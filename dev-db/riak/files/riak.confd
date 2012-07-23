@@ -1,0 +1,3 @@
+# DO not change the riak user unless you are sure what you are doing
+RIAK_USER="riak"
+

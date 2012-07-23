@@ -1,0 +1,29 @@
+#!/sbin/runscript
+# Copyright 1999-2011 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: /var/cvsroot/gentoo-x86/dev-db/pgpool2/files/pgpool2.initd,v 1.2 2011/03/02 08:52:52 scarabeus Exp $
+
+depend() {
+	need net
+}
+
+ARGS="-f /etc/pgpool2/pgpool.conf -a /etc/pgpool2/pool_hba.conf -F /etc/pgpool2/pcp.conf -D"
+LOGFILE="/var/log/pgpool2.log"
+
+start() {
+	ebegin "Starting pgpool2"
+	/usr/bin/pgpool ${ARGS} >> "${LOGFILE}" 2>&1
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping pgpool2"
+	/usr/bin/pgpool -m fast stop >> "${LOGFILE}" 2>&1
+	eend $?
+}
+
+restart() {
+	svc_stop
+	sleep 3
+	svc_start
+}

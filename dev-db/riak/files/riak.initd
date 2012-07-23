@@ -1,0 +1,35 @@
+#!/sbin/runscript
+# Copyright 1999-2012 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+depend() {
+    need net
+}
+
+start() {
+    ebegin "Start ${SVCNAME}"
+    if [[ "${RIAK_USER}" != "riak" && "${RIAK_USER}" != "root" ]]; then
+        ewarn "make sure ${RIAK_USER} has the permission to use riaks files and directories"
+    fi
+    start-stop-daemon --background --start \
+        --user ${RIAK_USER} \
+        --exec /usr/bin/riak -- start
+    eend $?
+}
+
+stop() {
+    ebegin "Stopping ${SVCNAME}"
+    /usr/bin/riak stop
+    # hacky.. fix it
+    local EPMD=$(ps aux|grep '/usr/lib/riak/erts-5.8.5/bin/epmd'|grep -v grep|awk '{ print $2 }')
+    kill $EPMD
+    eend $?
+}
+
+status() {
+    ebegin "Status of ${SVCNAME}"
+    /usr/bin/riak-admin status
+    eend $?
+}
+
