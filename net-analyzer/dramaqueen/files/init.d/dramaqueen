@@ -1,0 +1,23 @@
+#!/sbin/runscript
+# Copyright 1999-2012 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+depend() {
+    need localmount
+}
+
+start() {
+    ebegin "Starting Dramaqueen"
+    start-stop-daemon --background --start --exec /usr/local/bin/dramaqueen \
+    --make-pidfile --pidfile /var/run/dramaqueen \
+    -- -c /etc/dramaqueen/init.lua
+    eend $?
+}
+
+stop() {
+    ebegin "Stoping Dramaqueen"
+    start-stop-daemon --stop --exec /usr/local/bin/dramaqueen \
+    --pidfile /var/run/dramaqueen
+    eend $?
+}
