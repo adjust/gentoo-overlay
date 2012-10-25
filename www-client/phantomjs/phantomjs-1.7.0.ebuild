@@ -18,7 +18,8 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND="media-libs/freetype"
+DEPEND="media-libs/freetype
+		media-libs/fontconfig"
 
 src_install() {
 	dodir /usr/bin/ 
