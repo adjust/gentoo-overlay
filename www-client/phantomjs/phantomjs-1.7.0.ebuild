@@ -18,6 +18,8 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
+DEPEND="media-libs/freetype"
+
 src_install() {
 	dodir /usr/bin/ 
 	cp "${PORTAGE_BUILDDIR}/work/phantomjs-1.7.0-linux-x86_64/bin/phantomjs" "${D}/usr/bin/" || die
