@@ -55,13 +55,14 @@ src_compile()
 	export GOROOT_FINAL=/usr/lib/go
 	export GOROOT="$(pwd)"
 	export GOBIN="${GOROOT}/bin"
+
 	if [[ $CTARGET = armv5* ]]
 	then
 		export GOARM=5
 	fi
 
 	cd src
-	./make.bash || die "build failed"
+	CGO_ENABLED=1 ./make.bash || die "build failed"
 	cd ..
 
 	if use emacs; then
