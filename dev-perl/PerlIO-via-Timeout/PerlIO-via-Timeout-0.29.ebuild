@@ -8,7 +8,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND="virtual/perl-Module-Build"
+DEPEND="virtual/perl-Module-Build dev-perl/Module-Build-Tiny"
 
 RDEPEND="${DEPEND}"
 
