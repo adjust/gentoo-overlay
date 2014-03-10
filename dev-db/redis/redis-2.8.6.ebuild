@@ -1,6 +1,6 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/redis/redis-2.6.16.ebuild,v 1.1 2013/10/21 06:55:24 djc Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/redis/redis-2.8.6.ebuild,v 1.1 2014/02/26 11:07:13 ultrabug Exp $
 
 EAPI=5
 
@@ -31,9 +31,10 @@ pkg_setup() {
 }
 
 src_prepare() {
+	epatch "${FILESDIR}"/${PN}-2.8.3-{shared,config}.patch
 
 	# bug 467172, 467174
-# maybe to uncomment	sed -i -e 's:AR=:AR?=:g' -e 's:RANLIB=:RANLIB?=:g' "${S}/deps/lua/src/Makefile" || die
+	sed -i -e 's:AR=:AR?=:g' -e 's:RANLIB=:RANLIB?=:g' "${S}/deps/lua/src/Makefile" || die
 
 	# now we will rewrite present Makefiles
 	local makefiles=""

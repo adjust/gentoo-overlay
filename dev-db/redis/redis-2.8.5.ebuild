@@ -1,10 +1,10 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/redis/redis-2.6.15.ebuild,v 1.1 2013/08/26 11:47:13 djc Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/redis/redis-2.8.5.ebuild,v 1.1 2014/02/07 19:44:23 robbat2 Exp $
 
 EAPI=5
 
-inherit autotools eutils flag-o-matic toolchain-funcs user
+inherit autotools eutils flag-o-matic systemd toolchain-funcs user
 
 DESCRIPTION="A persistent caching system, key-value and data structures database."
 HOMEPAGE="http://redis.io/"
@@ -31,7 +31,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}/${PN}-2.6.7"-{shared,config}.patch
+	epatch "${FILESDIR}"/${PN}-2.8.3-{shared,config}.patch
 
 	# bug 467172, 467174
 	sed -i -e 's:AR=:AR?=:g' -e 's:RANLIB=:RANLIB?=:g' "${S}/deps/lua/src/Makefile" || die
@@ -89,6 +89,9 @@ src_install() {
 
 	newconfd "${FILESDIR}/redis.confd" redis
 	newinitd "${FILESDIR}/redis.initd-3" redis
+
+	systemd_dounit "${FILESDIR}/redis.service"
+	systemd_newtmpfilesd "${FILESDIR}/redis.tmpfiles" redis.conf
 
 	nonfatal dodoc 00-RELEASENOTES BUGS CONTRIBUTING MANIFESTO README
 
