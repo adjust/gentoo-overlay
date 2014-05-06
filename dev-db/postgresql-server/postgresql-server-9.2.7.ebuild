@@ -71,6 +71,7 @@ src_prepare() {
 	epatch "${WORKDIR}/autoconf.patch" \
 		"${WORKDIR}/bool.patch" \
 		"${WORKDIR}/server.patch"
+	epatch -p1 "${FILESDIR}"/ltree-9.2.patch
 
 	eprefixify src/include/pg_config_manual.h
 

@@ -15,7 +15,8 @@ SLOT="$(get_version_component_range 1-2)"
 S="${WORKDIR}/postgresql-${PV}"
 SRC_URI="mirror://postgresql/source/v${PV}/postgresql-${PV}.tar.bz2
 		 http://dev.gentoo.org/~titanofold/postgresql-patches-${SLOT}-r1.tbz2
-		 http://dev.gentoo.org/~titanofold/postgresql-initscript-2.5.tbz2"
+		 http://dev.gentoo.org/~titanofold/postgresql-initscript-2.5.tbz2
+		 "
 
 LICENSE="POSTGRESQL GPL-2"
 DESCRIPTION="PostgreSQL server"
@@ -67,7 +68,7 @@ src_prepare() {
 		"${WORKDIR}/bool.patch" \
 		"${WORKDIR}/server.patch" \
 		"${WORKDIR}/run-dir.patch"
-
+	epatch -p1 "${FILESDIR}"/ltree-9.3.patch
 	eprefixify src/include/pg_config_manual.h
 
 	if use pam ; then
