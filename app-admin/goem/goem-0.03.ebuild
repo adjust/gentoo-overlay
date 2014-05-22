@@ -16,16 +16,16 @@ DEPEND="dev-lang/go"
 RDEPEND="${DEPEND}"
 
 EGIT_REPO_URI="https://github.com/adeven/goem.git"
-EGIT_BRANCH="ca68ef7475e88ae340ca590a0ca7c42aec6ebe4e"
+EGIT_BRANCH="master"
 
 src_compile() {
-	mkdir "${PORTAGE_BUILDDIR}/work/goem-0.02/build_dir"
+	mkdir "${PORTAGE_BUILDDIR}/work/goem-0.03/build_dir"
 	go build -o build_dir/goem || die "$!"
 }
 
 src_install() {
     dodir /usr/bin/
-	cp "${PORTAGE_BUILDDIR}/work/goem-0.02/build_dir/goem" \
+	cp "${PORTAGE_BUILDDIR}/work/goem-0.03/build_dir/goem" \
 	"${D}/usr/bin/" || die
 }
 
