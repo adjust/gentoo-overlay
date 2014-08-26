@@ -2,7 +2,7 @@ EAPI=5
 inherit perl-module
 inherit git-2
 
-DESCRIPTION=""
+DESCRIPTION="Module to manage ruby versions in non-interactive environments"
 HOMEPAGE="https://github.com/adjust/p5-Ruby-VersionManager"
 SRC_URI=""
 EGIT_REPO_URI="https://github.com/adeven/p5-Ruby-VersionManager"

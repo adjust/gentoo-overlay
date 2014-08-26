@@ -2,7 +2,7 @@ EAPI=5
 inherit perl-module
 inherit git-2
 
-DESCRIPTION=""
+DESCRIPTION="redis failover scripts"
 HOMEPAGE="https://github.com/adjust/redis_failover"
 SRC_URI=""
 EGIT_REPO_URI="https://github.com/adeven/redis_failover.git"

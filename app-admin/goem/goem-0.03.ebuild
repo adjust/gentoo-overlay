@@ -2,7 +2,7 @@ EAPI=4
 
 inherit git-2
 
-DESCRIPTION=""
+DESCRIPTION="Go extension manager"
 HOMEPAGE="https://github.com/adjust/goem"
 SRC_URI=""
 
