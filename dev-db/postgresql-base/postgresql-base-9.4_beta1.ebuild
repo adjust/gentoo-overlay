@@ -13,7 +13,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86
 
 SLOT="$(get_version_component_range 1-2)"
 S="${WORKDIR}/postgresql-9.4beta1"
-SRC_URI="http://ftp.postgresql.org/pub/source/v9.4beta1/postgresql-9.4beta1.tar.bz2"
+SRC_URI="mirror://postgresql/source/v9.4beta1/postgresql-9.4beta1.tar.bz2"
 
 LICENSE="POSTGRESQL"
 DESCRIPTION="PostgreSQL libraries and clients"
