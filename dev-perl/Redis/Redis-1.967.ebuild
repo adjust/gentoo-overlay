@@ -1,7 +1,7 @@
 EAPI=5
 inherit perl-module
 DESCRIPTION=""
-HOMEPAGE=""
+HOMEPAGE="https://github.com/PerlRedis/perl-redis"
 SRC_URI="http://search.cpan.org/CPAN/authors/id/D/DA/DAMS/Redis-1.967.tar.gz"
 
 SLOT="0"

@@ -1,7 +1,7 @@
 EAPI=5
 inherit perl-module
 DESCRIPTION=""
-HOMEPAGE=""
+HOMEPAGE="https://github.com/dams/perlio-via-timeout"
 SRC_URI="http://search.cpan.org/CPAN/authors/id/D/DA/DAMS/PerlIO-via-Timeout-0.29.tar.gz"
 
 SLOT="0"

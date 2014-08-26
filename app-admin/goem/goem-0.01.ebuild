@@ -3,7 +3,7 @@ EAPI=4
 inherit git-2
 
 DESCRIPTION=""
-HOMEPAGE=""
+HOMEPAGE="https://github.com/adjust/goem"
 SRC_URI=""
 
 LICENSE="BeerBSD"

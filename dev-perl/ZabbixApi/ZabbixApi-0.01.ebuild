@@ -3,7 +3,7 @@ inherit perl-module
 inherit git-2
 
 DESCRIPTION=""
-HOMEPAGE=""
+HOMEPAGE="https://github.com/adjust/zabbix-api"
 SRC_URI=""
 EGIT_REPO_URI="https://github.com/adeven/zabbix-api"
 

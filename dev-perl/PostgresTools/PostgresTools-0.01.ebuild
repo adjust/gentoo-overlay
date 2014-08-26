@@ -3,7 +3,7 @@ inherit perl-module
 inherit git-2
 
 DESCRIPTION=""
-HOMEPAGE=""
+HOMEPAGE="https://github.com/adjust/postgres_tools"
 SRC_URI=""
 EGIT_REPO_URI="https://github.com/adeven/postgres_tools.git"
 
