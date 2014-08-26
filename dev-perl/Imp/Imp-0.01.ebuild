@@ -13,7 +13,7 @@ IUSE=""
 
 DEPEND="
 	virtual/perl-Module-Build
-    dev-perl/Moo
+	dev-perl/Moo
 	dev-perl/yaml
 	dev-perl/JSON
 	dev-perl/Template-Toolkit"

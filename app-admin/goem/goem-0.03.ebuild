@@ -24,7 +24,7 @@ src_compile() {
 }
 
 src_install() {
-    dodir /usr/bin/
+	dodir /usr/bin/
 	cp "${PORTAGE_BUILDDIR}/work/goem-0.03/build_dir/goem" \
 	"${D}/usr/bin/" || die
 }

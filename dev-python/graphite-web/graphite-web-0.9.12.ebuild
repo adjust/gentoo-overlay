@@ -23,7 +23,7 @@ IUSE=""
 
 DEPEND=""
 RDEPEND="${DEPEND}
-    dev-lang/python[sqlite]
+	dev-lang/python[sqlite]
 	dev-python/carbon
 	dev-python/django
 	dev-python/pycairo
