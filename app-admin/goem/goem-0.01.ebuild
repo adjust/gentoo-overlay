@@ -6,7 +6,7 @@ DESCRIPTION="Go extension manager"
 HOMEPAGE="https://github.com/adjust/goem"
 SRC_URI=""
 
-LICENSE="BeerBSD"
+LICENSE="BEER-WARE"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
