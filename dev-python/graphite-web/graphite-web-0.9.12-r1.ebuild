@@ -1,16 +1,14 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="4"
+EAPI=5
 
-PYTHON_DEPEND="2"
-SUPPORT_PYTHON_ABIS="1"
-RESTRICT_PYTHON_ABIS="3.*"
+PYTHON_COMPAT=( python2_7 )
 
 WEBAPP_MANUAL_SLOT="yes"
 
-inherit distutils webapp eutils
+inherit distutils-r1 webapp eutils
 
 DESCRIPTION="Enterprise scalable realtime graphing"
 HOMEPAGE="http://graphite.wikidot.com/"
@@ -24,12 +22,12 @@ IUSE=""
 DEPEND=""
 RDEPEND="${DEPEND}
 	dev-lang/python[sqlite]
-	dev-python/carbon
-	dev-python/django
-	dev-python/pycairo
-	dev-python/twisted-web
-	dev-python/whisper
-	dev-python/django-tagging"
+	dev-python/carbon[${PYTHON_USEDEP}]
+	dev-python/django[${PYTHON_USEDEP}]
+	dev-python/pycairo[${PYTHON_USEDEP}]
+	dev-python/twisted-web[${PYTHON_USEDEP}]
+	dev-python/whisper[${PYTHON_USEDEP}]
+	dev-python/django-tagging[${PYTHON_USEDEP}]"
 
 src_prepare () {
 	rm "${S}/setup.cfg"
