@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-db/postgresql-server/postgresql-server-9.2.4.ebuild,v 1.12 2013/04/05 18:45:00 ago Exp $
 
@@ -71,7 +71,6 @@ src_prepare() {
 	epatch "${WORKDIR}/autoconf.patch" \
 		"${WORKDIR}/bool.patch" \
 		"${WORKDIR}/server.patch"
-	epatch -p1 "${FILESDIR}"/ltree-9.2.patch
 
 	eprefixify src/include/pg_config_manual.h
 
