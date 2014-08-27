@@ -28,4 +28,3 @@ src_install() {
 	cp "${PORTAGE_BUILDDIR}/work/goem-0.03/build_dir/goem" \
 	"${D}/usr/bin/" || die
 }
-
