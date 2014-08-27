@@ -32,7 +32,7 @@ RDEPEND="${DEPEND}
 	dev-python/django-tagging"
 
 src_prepare () {
-	rm ${S}/setup.cfg
+	rm "${S}/setup.cfg"
 #	epatch ${FILESDIR}/data-dir.patch
 }
 
