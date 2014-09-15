@@ -1,8 +1,12 @@
+# Copyright 1999-2014 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
 EAPI=5
 inherit perl-module
-DESCRIPTION=""
-HOMEPAGE=""
-SRC_URI="http://search.cpan.org/CPAN/authors/id/L/LE/LEONT/Module-Build-Tiny-0.037.tar.gz"
+DESCRIPTION="A tiny replacement for Module::Build"
+HOMEPAGE="https://github.com/Leont/module-build-tiny"
+SRC_URI="mirror://cpan/authors/id/L/LE/LEONT/Module-Build-Tiny-0.037.tar.gz"
 
 SLOT="0"
 KEYWORDS="~amd64"
