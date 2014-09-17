@@ -1,0 +1,16 @@
+#!/sbin/runscript
+
+name=Logstash
+description="Logstash - you know, for logs"
+command=/usr/bin/logstash
+
+command_args="${LS_OPTS}"
+command_background="true"
+pidfile="${LS_PIDFILE}"
+
+start_stop_daemon_args="--user logstash:logstash --chdir /var/lib/logstash --env LS_HEAP_SIZE=${LS_HEAP_SIZE}"
+
+start_pre() {
+    checkpath --file --owner logstash:logstash -m750 ${pidfile}
+    checkpath --directory --owner logstash:logstash -m750 /var/log/logstash
+}

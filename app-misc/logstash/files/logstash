@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# workaround for https://logstash.jira.com/browse/LOGSTASH-2221
+RUBYOPT=""
+
+exec /opt/logstash/bin/logstash "$@"

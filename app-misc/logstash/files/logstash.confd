@@ -1,0 +1,19 @@
+# Logstash instance configuration
+
+# Java location
+#JAVACMD=/usr/bin/java
+
+# Java options
+JAVA_OPTS=""
+
+# Logstash command line arguments
+LS_OPTS="agent --config /etc/logstash/conf.d --filterworkers 1 --log /var/log/logstash/logstash.log"
+
+# Java heap size for Logstash
+LS_HEAP_SIZE="512m"
+
+# pidfile to use with this instance
+LS_PIDFILE="/run/logstash.pid"
+
+# Logstash GC logging
+#LS_USE_GC_LOGGING="true"
