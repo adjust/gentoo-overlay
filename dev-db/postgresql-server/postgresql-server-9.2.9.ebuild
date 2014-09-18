@@ -176,6 +176,9 @@ pkg_postinst() {
 	elog "Then, execute the following command to setup the initial database"
 	elog "environment:"
 	elog "    emerge --config =${CATEGORY}/${PF}"
+
+	einfo "Setting ownership for roa's experiments ..."
+	chown -Rf postgres:postgres "/usr/$(get_libdir)/postgresql-${SLOT}" "/usr/share/postgresql-${SLOT}" "/usr/share/doc/postgresql-${SLOT}"
 }
 
 pkg_prerm() {
