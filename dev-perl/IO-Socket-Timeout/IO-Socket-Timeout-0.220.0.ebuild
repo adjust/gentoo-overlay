@@ -14,6 +14,9 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND="dev-perl/PerlIO-via-Timeout"
+DEPEND="
+	dev-perl/PerlIO-via-Timeout
+	virtual/perl-Module-Build
+"
 
 mytargets="install"
