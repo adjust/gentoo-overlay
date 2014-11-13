@@ -26,6 +26,7 @@ pkg_setup() {
 
 src_prepare() {
 	rm -rf lib/sigar/*{solaris,winnt,freebsd,macosx}*
+	rm -rf bin/*.{bat,exe}
 	rm lib/sigar/libsigar-ia64-linux.so
 	rm LICENSE.txt
 
