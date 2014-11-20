@@ -19,7 +19,7 @@ DEPEND="dev-lang/go"
 
 RDEPEND="${DEPEND}"
 
-EGIT_REPO_URI="https://github.com/adeven/goem.git"
+EGIT_REPO_URI="https://github.com/adjust/goem.git"
 EGIT_BRANCH="master"
 
 src_compile() {
