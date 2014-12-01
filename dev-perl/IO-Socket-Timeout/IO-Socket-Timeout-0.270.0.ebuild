@@ -12,11 +12,16 @@ DESCRIPTION="IO::Socket with read/write timeout"
 
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE=""
+IUSE="test"
 
-DEPEND="
+RDEPEND="
 	dev-perl/PerlIO-via-Timeout
+"
+DEPEND="${RDEPEND}
 	virtual/perl-Module-Build
+	test? (
+		dev-perl/Test-TCP
+	)
 "
 
 mytargets="install"
