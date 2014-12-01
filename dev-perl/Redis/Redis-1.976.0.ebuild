@@ -12,12 +12,24 @@ DESCRIPTION="Perl binding for Redis database"
 
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE=""
+IUSE="test"
 
-DEPEND="
-	virtual/perl-Module-Build
+RDEPEND="
 	dev-perl/IO-Socket-Timeout
 	dev-perl/Try-Tiny
+"
+DEPEND="${RDEPEND}
+	virtual/perl-Module-Build
+	test? (
+		virtual/perl-Digest-SHA
+		dev-perl/IO-String
+		virtual/perl-IPC-Cmd
+		dev-perl/Test-Deep
+		dev-perl/Test-Fatal
+		virtual/perl-Test-Simple
+		dev-perl/Test-SharedFork
+		dev-perl/Test-TCP
+	)
 "
 
 mytargets="install"
