@@ -12,11 +12,14 @@ DESCRIPTION="PerlIO::via::Timeout - a PerlIO layer that adds read & write timeou
 
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE=""
+IUSE="test"
 
 DEPEND="
 	dev-perl/Module-Build-Tiny
 	virtual/perl-Module-Build
+	test? (
+		dev-perl/Test-TCP
+	)
 "
 
 mytargets="install"
