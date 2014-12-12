@@ -15,7 +15,16 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND="virtual/perl-Module-Build dev-perl/Moo dev-perl/DBD-Pg perl-core/File-Path dev-perl/DateTime dev-perl/DateTime-Format-Strptime dev-perl/Parallel-ForkManager dev-perl/Term-ProgressBar"
+DEPEND="
+	virtual/perl-Module-Build
+	dev-perl/Moo
+	dev-perl/DBD-Pg
+	perl-core/File-Path
+	dev-perl/DateTime
+	dev-perl/DateTime-Format-Strptime
+	dev-perl/Parallel-ForkManager
+	dev-perl/Term-ProgressBar
+"
 
 RDEPEND="${DEPEND}"
 
