@@ -28,6 +28,4 @@ DEPEND="
 
 RDEPEND="${DEPEND}"
 
-src_install() {
-	./Build install
-}
+mytargets="install"
