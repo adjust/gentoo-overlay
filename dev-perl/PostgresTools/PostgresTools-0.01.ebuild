@@ -19,7 +19,7 @@ DEPEND="
 	virtual/perl-Module-Build
 	dev-perl/Moo
 	dev-perl/DBD-Pg
-	perl-core/File-Path
+	virtual/perl-File-Path
 	dev-perl/DateTime
 	dev-perl/DateTime-Format-Strptime
 	dev-perl/Parallel-ForkManager
