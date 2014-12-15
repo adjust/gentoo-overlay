@@ -24,6 +24,7 @@ DEPEND="
 	dev-perl/DateTime-Format-Strptime
 	dev-perl/Parallel-ForkManager
 	dev-perl/Term-ProgressBar
+	dev-perl/File-Rsync
 "
 
 RDEPEND="${DEPEND}"
