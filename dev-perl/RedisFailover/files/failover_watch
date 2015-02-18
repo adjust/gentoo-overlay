@@ -1,0 +1,32 @@
+#!/sbin/runscript
+# Copyright 1999-2015 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+BIN='/usr/bin/failover_watch.pl'
+PIDFILE='/var/run/failover_watch'
+TOWATCH='/etc/nutcracker/nutcracker.yml'
+
+depend() {
+	need localmount
+}
+
+start() {
+	ebegin "Starting ${SVCNAME}"
+
+	start-stop-daemon --background \
+		--wait 500 \
+		--start --exec ${BIN} \
+		--make-pidfile --pidfile ${PIDFILE} \
+		-- --file ${TOWATCH}
+
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping ${SVCNAME}"
+	start-stop-daemon \
+		--stop --exec ${BIN} \
+		--pidfile ${PIDFILE}
+	eend $?
+}
