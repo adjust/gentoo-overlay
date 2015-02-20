@@ -3,16 +3,15 @@
 # $Header: $
 
 EAPI=5
-inherit perl-module
-inherit git-2
+inherit perl-module git-2
 
 DESCRIPTION="Gentoo abstraction layer for automation with perl scripts"
 HOMEPAGE="https://github.com/adjust/imp"
 SRC_URI=""
-EGIT_REPO_URI="https://github.com/adeven/imp.git"
+EGIT_REPO_URI="https://github.com/adjust/imp.git"
 
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS=""
 IUSE=""
 
 DEPEND="
