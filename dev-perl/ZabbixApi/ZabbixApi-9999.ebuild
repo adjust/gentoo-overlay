@@ -3,18 +3,21 @@
 # $Header: $
 
 EAPI=5
-inherit perl-module
-inherit git-2
+inherit perl-module git-2
 
 DESCRIPTION="perl zabbix bindings"
 HOMEPAGE="https://github.com/adjust/zabbix-api"
 SRC_URI=""
-EGIT_REPO_URI="https://github.com/adeven/zabbix-api"
+EGIT_REPO_URI="https://github.com/adjust/zabbix-api"
 
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS=""
 IUSE=""
 
-DEPEND="dev-perl/Moo dev-perl/JSON dev-perl/libwww-perl"
+DEPEND="
+	dev-perl/Moo
+	dev-perl/JSON
+	dev-perl/libwww-perl
+	virtual/perl-Module-Build"
 
 RDEPEND="${DEPEND}"
