@@ -3,16 +3,14 @@
 # $Header: $
 
 EAPI=5
-inherit perl-module
-inherit git-2
+inherit perl-module git-2
 
 DESCRIPTION="adjust postgres tools"
 HOMEPAGE="https://github.com/adjust/postgres_tools"
 SRC_URI=""
-EGIT_REPO_URI="https://github.com/adeven/postgres_tools.git"
-EGIT_BRANCH="master"
+EGIT_REPO_URI="https://github.com/adjust/postgres_tools.git"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS=""
 IUSE=""
 
 DEPEND="
