@@ -20,7 +20,7 @@ IUSE=""
 DEPEND=""
 RDEPEND="${DEPEND}
 dev-python/pycairo[${PYTHON_USEDEP}]
->=dev-python/django-1.4[${PYTHON_USEDEP}]
+|| ( =dev-python/django-1.5*[${PYTHON_USEDEP}] =dev-python/django-1.4*[${PYTHON_USEDEP}] )
 >=dev-python/django-tagging-0.3.1[${PYTHON_USEDEP}]
 >=dev-python/twisted-core-8.0.0[${PYTHON_USEDEP}]
 dev-python/pytz[${PYTHON_USEDEP}]
