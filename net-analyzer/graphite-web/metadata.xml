@@ -4,4 +4,7 @@
 	<maintainer>
 		<email>ops@adjust.com</email>
 	</maintainer>
+	<use>
+		<flag name="memcached">Enable memcached support</flag>
+	</use>
 </pkgmetadata>
