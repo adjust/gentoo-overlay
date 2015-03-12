@@ -14,13 +14,14 @@ SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="ldap mysql memcached +sqlite"
+IUSE="ldap mysql memcached postgres +sqlite"
 
 DEPEND=""
 RDEPEND="dev-lang/python[sqlite?]
-	|| ( >=dev-python/django-1.4[sqlite?,mysql?,${PYTHON_USEDEP}]
+	|| ( >=dev-python/django-1.4[sqlite?,mysql?,postgres?,${PYTHON_USEDEP}]
 		( >=dev-python/django-1.6[sqlite?,${PYTHON_USEDEP}]
-		mysql? ( || ( dev-python/mysql-python dev-python/mysqlclient ) ) ) )
+		mysql? ( || ( dev-python/mysql-python dev-python/mysqlclient ) )
+		postgres? ( dev-python/psycopg ) ) )
 	>=dev-python/twisted-core-10.0[${PYTHON_USEDEP}]
 	>=dev-python/django-tagging-0.3.1[${PYTHON_USEDEP}]
 	dev-python/pycairo[${PYTHON_USEDEP}]
