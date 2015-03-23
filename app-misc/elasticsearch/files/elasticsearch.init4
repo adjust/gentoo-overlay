@@ -84,6 +84,6 @@ stop() {
 	start-stop-daemon --stop \
 		--pidfile=${PIDFILE} \
 		--user="${ES_USER}" \
-        --retry=TERM/20/KILL/5
+		--retry=TERM/20/KILL/5
 	eend $?
 }
