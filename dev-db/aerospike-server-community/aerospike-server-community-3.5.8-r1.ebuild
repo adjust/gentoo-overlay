@@ -12,7 +12,7 @@ DESCRIPTION="Flash-optimized, in-memory, nosql database"
 HOMEPAGE="http://www.aerospike.com"
 SRC_URI=""
 
-LICENSE="AGPL Apache-2.0"
+LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="+tools"
