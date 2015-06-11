@@ -5,7 +5,6 @@ description=""
 
 ES_USER=${ES_USER:="elasticsearch"}
 ES_INSTANCE=${SVCNAME#*.}
-export ES_CLASSPATH="@ES_CLASS_PATH@"
 
 if [ -n "${ES_INSTANCE}" ] && [ ${SVCNAME} != "elasticsearch" ]; then
 	PIDFILE="/run/elasticsearch/elasticsearch.${ES_INSTANCE}.pid"
@@ -22,7 +21,7 @@ fi
 ES_DATA_PATH="${ES_BASE_PATH}/data"
 ES_WORK_PATH="${ES_BASE_PATH}/work"
 
-export ES_INCLUDE="${ES_CONF_PATH}/elasticsearch.in.sh"
+export ES_INCLUDE="/usr/share/elasticsearch/bin/elasticsearch.in.sh"
 export JAVA_OPTS
 export ES_JAVA_OPTS
 export ES_HEAP_SIZE
@@ -62,7 +61,6 @@ start() {
 		ulimit -n ${ES_MAX_FD}
 		einfo "Max open filedescriptors  : ${ES_MAX_FD}"
 	fi
-
 
 	checkpath -d -o "${ES_USER}" -m750 "/var/lib/elasticsearch"
 	checkpath -d -o "${ES_USER}" -m750 "/var/log/elasticsearch"
