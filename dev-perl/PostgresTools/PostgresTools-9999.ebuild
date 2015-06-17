@@ -14,7 +14,6 @@ KEYWORDS=""
 IUSE=""
 
 DEPEND="
-	virtual/perl-Module-Build
 	dev-perl/Moo
 	dev-perl/DBD-Pg
 	virtual/perl-File-Path

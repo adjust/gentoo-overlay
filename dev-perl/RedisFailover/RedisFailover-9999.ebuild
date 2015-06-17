@@ -15,7 +15,6 @@ KEYWORDS=""
 IUSE=""
 
 DEPEND="
-	virtual/perl-Module-Build
 	dev-perl/Moo
 	dev-perl/Redis
 	dev-perl/yaml
