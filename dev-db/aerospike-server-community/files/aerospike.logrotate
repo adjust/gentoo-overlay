@@ -4,7 +4,7 @@
     dateext
     compress
     olddir /var/log/aerospike/
-    postrotate 
-	kill -HUP `cat /var/run/aerospike/asd.pid`
+    postrotate
+	kill -HUP `cat /var/run/aerospike/aerospike.pid`
     endscript
 }
