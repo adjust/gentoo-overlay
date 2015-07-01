@@ -14,3 +14,11 @@ start_pre() {
     checkpath --file --owner logstash:logstash -m750 ${pidfile}
     checkpath --directory --owner logstash:logstash -m750 /var/log/logstash
 }
+
+stop() {
+	ebegin "Stopping logstash"
+	start-stop-daemon --stop \
+		--pidfile=${pidfile} \
+		--retry=TERM/20/KILL/5
+	eend $?
+}
