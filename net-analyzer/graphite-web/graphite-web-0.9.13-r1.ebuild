@@ -9,7 +9,8 @@ inherit distutils-r1 python-utils-r1 prefix
 
 DESCRIPTION="Enterprise scalable realtime graphing"
 HOMEPAGE="http://graphite.readthedocs.org/"
-SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
+SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz
+	https://raw.githubusercontent.com/graphite-project/graphite-web/522d84fed687bd946878e48d85982d59f7bd1267/webapp/content/img/share.png -> ${P}-share.png"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -68,6 +69,9 @@ python_install() {
 	chmod 0755 "${ED}"/usr/bin/${PN}-manage || die
 	python_fix_shebang "${ED}"/usr/bin/${PN}-manage
 
+	# shortener image isn't included for some reason
+	cp "${DISTDIR}"/"${P}"-share.png "${ED}"/usr/share/${PN}/webapp/content/img/
+
 	insinto /etc/${PN}
 	newins webapp/graphite/local_settings.py.example local_settings.py
 	pushd "${D}"/$(python_get_sitedir)/graphite > /dev/null || die
@@ -92,5 +96,5 @@ pkg_postinst() {
 	einfo "You will need to ${PN} it with Apache (mod_wsgi) or nginx (uwsgi)."
 	einfo "Don't forget to edit local_settings.py in ${EPREFIX}/etc/${PN}"
 	einfo "See http://graphite.readthedocs.org/en/latest/config-local-settings.html"
-	einfo "Run emerge --config =${P} if this is a fresh install."
+	einfo "Run emerge --config =${PN}-${PVR} if this is a fresh install."
 }
