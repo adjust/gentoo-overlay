@@ -83,7 +83,7 @@ python_install() {
 
 pkg_config() {
 	"${ROOT}"/usr/bin/${PN}-manage syncdb --noinput
-	local idx=$(grep 'INDEX_FILE =' "${EROOT}"/etc/local_settings.py 2>/dev/null)
+	local idx=$(grep 'INDEX_FILE =' "${EROOT}"/etc/graphite-web/local_settings.py 2>/dev/null)
 	if [[ -n ${idx} ]] ; then
 		idx=${idx##*=}
 		idx=$(echo ${idx})
