@@ -7,4 +7,7 @@
 	<use>
 		<flag name="memcached">Enable memcached support</flag>
 	</use>
+	<upstream>
+    	<remote-id type="pypi">graphite-web</remote-id>
+	</upstream>
 </pkgmetadata>
