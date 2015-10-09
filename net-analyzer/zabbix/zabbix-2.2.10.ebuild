@@ -6,7 +6,7 @@ EAPI="5"
 
 # needed to make webapp-config dep optional
 WEBAPP_OPTIONAL="yes"
-inherit flag-o-matic webapp depend.php java-pkg-opt-2 user systemd toolchain-funcs
+inherit eutils flag-o-matic webapp depend.php java-pkg-opt-2 user systemd toolchain-funcs
 
 DESCRIPTION="ZABBIX is software for monitoring of your applications, network and servers"
 HOMEPAGE="http://www.zabbix.com/"
@@ -62,6 +62,10 @@ java_prepare() {
 	rm -v *.jar || die
 
 	java-pkg_jar-from slf4j-api
+}
+
+src_prepare() {
+	epatch "${FILESDIR}/zabbix_sensors.patch" || die
 }
 
 pkg_setup() {
