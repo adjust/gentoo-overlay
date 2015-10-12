@@ -26,12 +26,11 @@ src_unpack() {
 	default
 	mkdir "${P}"
 	tar -xzf data.tar.gz -C "${S}" || die
+	tar -xzf ${S}/opt/amc.tar.gz -C ${S}/opt/ || die
+	rm ${S}/opt/amc.tar.gz
 }
 
 src_install() {
-	tar -xzf opt/amc.tar.gz -C opt/ || die
-	rm opt/amc.tar.gz
-
 	mv opt/amc/amc/* opt/amc/
 	rm -rf opt/amc/amc
 	rm -f opt/amc/install
@@ -49,7 +48,7 @@ src_install() {
 	newins opt/amc/config/logcron amc
 	rm -f opt/amc/config/logcron
 
-	sed -e 's@/tmp/amc.pid@/run/amc.pid@g' -i opt/amc/config/gunicorn_config.py
+	sed -e 's@/tmp/amc.pid@/run/amc.pid@g' -i opt/amc/config/gunicorn_config.py || die
 
 	insinto /etc/amc/config
 	doins -r opt/amc/config/*
