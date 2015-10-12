@@ -4,6 +4,8 @@
 
 EAPI=5
 
+inherit user
+
 MY_PN="${PN/-bin}"
 MY_P="${MY_PN}-${PV}"
 
@@ -24,6 +26,11 @@ RDEPEND="|| ( virtual/jre:1.8 virtual/jre:1.7 )"
 
 S="${WORKDIR}/${MY_P}"
 
+pkg_setup() {
+	enewgroup ${MY_PN}
+	enewuser ${MY_PN} -1 -1 /var/lib/${MY_PN} ${MY_PN} -m
+}
+
 src_install() {
 	keepdir /etc/"${MY_PN}"/{conf.d,patterns,plugins}
 	keepdir "/var/log/${MY_PN}"
@@ -36,10 +43,10 @@ src_install() {
 	fperms 0755 "/opt/${MY_PN}/bin/${MY_PN}" "/opt/${MY_PN}/vendor/jruby/bin/jruby"
 
 	insinto /etc/logrotate.d
-	doins "${FILESDIR}/${MY_PN}.logrotate"
+	newins "${FILESDIR}/${MY_PN}.logrotate-r1" "${MY_PN}"
 
-	newconfd "${FILESDIR}/${MY_PN}.confd" "${MY_PN}"
-	newinitd "${FILESDIR}/${MY_PN}.initd" "${MY_PN}"
+	newconfd "${FILESDIR}/${MY_PN}.confd-r1" "${MY_PN}"
+	newinitd "${FILESDIR}/${MY_PN}.initd-r1" "${MY_PN}"
 }
 
 pkg_postinst() {
