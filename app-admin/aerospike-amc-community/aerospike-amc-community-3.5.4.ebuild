@@ -26,8 +26,8 @@ src_unpack() {
 	default
 	mkdir "${P}"
 	tar -xzf data.tar.gz -C "${S}" || die
-	tar -xzf ${S}/opt/amc.tar.gz -C ${S}/opt/ || die
-	rm ${S}/opt/amc.tar.gz
+	tar -xzf "${S}"/opt/amc.tar.gz -C "${S}"/opt/ || die
+	rm "${S}"/opt/amc.tar.gz
 }
 
 src_install() {
