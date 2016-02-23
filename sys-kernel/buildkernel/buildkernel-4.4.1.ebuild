@@ -5,9 +5,10 @@
 EAPI="5"
 
 KEYWORDS="~amd64"
-HOMEPAGE=""
+HOMEPAGE="http://www.gentoo.org"
 IUSE=""
 SLOT="0"
+LICENSE="GPL-2"
 
 DESCRIPTION="Autogenerate kernel images with genkernel"
 SRC_URI=""
@@ -44,16 +45,16 @@ src_compile() {
 	echo "Building kernel ..."
 	make -s ${MAKEOPTS} || die
 	echo "Done building kernel."
-	cp $S/tmp/kernel/arch/x86/boot/bzImage $S/final/boot/kernel-genkernel-x86_64-${PVR}-gentoo || die
+	cp "$S/tmp/kernel/arch/x86/boot/bzImage" "$S/final/boot/kernel-genkernel-x86_64-${PVR}-gentoo" || die
 
 	# install  modules to a prefix. Strip in kbuild because otherwise size is >10x more for tarball
-	emake INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH=$S/final modules_install || die
+	emake INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH="$S/final modules_install" || die
 
 	# busybox uses this internally
 	unset KBUILD_OUTPUT
 	# we need fakeroot so we can always generate devicenodes like /dev/console
 	# this will fail for -rN kernel revisions as kerneldir is hardcoded badly
-	fakeroot genkernel initramfs --no-mountboot --bootdir=$S/final/boot \
+	fakeroot genkernel initramfs --no-mountboot --bootdir="$S/final/boot" \
         --logfile="$S/genkernel.log"  \
         --tempdir="$S/tmp" \
         --module-prefix="$S/final" \
