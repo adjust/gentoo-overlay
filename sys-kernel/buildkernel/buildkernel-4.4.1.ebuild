@@ -11,11 +11,14 @@ SLOT="0"
 LICENSE="GPL-2"
 
 DESCRIPTION="Autogenerate kernel images with genkernel"
-SRC_URI=""
+SRC_URI="http://files.adjust.com/${PF}"
 
 DEPEND="
 	=sys-kernel/gentoo-sources-${PVR}
-	sys-kernel/genkernel
+	|| (
+		sys-kernel/genkernel
+		sys-kernel/genkernel-next
+	)
 	sys-apps/fakeroot
 	"
 
@@ -27,12 +30,11 @@ src_prepare() {
 	mkdir -p "$S/tmp/kernel"
 	mkdir -p "$S/final/boot"
 	mkdir -p "$S/cache"
-
 }
 
 src_compile() {
 	# genkernel doesn't know how to kernel
-	cp "${FILESDIR}/${PV}" "$S/tmp/kernel/.config" || die
+	cp "${DISTDIR}/${A}" "$S/tmp/kernel/.config" || die
 
 	# goddamnit portage stop polluting the environment
 	unset ARCH

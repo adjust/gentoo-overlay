@@ -5,7 +5,7 @@
 EAPI="5"
 
 KEYWORDS="~amd64"
-HOMEPAGE=""
+HOMEPAGE="https://github.com/adjust/gentoo-overlay"
 IUSE=""
 SLOT="${PV}"
 LICENSE="GPL-2 freedist"
@@ -22,5 +22,5 @@ src_compile() {
 }
 
 src_install() {
-	cp -var ${WORKDIR}/* ${D}
+	cp -var "${WORKDIR}"/* "${D}"
 }

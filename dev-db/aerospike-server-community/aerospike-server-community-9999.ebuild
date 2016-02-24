@@ -1,4 +1,4 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -6,7 +6,7 @@ EAPI=5
 
 EGIT_REPO_URI="https://github.com/aerospike/aerospike-server.git"
 
-inherit base git-2 systemd user
+inherit git-2 systemd user
 
 DESCRIPTION="Flash-optimized, in-memory, nosql database"
 HOMEPAGE="http://www.aerospike.com"
