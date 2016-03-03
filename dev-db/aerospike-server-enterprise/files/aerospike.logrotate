@@ -1,10 +1,11 @@
 /var/log/aerospike/aerospike.log {
     daily
+    missingok
     rotate 90
     dateext
     compress
     olddir /var/log/aerospike/
     postrotate
-	kill -HUP `cat /var/run/aerospike/aerospike.pid`
+        test -f /var/run/aerospike/aerospike.pid && kill -HUP `cat /var/run/aerospike/aerospike.pid`
     endscript
 }
