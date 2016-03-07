@@ -62,6 +62,7 @@ src_install() {
 	insinto /usr/bin
 	doins usr/bin/*
 	fperms +x -R /usr/bin/asd
+	fperms +x -R /usr/bin/asxdr
 
 	insinto /etc/logrotate.d
 	newins "${FILESDIR}"/aerospike.logrotate aerospike
