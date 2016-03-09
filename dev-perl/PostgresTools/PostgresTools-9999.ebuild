@@ -19,6 +19,7 @@ DEPEND="
 	virtual/perl-File-Path
 	dev-perl/DateTime
 	dev-perl/DateTime-Format-Strptime
+	dev-perl/Module-Build
 	dev-perl/Parallel-ForkManager
 	dev-perl/Term-ProgressBar
 	dev-perl/File-Rsync
