@@ -19,6 +19,7 @@ DEPEND="
 	dev-perl/Redis
 	dev-perl/yaml
 	dev-perl/Linux-Inotify2
+	dev-perl/Module-Build
 "
 
 RDEPEND="${DEPEND}"
