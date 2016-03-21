@@ -11,7 +11,7 @@ SLOT="${PV}"
 LICENSE="GPL-2 freedist"
 
 DESCRIPTION="Prebuilt gentoo kernel image with genkernel initramfs"
-SRC_URI="http://dev.gentoo.org/~patrick/kernel/binkernel-${PV}.tar.xz"
+SRC_URI="http://files.adjust.com/binkernel-${PV}.tar.xz"
 
 DEPEND=""
 
