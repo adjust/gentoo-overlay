@@ -5,10 +5,12 @@
 EAPI=5
 
 inherit user
+MY_PN=${PN/-bin/}
+S=${WORKDIR}/${MY_PN}-${PV}
 
 DESCRIPTION="Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB"
 HOMEPAGE="http://grafana.org"
-SRC_URI="https://grafanarel.s3.amazonaws.com/builds/${P}.linux-x64.tar.gz"
+SRC_URI="https://grafanarel.s3.amazonaws.com/builds/${MY_PN}-${PV}.linux-x64.tar.gz"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -28,7 +30,7 @@ pkg_setup() {
 src_install() {
 
 	# Frontend assets
-	insinto /usr/share/${PN}
+	insinto /usr/share/${MY_PN}
 	doins -r public conf vendor
 
 	dobin bin/grafana-server
