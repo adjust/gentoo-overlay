@@ -29,6 +29,10 @@ pkg_setup() {
 }
 
 src_install() {
+	keepdir /etc/grafana
+	insinto /etc/grafana
+	newins "${S}"/conf/sample.ini grafana.ini
+	rm "${S}"/conf/sample.ini
 
 	# Frontend assets
 	insinto /usr/share/${MY_PN}
@@ -38,10 +42,6 @@ src_install() {
 
 	newconfd "${FILESDIR}"/grafana.confd grafana
 	newinitd "${FILESDIR}"/grafana.initd grafana
-
-	keepdir /etc/grafana
-	insinto /etc/grafana
-	doins "${FILESDIR}"/grafana.ini
 
 	keepdir /var/{lib,log}/grafana
 	fowners grafana:grafana /var/{lib,log}/grafana
