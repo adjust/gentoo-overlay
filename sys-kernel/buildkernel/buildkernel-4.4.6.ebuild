@@ -11,7 +11,7 @@ SLOT="0"
 LICENSE="GPL-2"
 
 DESCRIPTION="Autogenerate kernel images with genkernel"
-SRC_URI="http://files.adjust.com/${PF}"
+SRC_URI="http://files.adjust.com/${PF}-r1"
 
 DEPEND="
 	=sys-kernel/gentoo-sources-${PVR}
