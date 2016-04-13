@@ -1,0 +1,107 @@
+diff --git a/setup.py b/setup.py
+index 90585d0..1c5ddae 100644
+--- a/setup.py
++++ b/setup.py
+@@ -81,8 +81,6 @@ try:
+         'graphite.dashboard',
+         'graphite.events',
+         'graphite.version',
+-        'graphite.thirdparty',
+-        'graphite.thirdparty.pytz',
+       ],
+       package_data={'graphite' :
+         ['templates/*', 'local_settings.py.example']},
+diff --git a/webapp/graphite/cli/parser.py b/webapp/graphite/cli/parser.py
+index ec1a435..7d7d48d 100644
+--- a/webapp/graphite/cli/parser.py
++++ b/webapp/graphite/cli/parser.py
+@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License."""
+ 
+-from graphite.thirdparty.pyparsing import *
++from pyparsing import *
+ 
+ grammar = Forward()
+ 
+diff --git a/webapp/graphite/render/attime.py b/webapp/graphite/render/attime.py
+index 10405e3..a08e8b0 100644
+--- a/webapp/graphite/render/attime.py
++++ b/webapp/graphite/render/attime.py
+@@ -16,11 +16,7 @@ from datetime import datetime,timedelta
+ from time import daylight
+ from django.utils import timezone
+ 
+-try: # See if there is a system installation of pytz first
+-  import pytz
+-except ImportError: # Otherwise we fall back to Graphite's bundled version
+-  from graphite.thirdparty import pytz
+-
++import pytz
+ 
+ months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec']
+ weekdays = ['sun','mon','tue','wed','thu','fri','sat']
+diff --git a/webapp/graphite/render/glyph.py b/webapp/graphite/render/glyph.py
+index ea708b5..4bd4693 100644
+--- a/webapp/graphite/render/glyph.py
++++ b/webapp/graphite/render/glyph.py
+@@ -28,11 +28,7 @@ from django.utils.timezone import get_current_timezone
+ from graphite.render.datalib import TimeSeries
+ from graphite.util import json
+ 
+-
+-try: # See if there is a system installation of pytz first
+-  import pytz
+-except ImportError: # Otherwise we fall back to Graphite's bundled version
+-  from graphite.thirdparty import pytz
++import pytz
+ 
+ INFINITY = float('inf')
+ 
+diff --git a/webapp/graphite/render/grammar.py b/webapp/graphite/render/grammar.py
+index 07e3e4b..2b0ba41 100644
+--- a/webapp/graphite/render/grammar.py
++++ b/webapp/graphite/render/grammar.py
+@@ -1,4 +1,4 @@
+-from graphite.thirdparty.pyparsing import *
++from pyparsing import *
+ 
+ ParserElement.enablePackrat()
+ grammar = Forward()
+diff --git a/webapp/graphite/render/views.py b/webapp/graphite/render/views.py
+index eff142b..3f27c6e 100644
+--- a/webapp/graphite/render/views.py
++++ b/webapp/graphite/render/views.py
+@@ -26,10 +26,7 @@ try:
+ except ImportError:
+   import pickle
+ 
+-try:  # See if there is a system installation of pytz first
+-  import pytz
+-except ImportError:  # Otherwise we fall back to Graphite's bundled version
+-  from graphite.thirdparty import pytz
++import pytz
+ 
+ from graphite.util import getProfileByUsername, json, unpickle
+ from graphite.remote_storage import HTTPConnectionWithTimeout
+diff --git a/webapp/graphite/settings.py b/webapp/graphite/settings.py
+index a3b5f63..d959a70 100644
+--- a/webapp/graphite/settings.py
++++ b/webapp/graphite/settings.py
+@@ -34,7 +34,6 @@ JAVASCRIPT_DEBUG = False
+ WEB_DIR = dirname( abspath(__file__) )
+ WEBAPP_DIR = dirname(WEB_DIR)
+ GRAPHITE_ROOT = dirname(WEBAPP_DIR)
+-THIRDPARTY_DIR = join(WEB_DIR,'thirdparty')
+ # Initialize additional path variables
+ # Defaults for these are set after local_settings is imported
+ CONTENT_DIR = ''
+@@ -53,8 +52,6 @@ DATA_DIRS = []
+ CLUSTER_SERVERS = []
+ 
+ sys.path.insert(0, WEBAPP_DIR)
+-# Allow local versions of the libs shipped in thirdparty to take precedence
+-sys.path.append(THIRDPARTY_DIR)
+ 
+ # Memcache settings
+ MEMCACHE_HOSTS = []

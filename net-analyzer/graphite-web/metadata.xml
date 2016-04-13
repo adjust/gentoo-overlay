@@ -5,6 +5,7 @@
 		<email>ops@adjust.com</email>
 	</maintainer>
 	<use>
+		<flag name="carbon">Enable carbon support</flag>
 		<flag name="memcached">Enable memcached support</flag>
 	</use>
 	<upstream>
