@@ -1,4 +1,4 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -17,7 +17,7 @@ IUSE=""
 DEPEND="
 	dev-perl/Moo
 	dev-perl/Redis
-	dev-perl/yaml
+	dev-perl/YAML
 	dev-perl/Linux-Inotify2
 	dev-perl/Module-Build
 "
