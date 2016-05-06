@@ -9,8 +9,8 @@
 #LS_OPTS=""
 
 # Arguments to pass to java
-#LS_HEAP_SIZE="500m"
-#LS_JAVA_OPTS="-Djava.io.tmpdir=$HOME"
+#LS_HEAP_SIZE="1g"
+#LS_JAVA_OPTS="-Djava.io.tmpdir=${LS_HOME}"
 
 # pidfiles location
 #LS_PIDFILE=/run/logstash/logstash.pid
@@ -22,6 +22,7 @@
 # logstash logging
 #LS_LOG_FILE=/var/log/logstash/logstash.log
 #LS_USE_GC_LOGGING="true"
+#LS_GC_LOG_FILE=/var/log/logstash/gc.log
 
 # logstash configuration directory
 #LS_CONF_DIR=/etc/logstash/conf.d
@@ -34,4 +35,5 @@
 
 # If this is set to 1, then when `stop` is called, if the process has
 # not exited within a reasonable time, SIGKILL will be sent next.
-KILL_ON_STOP_TIMEOUT=0
+# The default behavior is to simply log a message "program stop failed; still running"
+#KILL_ON_STOP_TIMEOUT=0
