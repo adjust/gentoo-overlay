@@ -14,29 +14,30 @@ user=${user:-aerospike}
 group=${group:-aerospike}
 start_stop_daemon_args="--user ${user} --group ${group}"
 required_files="${config_file}"
+sysctl=`which sysctl`
 
 depend() {
 	use net
 }
 
 set_shmall() {
-	mem=`/sbin/sysctl -n kernel.shmall`
+	mem=`$sysctl -n kernel.shmall`
 	min=4294967296
 	if [ ${#mem} -le ${#min} ]; then
 		if [ $mem -lt $min ]; then
 		ewarn "kernel.shmall too low, setting to 4G pages = 16TB"
-		/sbin/sysctl -w kernel.shmall=$min
+		$sysctl -w kernel.shmall=$min
 		fi
 	fi
 }
 
 set_shmmax() {
-	mem=`/sbin/sysctl -n kernel.shmmax`
+	mem=`$sysctl -n kernel.shmmax`
 	min=1073741824
 	if [ ${#mem} -le ${#min} ]; then
 		if [ $mem -lt $min ]; then
 		ewarn "kernel.shmmax too low, setting to 1GB"
-		/sbin/sysctl -w kernel.shmmax=$min
+		$sysctl -w kernel.shmmax=$min
 		fi
 	fi
 }
