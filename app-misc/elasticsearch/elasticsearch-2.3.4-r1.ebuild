@@ -16,7 +16,8 @@ KEYWORDS="~amd64"
 
 RESTRICT="strip"
 
-RDEPEND="|| ( virtual/jre:1.8 virtual/jre:1.7 )"
+RDEPEND="|| ( virtual/jre:1.8 virtual/jre:1.7 )
+	sys-process/numactl"
 
 pkg_preinst() {
 	if has_version '<app-misc/elasticsearch-2.3.2'; then
