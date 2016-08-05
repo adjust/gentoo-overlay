@@ -47,9 +47,6 @@ src_install() {
 	insinto /usr/share/${MY_PN}
 	doins -r ./*
 
-	insinto /usr/share/${MY_PN}/bin
-	doins "${FILESDIR}/elasticsearch-systemd-pre-exec"
-
 	chmod +x "${D}"/usr/share/${MY_PN}/bin/*
 
 	keepdir /var/{lib,log}/${MY_PN}
