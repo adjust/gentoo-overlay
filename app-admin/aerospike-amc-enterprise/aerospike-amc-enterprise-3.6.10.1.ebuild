@@ -23,6 +23,7 @@ RDEPEND="app-crypt/gcr
 	dev-python/flask-login
 	dev-lang/python:2.7[sqlite]
 	dev-python/pycrypto
+	dev-python/ipaddr
 	www-servers/gunicorn"
 DEPEND="${RDEPEND}"
 
