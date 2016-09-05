@@ -5,15 +5,15 @@
 
 description="Kafka distributed messaging system"
 
-logfile="/var/log/kafka.log"
+logfile="/var/log/kafka/kafka.log"
 
 command="/opt/kafka/bin/kafka-server-start.sh"
 command_args="/etc/kafka/server.properties"
-start_stop_daemon_args="--chdir /opt/kafka --stdout $logfile --stderr $logfile"
+start_stop_daemon_args="--user kafka --chdir /opt/kafka --stdout $logfile --stderr $logfile"
 
 command_background=yes
 pidfile=/run/kafka.pid
 
 depend() {
-	need kafka-zookeeper
+       after zookeeper kafka-zookeeper
 }

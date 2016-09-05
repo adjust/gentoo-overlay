@@ -4,4 +4,7 @@
         <maintainer type="person">
                 <email>ops@adjust.com</email>
         </maintainer>
+	<use>
+		<flag name="internal-zookeeper">Use bundled local zookeeper instance</flag>
+	</use>
 </pkgmetadata>

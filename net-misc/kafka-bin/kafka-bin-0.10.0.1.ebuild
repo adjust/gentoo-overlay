@@ -20,7 +20,7 @@ RESTRICT="mirror"
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="internal-zookeeper"
 
 RDEPEND="
 	|| ( virtual/jre:1.8 virtual/jre:1.7 )
@@ -30,20 +30,33 @@ DEPEND="${RDEPEND}"
 S="${WORKDIR}/${MY_P}"
 INSTALL_DIR="/opt/${MY_PN}"
 
+pkg_setup() {
+	enewgroup kafka
+	enewuser kafka -1 /bin/sh /var/lib/kafka kafka
+}
+
 src_prepare() {
-	sed -i -e 's:/tmp/zookeeper:/var/kafka/zookeeper:' "config/zookeeper.properties"
-	sed -i -e 's:/tmp/kafka-logs:/var/kafka/logs:' "config/server.properties"
+	sed -i -e 's:/tmp/zookeeper:/var/lib/kafka/zookeeper:' "config/zookeeper.properties"
+	sed -i -e 's:/tmp/kafka-logs:/var/lib/kafka/logs:' "config/server.properties"
 }
 
 src_install() {
 	insinto /etc/kafka
 	doins config/zookeeper.properties config/server.properties
+	if use "internal-zookeeper"; then
+		keepdir /var/lib/kafka/zookeeper
+		newinitd "${FILESDIR}/${MY_PN}-zookeeper.init.d" "${MY_PN}-zookeeper"
+	fi
 
-	keepdir /var/kafka/zookeeper
+	keepdir /var/lib/kafka
+	fowners -R kafka:kafka /var/lib/kafka
+
+	keepdir /var/log/kafka
+	fowners -R kafka:kafka /var/log/kafka
 
 	newinitd "${FILESDIR}/${MY_PN}.init.d" "${MY_PN}"
-	newinitd "${FILESDIR}/${MY_PN}-zookeeper.init.d" "${MY_PN}-zookeeper"
 
 	dodir "${INSTALL_DIR}"
 	cp -pRP bin config libs "${ED}/${INSTALL_DIR}" || die
+	fowners -R kafka:kafka "${INSTALL_DIR}"
 }
