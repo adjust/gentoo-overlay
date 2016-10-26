@@ -42,12 +42,9 @@ pkg_setup() {
 	enewuser ${USER} -1 /bin/bash "${DATADIR}" ${USER}
 }
 
-src_compile() {
-	./setup_database
-}
-
 src_install() {
 	insinto "${DATADIR}"
+	rm -rf "${S}/data"
 	doins -r ./*
 	fowners -R "${USER}:${USER}" "${DATADIR}"
 }
