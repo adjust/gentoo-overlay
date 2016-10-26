@@ -9,12 +9,11 @@ DESCRIPTION="Github clone. you can install Github system into your unix/linux ma
 HOMEPAGE="http://gitprep.yukikimoto.com/"
 SRC_URI=""
 EGIT_REPO_URI="https://github.com/yuki-kimoto/gitprep"
-RESTRICT="test"
 #VERSION 2.4.1
 EGIT_COMMIT="c3e7ef3f17e0daee47f65dc77e5fbf829f8d02ae"
 LICENSE="|| ( Artistic GPL-1+ )"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64"
 IUSE=""
 DATADIR="/var/lib/gitprep"
 USER="git"
