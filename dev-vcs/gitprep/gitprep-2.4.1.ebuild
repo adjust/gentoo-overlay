@@ -40,7 +40,7 @@ DEPEND="${RDEPEND}"
 
 pkg_setup() {
 	enewgroup ${USER}
-	enewuser ${USER} -1 /bin/bash /var/lib/"${PN}" ${USER}
+	enewuser ${USER} -1 /bin/bash "${DATADIR}" ${USER}
 }
 
 src_compile() {
