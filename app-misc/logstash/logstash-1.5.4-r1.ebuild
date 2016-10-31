@@ -1,4 +1,4 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -19,7 +19,7 @@ RDEPEND="virtual/jre"
 
 pkg_setup() {
 	enewgroup logstash
-	enewuser logstash -1 -1 /var/lib/logstash logstash -m
+	enewuser logstash -1 -1 /var/lib/logstash logstash
 }
 
 src_install() {
