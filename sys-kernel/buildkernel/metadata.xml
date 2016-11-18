@@ -4,4 +4,7 @@
 	<maintainer type="person">
 		<email>ops@adjust.com</email>
 	</maintainer>
+	<use>
+		<flag name="firmware">Bundle in linux-firmware</flag>
+	</use>
 </pkgmetadata>
