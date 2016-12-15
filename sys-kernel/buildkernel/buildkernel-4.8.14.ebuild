@@ -62,11 +62,14 @@ src_compile() {
 		--module-prefix="$S/final" \
 		--kerneldir=/usr/src/linux-${PVR}-gentoo \
 		--mdadm \
+		--no-zfs --no-btrfs \
 		--kernel-config="$S/tmp/kernel/.config" \
 		--cachedir="$S/cache" || die
 }
 
 src_install() {
+	# don't package firmware files, provided by linux-firmware if required
+	rm -rf "$S/final/lib/firmware" || die
 	cd "$S/final/" && tar cJf binkernel-${PVR}.tar.xz * || die
 	mkdir -p "${D}/usr/share"
 	mv binkernel-${PVR}.tar.xz "${D}/usr/share" || die
