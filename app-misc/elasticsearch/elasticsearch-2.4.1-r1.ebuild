@@ -55,9 +55,6 @@ src_install() {
 	keepdir /var/{lib,log}/${MY_PN}
 	keepdir /usr/share/${MY_PN}/plugins
 
-	insinto /usr/lib/tmpfiles.d
-	newins "${FILESDIR}/${MY_PN}.tmpfiles.d" "${MY_PN}.conf"
-
 	insinto /etc/sysctl.d
 	newins "${FILESDIR}/${MY_PN}.sysctl.d" "${MY_PN}.conf"
 
