@@ -16,9 +16,9 @@ RDEPEND='>=dev-db/postgresql-9.3'
 S="${WORKDIR}/eradman-ephemeralpg-775e90996fea"
 
 src_compile() {
-	emake DESTDIR="${D}" PREFIX='/usr'
+	emake DESTDIR="${D}" PREFIX='/usr' MANPREFIX='/usr/share'
 }
 
 src_install() {
-	emake DESTDIR="${D}" PREFIX='/usr' install
+	emake DESTDIR="${D}" PREFIX='/usr' MANPREFIX='/usr/share' install
 }
