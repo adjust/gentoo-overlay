@@ -1,0 +1,44 @@
+#!/sbin/openrc-run
+# Copyright 1999-2012 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+USER="karmabot"
+STDOUT="/var/log/${USER}/${SVCNAME}.log"
+STDERR="/var/log/${USER}/${SVCNAME}_crash.log"
+BIN="/usr/bin/karmabot"
+PIDFILE="/run/${SVCNAME}.pid"
+
+depend() {
+    need localmount
+    need net
+}
+
+mark_crash_log() {
+    touch "${STDERR}"
+    chown "${USER}:${USER}" "${STDERR}"
+    if [ -f "${STDERR}" ];then
+        echo "==== `date` ====" >> ${STDERR}
+    fi
+}
+
+start() {
+    ebegin "Starting ${SVCNAME}"
+    mark_crash_log
+
+    CLIENT_ID=${CLIENT_ID} \
+    CLIENT_SECRET=${CLIENT_SECRET} \
+    ACCESS_TOKEN=${ACCESS_TOKEN} \
+    BOT_ACCESS_TOKEN=${BOT_ACCESS_TOKEN} \
+    start-stop-daemon -2 ${STDERR} -1 ${STDOUT} --wait 3000 --background --start --exec \
+    ${BIN} \
+    --make-pidfile --pidfile=${PIDFILE} \
+    -u ${USER}
+    eend $?
+}
+
+stop() {
+    ebegin "Stopping ${SVCNAME}"
+    start-stop-daemon --stop --exec \
+    ${BIN} --pidfile=${PIDFILE} -s 1
+}

@@ -1,0 +1,6 @@
+# Config file for /etc/init.d/karmabot
+
+CLIENT_ID=""
+CLIENT_SECRET=""
+ACCESS_TOKEN=""
+BOT_ACCESS_TOKEN=""
