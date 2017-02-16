@@ -1,9 +1,9 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 EAPI=5
 MODULE_AUTHOR=DWHEELER
-MODULE_VERSION=0.53
+MODULE_VERSION=${PV}
 inherit perl-module
 
 DESCRIPTION='Fast, safe DBI connection and transaction management'
