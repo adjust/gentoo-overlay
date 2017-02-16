@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -9,8 +9,8 @@ DESCRIPTION="Github clone. you can install Github system into your unix/linux ma
 HOMEPAGE="http://gitprep.yukikimoto.com/"
 SRC_URI=""
 EGIT_REPO_URI="https://github.com/yuki-kimoto/gitprep"
-#VERSION 2.4.1
-EGIT_COMMIT="c3e7ef3f17e0daee47f65dc77e5fbf829f8d02ae"
+EGIT_BRANCH="master"
+EGIT_COMMIT="v${PV}"
 LICENSE="|| ( Artistic GPL-1+ )"
 SLOT="0"
 KEYWORDS="~amd64"
