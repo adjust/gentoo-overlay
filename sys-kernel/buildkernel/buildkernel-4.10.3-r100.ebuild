@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -14,7 +14,7 @@ DESCRIPTION="Autogenerate kernel images with genkernel"
 SRC_URI="http://files.adjust.com/${PF}"
 
 DEPEND="
-	=sys-kernel/gentoo-sources-${PVR}
+	=sys-kernel/gentoo-sources-4.10.3-r100
 	|| (
 		sys-kernel/genkernel
 		sys-kernel/genkernel-next
@@ -41,13 +41,13 @@ src_compile() {
 	export KBUILD_OUTPUT="$S/tmp/kernel"
 
 	# make runs from src dir with output going to KBUILD_OUTPUT
-	# FIXME: Ignores PVR here
-	cd /usr/src/linux-${PV}-gentoo || die
+	# hacky PVR special
+	cd /usr/src/linux-${PV}-gentoo-r100 || die
 	make -s oldconfig || die
 	echo "Building kernel ..."
 	make -s ${MAKEOPTS} || die
 	echo "Done building kernel."
-	cp "$S/tmp/kernel/arch/x86/boot/bzImage" "$S/final/boot/kernel-genkernel-x86_64-${PVR}-gentoo" || die
+	cp "$S/tmp/kernel/arch/x86/boot/bzImage" "$S/final/boot/kernel-genkernel-x86_64-${PV}-gentoo-${PR}" || die
 
 	# install  modules to a prefix. Strip in kbuild because otherwise size is >10x more for tarball
 	emake INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH="$S/final" modules_install || die
@@ -60,7 +60,7 @@ src_compile() {
 		--logfile="$S/genkernel.log"  \
 		--tempdir="$S/tmp" \
 		--module-prefix="$S/final" \
-		--kerneldir=/usr/src/linux-${PVR}-gentoo \
+		--kerneldir=/usr/src/linux-${PV}-gentoo-${PR} \
 		--mdadm \
 		--no-zfs --no-btrfs \
 		--kernel-config="$S/tmp/kernel/.config" \
