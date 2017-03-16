@@ -47,7 +47,7 @@ src_compile() {
 	echo "Building kernel ..."
 	make -s ${MAKEOPTS} || die
 	echo "Done building kernel."
-	cp "$S/tmp/kernel/arch/x86/boot/bzImage" "$S/final/boot/kernel-genkernel-x86_64-${PVR}-gentoo" || die
+	cp "$S/tmp/kernel/arch/x86/boot/bzImage" "$S/final/boot/kernel-genkernel-x86_64-${PV}-gentoo-${PVR}" || die
 
 	# install  modules to a prefix. Strip in kbuild because otherwise size is >10x more for tarball
 	emake INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH="$S/final" modules_install || die
