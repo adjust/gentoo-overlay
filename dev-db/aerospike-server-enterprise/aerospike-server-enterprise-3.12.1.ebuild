@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -22,7 +22,7 @@ S="${WORKDIR}/${P}-debian7"
 RESTRICT="fetch"
 
 # change me at every version bump
-TOOLS_PV="3.8.2"
+TOOLS_PV="3.12.1"
 
 pkg_setup() {
 	enewgroup aerospike
