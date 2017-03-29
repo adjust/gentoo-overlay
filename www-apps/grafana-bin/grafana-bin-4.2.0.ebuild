@@ -3,7 +3,8 @@
 
 EAPI=5
 
-inherit user
+inherit user systemd
+
 MY_PN=${PN/-bin/}
 MY_PV="4.2.0-beta1"
 S=${WORKDIR}/${MY_PN}-${MY_PV}
@@ -46,6 +47,7 @@ src_install() {
 
 	newconfd "${FILESDIR}"/grafana.confd grafana
 	newinitd "${FILESDIR}"/grafana.initd.3 grafana
+	systemd_newunit "${FILESDIR}"/grafana.service grafana.service
 
 	keepdir /var/{lib,log}/grafana
 	keepdir /var/lib/grafana/{dashboards,plugins}
