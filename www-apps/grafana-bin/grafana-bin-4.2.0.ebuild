@@ -6,12 +6,11 @@ EAPI=5
 inherit user systemd
 
 MY_PN=${PN/-bin/}
-MY_PV="4.2.0-beta1"
-S=${WORKDIR}/${MY_PN}-${MY_PV}
+S=${WORKDIR}/${MY_PN}-${PV}
 
 DESCRIPTION="Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB"
 HOMEPAGE="http://grafana.org"
-SRC_URI="https://grafanarel.s3.amazonaws.com/builds/${MY_PN}-${MY_PV}.linux-x64.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://grafanarel.s3.amazonaws.com/builds/${MY_PN}-${PV}.linux-x64.tar.gz -> ${P}.tar.gz"
 
 LICENSE="Apache-2.0"
 SLOT="0"
