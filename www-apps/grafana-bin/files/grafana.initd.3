@@ -9,6 +9,10 @@ depend() {
 start() {
 	ebegin "Starting grafana server"
 
+    checkpath -d -o "${GRAFANA_USER}:${GRAFANA_GROUP}" -m750 "/var/lib/grafana/dashboards"
+    checkpath -d -o "${GRAFANA_USER}:${GRAFANA_GROUP}" -m750 "/var/lib/grafana/plugins"
+    checkpath -d -o "${GRAFANA_USER}:${GRAFANA_GROUP}" -m750 "/var/lib/grafana/sessions"
+
 	start-stop-daemon --start -b \
 		--make-pidfile \
 		--pidfile /run/grafana.pid \

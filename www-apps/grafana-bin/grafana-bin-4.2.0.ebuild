@@ -45,13 +45,12 @@ src_install() {
 	dobin bin/grafana-server
 
 	newconfd "${FILESDIR}"/grafana.confd grafana
-	newinitd "${FILESDIR}"/grafana.initd.2 grafana
+	newinitd "${FILESDIR}"/grafana.initd.3 grafana
 
 	keepdir /var/{lib,log}/grafana
 	keepdir /var/lib/grafana/{dashboards,plugins}
-	dodir /var/lib/grafana/sessions
 	fowners grafana:grafana /var/{lib,log}/grafana
-	fowners grafana:grafana /var/lib/grafana/{dashboards,plugins,sessions}
+	fowners grafana:grafana /var/lib/grafana/{dashboards,plugins}
 	fperms 0750 /var/{lib,log}/grafana
-	fperms 0750 /var/lib/grafana/{dashboards,plugins,sessions}
+	fperms 0750 /var/lib/grafana/{dashboards,plugins}
 }
