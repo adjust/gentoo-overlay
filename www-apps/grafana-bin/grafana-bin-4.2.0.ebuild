@@ -23,6 +23,9 @@ RDEPEND="${DEPEND}
 	net-libs/nodejs
 "
 
+QA_EXECSTACK="usr/share/grafana/vendor/phantomjs/phantomjs"
+QA_PRESTRIPPED=${QA_EXECSTACK}
+
 pkg_setup() {
 	enewgroup grafana
 	enewuser grafana -1 -1 /usr/share/grafana grafana
