@@ -18,10 +18,7 @@ KEYWORDS="~amd64"
 IUSE=""
 
 DEPEND=""
-RDEPEND="${DEPEND}
-	>=dev-lang/go-1.5
-	net-libs/nodejs
-"
+RDEPEND="${DEPEND}"
 
 QA_EXECSTACK="usr/share/grafana/vendor/phantomjs/phantomjs"
 QA_PRESTRIPPED=${QA_EXECSTACK}
