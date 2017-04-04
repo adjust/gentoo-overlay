@@ -7,7 +7,7 @@ inherit user
 
 DESCRIPTION="shovel data around"
 HOMEPAGE="https://github.com/adjust/schaufel"
-SRC_URI="https://github.com/adjust/schaufel/archive/${PN}-9999.tar.gz"
+SRC_URI="https://github.com/adjust/${PN}/archive/${PN}-9999.tar.gz"
 
 RESTRICT="fetch"
 
@@ -33,4 +33,9 @@ src_install() {
 	emake PREFIX="${D}" install
 	insinto /usr/bin
 	doins "${D}/${PN}"
+	fperms +x /usr/bin/${PN}
+	newconfd "${FILESDIR}/${PN}.confd" ${PN}
+	newinitd "${FILESDIR}/${PN}.initd" ${PN}
+	diropts -m 0755 -o ${PN} -g ${PN}
+	keepdir /var/{log,lib}/${PN}
 }
