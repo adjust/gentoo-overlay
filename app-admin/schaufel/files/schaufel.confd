@@ -1,0 +1,5 @@
+#SCHAUFEL_DIR=/var/log/schaufel
+#SCHAUFEL_LOG_DIR=/var/log/schaufel
+#SCHAUFEL_OPTS="-l /var/log/schaufel/schaufel.log"
+#SCHAUFEL_USER=schaufel
+#SCHAUFEL_GROUP=schaufel
