@@ -5,6 +5,7 @@ SCHAUFEL_LOG_DIR=${SCHAUFEL_LOG_DIR:-/var/log/schaufel}
 SCHAUFEL_OPTS=${SCHAUFEL_OPTS:-"-l /var/log/schaufel/schaufel.log"}
 SCHAUFEL_USER=${SCHAUFEL_USER:-schaufel}
 SCHAUFEL_GROUP=${SCHAUFEL_GROUP:-schaufel}
+SCHAUFEL_TIMEOUT=${SCHAUFEL_TIMEOUT:-60}
 
 command=/usr/bin/schaufel
 pidfile=${SCHAUFEL_PID:-/run/schaufel/schaufel.pid}
@@ -18,4 +19,13 @@ depend() {
 
 start_pre() {
 	checkpath -d -m 0775 -o ${SCHAUFEL_USER}:${SCHAUFEL_GROUP} $(dirname ${pidfile})
+}
+
+stop() {
+	ebegin "Stopping ${SVCNAME}"
+	start-stop-daemon --stop \
+		--exec ${command} \
+		--retry ${SCHAUFEL_TIMEOUT} \
+		--pidfile ${pidfile}
+	eend
 }
