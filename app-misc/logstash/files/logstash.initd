@@ -7,8 +7,9 @@ command=/usr/bin/logstash
 command_args="${LS_OPTS}"
 command_background="true"
 pidfile="${LS_PIDFILE}"
+nicelevel="${LS_NICE:-0}"
 
-start_stop_daemon_args="--user logstash:logstash --chdir /var/lib/logstash --env LS_HEAP_SIZE=${LS_HEAP_SIZE}"
+start_stop_daemon_args="--user logstash:logstash --chdir /var/lib/logstash --env LS_HEAP_SIZE=${LS_HEAP_SIZE} --nicelevel=${nicelevel}"
 
 start_pre() {
     checkpath --file --owner logstash:logstash -m750 ${pidfile}

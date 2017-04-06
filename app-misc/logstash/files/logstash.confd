@@ -12,6 +12,9 @@ LS_OPTS="agent --config /etc/logstash/conf.d --filterworkers 1 --log /var/log/lo
 # Java heap size for Logstash
 LS_HEAP_SIZE="512m"
 
+# Be nice, nice up!
+# LS_NICE=-10
+
 # pidfile to use with this instance
 LS_PIDFILE="/run/logstash.pid"
 
