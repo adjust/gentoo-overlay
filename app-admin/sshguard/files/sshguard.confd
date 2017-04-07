@@ -8,8 +8,9 @@
 SSHGUARD_OPTS=""
 
 # Files to monitor
-#   -l <source>
-SSHGUARD_OPTS="${SSHGUARD_OPTS} -l /var/log/auth.log"
+#   <source>...
+# Note: This overrides FILES= setting in /etc/sshguard.conf
+SSHGUARD_OPTS="${SSHGUARD_OPTS} /var/log/auth.log"
 
 # White listing
 #   -w <addr/host/block/file>
