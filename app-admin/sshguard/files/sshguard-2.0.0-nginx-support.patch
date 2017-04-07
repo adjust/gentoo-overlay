@@ -1,0 +1,185 @@
+From 56fe500ec85f893648482f70c2cd90c567e68fbf Mon Sep 17 00:00:00 2001
+From: Ali Polatel <alip@exherbo.org>
+Date: Fri, 7 Apr 2017 09:32:10 +0200
+Subject: [PATCH 2/2] Initial support for nginx service
+
+There are two checks for nginx:
+1. Catch HTTP 401 (Authorization Required) status code
+2. Catch common patterns of bot failures (adapted from fail2ban)
+
+Note, the patterns are written with the Common Log Format in mind and
+are relatively flexible so as to work with small tweaks but there are no
+guarantees for the latter. See attacks.txt for a near-complete list of
+fingerprints that match.
+---
+ src/common/attack.h         |  1 +
+ src/parser/attack_parser.y  | 11 +++++++++++
+ src/parser/attack_scanner.l | 32 ++++++++++++++++++++++++++++++++
+ src/parser/attacks.txt      | 25 +++++++++++++++++++++++++
+ 4 files changed, 69 insertions(+)
+
+diff --git a/src/common/attack.h b/src/common/attack.h
+index 3f25aba..371d57e 100644
+--- a/src/common/attack.h
++++ b/src/common/attack.h
+@@ -38,6 +38,7 @@ enum service {
+     SERVICES_PROFTPD        = 310,  //< ProFTPd
+     SERVICES_PUREFTPD       = 320,  //< Pure-FTPd
+     SERVICES_VSFTPD         = 330,  //< vsftpd
++    SERVICES_NGINX          = 340,  //< nginx
+ };
+ 
+ /* an attack (source address & target service info) */
+diff --git a/src/parser/attack_parser.y b/src/parser/attack_parser.y
+index c8570df..7ebf5eb 100644
+--- a/src/parser/attack_parser.y
++++ b/src/parser/attack_parser.y
+@@ -51,6 +51,8 @@ static void yyerror(attack_t *, const char *);
+ 
+ /* flat tokens */
+ %token SYSLOG_BANNER TIMESTAMP_SYSLOG TIMESTAMP_ISO8601 TIMESTAMP_TAI64 AT_TIMESTAMP_TAI64 METALOG_BANNER SOCKLOG_BANNER
++%token HTTP_REQUEST HTTP_VERSION HTTP_REDIRECT HTTP_AUTHFAIL HTTP_CLIERROR
++%token HTTP_BOTSEARCH_WEBMAIL HTTP_BOTSEARCH_PHPMYADMIN HTTP_BOTSEARCH_WORDPRESS HTTP_BOTSEARCH
+ /* ssh */
+ %token SSH_INVALUSERPREF SSH_NOTALLOWEDPREF SSH_NOTALLOWEDSUFF
+ %token SSH_LOGINERR_PREF SSH_LOGINERR_SUFF SSH_LOGINERR_PAM
+@@ -81,6 +83,8 @@ static void yyerror(attack_t *, const char *);
+ %token PUREFTPD_LOGINERR_PREF PUREFTPD_LOGINERR_SUFF
+ /* vsftpd */
+ %token VSFTPD_LOGINERR_PREF VSFTPD_LOGINERR_SUFF
++/* nginx */
++%token NGINX_LOGENT_PREF NGINX_AUTHFAIL_SUFF NGINX_BOTSEARCH_SUFF
+ 
+ %%
+ 
+@@ -142,6 +146,7 @@ msg_single:
+     | proftpdmsg        {   attack->service = SERVICES_PROFTPD; }
+     | pureftpdmsg       {   attack->service = SERVICES_PUREFTPD; }
+     | vsftpdmsg         {   attack->service = SERVICES_VSFTPD; }
++    | nginxmsg          {   attack->service = SERVICES_NGINX; }
+     ;
+ 
+ /* an address */
+@@ -253,6 +258,12 @@ vsftpdmsg:
+     VSFTPD_LOGINERR_PREF addr VSFTPD_LOGINERR_SUFF
+     ;
+ 
++/* attack rules for nginx */
++nginxmsg:
++    addr NGINX_LOGENT_PREF NGINX_AUTHFAIL_SUFF |
++    addr NGINX_LOGENT_PREF NGINX_BOTSEARCH_SUFF
++    ;
++
+ %%
+ 
+ static void yyerror(__attribute__((unused)) attack_t *a,
+diff --git a/src/parser/attack_scanner.l b/src/parser/attack_scanner.l
+index 05fe8fa..04d6917 100644
+--- a/src/parser/attack_scanner.l
++++ b/src/parser/attack_scanner.l
+@@ -42,6 +42,8 @@ static int getsyslogpid(char *syslogbanner, int length);
+ %s dovecot_loginerr cyrusimap_loginerr exim_esmtp_autherr sendmail_relaydenied sendmail_authfailure postfix_loginerr
+  /* for FTP services */
+ %s freebsdftpd_loginerr  proftpd_loginerr  pureftpd_loginerr vsftpd_loginerr
++ /* for HTTP services */
++%s nginx_logent
+ 
+ MONTH       (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)
+ MONTHNO     0[0-9]|1[0-2]
+@@ -51,6 +53,7 @@ MINPS       [0-5][0-9]
+ SECONDFRAC  [0-5][0-9]([.,][0-9]+)?
+ WORD        [a-zA-Z0-9][-_a-zA-Z0-9]+
+ NUMBER      [1-9][0-9]*
++FILENAME    [a-zA-Z0-9\/.-]+
+ YEAR        (1|2)[0-9]{3}
+ TIMEZONE    Z|[-+]{HOUR}(:?{MINPS})?
+ 
+@@ -58,6 +61,7 @@ TIMESTAMP_SYSLOG    {MONTH}\ +{DAYNO}\ +{HOUR}:{MINPS}:{MINPS}
+ TIMESTAMP_TAI64     [0-9A-Fa-f]{24}
+ SOLARIS_MSGID_TAG   "[ID "[0-9]+" "{WORD}"."{WORD}"]"
+ TIMESTAMP_ISO8601   {YEAR}-{MONTHNO}-{DAYNO}(T|" "){HOUR}:?{MINPS}:?{SECONDFRAC}{TIMEZONE}?
++TIMESTAMP_LOCAL     {DAYNO}"/"{MONTH}"/"{YEAR}":"{HOUR}":"{MINPS}":"{MINPS}" "{TIMEZONE}
+ 
+  /* all words but "sshguard" provided that posix regex don't support negation nor intersection:
+   * 1) all words of 2 to 7 characters or 8-* chars
+@@ -72,9 +76,32 @@ IPV6        (::|:(:[0-9a-fA-F]{1,4}){1,7}|[0-9a-fA-F]{1,4}:([0-9a-fA-F]{1,4}:(:[
+  /* an IPv4 packed in IPv6 as IPv4-mapped IPv6 address */
+ IPV4MAPPED6 ((:(:0{1,4}){0,4}|0{1,4}:(:0{1,4}){1,3}|(0{1,4}:){2}(0{1,4}:0{0,4}:0{1,4}|(:0{1,4}){1,2})|(0{1,4}:){1,4}):[fF]{4}:(((2[0-4]|1[0-9]|[1-9])?[0-9]|25[0-5])\.){3}((2[0-4]|1[0-9]|[1-9])?[0-9]|25[0-5]))
+ 
++HOSTNAME    ([-a-zA-Z0-9]+\.)*[-a-zA-Z0-9]+
+ HOSTADDR    localhost|([-a-zA-Z0-9]+\.)+[a-zA-Z]+|{IPV4}|{IPV6}|{IPV4MAPPED6}
+ FACLEVEL    (<[a-zA-Z0-9]+\.[a-zA-Z0-9]+>)
+ 
++HTTP_REQUEST   (GET|HEAD|PUT|POST|DELETE)
++HTTP_VERSION   HTTP"/"[0-9]"."[0-9]
++HTTP_REDIRECT  3[0-9]{2}
++HTTP_AUTHFAIL  401
++HTTP_CLIERROR  4[0-9]{2}
++
++ /* Common Log Format. */
++CLF_MISSING    -
++CLF_USER_ID    {CLF_MISSING}|{WORD}
++CLF_USER_NAME  {CLF_MISSING}|{WORD}
++CLF_TIMESTAMP  "["({TIMESTAMP_LOCAL}|{TIMESTAMP_ISO8601})"]"
++CLF_REQUEST    "\""{HTTP_REQUEST}" "{FILENAME}" "{HTTP_VERSION}"\""
++
++ /* Common configuration for http botsearch
++  * Adapted from fail2ban botsearch filters & tweaked by alip☮exherbo.org,
++  * Original author: Frantisek Sumsal
++  */
++HTTP_BOTSEARCH_WEBMAIL     roundcube|(ext)?mail|horde|(v-?)?webmail
++HTTP_BOTSEARCH_PHPMYADMIN  (typo3"/"|xampp"/"|admin"/")?(pma|(php)?[Mm]y[Aa]dmin)
++HTTP_BOTSEARCH_WORDPRESS   wp-(login|signup|admin)"."php
++HTTP_BOTSEARCH             "/"?({HTTP_BOTSEARCH_WEBMAIL}|{HTTP_BOTSEARCH_PHPMYADMIN}|{HTTP_BOTSEARCH_WORDPRESS}|cgi-bin|mysqladmin)[^,]*
++
+ %%
+ 
+ 
+@@ -196,6 +223,11 @@ FACLEVEL    (<[a-zA-Z0-9]+\.[a-zA-Z0-9]+>)
+ .+"FAIL LOGIN: Client \""                                       { BEGIN(vsftpd_loginerr); return VSFTPD_LOGINERR_PREF; }
+ <vsftpd_loginerr>"\""                                           { BEGIN(INITIAL); return VSFTPD_LOGINERR_SUFF; }
+ 
++ /* nginx */
++({CLF_USER_ID}" ")?({CLF_USER_NAME}" ")?{CLF_TIMESTAMP}" "("\""{HOSTNAME}"\" ")?"\""{HTTP_REQUEST} { BEGIN(nginx_logent); return NGINX_LOGENT_PREF; }
++<nginx_logent>" "{FILENAME}" "{HTTP_VERSION}"\" "({HTTP_REDIRECT}" ")?{HTTP_AUTHFAIL}" ".+         { BEGIN(INITIAL); return NGINX_AUTHFAIL_SUFF; }
++<nginx_logent>" "{HTTP_BOTSEARCH}" "{HTTP_VERSION}"\" "({HTTP_REDIRECT}" ")?{HTTP_CLIERROR}.+      { BEGIN(INITIAL); return NGINX_BOTSEARCH_SUFF; }
++
+  /**         COMMON-USE TOKENS       do not touch these          **/
+  /* an IPv4 address */
+ {IPV4}                                                          { yylval.str = yytext; return IPv4; }
+diff --git a/src/parser/attacks.txt b/src/parser/attacks.txt
+index 1cf5b90..75c9631 100644
+--- a/src/parser/attacks.txt
++++ b/src/parser/attacks.txt
+@@ -24,3 +24,28 @@ Apr  9 13:24:07 quasar sshd[44787]: Received disconnect from 103.237.33.58: 11:
+ 2015-05-27T04:31:27.46667 auth.info: Invalid user admin from 192.168.2.1
+ May 29 14:44:30 epsilon sshd[4564]: error: Received disconnect from 192.168.2.200: 14: No supported authentication methods available [preauth]
+ Dec 13 09:32:50 marcos postfix/smtpd[24754]: lost connection after AUTH from rrcs-24-213-217-114.nys.biz.rr.com[24.213.217.114]
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "GET / HTTP/1.1" 401 314 "-" "Mozilla/5.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "GET / HTTP/2.0" 301 401 314 "-" "Mozilla/5.0"
++10.42.42.42 - admin [19/Apr/1943:03:14:15 +0000] "GET / HTTP/1.1" 401 314 "-" "Mozilla/5.0"
++10.42.42.42 - - [19/Apr/1943:03:14:15 +0000] "GET / HTTP/2.0" 301 401 314 "-" "Mozilla/5.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "GET wp-login.php HTTP/1.1" 404 "-" "Mozilla/5.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "GET /wp-login.php HTTP/1.1" 404 "-" "Mozilla/5.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "GET /wp-login.php HTTP/1.1" 301 404 "-" "Mozilla/5.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "GET /wp-login.php HTTP/2.0" 301 403 "-" "Mozilla/5.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "GET /roundcube HTTP/1.1" 404 "-" "Mozilla/4.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "GET /roundcube HTTP/1.1" 301 403 "-" "Mozilla/4.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "GET /roundcube HTTP/2.0" 301 404 "-" "Mozilla/4.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "GET /roundcube/ HTTP/1.1" 404 "-" "Mozilla/4.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "GET /roundcube/ HTTP/1.1" 301 403 "-" "Mozilla/4.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "GET /roundcube/ HTTP/2.0" 301 404 "-" "Mozilla/4.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "honeypot-1" "GET wp-login.php HTTP/1.1" 404 "-" "Mozilla/5.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "honeypot-2" "GET /wp-login.php HTTP/1.1" 404 "-" "Mozilla/5.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "honeypot-3" "GET /wp-login.php HTTP/1.1" 301 404 "-" "Mozilla/5.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "honeypot-4" "GET /wp-login.php HTTP/2.0" 301 403 "-" "Mozilla/5.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "honeypot-5" "GET roundcube HTTP/1.1" 404 "-" "Mozilla/4.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "honeypot-6" "GET /roundcube HTTP/1.1" 404 "-" "Mozilla/4.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "honeypot-7" "GET /roundcube HTTP/1.1" 301 403 "-" "Mozilla/4.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "honeypot-8" "GET /roundcube HTTP/2.0" 301 404 "-" "Mozilla/4.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "honeypot-9" "GET /roundcube/ HTTP/1.1" 404 "-" "Mozilla/4.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "honeypot-10" "GET /roundcube/ HTTP/1.1" 301 403 "-" "Mozilla/4.0"
++10.42.42.42 [19/Apr/1943:03:14:15 +0000] "honeypot-11" "GET /roundcube/ HTTP/2.0" 301 404 "-" "Mozilla/4.0"
+-- 
+2.12.2
+
