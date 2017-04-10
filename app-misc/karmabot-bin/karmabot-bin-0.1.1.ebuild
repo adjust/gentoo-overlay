@@ -8,7 +8,7 @@ inherit user
 
 DESCRIPTION="Slack bot for karma tracking using reaction buttons"
 HOMEPAGE="https://github.com/adjust/karmabot"
-SRC_URI="http://files.adjust.com/karmabot-0.1.0.tar.gz"
+SRC_URI="http://files.adjust.com/karmabot-0.1.1.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
