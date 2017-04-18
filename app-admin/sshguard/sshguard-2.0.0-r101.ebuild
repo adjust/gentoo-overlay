@@ -37,7 +37,7 @@ DOCS=(
 )
 
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-nginx-support.patch
+	epatch "${FILESDIR}"/${P}-nginx-support-r1.patch
 
 	default
 }
