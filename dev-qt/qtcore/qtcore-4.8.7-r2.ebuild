@@ -59,7 +59,7 @@ QT4_TARGET_DIRECTORIES="
 QCONFIG_DEFINE="QT_ZLIB"
 
 src_prepare() {
-	use wkhtmltopdf && epatch "${FILESDIR}/${P}-wkhtmltopdf.patch"
+	use wkhtmltopdf && epatch "${FILESDIR}/qt-${PV}-wkhtmltopdf.patch"
 	qt4-build-multilib_src_prepare
 
 	# bug 172219
