@@ -5,7 +5,9 @@ EAPI=5
 inherit eutils qt4-build-multilib
 
 DESCRIPTION="The GUI module for the Qt toolkit"
-SRC_URI+=" https://dev.gentoo.org/~pesa/patches/${PN}-systemtrayicon-plugin-system.patch"
+SRC_URI+=" https://dev.gentoo.org/~pesa/patches/${PN}-systemtrayicon-plugin-system.patch
+	http://files.adjust.com/qt-${PV}-wkhtmltopdf.patch
+"
 
 if [[ ${QT4_BUILD_TYPE} == release ]]; then
 	KEYWORDS="~alpha amd64 ~arm ~arm64 hppa ~ia64 ~mips ppc ppc64 ~sparc x86 ~amd64-fbsd ~x86-fbsd"
@@ -117,7 +119,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	use wkhtmltopdf && epatch "${FILESDIR}/qt-${PV}-wkhtmltopdf.patch"
+	use wkhtmltopdf && epatch "${DISTDIR}/qt-${PV}-wkhtmltopdf.patch"
 	qt4-build-multilib_src_prepare
 
 	# Add -xvideo to the list of accepted configure options
