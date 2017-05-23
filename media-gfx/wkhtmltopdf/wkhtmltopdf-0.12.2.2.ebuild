@@ -14,11 +14,11 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="examples"
 
-RDEPEND="dev-qt/qtgui:4[wkhtmltopdf]
-	dev-qt/qtwebkit:4[wkhtmltopdf]
-	dev-qt/qtcore:4[wkhtmltopdf]
-	dev-qt/qtsvg:4[wkhtmltopdf]
-	dev-qt/qtxmlpatterns:4[wkhtmltopdf]"
+RDEPEND="~dev-qt/qtgui-4.8.5[wkhtmltopdf]
+	~dev-qt/qtwebkit-4.8.5[wkhtmltopdf]
+	~dev-qt/qtcore-4.8.5[wkhtmltopdf]
+	~dev-qt/qtsvg-4.8.5[wkhtmltopdf]
+	~dev-qt/qtxmlpatterns-4.8.5[wkhtmltopdf]"
 DEPEND="${RDEPEND}"
 
 src_prepare() {
