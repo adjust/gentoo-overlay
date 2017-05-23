@@ -31,7 +31,7 @@ QCONFIG_DEFINE="QT_XMLPATTERNS"
 src_prepare() {
 	use wkhtmltopdf && epatch "${DISTDIR}/qt-${PV}-wkhtmltopdf.patch"
 
-	qt4_multilib_src_prepare
+	qt4-build-multilib_src_prepare
 }
 
 multilib_src_configure() {
