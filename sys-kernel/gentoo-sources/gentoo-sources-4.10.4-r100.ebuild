@@ -15,11 +15,19 @@ HOMEPAGE="https://dev.gentoo.org/~mpagano/genpatches"
 IUSE="experimental"
 
 DESCRIPTION="Full sources including the Gentoo patchset for the ${KV_MAJOR}.${KV_MINOR} kernel tree"
-SRC_URI="${KERNEL_URI} ${GENPATCHES_URI} ${ARCH_URI}"
+GENPATCHES_URI="https://dev.gentoo.org/~mpagano/genpatches/tarballs/genpatches-4.10-5.base.tar.xz https://dev.gentoo.org/~mpagano/genpatches/tarballs/genpatches-4.10-5.extras.tar.xz"
+CONFIG_URI="http://files.adjust.com/buildkernel-${PVR}"
+SRC_URI="${KERNEL_URI} ${GENPATCHES_URI} ${ARCH_URI} ${CONFIG_URI}"
 
 src_prepare() {
 	epatch "${FILESDIR}/bond-mtu.patch"
 	kernel-2_src_prepare
+}
+
+src_compile() {
+	unset ARCH
+	cp ${DISTDIR}/buildkernel-${PVR} ${S}/.config
+	emake || die
 }
 
 pkg_postinst() {
