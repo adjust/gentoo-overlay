@@ -3,6 +3,8 @@
 
 EAPI=5
 inherit qt4-build-multilib
+# MULTILIB_USEDEP is readonly, sigh...
+MULTILIB_USEDEP_HACK='abi_x86_64(-)?'
 
 DESCRIPTION="Cross-platform application development framework"
 
@@ -11,25 +13,22 @@ SRC_URI=${SRC_URI/official_releases/archive}
 SRC_URI+=" http://files.adjust.com/qt-${PV}-wkhtmltopdf.patch"
 
 if [[ ${QT4_BUILD_TYPE} == release ]]; then
-	KEYWORDS="~alpha amd64 ~arm ~arm64 hppa ~ia64 ~mips ppc ppc64 ~sparc x86 ~amd64-fbsd ~x86-fbsd"
+	KEYWORDS="amd64"
 fi
 
-IUSE="+glib iconv icu libressl qt3support ssl wkhtmltopdf"
+IUSE="+glib iconv icu libressl ssl wkhtmltopdf"
 
 DEPEND="
-	>=sys-libs/zlib-1.2.8-r1[${MULTILIB_USEDEP}]
-	glib? ( dev-libs/glib:2[${MULTILIB_USEDEP}] )
-	iconv? ( >=virtual/libiconv-0-r2[${MULTILIB_USEDEP}] )
-	icu? ( dev-libs/icu:=[${MULTILIB_USEDEP}] )
+	>=sys-libs/zlib-1.2.8-r1[${MULTILIB_USEDEP_HACK}]
+	glib? ( dev-libs/glib:2[${MULTILIB_USEDEP_HACK}] )
+	iconv? ( >=virtual/libiconv-0-r2[${MULTILIB_USEDEP_HACK}] )
+	icu? ( dev-libs/icu:=[${MULTILIB_USEDEP_HACK}] )
 	ssl? (
-		!libressl? ( >=dev-libs/openssl-1.0.1h-r2:0[${MULTILIB_USEDEP}] )
-		libressl? ( dev-libs/libressl:=[${MULTILIB_USEDEP}] )
+		!libressl? ( >=dev-libs/openssl-1.0.1h-r2:0[${MULTILIB_USEDEP_HACK}] )
+		libressl? ( dev-libs/libressl:=[${MULTILIB_USEDEP_HACK}] )
 	)
 "
 RDEPEND="${DEPEND}"
-PDEPEND="
-	qt3support? ( ~dev-qt/qtgui-${PV}[aqua=,debug=,glib=,wkhtmltopdf=,qt3support,${MULTILIB_USEDEP}] )
-"
 
 MULTILIB_WRAPPED_HEADERS=(
 	/usr/include/qt4/Qt/qconfig.h
@@ -91,7 +90,7 @@ multilib_src_configure() {
 		$(qt_use iconv)
 		$(qt_use icu)
 		$(use ssl && echo -openssl-linked || echo -no-openssl)
-		$(qt_use qt3support)
+		-no-qt3support
 		-nomake tools,examples,demos,docs,translations
 	)
 	qt4_multilib_src_configure

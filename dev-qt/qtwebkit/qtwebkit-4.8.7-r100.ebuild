@@ -3,31 +3,32 @@
 
 EAPI=5
 inherit qt4-build-multilib
+MULTILIB_USEDEP_HACK='abi_x86_64(-)?'
 
 DESCRIPTION="The WebKit module for the Qt toolkit"
 SRC_URI+=" http://files.adjust.com/qt-${PV}-wkhtmltopdf.patch"
 
 if [[ ${QT4_BUILD_TYPE} == release ]]; then
-	KEYWORDS="~amd64 ~arm ~ia64 ~mips ~ppc ~ppc64 ~x86 ~amd64-fbsd ~x86-fbsd"
+	KEYWORDS="~amd64"
 fi
 
 IUSE="+gstreamer icu +jit wkhtmltopdf"
 
 # libxml2[!icu?] is needed for bugs 407315 and 411091
 DEPEND="
-	>=dev-db/sqlite-3.8.3:3[${MULTILIB_USEDEP}]
-	~dev-qt/qtcore-${PV}[aqua=,debug=,ssl,wkhtmltopdf=,${MULTILIB_USEDEP}]
-	~dev-qt/qtgui-${PV}[aqua=,debug=,wkhtmltopdf=,${MULTILIB_USEDEP}]
-	~dev-qt/qtxmlpatterns-${PV}[aqua=,debug=,wkhtmltopdf=,${MULTILIB_USEDEP}]
-	>=x11-libs/libX11-1.5.0-r1[${MULTILIB_USEDEP}]
-	>=x11-libs/libXrender-0.9.7-r1[${MULTILIB_USEDEP}]
+	>=dev-db/sqlite-3.8.3:3[${MULTILIB_USEDEP_HACK}]
+	~dev-qt/qtcore-${PV}[aqua=,debug=,ssl,wkhtmltopdf=,${MULTILIB_USEDEP_HACK}]
+	~dev-qt/qtgui-${PV}[aqua=,debug=,wkhtmltopdf=,${MULTILIB_USEDEP_HACK}]
+	~dev-qt/qtxmlpatterns-${PV}[aqua=,debug=,wkhtmltopdf=,${MULTILIB_USEDEP_HACK}]
+	>=x11-libs/libX11-1.5.0-r1[${MULTILIB_USEDEP_HACK}]
+	>=x11-libs/libXrender-0.9.7-r1[${MULTILIB_USEDEP_HACK}]
 	gstreamer? (
-		dev-libs/glib:2[${MULTILIB_USEDEP}]
-		dev-libs/libxml2:2[!icu?,${MULTILIB_USEDEP}]
-		>=media-libs/gstreamer-0.10.36-r1:0.10[${MULTILIB_USEDEP}]
-		>=media-libs/gst-plugins-base-0.10.36-r1:0.10[${MULTILIB_USEDEP}]
+		dev-libs/glib:2[${MULTILIB_USEDEP_HACK}]
+		dev-libs/libxml2:2[!icu?,${MULTILIB_USEDEP_HACK}]
+		>=media-libs/gstreamer-0.10.36-r1:0.10[${MULTILIB_USEDEP_HACK}]
+		>=media-libs/gst-plugins-base-0.10.36-r1:0.10[${MULTILIB_USEDEP_HACK}]
 	)
-	icu? ( dev-libs/icu:=[${MULTILIB_USEDEP}] )
+	icu? ( dev-libs/icu:=[${MULTILIB_USEDEP_HACK}] )
 "
 RDEPEND="${DEPEND}"
 

@@ -3,18 +3,19 @@
 
 EAPI=5
 inherit qt4-build-multilib
+MULTILIB_USEDEP_HACK='abi_x86_64(-)?'
 
 DESCRIPTION="The QtScript module for the Qt toolkit"
 SRC_URI=${SRC_URI/official_releases/archive}
 
 if [[ ${QT4_BUILD_TYPE} == release ]]; then
-	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd"
+	KEYWORDS="~amd64"
 fi
 
 IUSE="+jit"
 
 DEPEND="
-	~dev-qt/qtcore-${PV}[aqua=,debug=,${MULTILIB_USEDEP}]
+	~dev-qt/qtcore-${PV}[aqua=,debug=,${MULTILIB_USEDEP_HACK}]
 "
 RDEPEND="${DEPEND}"
 

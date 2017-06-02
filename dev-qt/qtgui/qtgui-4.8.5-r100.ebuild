@@ -3,6 +3,7 @@
 
 EAPI=5
 inherit eutils qt4-build-multilib
+MULTILIB_USEDEP_HACK='abi_x86_64(-)?'
 
 DESCRIPTION="The GUI module for the Qt toolkit"
 
@@ -12,10 +13,10 @@ SRC_URI+=" https://dev.gentoo.org/~pesa/patches/${PN}-systemtrayicon-plugin-syst
 "
 
 if [[ ${QT4_BUILD_TYPE} == release ]]; then
-	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd"
+	KEYWORDS="~amd64"
 fi
 
-IUSE="+accessibility cups egl +glib gtkstyle mng nas nis qt3support tiff trace xinerama +xv wkhtmltopdf"
+IUSE="+accessibility cups egl +glib gtkstyle mng nas nis tiff trace xinerama +xv wkhtmltopdf"
 
 REQUIRED_USE="
 	gtkstyle? ( glib )
@@ -24,48 +25,45 @@ REQUIRED_USE="
 # cairo[-qt4] is needed because of bug 454066
 RDEPEND="
 	app-eselect/eselect-qtgraphicssystem
-	~dev-qt/qtcore-${PV}[aqua=,debug=,glib=,qt3support=,wkhtmltopdf=,${MULTILIB_USEDEP}]
-	~dev-qt/qtscript-${PV}[aqua=,debug=,${MULTILIB_USEDEP}]
-	>=media-libs/fontconfig-2.10.2-r1[${MULTILIB_USEDEP}]
-	>=media-libs/freetype-2.4.11-r1:2[${MULTILIB_USEDEP}]
-	media-libs/libpng:0=[${MULTILIB_USEDEP}]
-	>=sys-libs/zlib-1.2.8-r1[${MULTILIB_USEDEP}]
-	virtual/jpeg:0[${MULTILIB_USEDEP}]
+	~dev-qt/qtcore-${PV}[debug=,glib=,wkhtmltopdf=,${MULTILIB_USEDEP_HACK}]
+	~dev-qt/qtscript-${PV}[debug=,${MULTILIB_USEDEP_HACK}]
+	>=media-libs/fontconfig-2.10.2-r1[${MULTILIB_USEDEP_HACK}]
+	>=media-libs/freetype-2.4.11-r1:2[${MULTILIB_USEDEP_HACK}]
+	media-libs/libpng:0=[${MULTILIB_USEDEP_HACK}]
+	>=sys-libs/zlib-1.2.8-r1[${MULTILIB_USEDEP_HACK}]
+	virtual/jpeg:0[${MULTILIB_USEDEP_HACK}]
 	!aqua? (
-		>=x11-libs/libICE-1.0.8-r1[${MULTILIB_USEDEP}]
-		>=x11-libs/libSM-1.2.1-r1[${MULTILIB_USEDEP}]
-		>=x11-libs/libX11-1.5.0-r1[${MULTILIB_USEDEP}]
-		>=x11-libs/libXcursor-1.1.13-r1[${MULTILIB_USEDEP}]
-		>=x11-libs/libXext-1.3.1-r1[${MULTILIB_USEDEP}]
-		>=x11-libs/libXfixes-5.0-r1[${MULTILIB_USEDEP}]
-		>=x11-libs/libXi-1.6.2-r1[${MULTILIB_USEDEP}]
-		>=x11-libs/libXrandr-1.4.0-r1[${MULTILIB_USEDEP}]
-		>=x11-libs/libXrender-0.9.7-r1[${MULTILIB_USEDEP}]
-		xinerama? ( >=x11-libs/libXinerama-1.1.2-r1[${MULTILIB_USEDEP}] )
-		xv? ( >=x11-libs/libXv-1.0.7-r1[${MULTILIB_USEDEP}] )
+		>=x11-libs/libICE-1.0.8-r1[${MULTILIB_USEDEP_HACK}]
+		>=x11-libs/libSM-1.2.1-r1[${MULTILIB_USEDEP_HACK}]
+		>=x11-libs/libX11-1.5.0-r1[${MULTILIB_USEDEP_HACK}]
+		>=x11-libs/libXcursor-1.1.13-r1[${MULTILIB_USEDEP_HACK}]
+		>=x11-libs/libXext-1.3.1-r1[${MULTILIB_USEDEP_HACK}]
+		>=x11-libs/libXfixes-5.0-r1[${MULTILIB_USEDEP_HACK}]
+		>=x11-libs/libXi-1.6.2-r1[${MULTILIB_USEDEP_HACK}]
+		>=x11-libs/libXrandr-1.4.0-r1[${MULTILIB_USEDEP_HACK}]
+		>=x11-libs/libXrender-0.9.7-r1[${MULTILIB_USEDEP_HACK}]
+		xinerama? ( >=x11-libs/libXinerama-1.1.2-r1[${MULTILIB_USEDEP_HACK}] )
+		xv? ( >=x11-libs/libXv-1.0.7-r1[${MULTILIB_USEDEP_HACK}] )
 	)
-	cups? ( net-print/cups[${MULTILIB_USEDEP}] )
-	egl? ( media-libs/mesa[egl,${MULTILIB_USEDEP}] )
-	glib? ( dev-libs/glib:2[${MULTILIB_USEDEP}] )
+	cups? ( net-print/cups[${MULTILIB_USEDEP_HACK}] )
+	egl? ( media-libs/mesa[egl,${MULTILIB_USEDEP_HACK}] )
+	glib? ( dev-libs/glib:2[${MULTILIB_USEDEP_HACK}] )
 	gtkstyle? (
-		>=x11-libs/cairo-1.12[-qt4(-),${MULTILIB_USEDEP}]
-		>=x11-libs/gtk+-2.24.23-r1:2[aqua=,${MULTILIB_USEDEP}]
+		>=x11-libs/cairo-1.12[-qt4(-),${MULTILIB_USEDEP_HACK}]
+		>=x11-libs/gtk+-2.24.23-r1:2[aqua=,${MULTILIB_USEDEP_HACK}]
 	)
-	mng? ( >=media-libs/libmng-1.0.10-r2:=[${MULTILIB_USEDEP}] )
-	nas? ( >=media-libs/nas-1.9.3-r1[${MULTILIB_USEDEP}] )
-	tiff? ( >=media-libs/tiff-4.0.3-r2:0[${MULTILIB_USEDEP}] )
+	mng? ( >=media-libs/libmng-1.0.10-r2:=[${MULTILIB_USEDEP_HACK}] )
+	nas? ( >=media-libs/nas-1.9.3-r1[${MULTILIB_USEDEP_HACK}] )
+	tiff? ( >=media-libs/tiff-4.0.3-r2:0[${MULTILIB_USEDEP_HACK}] )
 	!<dev-qt/qthelp-4.8.5:4
 "
 DEPEND="${RDEPEND}
 	!aqua? (
-		>=x11-proto/inputproto-2.2-r1[${MULTILIB_USEDEP}]
-		>=x11-proto/xextproto-7.2.1-r1[${MULTILIB_USEDEP}]
-		xinerama? ( >=x11-proto/xineramaproto-1.2.1-r1[${MULTILIB_USEDEP}] )
-		xv? ( >=x11-proto/videoproto-2.3.1-r1[${MULTILIB_USEDEP}] )
+		>=x11-proto/inputproto-2.2-r1[${MULTILIB_USEDEP_HACK}]
+		>=x11-proto/xextproto-7.2.1-r1[${MULTILIB_USEDEP_HACK}]
+		xinerama? ( >=x11-proto/xineramaproto-1.2.1-r1[${MULTILIB_USEDEP_HACK}] )
+		xv? ( >=x11-proto/videoproto-2.3.1-r1[${MULTILIB_USEDEP_HACK}] )
 	)
-"
-PDEPEND="
-	qt3support? ( ~dev-qt/qt3support-${PV}[aqua=,debug=,${MULTILIB_USEDEP}] )
 "
 
 PATCHES=(
@@ -138,7 +136,7 @@ multilib_src_configure() {
 		$(qt_use nis)
 		$(qt_use tiff libtiff system)
 		$(qt_use egl)
-		$(qt_use qt3support)
+		-no-qt3support
 		$(qt_use gtkstyle)
 		$(qt_use xinerama)
 		$(qt_use xv xvideo)
