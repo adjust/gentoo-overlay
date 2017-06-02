@@ -26,7 +26,7 @@ src_prepare() {
 
 src_compile() {
 	unset ARCH
-	cp ${DISTDIR}/buildkernel-${PVR} ${S}/.config
+	cp "${DISTDIR}/buildkernel-${PVR}" "${S}/.config"
 	emake || die
 }
 
