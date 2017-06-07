@@ -7,7 +7,7 @@ inherit user
 
 DESCRIPTION="shovel data around"
 HOMEPAGE="https://github.com/adjust/schaufel"
-SRC_URI="https://github.com/adjust/${PN}/archive/${PN}-9999.tar.gz"
+SRC_URI="https://github.com/adjust/${PN}/archive/master.tar.gz -> ${PN}-master.tar.gz"
 
 RESTRICT="fetch"
 
@@ -22,7 +22,7 @@ RDEPEND="${DEPEND}
 dev-libs/hiredis
 "
 
-S="${WORKDIR}/${PN}"
+S="${WORKDIR}/${PN}-master"
 
 pkg_setup() {
 	enewgroup ${PN}
