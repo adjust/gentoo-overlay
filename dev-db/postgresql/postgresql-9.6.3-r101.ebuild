@@ -5,7 +5,7 @@ EAPI="5"
 
 PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
 
-inherit eutils flag-o-matic linux-info multilib pam prefix python-single-r1 \
+inherit autotools eutils flag-o-matic linux-info multilib pam prefix python-single-r1 \
 		systemd user versionator
 
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~sparc-fbsd ~x86-fbsd ~ppc-macos ~x86-solaris"
@@ -23,7 +23,7 @@ HOMEPAGE="http://www.postgresql.org/"
 
 LINGUAS="af cs de en es fa fr hr hu it ko nb pl pt_BR ro ru sk sl sv tr
 		 zh_CN zh_TW"
-IUSE="doc kerberos kernel_linux ldap libressl nls pam perl -pg_legacytimestamp python
+IUSE="doc kerberos kernel_linux ldap libressl +ltree nls pam perl -pg_legacytimestamp python
 	  +readline selinux +server ssl static-libs tcl threads uuid xml zlib"
 
 for lingua in ${LINGUAS}; do
@@ -108,6 +108,11 @@ pkg_setup() {
 }
 
 src_prepare() {
+	epatch "${FILESDIR}/${PN}-${MY_PV}-wo-ltree.patch"
+	# ^^ wo-ltree patches configure.in
+	eautoconf
+	eautoheader
+
 	# Work around PPC{,64} compilation bug where bool is already defined
 	sed '/#ifndef __cplusplus/a #undef bool' -i src/include/c.h || die
 
@@ -171,6 +176,7 @@ src_configure() {
 		$(use_enable threads thread-safety) \
 		$(use_with kerberos gssapi) \
 		$(use_with ldap) \
+		$(use_with ltree) \
 		$(use_with pam) \
 		$(use_with perl) \
 		$(use_with python) \

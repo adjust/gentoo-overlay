@@ -1,0 +1,68 @@
+Source: Written by Ali Polatel <alip@exherbo.org>
+Upstream: Not yet (TODO: patch must be updated for git://)
+Reason: Make the ltree extension build optional via --without-tree
+diff -ur postgresql-9.6.3/configure.in postgresql-9.6.3-wo-ltree/configure.in
+--- postgresql-9.6.3/configure.in	2017-05-08 23:15:12.000000000 +0200
++++ postgresql-9.6.3-wo-ltree/configure.in	2017-06-20 16:04:32.469914846 +0200
+@@ -751,6 +751,14 @@
+ PGAC_ARG_BOOL(with, libedit-preferred, no,
+               [prefer BSD Libedit over GNU Readline])
+ 
++#
++# Optionally build the ltree extension (default: yes)
++#
++AC_MSG_CHECKING([whether to build the ltree extension])
++PGAC_ARG_BOOL(with, ltree, yes, [build the ltree extension])
++AC_MSG_RESULT([$with_ltree])
++AC_SUBST(with_ltree)
++
+ 
+ #
+ # UUID library
+diff -ur postgresql-9.6.3/contrib/Makefile postgresql-9.6.3-wo-ltree/contrib/Makefile
+--- postgresql-9.6.3/contrib/Makefile	2017-05-08 23:15:12.000000000 +0200
++++ postgresql-9.6.3-wo-ltree/contrib/Makefile	2017-06-20 16:05:11.489914697 +0200
+@@ -25,7 +25,6 @@
+ 		intarray	\
+ 		isn		\
+ 		lo		\
+-		ltree		\
+ 		oid2name	\
+ 		pageinspect	\
+ 		passwordcheck	\
+@@ -51,6 +50,12 @@
+ 		unaccent	\
+ 		vacuumlo
+ 
++ifeq ($(with_ltree),yes)
++SUBDIRS += ltree
++else
++ALWAYS_SUBDIRS += ltree
++endif
++
+ ifeq ($(with_openssl),yes)
+ SUBDIRS += sslinfo
+ else
+@@ -82,7 +87,10 @@
+ endif
+ 
+ ifeq ($(with_python),yes)
+-SUBDIRS += hstore_plpython ltree_plpython
++SUBDIRS += hstore_plpython
++ifeq ($(with_ltree),yes)
++SUBDIRS += ltree_plpython
++endif
+ else
+ ALWAYS_SUBDIRS += hstore_plpython ltree_plpython
+ endif
+diff -ur postgresql-9.6.3/src/Makefile.global.in postgresql-9.6.3-wo-ltree/src/Makefile.global.in
+--- postgresql-9.6.3/src/Makefile.global.in	2017-05-08 23:15:12.000000000 +0200
++++ postgresql-9.6.3-wo-ltree/src/Makefile.global.in	2017-06-20 16:42:01.919906265 +0200
+@@ -187,6 +187,7 @@
+ with_systemd	= @with_systemd@
+ with_libxml	= @with_libxml@
+ with_libxslt	= @with_libxslt@
++with_ltree	= @with_ltree@
+ with_system_tzdata = @with_system_tzdata@
+ with_uuid	= @with_uuid@
+ with_zlib	= @with_zlib@
