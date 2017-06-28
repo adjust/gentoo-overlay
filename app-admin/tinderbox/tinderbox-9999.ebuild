@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND=""
+DEPEND="app-admin/rex"
 RDEPEND="${DEPEND}"
 
 src_install() {
