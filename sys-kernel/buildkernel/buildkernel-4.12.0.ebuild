@@ -13,7 +13,8 @@ DESCRIPTION="Autogenerate kernel images with genkernel"
 SRC_URI="http://files.adjust.com/${PF}"
 
 DEPEND="
-	=sys-kernel/gentoo-sources-${PVR}
+	sys-firmware/intel-microcode
+	=sys-kernel/gentoo-sources-${PV}
 	|| (
 		sys-kernel/genkernel
 		sys-kernel/genkernel-next
@@ -40,13 +41,13 @@ src_compile() {
 	export KBUILD_OUTPUT="$S/tmp/kernel"
 
 	# make runs from src dir with output going to KBUILD_OUTPUT
-	# FIXME: Ignores PVR here
+	# hacky PVR special
 	cd /usr/src/linux-${PV}-gentoo || die
 	make -s oldconfig || die
 	echo "Building kernel ..."
 	make -s ${MAKEOPTS} || die
 	echo "Done building kernel."
-	cp "$S/tmp/kernel/arch/x86/boot/bzImage" "$S/final/boot/kernel-genkernel-x86_64-${PVR}-gentoo" || die
+	cp "$S/tmp/kernel/arch/x86/boot/bzImage" "$S/final/boot/kernel-genkernel-x86_64-${PV}-gentoo" || die
 
 	# install  modules to a prefix. Strip in kbuild because otherwise size is >10x more for tarball
 	emake INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH="$S/final" modules_install || die
@@ -59,7 +60,7 @@ src_compile() {
 		--logfile="$S/genkernel.log"  \
 		--tempdir="$S/tmp" \
 		--module-prefix="$S/final" \
-		--kerneldir=/usr/src/linux-${PVR}-gentoo \
+		--kerneldir=/usr/src/linux-${PV}-gentoo \
 		--mdadm \
 		--no-zfs --no-btrfs \
 		--kernel-config="$S/tmp/kernel/.config" \
@@ -69,7 +70,7 @@ src_compile() {
 src_install() {
 	# don't package firmware files, provided by linux-firmware if required
 	rm -rf "$S/final/lib/firmware" || die
-	cd "$S/final/" && tar cJf binkernel-${PVR}.tar.xz * || die
+	cd "$S/final/" && tar cJf binkernel-${PV}.tar.xz * || die
 	mkdir -p "${D}/usr/share"
-	mv binkernel-${PVR}.tar.xz "${D}/usr/share" || die
+	mv binkernel-${PV}.tar.xz "${D}/usr/share" || die
 }
