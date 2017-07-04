@@ -1,6 +1,6 @@
 Source: Written by Ali Polatel <alip@exherbo.org>
 Upstream: Not yet (TODO: patch must be updated for git://)
-Reason: Make the ltree extension build optional via --without-tree
+Reason: Make the ltree extension build optional via --without-ltree
 diff -ur postgresql-9.6.3/configure.in postgresql-9.6.3-wo-ltree/configure.in
 --- postgresql-9.6.3/configure.in	2017-05-08 23:15:12.000000000 +0200
 +++ postgresql-9.6.3-wo-ltree/configure.in	2017-06-20 16:04:32.469914846 +0200
