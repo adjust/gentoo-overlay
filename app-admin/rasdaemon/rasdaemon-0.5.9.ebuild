@@ -28,8 +28,8 @@ src_prepare() {
 
 src_configure() {
 	econf \
-		--includedir=${EPREFIX}/usr/include/${PN} \
-		--localstatedir=${EPREFIX}/var \
+		--includedir="${EPREFIX}"/usr/include/${PN} \
+		--localstatedir="${EPREFIX}"/var \
 		--enable-aer --enable-extlog --enable-mce \
 		$(use_enable 'sqlite' 'sqlite3')
 }
