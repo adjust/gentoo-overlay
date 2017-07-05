@@ -8,7 +8,7 @@ depend() {
 
 extra_started_commands='reload'
 command=/usr/sbin/rasdaemon
-command_args=-f @RASDAEMON_OPTS@
+command_args="-f @RASDAEMON_OPTS@"
 description="RAS daemon"
 
 start() {
