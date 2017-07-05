@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-inherit eutils
+inherit eutils linux-info
 
 DESCRIPTION="Platform Reliability, Availability and Serviceability (RAS) daemon"
 HOMEPAGE="https://pagure.io/rasdaemon"
@@ -16,7 +16,8 @@ IUSE="sqlite"
 DEPEND="sqlite? ( dev-db/sqlite:3 )"
 RDEPEND="
 	sys-apps/dmidecode
-	${DEPEND}"
+	${DEPEND}
+"
 
 src_prepare() {
 	default
@@ -49,4 +50,18 @@ src_install() {
 
 	keepdir /etc/ras/dimm_labels.d
 	keepdir /var/lib/${PN}
+}
+
+pkg_postinst() {
+	kernel_is -lt 3 5 0 && ewarn "$PN requires a Linux kernel >= 3.5.0"
+	kernel_is -lt 3 10 0 && ewarn "In order to get full benefit of $PN a Linux kernel >= 3.10 is needed."
+
+	if ! linux_config_exists || ! linux_chkconfig_present EDAC || ! linux_chkconfig_present RAS; then
+		ewarn 'Your kernel must include EDAC and RAS support.'
+		ewarn '  -> Device Drivers'
+		ewarn '     <*> EDAC (Error Detection And Correction) reporting'
+		ewarn '     <*> Reliability, Availability and Serviceability (RAS) features'
+		echo
+		ewarn "You may check the driver status with \`ras-mc-ctl --status'"
+	fi
 }
