@@ -3,13 +3,11 @@
 
 EAPI=6
 
-inherit user
+inherit user git-r3
 
 DESCRIPTION="shovel data around"
 HOMEPAGE="https://github.com/adjust/schaufel"
-SRC_URI="https://github.com/adjust/${PN}/archive/master.tar.gz -> ${PN}-master.tar.gz"
-
-RESTRICT="fetch"
+EGIT_REPO_URI="https://github.com/adjust/schaufel.git"
 
 LICENSE="MIT"
 SLOT="0"
@@ -21,8 +19,6 @@ RDEPEND="${DEPEND}
 >=dev-libs/librdkafka-0.9.4[lz4]
 dev-libs/hiredis
 "
-
-S="${WORKDIR}/${PN}-master"
 
 pkg_setup() {
 	enewgroup ${PN}
