@@ -1,6 +1,7 @@
 Source: Written by Ali Polatel <alip@exherbo.org>
 Upstream: Not yet (TODO: patch must be updated for git://)
 Reason: Make the ltree extension build optional via --without-ltree
+Comment: Originally written for 9.6.3, applies as is to 9.5.7, applies to 9.4.12 w/o the ltree_plpython hunk.
 diff -ur postgresql-9.6.3/configure.in postgresql-9.6.3-wo-ltree/configure.in
 --- postgresql-9.6.3/configure.in	2017-05-08 23:15:12.000000000 +0200
 +++ postgresql-9.6.3-wo-ltree/configure.in	2017-06-20 16:04:32.469914846 +0200
@@ -43,18 +44,6 @@ diff -ur postgresql-9.6.3/contrib/Makefile postgresql-9.6.3-wo-ltree/contrib/Mak
  ifeq ($(with_openssl),yes)
  SUBDIRS += sslinfo
  else
-@@ -82,7 +87,10 @@
- endif
- 
- ifeq ($(with_python),yes)
--SUBDIRS += hstore_plpython ltree_plpython
-+SUBDIRS += hstore_plpython
-+ifeq ($(with_ltree),yes)
-+SUBDIRS += ltree_plpython
-+endif
- else
- ALWAYS_SUBDIRS += hstore_plpython ltree_plpython
- endif
 diff -ur postgresql-9.6.3/src/Makefile.global.in postgresql-9.6.3-wo-ltree/src/Makefile.global.in
 --- postgresql-9.6.3/src/Makefile.global.in	2017-05-08 23:15:12.000000000 +0200
 +++ postgresql-9.6.3-wo-ltree/src/Makefile.global.in	2017-06-20 16:42:01.919906265 +0200
