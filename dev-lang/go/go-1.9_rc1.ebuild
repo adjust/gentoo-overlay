@@ -10,8 +10,6 @@ MY_PV=${PV/_/}
 
 inherit toolchain-funcs eutils
 
-PATCHES="${FILESDIR}/${P}-atomics.patch"
-
 BOOTSTRAP_DIST="https://dev.gentoo.org/~williamh/dist"
 SRC_URI="!gccgo? (
 kernel_Darwin? (
