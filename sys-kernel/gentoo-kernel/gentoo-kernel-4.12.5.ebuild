@@ -11,7 +11,10 @@ LICENSE="GPL-2 freedist"
 
 DESCRIPTION="Prebuilt gentoo kernel image with genkernel initramfs"
 SRC_URI="http://files.adjust.com/binkernel-${PV}.tar.xz
-	sources? ( http://files.adjust.com/buildkernel-${PV} )"
+	sources? (
+		http://files.adjust.com/buildkernel-${PV}
+		http://files.adjust.com/Module.symvers-${PV}
+	)"
 
 IUSE="sources"
 
@@ -28,6 +31,7 @@ src_install() {
 	if use sources; then
 		mkdir -p "${D}"/usr/src/linux-${PV}-gentoo/
 		cp "${DISTDIR}/buildkernel-${PV}" "${D}"/usr/src/linux-${PV}-gentoo/.config
+		cp "${DISTDIR}/Module.symvers-${PV}" "${D}"/usr/src/linux-${PV}-gentoo/Module.symvers
 	fi
 }
 
