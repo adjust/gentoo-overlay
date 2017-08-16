@@ -22,7 +22,6 @@ DEPEND="${PYTHON_DEPS}
     dev-python/chardet[${PYTHON_USEDEP}]
     dev-python/crcmod[${PYTHON_USEDEP}]
     dev-python/httplib2[${PYTHON_USEDEP}]
-    dev-python/python-dateutil[${PYTHON_USEDEP}]
 "
 RDEPEND="${DEPEND}
     !net-misc/gsutil
@@ -35,7 +34,7 @@ src_prepare() {
 	# TODO: Drop bundled bloat.
 	# Needs more ebuilds for dependencies.
 	# find . -depth -type d -name third_party -exec rm -fr '{}' \;
-	rm -fr lib/third_party/{argcomplete,chardet,crcmod,crcmod_osx,dateutil,httplib2}
+	rm -fr lib/third_party/{argcomplete,chardet,crcmod,crcmod_osx,httplib2}
 	# Same bloat is under platform/gsutil, but google argues against it:
 	# `gsutil command cannot work properly when installed this way.'
 	# So we just drop py3 bits for now (py2 is a hard dep ^^).
