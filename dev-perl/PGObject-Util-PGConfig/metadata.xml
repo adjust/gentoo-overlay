@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+<email>chris.travers@gmail.com</email>
+</maintainer>
+<longdescription lang="en">
+PGObject-Util-PGConfig is a Perl module for programmatically managing the 
+configuration of PostgreSQL servers.  It is capable of generating arbitrary
+postgresql.conf and recovery.conf files, and can make appropriate changes to
+PostgreSQL systems via ALTER SYSTEM.
+
+In the later case, it can filter out unknown configuration variables, changing
+only those known by the server.  This reduces the risk of downtime due to
+misconfiguration and it allows renamed configuration options to be specified
+together across Postgresql versions.
+</longdescription>
+</pkgmetadata>
