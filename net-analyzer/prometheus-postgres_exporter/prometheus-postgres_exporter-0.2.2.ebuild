@@ -52,7 +52,6 @@ src_install() {
 
 	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
 	newconfd "${FILESDIR}/${PN}.confd" "${PN}"
-	systemd_dounit "${FILESDIR}/${PN}.service"
 
 	insinto /etc/default
 	newins "${FILESDIR}/${PN}.default" "${PN}"
