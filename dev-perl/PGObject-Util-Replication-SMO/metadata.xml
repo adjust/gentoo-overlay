@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+<email>chris.travers@adjust.com</email>
+</maintainer>
+<longdescription lang="en">
+PGObject::Util::Replication::SMO is an abstraction around server instances
+for management with Rex and so forth. It is further specialized for various
+purposes in the master and standby subclasses.
+</longdescription>
+</pkgmetadata>

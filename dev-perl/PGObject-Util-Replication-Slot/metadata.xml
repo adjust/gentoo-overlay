@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+<email>chris.travers@gmail.com</email>
+</maintainer>
+<longdescription lang="en">
+PGObject::Util::Replication::Slot - Replication Slot Management
+
+This is a helper module for managing replication slots.  It is tested on both
+standard and cascading replication models.  It can provide telemetry and lag
+information as well as add and delete slots.
+</longdescription>
+</pkgmetadata>

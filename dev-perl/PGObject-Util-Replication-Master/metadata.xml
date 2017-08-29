@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+<email>chris.travers@gmail.com</email>
+</maintainer>
+<longdescription lang="en">
+PGObject::Util::Replication::Master
+
+This module specializes in management of relication masters, such as setting 
+required configuration parameters and more.
+</longdescription>
+</pkgmetadata>
