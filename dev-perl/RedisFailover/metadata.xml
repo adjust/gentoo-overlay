@@ -4,7 +4,7 @@
         <maintainer type="person">
                 <email>ops@adjust.com</email>
         </maintainer>
-	<longdescription lang="en">
-		Perl RedisFailover Extensions
-	</longdescription>
+        <longdescription lang="en">
+        Perl RedisFailover Extensions
+        </longdescription>
 </pkgmetadata>
