@@ -104,7 +104,7 @@ src_install() {
 	doins -r mibs
 	keepdir "${MY_HOSTROOTDIR}"/{error,icons,logs,var,database4/metrics}
 	for d in interface health; do
-		keepdir "${MY_HOSTROOTDIR}"/database4/"$d"/{generic,router,server,switch}
+		keepdir "${MY_HOSTROOTDIR}"/database4/"$d"/{generic,Router,server,switch}
 	done
 
 	# TODO: Stub, not all files under conf/ should be necessary.
