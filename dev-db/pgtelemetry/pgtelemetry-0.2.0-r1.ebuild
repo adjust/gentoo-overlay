@@ -16,6 +16,8 @@ KEYWORDS="~amd64"
 
 SLOT=0
 
+RESTRICT="test" # connects to local DB instance, which is bad
+
 src_prepare() {
 	cp "${FILESDIR}/Makefile" .
 	postgres-multi_src_prepare
