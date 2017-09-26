@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+<email>chris.travers@adjust.com</email>
+</maintainer>
+<longdescription lang="en">
+roleman is a procedural interface for role management in PostgreSQL.
+
+Currently it allows revoking all permissions in the current database,
+adding permissions, and creating/dropping roles.  Setting passwords with
+valid-to dates is also supported.
+</longdescription>
+</pkgmetadata>
