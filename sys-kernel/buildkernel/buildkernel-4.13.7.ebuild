@@ -40,6 +40,13 @@ src_compile() {
 	unset ARCH
 	export KBUILD_OUTPUT="$S/tmp/kernel"
 
+	# genkernel uses things it doesn't build, so let's trick it
+	# https://bugs.gentoo.org/show_bug.cgi?id=616734
+	# currently patched in genkernel locally
+	#gcc /usr/src/linux-${PV}-gentoo/usr/gen_init_cpio.c -o gen_init_cpio || die
+	#PATH=${PATH}:.
+
+	echo $PATH
 	# make runs from src dir with output going to KBUILD_OUTPUT
 	# hacky PVR special
 	cd /usr/src/linux-${PV}-gentoo || die
@@ -51,7 +58,7 @@ src_compile() {
 
 	# install  modules to a prefix. Strip in kbuild because otherwise size is >10x more for tarball
 	emake INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH="$S/final" modules_install || die
-	cd usr && make || die
+
 	# busybox uses this internally
 	unset KBUILD_OUTPUT
 	# we need fakeroot so we can always generate devicenodes like /dev/console
@@ -62,10 +69,9 @@ src_compile() {
 		--module-prefix="$S/final" \
 		--kerneldir=/usr/src/linux-${PV}-gentoo \
 		--mdadm \
-		--loglevel=3 \
-		--no-zfs --no-btrfs --no-multipath \
+		--no-zfs --no-btrfs \
 		--kernel-config="$S/tmp/kernel/.config" \
-		--cachedir="$S/cache" || die
+		--cachedir="$S/cache" --loglevel=3 || die
 }
 
 src_install() {
