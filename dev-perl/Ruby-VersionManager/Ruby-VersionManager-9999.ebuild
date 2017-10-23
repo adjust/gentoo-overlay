@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-inherit perl-module git-2
+inherit perl-module git-r3
 
 DESCRIPTION="Module to manage ruby versions in non-interactive environments"
 HOMEPAGE="https://github.com/adjust/p5-Ruby-VersionManager"
