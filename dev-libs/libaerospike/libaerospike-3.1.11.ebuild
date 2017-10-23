@@ -2,10 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-
 EGIT_REPO_URI="https://github.com/aerospike/aerospike-client-c.git"
-
-inherit autotools git-2
+inherit autotools git-r3
 
 DESCRIPTION="Aerospike C Client"
 HOMEPAGE="https://github.com/aerospike/aerospike-client-c"
@@ -15,8 +13,6 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE="luajit +static-libs"
-
-S="${WORKDIR}/aerospike-client-c-${PV}"
 
 # tests fails to build ?
 RESTRICT="test"
@@ -48,7 +44,14 @@ src_install() {
 	use static-libs && dolib.a target/Linux-x86_64/lib/libaerospike.a
 
 	insinto /usr/include/
-	doins -r target/Linux-x86_64/include/{aerospike,citrusleaf,ck}
+	doins -r target/Linux-x86_64/include/{aerospike,citrusleaf}
+
+	# ck (aka: Concurrency Kit) submodule was dropped from git as of
+	# aerospike-client-c.git:712ed53e however Makefile is still configured to
+	# install files under aerospike/ck provided they're available, mimic the
+	# behaviour here.
+	local ck=target/Linux-x86_64/include/ck
+	[[ -d "$ck" ]] && doins -r $ck
 
 	insinto /opt/aerospike/client/sys/udf/lua/
 	doins modules/lua-core/src/{aerospike,as,stream_ops}.lua
