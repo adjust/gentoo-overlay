@@ -16,7 +16,7 @@ IUSE="experimental"
 
 DESCRIPTION="Full sources including the Gentoo patchset for the ${KV_MAJOR}.${KV_MINOR} kernel tree"
 GENPATCHES_URI="https://dev.gentoo.org/~mpagano/genpatches/tarballs/genpatches-4.10-5.base.tar.xz https://dev.gentoo.org/~mpagano/genpatches/tarballs/genpatches-4.10-5.extras.tar.xz"
-CONFIG_URI="http://files.adjust.com/buildkernel-${PVR}"
+CONFIG_URI="https://files.adjust.com/buildkernel-${PVR}"
 SRC_URI="${KERNEL_URI} ${GENPATCHES_URI} ${ARCH_URI} ${CONFIG_URI}"
 
 src_prepare() {

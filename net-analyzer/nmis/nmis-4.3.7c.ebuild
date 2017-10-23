@@ -6,7 +6,7 @@ inherit eutils perl-functions user webapp
 
 DESCRIPTION="Network Management Information System"
 HOMEPAGE="https://opmantek.com/network-management-system-nmis/"
-SRC_URI="http://files.adjust.com/${PN}${PV}.tar.gz"
+SRC_URI="https://files.adjust.com/${PN}${PV}.tar.gz"
 
 LICENSE="GPL-2"
 KEYWORDS="~amd64"

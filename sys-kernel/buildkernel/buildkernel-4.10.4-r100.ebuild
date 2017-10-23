@@ -4,13 +4,13 @@
 EAPI="5"
 
 KEYWORDS="~amd64"
-HOMEPAGE="http://www.gentoo.org"
+HOMEPAGE="https://www.gentoo.org"
 IUSE=""
 SLOT="0"
 LICENSE="GPL-2"
 
 DESCRIPTION="Autogenerate kernel images with genkernel"
-SRC_URI="http://files.adjust.com/${PF}"
+SRC_URI="https://files.adjust.com/${PF}"
 
 DEPEND="
 	=sys-kernel/gentoo-sources-4.10.3-r100
