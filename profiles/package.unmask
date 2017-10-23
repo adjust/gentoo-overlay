@@ -1,0 +1,10 @@
+# Ali Polatel <alip@adjust.com> (23 Oct 2017)
+# (Sadly) Override the following package.mask entry from ::gentoo-x86
+# until wkhtmltopdf is either decommissioned or updated to use a sane Qt
+# version.
+#       Andreas Sturmlechner <asturm@gentoo.org> (16 Oct 2017)
+#       Qt4WebKit is ancient and is likely to have more holes
+#       in it than swiss cheese. Bug #620684
+#       dev-qt/qtwebkit:4
+=dev-qt/qtwebkit-4.8.5-r100
+=dev-qt/qtwebkit-4.8.7-r100
