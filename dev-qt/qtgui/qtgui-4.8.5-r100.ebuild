@@ -9,7 +9,7 @@ DESCRIPTION="The GUI module for the Qt toolkit"
 
 SRC_URI=${SRC_URI/official_releases/archive}
 SRC_URI+=" https://dev.gentoo.org/~pesa/patches/${PN}-systemtrayicon-plugin-system.patch
-	http://files.adjust.com/qt-${PV}-wkhtmltopdf.patch
+	https://files.adjust.com/qt-${PV}-wkhtmltopdf.patch
 "
 
 if [[ ${QT4_BUILD_TYPE} == release ]]; then

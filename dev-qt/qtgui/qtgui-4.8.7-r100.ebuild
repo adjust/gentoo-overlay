@@ -7,7 +7,7 @@ MULTILIB_USEDEP_HACK='abi_x86_64(-)?'
 
 DESCRIPTION="The GUI module for the Qt toolkit"
 SRC_URI+=" https://dev.gentoo.org/~pesa/patches/${PN}-systemtrayicon-plugin-system.patch
-	http://files.adjust.com/qt-${PV}-wkhtmltopdf.patch
+	https://files.adjust.com/qt-${PV}-wkhtmltopdf.patch
 "
 
 if [[ ${QT4_BUILD_TYPE} == release ]]; then

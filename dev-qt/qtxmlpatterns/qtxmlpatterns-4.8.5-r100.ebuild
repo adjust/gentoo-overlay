@@ -8,7 +8,7 @@ MULTILIB_USEDEP_HACK='abi_x86_64(-)?'
 DESCRIPTION="The XmlPatterns module for the Qt toolkit"
 
 SRC_URI=${SRC_URI/official_releases/archive}
-SRC_URI+=" http://files.adjust.com/qt-${PV}-wkhtmltopdf.patch"
+SRC_URI+=" https://files.adjust.com/qt-${PV}-wkhtmltopdf.patch"
 
 if [[ ${QT4_BUILD_TYPE} == release ]]; then
 	KEYWORDS="~amd64"
