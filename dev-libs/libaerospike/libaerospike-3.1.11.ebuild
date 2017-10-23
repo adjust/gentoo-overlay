@@ -3,7 +3,7 @@
 
 EAPI=5
 EGIT_REPO_URI="https://github.com/aerospike/aerospike-client-c.git"
-inherit autotools git-r3
+inherit git-r3
 
 DESCRIPTION="Aerospike C Client"
 HOMEPAGE="https://github.com/aerospike/aerospike-client-c"
