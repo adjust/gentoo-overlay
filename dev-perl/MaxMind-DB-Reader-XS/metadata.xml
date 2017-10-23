@@ -5,7 +5,7 @@
 <email>chris.travers@adjust.com</email>
 </maintainer>
 <longdescription lang="en">
-This is the XS implementation for MaxMind::DB::Reader.  It links against
+This is the XS implementation for MaxMind::DB::Reader. It links against
 libmaxminddb, and is approx 500 times faster.
 </longdescription>
 </pkgmetadata>

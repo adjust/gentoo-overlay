@@ -8,7 +8,7 @@
 PGObject::Util::Replication::Slot - Replication Slot Management
 
 This is a helper module for managing replication slots.  It is tested on both
-standard and cascading replication models.  It can provide telemetry and lag
+standard and cascading replication models. It can provide telemetry and lag
 information as well as add and delete slots.
 </longdescription>
 </pkgmetadata>
