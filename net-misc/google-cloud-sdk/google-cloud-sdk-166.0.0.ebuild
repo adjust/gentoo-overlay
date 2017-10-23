@@ -18,13 +18,13 @@ KEYWORDS='~amd64'
 IUSE='bash-completion zsh-completion'
 
 DEPEND="${PYTHON_DEPS}
-    dev-python/argcomplete[${PYTHON_USEDEP}]
-    dev-python/chardet[${PYTHON_USEDEP}]
-    dev-python/crcmod[${PYTHON_USEDEP}]
-    dev-python/httplib2[${PYTHON_USEDEP}]
+	dev-python/argcomplete[${PYTHON_USEDEP}]
+	dev-python/chardet[${PYTHON_USEDEP}]
+	dev-python/crcmod[${PYTHON_USEDEP}]
+	dev-python/httplib2[${PYTHON_USEDEP}]
 "
 RDEPEND="${DEPEND}
-    !net-misc/gsutil
+	!net-misc/gsutil
 "
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
