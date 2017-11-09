@@ -8,7 +8,7 @@ POSTGRES_COMPAT=( 9.4 9.5 9.6 10 )
 inherit eutils postgres-multi
 
 DESCRIPTION="Bool with explicit, distinct null for primary keys"
-HOMEPAGE="http://github.com/adjust/ajbool"
+HOMEPAGE="https://github.com/adjust/ajbool"
 SRC_URI="https://api.pgxn.org/dist/ajbool/${PV}/ajbool-${PV}.zip"
 LICENSE="POSTGRESQL GPL-2"
 
