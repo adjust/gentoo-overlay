@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+<email>chris.travers@adjust.com</email>
+</maintainer>
+<longdescription lang="en">
+currency is a one-byte enum type used to store currencies for analytics purposes.
+</longdescription>
+</pkgmetadata>
