@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+<email>chris.travers@gmail.com</email>
+</maintainer>
+<longdescription lang="en">
+The hashtypes extension for PostgreSQL contains data types for storing
+cryptographic hashes of other data.  md5 and sha algorithms are supported.
+</longdescription>
+</pkgmetadata>
