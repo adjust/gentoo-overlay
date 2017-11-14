@@ -5,7 +5,7 @@ EAPI=6
 
 POSTGRES_COMPAT=( 9.4 9.5 9.6 10 )
 
-inherit eutils postgres-multi
+inherit postgres-multi
 
 DESCRIPTION="Functional interface for role management for PostgreSQL"
 HOMEPAGE="http://big-elephants.com/pg-roleman"
