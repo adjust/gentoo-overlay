@@ -5,7 +5,7 @@ EAPI=6
 
 POSTGRES_COMPAT=( 9.5 9.6 10 )
 
-inherit eutils postgres-multi
+inherit postgres-multi
 
 DESCRIPTION="One-byte enum for major languages"
 HOMEPAGE="https://github.com/adjust/pg-language"
@@ -13,6 +13,8 @@ SRC_URI="https://api.pgxn.org/dist/language/${PV}/language-${PV}.zip"
 LICENSE="POSTGRESQL GPL-2"
 
 KEYWORDS="~amd64"
+
+RESTRICT="test"
 
 SLOT=0
 
