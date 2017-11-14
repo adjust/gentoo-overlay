@@ -5,7 +5,7 @@ EAPI=6
 
 POSTGRES_COMPAT=( 9.6 10 )
 
-inherit eutils postgres-multi
+inherit postgres-multi
 
 DESCRIPTION="Useful views and queries for PostgreSQL monitoring"
 HOMEPAGE="http://big-elephants.com/pg-telemetry"
