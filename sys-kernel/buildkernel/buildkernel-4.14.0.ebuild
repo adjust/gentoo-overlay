@@ -74,4 +74,5 @@ src_install() {
 	cd "$S/final/" && tar cJf binkernel-${PV}.tar.xz * || die
 	mkdir -p "${D}/usr/share"
 	mv binkernel-${PV}.tar.xz "${D}/usr/share" || die
+	cp "$S/tmp/kernel/Modules.symvers" "${D}/usr/share/Modules.symvers-${PV}" || die
 }
