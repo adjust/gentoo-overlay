@@ -13,6 +13,7 @@ DESCRIPTION="Autogenerate kernel images with genkernel"
 SRC_URI="https://files.adjust.com/${PF}"
 
 DEPEND="
+	dev-libs/elfutils
 	sys-firmware/intel-microcode
 	=sys-kernel/gentoo-sources-${PV}
 	|| (
