@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+<email>chris.travers@adjust.com</email>
+</maintainer>
+<longdescription lang="en">
+Ever want a primary key where you can have one value for each of true, false,
+or null?  Where null is distinct for this purpose?  For boolean values
+ajbool provides this.  It is useful where a boolean is a part of a primary key,
+and where for each key, only one value can be null.
+
+When casting from bool, null becomes 'u' (for unknown) and when casting to
+bool, 'u' becomes null.
+</longdescription>
+</pkgmetadata>
