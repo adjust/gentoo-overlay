@@ -24,6 +24,9 @@ SLOT=0
 
 RESTRICT="test" # connects to local DB instance, which is bad
 
+DEPEND="${POSTGRES_DEP}"
+RDEPEND="${DEPEND}"
+
 src_prepare() {
 	postgres-multi_src_prepare
 }

@@ -18,6 +18,9 @@ RESTRICT="test"
 
 SLOT=0
 
+DEPEND="${POSTGRES_DEP}"
+RDEPEND="${DEPEND}"
+
 src_compile() {
 	postgres-multi_foreach emake USE_PGXS=1
 }
