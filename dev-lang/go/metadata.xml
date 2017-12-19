@@ -6,5 +6,6 @@
 	</maintainer>
 	<use>
 		<flag name="gccgo">Enable bootstrapping using gccgo</flag>
+		<flag name="gobootstrap">Enable bootstrapping using an existing Go installation</flag>
 	</use>
 </pkgmetadata>

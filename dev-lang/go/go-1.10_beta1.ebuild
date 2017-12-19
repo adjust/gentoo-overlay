@@ -49,14 +49,15 @@ case ${PV}  in
 		;;
 	esac
 esac
-SRC_URI+="!gccgo? ( ${BOOTSTRAP_URI} )"
+SRC_URI+="!gobootstrap? ( !gccgo? ( ${BOOTSTRAP_URI} ) )"
 
 DESCRIPTION="A concurrent garbage collected and typesafe programming language"
 HOMEPAGE="https://golang.org"
 
 LICENSE="BSD"
 SLOT="0/${PV}"
-IUSE="gccgo"
+IUSE="gobootstrap gccgo"
+REQUIRED_USE="gccgo? ( !gobootstrap )"
 
 DEPEND="gccgo? ( >=sys-devel/gcc-5[go] )"
 RDEPEND="!<dev-go/go-tools-0_pre20150902"
@@ -159,7 +160,11 @@ src_unpack()
 
 src_compile()
 {
-	export GOROOT_BOOTSTRAP="${WORKDIR}"/go-$(go_os)-$(go_arch)-bootstrap
+	if use gobootstrap; then
+		export GOROOT_BOOTSTRAP="${EPREFIX}"/usr/lib/go
+	else
+		export GOROOT_BOOTSTRAP="${WORKDIR}"/go-$(go_os)-$(go_arch)-bootstrap
+	fi
 	if use gccgo; then
 		mkdir -p "${GOROOT_BOOTSTRAP}/bin" || die
 		local go_binary=$(gcc-config --get-bin-path)/go-$(gcc-major-version)
