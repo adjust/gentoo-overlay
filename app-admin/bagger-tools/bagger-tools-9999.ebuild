@@ -17,6 +17,7 @@ DEPEND="
 	dev-perl/DBD-Pg
 	dev-perl/DateTime
 	dev-perl/DateTime-Format-Strptime
+	dev-perl/DateTimeX-Easy
 	dev-perl/Module-Build
 	dev-perl/Parallel-ForkManager
 	dev-perl/Term-ProgressBar
