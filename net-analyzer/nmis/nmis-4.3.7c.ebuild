@@ -34,7 +34,7 @@ RDEPEND="${DEPEND}
 	dev-perl/TimeDate
 	dev-perl/Time-ParseDate
 	net-analyzer/fping
-	net-analyzer/rrdtool[perl,graph,rrdcgi]
+	<net-analyzer/rrdtool-1.6[perl,graph,rrdcgi]
 	virtual/perl-Data-Dumper
 	mysql? ( dev-perl/DBD-mysql )
 	postgres? ( dev-perl/DBD-Pg )
