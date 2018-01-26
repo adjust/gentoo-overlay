@@ -21,7 +21,7 @@ S="${WORKDIR}/${P}-debian7"
 RESTRICT="fetch"
 
 # change me at every version bump
-TOOLS_PV="3.13.0.1"
+TOOLS_PV="3.15.0.3"
 
 pkg_setup() {
 	enewgroup aerospike

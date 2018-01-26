@@ -13,8 +13,7 @@ KEYWORDS="~amd64"
 IUSE=""
 SRC_URI="http://www.aerospike.com/artifacts/${PN}/${PV}/${P}-debian7.tgz"
 
-RDEPEND="app-crypt/gcr
-	!dev-db/aerospike-server-community"
+RDEPEND="!dev-db/aerospike-server-community"
 DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${P}-debian7"
