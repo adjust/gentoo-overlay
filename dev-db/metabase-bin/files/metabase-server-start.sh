@@ -36,7 +36,7 @@ if [ -n "${METABASE_ENCRYPTION_SECRET_KEY}" ]
 then
 	echo ${METABASE_ENCRYPTION_SECRET_KEY} | \
 		base64 --decode &> /dev/null || \
-		exit_error "${METABASE_ENCRYPTION_SECRET_KEY}"
+		exit_error "\$METABASE_ENCRYPTION_SECRET_KEY is not base64"
 
 	export MB_ENCRYPTION_SECRET_KEY="${METABASE_ENCRYPTION_SECRET_KEY}"
 fi
