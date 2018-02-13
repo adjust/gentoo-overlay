@@ -33,18 +33,14 @@ pkg_setup() {
 
 src_unpack() {
 	#cp because we don't actually unpack jars
-	mkdir -p "${WORKDIR}/${MY_P}/bin"
-	mkdir -p "${WORKDIR}/${MY_P}/lib"
+	mkdir -p "${WORKDIR}/${MY_P}/bin" || die
+	mkdir -p "${WORKDIR}/${MY_P}/lib" || die
 
 	cp "${DISTDIR}/${MY_PN}.jar" "${WORKDIR}/${MY_P}/bin" || die
 	cp "${FILESDIR}/metabase-server-start.sh" \
 		"${WORKDIR}/${MY_P}/bin" || die
 	cp "${FILESDIR}/metabase-log4j.properties" \
 		"${WORKDIR}/${MY_P}/lib/log4j.properties" || die
-}
-
-src_prepare() {
-	eapply_user
 }
 
 src_install() {
@@ -54,6 +50,7 @@ src_install() {
 	dodir "${INSTALL_DIR}/"
 	cp -pRP * "${ED}/${INSTALL_DIR}" || die
 	fowners -R metabase:metabase "${INSTALL_DIR}"
+	fperms o-x "${INSTALL_DIR}/bin/metabase-server-start.sh"
 
 	newinitd "${FILESDIR}/metabase-init.d" "${MY_PN}"
 	newconfd "${FILESDIR}/metabase-conf.d" "${MY_PN}"
