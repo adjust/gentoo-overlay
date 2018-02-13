@@ -1,7 +1,7 @@
 #!/sbin/openrc-run
 
 command="/opt/shiny-server/bin/shiny-server"
-pidfile="/var/run/${SVCNAME}.pid"
+pidfile="/run/${SVCNAME}.pid"
 
 depend(){
 	use net
