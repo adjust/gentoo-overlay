@@ -66,4 +66,5 @@ src_install() {
 	dodir /var/lib/shiny-server
 
 	newinitd "${FILESDIR}/${PN}.init.d" "${PN}"
+	newconfd "${FILESDIR}/${PN}.conf.d" "${PN}"
 }
