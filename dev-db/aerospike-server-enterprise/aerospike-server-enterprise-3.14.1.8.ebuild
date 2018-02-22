@@ -1,9 +1,8 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-PYTHON_COMPAT=( python2_7 )
-inherit eutils python-single-r1 user
+inherit eutils user
 
 DESCRIPTION="Flash-optimized, in-memory, nosql database"
 HOMEPAGE="http://www.aerospike.com"
@@ -14,9 +13,7 @@ KEYWORDS="~amd64"
 IUSE=""
 SRC_URI="http://www.aerospike.com/artifacts/${PN}/${PV}/${P}-debian7.tgz"
 
-RDEPEND="app-crypt/gcr
-	${PYTHON_DEPS}
-"
+RDEPEND="!dev-db/aerospike-server-community"
 DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${P}-debian7"
@@ -24,13 +21,11 @@ S="${WORKDIR}/${P}-debian7"
 RESTRICT="fetch"
 
 # change me at every version bump
-TOOLS_PV="3.12.1"
+TOOLS_PV="3.13.0.1"
 
 pkg_setup() {
 	enewgroup aerospike
 	enewuser aerospike -1 /bin/bash /opt/aerospike aerospike
-
-	python-single-r1_pkg_setup
 }
 
 src_prepare() {
@@ -45,8 +40,6 @@ src_prepare() {
 
 	rm *.deb asinstall control.tar.gz debian-binary LICENSE SHA256SUMS
 	rm usr/bin/{asfixownership,asmigrate2to3}
-
-	python_fix_shebang opt/aerospike/bin
 }
 
 src_install() {

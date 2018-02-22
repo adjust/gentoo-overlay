@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
@@ -13,7 +13,7 @@ KEYWORDS="~amd64"
 IUSE=""
 SRC_URI="http://www.aerospike.com/artifacts/${PN}/${PV}/${P}-debian7.tgz"
 
-RDEPEND="app-crypt/gcr"
+RDEPEND="!dev-db/aerospike-server-community"
 DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${P}-debian7"
@@ -21,7 +21,7 @@ S="${WORKDIR}/${P}-debian7"
 RESTRICT="fetch"
 
 # change me at every version bump
-TOOLS_PV="3.12.1"
+TOOLS_PV="3.15.2.1"
 
 pkg_setup() {
 	enewgroup aerospike
