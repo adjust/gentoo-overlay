@@ -38,10 +38,8 @@ KEYWORDS="amd64"
 IUSE="static-libs"
 
 RDEPEND=">=sys-libs/ncurses-5.9-r3:0=[${MULTILIB_USEDEP}]
-	abi_x86_32? (
-		!app-emulation/emul-linux-x86-baselibs[-abi_x86_32(-)]
-		!<=app-emulation/emul-linux-x86-baselibs-20131008-r7
-	)"
+	!=sys-libs/readline-6
+	"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
