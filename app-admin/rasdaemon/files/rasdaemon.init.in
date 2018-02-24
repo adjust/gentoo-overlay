@@ -1,0 +1,25 @@
+#!/sbin/openrc-run
+# Copyright 1999-2017 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+depend() {
+	need localmount
+}
+
+extra_started_commands='reload'
+command=/usr/sbin/rasdaemon
+command_args="-f @RASDAEMON_OPTS@"
+description="RAS daemon"
+
+start() {
+	start-stop-daemon --start \
+		--background --make-pidfile \
+		--pidfile /run/${PN}.pid \
+		--exec $command -- $command_args && $command --enable
+	eend $?
+}
+
+stop() {
+	$command --disable && start-stop-daemon --stop --pidfile /run/${PN}.pid
+	eend $?
+}

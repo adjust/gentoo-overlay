@@ -1,0 +1,29 @@
+From 2afbcd81173822014d6d73e98e9093a140bb1421 Mon Sep 17 00:00:00 2001
+From: Aristeu Rozanski <arozansk@redhat.com>
+Date: Fri, 6 Dec 2013 09:45:14 -0500
+Subject: [PATCH 19/32] ras-mc-ctl: remove completely use of modprobe
+
+While verifying SELinux policies, this popped up. ras-mc-ctl inherited a
+modprobe lookup that ends up never being used. This patch gets rid of
+it.
+
+Signed-off-by: Aristeu Rozanski <arozansk@redhat.com>
+---
+ util/ras-mc-ctl.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+diff --git a/util/ras-mc-ctl.in b/util/ras-mc-ctl.in
+index 196a643..ef0d9bc 100755
+--- a/util/ras-mc-ctl.in
++++ b/util/ras-mc-ctl.in
+@@ -39,7 +39,6 @@ my $dbname      = "@RASSTATEDIR@/@RAS_DB_FNAME@";
+ my $prefix      = "@prefix@";
+ my $sysconfdir  = "@sysconfdir@";
+ my $dmidecode   = find_prog ("dmidecode");
+-my $modprobe    = find_prog ("modprobe")  or exit (1);
+ 
+ my %conf        = ();
+ my %bus         = ();
+-- 
+1.7.1
+

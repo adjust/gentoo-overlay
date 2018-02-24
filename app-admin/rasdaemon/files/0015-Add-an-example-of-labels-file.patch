@@ -1,0 +1,44 @@
+From 74d84ba18f4f1d7097b47ce1c2e41e332d197dfb Mon Sep 17 00:00:00 2001
+From: Mauro Carvalho Chehab <m.chehab@samsung.com>
+Date: Thu, 15 Aug 2013 12:58:02 -0300
+Subject: [PATCH 15/32] Add an example of labels file
+
+This is an example of a labels file for a Dell Power Edge T620.
+
+For now, only DIMMs A1 and B1 are tested here.
+
+Signed-off-by: Mauro Carvalho Chehab <m.chehab@samsung.com>
+---
+ labels/dell |   20 ++++++++++++++++++++
+ 1 files changed, 20 insertions(+), 0 deletions(-)
+ create mode 100644 labels/dell
+
+diff --git a/labels/dell b/labels/dell
+new file mode 100644
+index 0000000..e1a09a7
+--- /dev/null
++++ b/labels/dell
+@@ -0,0 +1,20 @@
++# RASDAEMON Motherboard DIMM labels Database file.
++#
++#  Vendor-name and model-name are found from the program 'dmidecode'
++#  labels are found from the silk screen on the motherboard.
++#
++#Vendor: <vendor-name>
++#  Model: <model-name>
++#    <label>:  <mc>.<top>.<mid>.<low>
++#
++
++Vendor: Dell Inc.
++
++  Model: 0F5XM3
++    DIMM_A1: 0.0.0;	DIMM_A2:  0.0.1;	DIMM_A3:  0.0.2;	DIMM_A4:  0.0.3;
++    DIMM_A5: 0.1.0;	DIMM_A6:  0.1.1;	DIMM_A7:  0.1.2;	DIMM_A8:  0.1.3;
++    DIMM_A9: 0.2.0;	DIMM_A10: 0.2.1;	DIMM_A11: 0.2.2;	DIMM_A12: 0.2.3;
++
++    DIMM_B1: 1.0.0;	DIMM_B2:  1.0.1;	DIMM_B3:  1.0.2;	DIMM_B4:  1.0.3;
++    DIMM_B5: 1.1.0;	DIMM_B6:  1.1.1;	DIMM_B7:  1.1.2;	DIMM_B8:  1.1.3;
++    DIMM_B9: 1.2.0;	DIMM_B10: 1.2.1;	DIMM_B11: 1.2.2;	DIMM_B12: 1.2.3;
+-- 
+1.7.1
+
