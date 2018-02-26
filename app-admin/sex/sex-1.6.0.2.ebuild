@@ -11,18 +11,19 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_CHECKOUT_DIR="${WORKDIR}/${PN}-git"
 	VCS_ECLASS="git-r3"
 else
+	# TODO: Update!
 	# This is intentional to stop perl-module.eclass doing magic things when it
 	# shouldn't. Like making ${S} contain "Rex" when the git clone has "rex"
 	# Also prevents perl-module.eclass provisioning SRC_URI
-	DIST_AUTHOR=JFRIED
-	DIST_NAME=Rex
+	#DIST_AUTHOR=JFRIED
+	DIST_NAME=Sex
 	KEYWORDS="~amd64 ~x86"
 fi
 
 inherit perl-module ${VCS_ECLASS}
 
-DESCRIPTION="(R)?ex is a small script to ease the execution of remote commands"
-SRC_URI="https://files.adjust.com/Rex-${PV}-TRIAL.tar.gz"
+DESCRIPTION="(S)!ex is a (R)?ex fork to ease the execution of remote commands"
+SRC_URI="https://files.adjust.com/Sex-${PV}-TRIAL.tar.gz"
 
 SLOT="0"
 IUSE="test"
@@ -38,6 +39,7 @@ DZIL_DEPENDS="
 "
 
 RDEPEND="
+	!app-admin/rex
 	dev-perl/Data-Validate-IP
 	dev-perl/DBI
 	dev-perl/Devel-Caller
