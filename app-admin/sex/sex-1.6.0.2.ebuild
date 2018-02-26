@@ -50,6 +50,7 @@ RDEPEND="
 	dev-perl/IO-String
 	dev-perl/IO-Tty
 	dev-perl/IPC-Shareable
+	dev-perl/JSON-MaybeXS
 	dev-perl/JSON-XS
 	dev-perl/List-MoreUtils
 	dev-perl/Net-OpenSSH
