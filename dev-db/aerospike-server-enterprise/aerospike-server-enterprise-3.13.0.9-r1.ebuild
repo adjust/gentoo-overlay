@@ -13,7 +13,8 @@ KEYWORDS="~amd64"
 IUSE=""
 SRC_URI="http://www.aerospike.com/artifacts/${PN}/${PV}/${P}-debian7.tgz"
 
-RDEPEND="!dev-db/aerospike-server-community"
+RDEPEND="!dev-db/aerospike-server-community
+	sys-libs/readline-compat"
 DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${P}-debian7"
@@ -21,7 +22,7 @@ S="${WORKDIR}/${P}-debian7"
 RESTRICT="fetch"
 
 # change me at every version bump
-TOOLS_PV="3.15.1.2"
+TOOLS_PV="3.13.0.1"
 
 pkg_setup() {
 	enewgroup aerospike
