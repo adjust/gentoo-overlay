@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
@@ -12,7 +12,8 @@ HOMEPAGE="https://flink.apache.org/"
 SCALA_VERSION=2.11
 MY_PN="flink"
 MY_P="${MY_PN}-${PV}-bin-hadoop1-scala_${SCALA_VERSION}"
-SRC_URI="mirror://apache/flink/flink-${PV}/${MY_P}.tgz"
+#SRC_URI="mirror://apache/flink/flink-${PV}/${MY_P}.tgz"
+SRC_URI="https://archive.apache.org/dist/flink/flink-1.3.1/flink-1.3.1-bin-hadoop2-scala_2.11.tgz"
 SLOT=${PV}
 RESTRICT="mirror"
 

@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -14,7 +14,8 @@ if [[ ${PV} == *9999* ]]; then
 		https://github.com/ceph/ceph.git"
 	SRC_URI=""
 else
-	SRC_URI="http://ceph.com/download/${P}.tar.gz"
+	#SRC_URI="http://ceph.com/download/${P}.tar.gz"
+	SRC_URI="http://download.ceph.com/tarballs/ceph_10.2.2.orig.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
 fi
 
