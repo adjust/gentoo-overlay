@@ -15,6 +15,7 @@ IUSE=""
 SRC_URI="http://www.aerospike.com/artifacts/${PN}/${PV}/${P}-debian7.tgz"
 
 RDEPEND="!dev-db/aerospike-server-community
+	sys-process/numactl
 	sys-libs/readline-compat
 	${PYTHON_DEPS}"
 DEPEND="${RDEPEND}"
@@ -24,7 +25,7 @@ S="${WORKDIR}/${P}-debian7"
 RESTRICT="fetch"
 
 # change me at every version bump
-TOOLS_PV="3.13.0.1"
+TOOLS_PV="3.15.1.2"
 
 pkg_setup() {
 	enewgroup aerospike
@@ -69,7 +70,7 @@ src_install() {
 	insinto /etc/logrotate.d
 	newins "${FILESDIR}"/aerospike.logrotate aerospike
 
-	newinitd "${FILESDIR}"/aerospike.init aerospike
+	newinitd "${FILESDIR}"/aerospike.init2 aerospike
 
 	fowners -R aerospike:aerospike /opt/aerospike/
 	fowners aerospike:aerospike /usr/bin/asd
