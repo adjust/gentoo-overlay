@@ -114,30 +114,11 @@ multilib_src_configure() {
 		$(use_enable static-libs static)
 }
 
-multilib_src_compile() {
-	emake
-
-	if use utils && multilib_is_native_abi && ! tc-is-cross-compiler ; then
-		# code is full of AC_TRY_RUN()
-		cd examples/rlfe || die
-		local l
-		for l in readline history ; do
-			ln -s ../../shlib/lib${l}$(get_libname)* lib${l}$(get_libname)
-			ln -sf ../../lib${l}.a lib${l}.a
-		done
-		emake
-	fi
-}
-
 multilib_src_install() {
 	default
 
 	if multilib_is_native_abi ; then
 		gen_usr_ldscript -a readline history #4411
-
-		if use utils && ! tc-is-cross-compiler; then
-			dobin examples/rlfe/rlfe
-		fi
 	fi
 }
 
