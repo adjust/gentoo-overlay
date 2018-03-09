@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -7,7 +7,7 @@ inherit user
 
 DESCRIPTION="Slack bot for karma tracking using reaction buttons"
 HOMEPAGE="https://github.com/adjust/karmabot"
-SRC_URI="https://files.adjust.com/karmabot-0.1.3.tar.gz"
+SRC_URI="https://files.adjust.com/karmabot-${PV}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
@@ -16,7 +16,8 @@ IUSE=""
 
 DAEMON_USER="karmabot"
 LOG_DIR="/var/log/karmabot"
-S="${WORKDIR}/${MY_PN}"
+
+S="${WORKDIR}"
 
 pkg_setup() {
 	enewgroup karmabot
