@@ -1,0 +1,57 @@
+diff --git a/Makefile.am b/Makefile.am
+index 5869974..237405e 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -2,7 +2,7 @@ MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure config.h.in config.h.in~
+
+ ACLOCAL_AMFLAGS = -I m4
+
+-SUBDIRS = contrib src
++SUBDIRS = src
+
+ dist_man_MANS = man/nutcracker.8
+
+diff --git a/configure.ac b/configure.ac
+index 7da0ad9..20e1c4d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -209,11 +209,8 @@ AS_IF([test "x$disable_spinlock" = xyes],
+   [AC_DEFINE([HAVE_SPINLOCK], [1], [Define to 1 if spinlock is not disabled])])
+ AC_MSG_RESULT($disable_spinlock)
+
+-# Untar the yaml-0.1.4 in contrib/ before config.status is rerun
+-AC_CONFIG_COMMANDS_PRE([tar xvfz contrib/yaml-0.1.4.tar.gz -C contrib])
+-
+-# Call yaml-0.1.4 ./configure recursively
+-AC_CONFIG_SUBDIRS([contrib/yaml-0.1.4])
++# Use systems libyaml.
++PKG_CHECK_MODULES([YAML], [yaml-0.1 >= 0.1])
+
+ # Define Makefiles
+ AC_CONFIG_FILES([Makefile
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 024ca7e..9c04e80 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -7,7 +7,6 @@ endif
+ AM_CPPFLAGS += -I $(top_srcdir)/src/hashkit
+ AM_CPPFLAGS += -I $(top_srcdir)/src/proto
+ AM_CPPFLAGS += -I $(top_srcdir)/src/event
+-AM_CPPFLAGS += -I $(top_srcdir)/contrib/yaml-0.1.4/include
+
+ AM_CFLAGS =
+ # about -fno-strict-aliasing: https://github.com/twitter/twemproxy/issues/276
+@@ -21,7 +20,7 @@ AM_CFLAGS += -Wconversion -Wsign-compare
+ AM_CFLAGS += -Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls -Wmissing-declarations
+
+ AM_LDFLAGS =
+-AM_LDFLAGS += -lm -lpthread -rdynamic
++AM_LDFLAGS += -lm -lpthread -rdynamic $(YAML_LIBS)
+ if OS_SOLARIS
+ AM_LDFLAGS += -lnsl -lsocket
+ endif
+@@ -59,4 +58,3 @@ nutcrackers_SOURCES =                 \
+ nutcrackers_LDADD = $(top_builddir)/src/hashkit/libhashkit.a
+ nutcrackers_LDADD += $(top_builddir)/src/proto/libproto.a
+ nutcrackers_LDADD += $(top_builddir)/src/event/libevent.a
+-nutcrackers_LDADD += $(top_builddir)/contrib/yaml-0.1.4/src/.libs/libyaml.a

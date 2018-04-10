@@ -4,7 +4,7 @@
 
 USER="${USER:-nobody}"
 PIDFILE="${PIDFILE:-/var/run/nutcracker.pid}"
-NUTCRACKER_BIN="${NUTCRACKER_BIN:-/usr/sbin/nutcracker}"
+NUTCRACKER_BIN="${NUTCRACKER_BIN:-/usr/sbin/nutcrackers}"
 CONF_FILE="${CONF_FILE:-/etc/nutcracker/nutcracker.yml}"
 
 depend() {
@@ -21,7 +21,7 @@ checkconf() {
 
 start() {
 	checkconf || exit 1
-        ebegin "Starting Nutcracker"
+        ebegin "Starting Nutcrackers"
         start-stop-daemon --start -u ${USER} \
 		--name ${SVCNAME} \
                 --exec ${NUTCRACKER_BIN} -- \
@@ -32,7 +32,7 @@ start() {
 }
 
 stop() {
-        ebegin "Stopping Nutcracker"
+        ebegin "Stopping Nutcrackers"
         start-stop-daemon --stop --pidfile "${PIDFILE}"
         eend $?
 }

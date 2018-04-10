@@ -20,7 +20,7 @@ RDEPEND="${DEPEND}"
 S="${WORKDIR}/twemproxies-${PV}"
 
 src_prepare() {
-	epatch "${FILESDIR}/${PN}-0.3.0-use-system-libyaml.patch"
+	epatch "${FILESDIR}/${PN}-${PV}-use-system-libyaml.patch"
         eautoreconf
 }
 
