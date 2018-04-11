@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+<email>chris.travers@adjust.com</email>
+</maintainer>
+<longdescription lang="en">
+PGObject::Util::AsyncPool provides an asynchrnonous connection pool for
+PostgreSQL databases with callback-based query results handling.  It can be
+used for scheduled database maintenance, incremental updates of very large
+tables and much more.
+</longdescription>
+</pkgmetadata>
