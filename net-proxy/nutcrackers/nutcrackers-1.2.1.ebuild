@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug doc"
 
-DEPEND=""
+DEPEND=">=dev-libs/libyaml-0.1.4"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/twemproxies-${PV}"
