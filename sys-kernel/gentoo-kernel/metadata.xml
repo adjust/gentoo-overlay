@@ -6,5 +6,6 @@
 	</maintainer>
 	<use>
 		<flag name="sources">Pull in sources for bin package</flag>
+		<flag name="protection">Enable spectre/meltdown mitigations</flag>
 	</use>
 </pkgmetadata>

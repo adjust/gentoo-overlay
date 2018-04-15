@@ -4,4 +4,7 @@
 	<maintainer type="person">
 		<email>ops@adjust.com</email>
 	</maintainer>
+	<use>
+		<flag name="protection">Enable spectre/meltdown mitigations</flag>
+	</use>
 </pkgmetadata>
