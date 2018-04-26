@@ -1,6 +1,10 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
+EAPI=5
 
+inherit vcs-snapshot
+
+RESTRICT="test" # 'works on my notebook' is not valid in general. sigh. ur wat doin?!
 DESCRIPTION="Run tests on an isolated, temporary PostgreSQL database"
 HOMEPAGE="http://ephemeralpg.org/"
 SRC_URI="https://bitbucket.org/eradman/${PN}/get/${P}.tar.gz"
@@ -10,12 +14,10 @@ SRC_URI="https://bitbucket.org/eradman/${PN}/get/${P}.tar.gz"
 KEYWORDS="~amd64 ~x86"
 LICENSE="ISC"
 SLOT="0"
-IUSE="" # TODO: perl & python
+IUSE="test" # TODO: perl & python
 
-DEPEND=''
+DEPEND='test? ( dev-lang/ruby )'
 RDEPEND='>=dev-db/postgresql-9.3'
-
-S="${WORKDIR}/eradman-ephemeralpg-5041d6685332"
 
 src_compile() {
 	emake DESTDIR="${D}" PREFIX='/usr' MANPREFIX='/usr/share'
