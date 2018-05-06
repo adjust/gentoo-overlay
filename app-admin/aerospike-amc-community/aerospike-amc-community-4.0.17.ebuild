@@ -18,5 +18,5 @@ DEPEND="${RDEPEND}"
 S=$WORKDIR
 
 src_install() {
-	cp -r "$S/*" "$D"
+	cp -r "$S/"* "$D"
 }
