@@ -20,15 +20,15 @@ ruby_add_bdepend "
 	"
 
 all_ruby_prepare() {
-        mkdir -p lib
+	mkdir -p lib
 }
 
 each_ruby_configure() {
-        ${RUBY} -Cext/mri/ extconf.rb || die "Unable to configure extension."
+	${RUBY} -Cext/mri/ extconf.rb || die "Unable to configure extension."
 }
 
 each_ruby_compile() {
-        emake -Cext/mri V=1
-        cp ext/mri/bcrypt_ext.so lib/ || die "Unable to copy extension."
+	emake -Cext/mri V=1
+	cp ext/mri/bcrypt_ext.so lib/ || die "Unable to copy extension."
 }
 
