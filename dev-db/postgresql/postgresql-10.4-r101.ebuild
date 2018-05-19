@@ -5,7 +5,7 @@ EAPI="6"
 
 PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
 
-inherit eutils flag-o-matic linux-info multilib pam prefix python-single-r1 \
+inherit autotools eutils flag-o-matic linux-info multilib pam prefix python-single-r1 \
 		systemd user versionator
 
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~ppc-macos ~x86-solaris"
@@ -21,7 +21,7 @@ LICENSE="POSTGRESQL GPL-2"
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="http://www.postgresql.org/"
 
-IUSE="cassert doc kerberos kernel_linux ldap libressl nls pam perl python +readline
+IUSE="cassert bagger doc kerberos kernel_linux ldap libressl ltree nls pam perl python +readline
 	  selinux +server systemd ssl static-libs tcl threads uuid xml zlib"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
@@ -105,6 +105,11 @@ pkg_setup() {
 }
 
 src_prepare() {
+	epatch "${FILESDIR}/${PN}-wo-ltree.patch"
+	# ^^ wo-ltree patches configure.in
+	eautoconf
+	eautoheader
+
 	# Work around PPC{,64} compilation bug where bool is already defined
 	sed '/#ifndef __cplusplus/a #undef bool' -i src/include/c.h || die
 
@@ -126,7 +131,7 @@ src_prepare() {
 	fi
 
 	# bagger
-	epatch "${FILESDIR}/index.patch"
+	use bagger && epatch "${FILESDIR}/index.patch"
 
 	eapply_user
 }
@@ -167,6 +172,7 @@ src_configure() {
 		$(use_enable threads thread-safety) \
 		$(use_with kerberos gssapi) \
 		$(use_with ldap) \
+		$(use_with ltree) \
 		$(use_with pam) \
 		$(use_with perl) \
 		$(use_with python) \
