@@ -30,8 +30,12 @@ src_install() {
 	cp -var "${WORKDIR}"/* "${D}"
 	if use sources; then
 		mkdir -p "${D}"/usr/src/linux-${PV}-gentoo/
-		cp "${DISTDIR}/buildkernel-${PV}" "${D}"/usr/src/linux-${PV}-gentoo/.config
-		cp "${DISTDIR}/Module.symvers-${PV}" "${D}"/usr/src/linux-${PV}-gentoo/Module.symvers
+		cp "${DISTDIR}/buildkernel-${PVR}" \
+			"${D}"/usr/src/linux-${PV}-gentoo/.config || \
+			die
+		cp "${DISTDIR}/Module.symvers-${PVR}" \
+			"${D}"/usr/src/linux-${PV}-gentoo/Module.symvers || \
+			die
 	fi
 }
 
