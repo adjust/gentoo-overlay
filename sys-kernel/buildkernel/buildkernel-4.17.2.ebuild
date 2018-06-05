@@ -46,6 +46,9 @@ src_compile() {
 	unset ARCH
 	export KBUILD_OUTPUT="$S/tmp/kernel"
 
+	# hnurgh.
+	export KERNEL_OUTPUTDIR="$S/tmp/kernel"
+
 	# make runs from src dir with output going to KBUILD_OUTPUT
 	# hacky PVR special
 	cd /usr/src/linux-${PV}-gentoo || die
@@ -70,7 +73,8 @@ src_compile() {
 		--mdadm \
 		--no-zfs --no-btrfs \
 		--kernel-config="$S/tmp/kernel/.config" \
-		--cachedir="$S/cache" || die
+		--cachedir="$S/cache" \
+		--microcode || die
 }
 
 src_install() {
@@ -81,5 +85,4 @@ src_install() {
 	mkdir -p "${D}/usr/share"
 	mv binkernel-${PV}.tar.xz "${D}/usr/share" || die
 	use protection && mv "${D}/usr/share/binkernel-${PV}.tar.xz" "${D}/usr/share/binkernel-hard-${PV}.tar.xz"
-	#cp "$S/tmp/kernel/Module.symvers" "${D}/usr/share/Modules.symvers-${PV}" || die
 }
