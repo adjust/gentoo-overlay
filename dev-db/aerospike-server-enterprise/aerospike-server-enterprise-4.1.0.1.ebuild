@@ -15,6 +15,7 @@ IUSE=""
 SRC_URI="http://www.aerospike.com/artifacts/${PN}/${PV}/${P}-debian7.tgz"
 
 RDEPEND="!dev-db/aerospike-server-community
+	net-nds/openldap
 	sys-process/numactl
 	sys-libs/readline-compat
 	${PYTHON_DEPS}"
