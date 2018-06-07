@@ -4,7 +4,7 @@
 EAPI=5
 
 MODULE_AUTHOR="EINHVERFR"
-MODULE_VERSION="0.02"
+MODULE_VERSION="0.03"
 
 inherit perl-module
 
