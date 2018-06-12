@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
@@ -57,10 +57,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	!aqua? (
-		>=x11-proto/inputproto-2.2-r1[${MULTILIB_USEDEP_HACK}]
-		>=x11-proto/xextproto-7.2.1-r1[${MULTILIB_USEDEP_HACK}]
-		xinerama? ( >=x11-proto/xineramaproto-1.2.1-r1[${MULTILIB_USEDEP_HACK}] )
-		xv? ( >=x11-proto/videoproto-2.3.1-r1[${MULTILIB_USEDEP_HACK}] )
+		x11-base/xorg-proto
 	)
 "
 PDEPEND="
