@@ -58,8 +58,6 @@ src_install() {
 	doins "${WORKDIR}/${PF}"/config/*
 	doins "${FILESDIR}/shiny-server.conf"
 
-	fowners -R shiny:shiny /etc/shiny-server
-
 	dodir /var/log/shiny-server
 	fowners -R shiny:shiny /var/log/shiny-server
 
