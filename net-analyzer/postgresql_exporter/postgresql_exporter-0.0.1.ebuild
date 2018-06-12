@@ -3,7 +3,7 @@
 
 EAPI=6
 EGO_PN="github.com/ikitiki/${PN}"
-inherit golang-build
+inherit golang-build user
 
 SRC_URI="https://${EGO_PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 KEYWORDS="~amd64"
@@ -13,6 +13,15 @@ HOMEPAGE="https://github.com/ikitiki/postgresql_exporter"
 LICENSE="MIT"
 SLOT="0"
 IUSE=""
+
+# This package is meant as a replacement so it uses the same user.
+RDEPEND="!net-analyzer/prometheus-postgres_exporter"
+
+EXPORTER_USER=prometheus-exporter
+
+pkg_setup() {
+	enewuser "${EXPORTER_USER}" -1 -1 -1
+}
 
 src_prepare() {
 	default
@@ -38,5 +47,15 @@ src_compile() {
 
 src_install() {
 	newbin pg-prometheus-exporter "${PN}"
-	dodoc -r configs README.md
+	dodoc README.md
+
+	insinto /etc/"${PN}"
+	doins configs/*.yaml
+
+	# These collide with net-analyzer/prometheus-postgres_exporter
+	keepdir /var/lib/prometheus/"${PN}" /var/log/prometheus
+	fowners "${EXPORTER_USER}":"${EXPORTER_USER}" /var/lib/prometheus/"${PN}" /var/log/prometheus
+
+	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
+	newconfd "${FILESDIR}/${PN}.confd" "${PN}"
 }
