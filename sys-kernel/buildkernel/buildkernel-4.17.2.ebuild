@@ -17,7 +17,7 @@ DEPEND="
 	sys-firmware/intel-microcode
 	=sys-kernel/gentoo-sources-${PV}
 	|| (
-		sys-kernel/genkernel
+		>=sys-kernel/genkernel-3.5.0.9
 		sys-kernel/genkernel-next
 	)
 	sys-apps/fakeroot
