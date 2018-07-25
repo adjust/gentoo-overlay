@@ -9,20 +9,38 @@ SLOT="${PV}"
 LICENSE="GPL-2 freedist"
 
 DESCRIPTION="Prebuilt gentoo kernel image with genkernel initramfs"
-SRC_URI="protection? ( https://files.adjust.com/binkernel-hard-${PV}.tar.xz
+
+SRC_URI="
+	protection? (
+	https://files.adjust.com/binkernel-hard-${PV}.tar.xz
 		sources? (
 			https://files.adjust.com/buildkernel-${PV}-hardened
 		)
 	)
-	!protection? ( https://files.adjust.com/binkernel-${PV}.tar.xz
+	docker? (
+		https://files.adjust.com/binkernel-docker-${PV}.tar.xz
 		sources? (
-			https://files.adjust.com/buildkernel-${PV}
+			https://files.adjust.com/buildkernel-${PV}-docker
 		)
-	)"
+	)
+	!protection? (
+		!docker? (
+			https://files.adjust.com/binkernel-${PV}.tar.xz
+			sources? (
+				https://files.adjust.com/buildkernel-${PV}
+			)
+		)
+	)
+"
 
-IUSE="sources protection"
+IUSE="sources protection docker"
 
 DEPEND="sources? ( =sys-kernel/gentoo-sources-${PV} )"
+
+REQUIRED_USE="
+	protection? ( !docker )
+	docker? ( !protection )
+"
 
 S=${WORKDIR}
 
@@ -36,6 +54,8 @@ src_install() {
 		mkdir -p "${D}"/usr/src/linux-${PV}-gentoo/
 		if use protection; then
 			cp "${DISTDIR}/buildkernel-${PV}-hardened" "${D}"/usr/src/linux-${PV}-gentoo/.config
+		elif use docker; then
+			cp "${DISTDIR}/buildkernel-${PV}-docker" "${D}"/usr/src/linux-${PV}-gentoo/.config
 		else
 			cp "${DISTDIR}/buildkernel-${PV}" "${D}"/usr/src/linux-${PV}-gentoo/.config;
 		fi
