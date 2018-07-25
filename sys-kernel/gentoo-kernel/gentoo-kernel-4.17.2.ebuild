@@ -12,7 +12,7 @@ DESCRIPTION="Prebuilt gentoo kernel image with genkernel initramfs"
 
 SRC_URI="
 	protection? (
-	https://files.adjust.com/binkernel-hard-${PV}.tar.xz
+		https://files.adjust.com/binkernel-hard-${PV}.tar.xz
 		sources? (
 			https://files.adjust.com/buildkernel-${PV}-hardened
 		)
