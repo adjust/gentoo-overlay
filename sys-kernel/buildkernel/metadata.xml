@@ -6,5 +6,6 @@
 	</maintainer>
 	<use>
 		<flag name="protection">Enable spectre/meltdown mitigations</flag>
+		<flag name="docker">Enable everything docker needs and spectre/meltdown mitigations</flag>
 	</use>
 </pkgmetadata>

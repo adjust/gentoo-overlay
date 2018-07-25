@@ -5,12 +5,13 @@ EAPI="5"
 
 KEYWORDS="~amd64"
 HOMEPAGE="https://www.gentoo.org"
-IUSE="protection"
+IUSE="protection docker"
 SLOT="0"
 LICENSE="GPL-2"
 
 DESCRIPTION="Autogenerate kernel images with genkernel"
 SRC_URI="https://files.adjust.com/${PF}-hardened
+	https://files.adjust.com/${PF}-docker
 	https://files.adjust.com/${PF}"
 
 DEPEND="
@@ -22,6 +23,11 @@ DEPEND="
 	)
 	sys-apps/fakeroot
 	"
+
+REQUIRED_USE="
+	protection? ( !docker )
+	docker? ( !protection )
+"
 
 src_unpack() {
 	mkdir -p "$S"
@@ -37,6 +43,8 @@ src_compile() {
 	# genkernel doesn't know how to kernel
 	if use protection; then
 		cp "${DISTDIR}/${PF}-hardened" "$S/tmp/kernel/.config" || die
+	elif use docker; then
+		cp "${DISTDIR}/${PF}-docker" "$S/tmp/kernel/.config" || die
 	else
 		cp "${DISTDIR}/${PF}" "$S/tmp/kernel/.config" || die
 	fi
@@ -84,4 +92,5 @@ src_install() {
 	mkdir -p "${D}/usr/share"
 	mv binkernel-${PV}.tar.xz "${D}/usr/share" || die
 	use protection && mv "${D}/usr/share/binkernel-${PV}.tar.xz" "${D}/usr/share/binkernel-hard-${PV}.tar.xz"
+	use docker && mv "${D}/usr/share/binkernel-${PV}.tar.xz" "${D}/usr/share/binkernel-docker-${PV}.tar.xz"
 }
