@@ -31,4 +31,3 @@ each_ruby_compile() {
 	emake -Cext/mri V=1
 	cp ext/mri/bcrypt_ext.so lib/ || die "Unable to copy extension."
 }
-
