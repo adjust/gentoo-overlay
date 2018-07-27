@@ -18,7 +18,7 @@ DEPEND="dev-lang/python:2.7"
 
 LICENSE="AGPL-3"
 
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="~amd64"
 SRC_URI="https://github.com/rstudio/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 BUILD_PYTHON="python2"
