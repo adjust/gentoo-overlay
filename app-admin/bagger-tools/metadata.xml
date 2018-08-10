@@ -7,4 +7,7 @@
 	<longdescription lang="en">
 		Perl Postgres Dump and Restore Tools
 	</longdescription>
+	<use>
+		<flag name="schaufel">Init scripts for schaufel listener/schaufel dependency</flag>
+	</use>
 </pkgmetadata>

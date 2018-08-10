@@ -10,7 +10,7 @@ SRC_URI=""
 EGIT_REPO_URI="https://github.com/adjust/bagger.git"
 SLOT="0"
 KEYWORDS=""
-IUSE=""
+IUSE="schaufel"
 
 DEPEND="
 	dev-perl/Moo
@@ -24,6 +24,19 @@ DEPEND="
 	dev-perl/Digest-SHA1
 "
 
-RDEPEND="${DEPEND}"
+RDEPEND="${DEPEND}
+	schaufel? (
+		app-admin/schaufel
+	)
+"
 
-mytargets="install"
+src_install() {
+	mytargets="install"
+	perl-module_src_install
+
+	if use schaufel;
+	then
+		newinitd "${FILESDIR}"/schaufel_listener.initd schaufel_listener
+		newconfd "${FILESDIR}"/schaufel_listener.confd schaufel_listener
+	fi
+}
