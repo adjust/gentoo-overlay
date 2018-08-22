@@ -21,4 +21,5 @@ RDEPEND="=www-servers/tornado-4*
 python_install() {
 	distutils-r1_python_install
 	newinitd "${FILESDIR}"/${P}.init ${PN}
+	keepdir /var/lib/luigi-server
 }

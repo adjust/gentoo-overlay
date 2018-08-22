@@ -3,7 +3,9 @@
 # Distributed under the terms of the GNU General Public License v2
 
 command="/usr/bin/luigid"
-start_stop_daemon_args="-bm"
+log=${logfile:-"/var/log/luigi.log"}
+cfg=${cfgfile:-"/etc/luigi/client.cfg"}
+start_stop_daemon_args="-bm -1 ${log} -2 ${log} -e LUIGI_CONFIG_PATH=${cfg}"
 pidfile="/var/run/luigi.pid"
 
 depend() {
