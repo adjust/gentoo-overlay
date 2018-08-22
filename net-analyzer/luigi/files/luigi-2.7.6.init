@@ -3,8 +3,14 @@
 # Distributed under the terms of the GNU General Public License v2
 
 command="/usr/bin/luigid"
-start_stop_daemon_args="-bm"
 pidfile="/var/run/luigi.pid"
+
+log=${logfile:-"/var/log/luigi.log"}
+cfg=${cfgfile:-"/etc/luigi/client.cfg"}
+py=${pythonpath:-""}
+start_stop_daemon_args="-bm -1 ${log} -2 ${log}
+	-e LUIGI_CONFIG_PATH=${cfg}
+	-e PYTHONPATH=${py}"
 
 depend() {
 	use nginx
