@@ -4,6 +4,7 @@
     rotate 90
     dateext
     compress
+    delaycompress
     olddir /var/log/aerospike/
     postrotate
         test -f /var/run/aerospike/aerospike.pid && kill -HUP `cat /var/run/aerospike/aerospike.pid`
