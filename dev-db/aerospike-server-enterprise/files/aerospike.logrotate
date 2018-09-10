@@ -3,10 +3,13 @@
     missingok
     rotate 90
     dateext
-    compress
     delaycompress
+    compress
     olddir /var/log/aerospike/
     postrotate
-        test -f /var/run/aerospike/aerospike.pid && kill -HUP `cat /var/run/aerospike/aerospike.pid`
+        pidfile=/var/run/aerospike/aerospike.pid
+        test -f "$pidfile" || exit 0
+        pid=$(< "$pidfile")
+        kill -0 "$pid" 2>/dev/null || exit 0 && kill -HUP "$pid"
     endscript
 }
