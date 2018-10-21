@@ -2,7 +2,7 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="project">
-                <email>ops@adjust.com</email>
+		<email>ops@adjust.com</email>
 	</maintainer>
 	<use>
 		<flag name="exceptions">Add support for exceptions - like catching them
