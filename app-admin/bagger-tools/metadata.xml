@@ -9,5 +9,6 @@
 	</longdescription>
 	<use>
 		<flag name="schaufel">Init scripts for schaufel listener/schaufel dependency</flag>
+		<flag name="bagger">Also build and install the database insert trigger</flag>
 	</use>
 </pkgmetadata>
