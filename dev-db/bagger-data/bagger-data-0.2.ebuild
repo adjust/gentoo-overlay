@@ -1,7 +1,7 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=6
 POSTGRES_COMPAT=( "9.6" "10" )
 POSTGRES_USEDEP="bagger"
 BUILD_DIR="${S}/sql/bagger_data"
