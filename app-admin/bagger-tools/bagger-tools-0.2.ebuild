@@ -59,7 +59,7 @@ src_install() {
 
 	if use schaufel;
 	then
-		newinitd "${FILESDIR}"/schaufel_listener.${PVR}.initd schaufel_listener
-		newconfd "${FILESDIR}"/schaufel_listener.${PVR}.confd schaufel_listener
+		newinitd "${FILESDIR}"/schaufel_listener-${PVR}.initd schaufel_listener
+		newconfd "${FILESDIR}"/schaufel_listener-${PVR}.confd schaufel_listener
 	fi
 }
