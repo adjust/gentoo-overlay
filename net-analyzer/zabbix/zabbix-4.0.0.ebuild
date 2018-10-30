@@ -20,6 +20,7 @@ IUSE="+agent java curl frontend ipv6 xmpp ldap libxml2 mysql openipmi oracle +po
 REQUIRED_USE="|| ( agent frontend proxy server )
 	proxy? ( ^^ ( mysql oracle postgres sqlite odbc ) )
 	server? ( ^^ ( mysql oracle postgres odbc ) )
+	server? ( !sqlite )
 	static? ( !oracle !snmp )"
 
 COMMON_DEPEND="snmp? ( net-analyzer/net-snmp )
