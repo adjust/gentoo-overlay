@@ -55,7 +55,7 @@ python_prepare_all() {
 	export SCIPY_FCONFIG="config_fc --noopt --noarch"
 
 	# remove bundled cblas
-	rm -r sklearn/src || die
+	rm -rf sklearn/src || die "failed to remove bundled cblas"
 
 	# commented out, since it is a mess to maintain
 	# use system joblib
