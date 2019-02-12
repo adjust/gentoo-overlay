@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="project">
+    <email>ops@adjust.com</email>
+    <name>Adjust Ops Team</name>
+  </maintainer>
+  <use>
+    <flag name="redis">Redis backend support</flag>
+    <flag name="database">Databse backend support</flag>
+  </use>
+</pkgmetadata>
