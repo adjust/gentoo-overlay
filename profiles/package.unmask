@@ -20,3 +20,5 @@ app-eselect/eselect-qtgraphicssystem
 # django bits for graphite-web
 <dev-python/django-1.11
 
+# python3-openid for aqcuired
+=dev-python/python3-openid-3.1.0
