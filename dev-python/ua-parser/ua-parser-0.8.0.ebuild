@@ -12,7 +12,7 @@ LICENSE="Apache-2.0"
 SLOT="0"
 IUSE="test"
 
-SRC_URI="https://files.pythonhosted.org/packages/b0/02/94ea43fc432fb112fbb62a89855317c41c210fb5239a2ed9b94ecb63024f/${P}.tar.gz"
+SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 KEYWORDS="amd64 ~arm64 x86 ~amd64-linux ~x86-linux"
 
 RDEPEND="
@@ -24,8 +24,4 @@ DEPEND="
 
 python_test() {
 	${EPYTHON} ua_parser/user_agent_parser_test.py || die "test failed under ${EPYTHON}"
-}
-
-python_install() {
-	distutils-r1_python_install
 }
