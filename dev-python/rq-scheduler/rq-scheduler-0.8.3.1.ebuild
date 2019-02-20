@@ -25,4 +25,5 @@ DEPEND="
 "
 RDEPEND="
 	dev-python/rq[${PYTHON_USEDEP}]
+	dev-python/croniter[${PYTHON_USEDEP}]
 "
