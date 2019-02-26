@@ -34,7 +34,7 @@ pkg_setup() {
 src_prepare() {
 	eapply_user
 
-	rm -rf ${S}/src/github.com/hashicorp/nomad/vendor/golang.org/x/{crypto,net}
+	rm -rf "${S}/src/github.com/hashicorp/nomad/vendor/golang.org/x/"{crypto,net}
 
 	sed -e 's@^\(GIT_DESCRIBE :=\).*@\1'${PV}'@' \
 		-e 's@^\(GIT_COMMIT :=\).*@\1@' \
@@ -56,7 +56,7 @@ src_install() {
 	local x
 
 	#dobin "${S}/src/${EGO_PN}/pkg/linux_amd64$(use lxc && echo '-lxc')/${PN}"
-	dobin ${S}/nomad || die
+	dobin "${S}/nomad" || die
 
 	for x in /var/{lib,log}/${PN}; do
 		keepdir "${x}"
