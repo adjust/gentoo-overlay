@@ -191,6 +191,10 @@ src_install() {
 		newinitd "${FILESDIR}"/clickhouse-server.initd clickhouse-server
 		systemd_dounit "${FILESDIR}"/clickhouse-server.service
 	fi
+
+	mkdir -p "${D}"/var/log/clickhouse-server
+	keepdir "${D}"/var/log/clickhouse-server
+	chown clickhouse:clickhouse "${D}"/var/log/clickhouse-server
 }
 
 pkg_preinst() {
