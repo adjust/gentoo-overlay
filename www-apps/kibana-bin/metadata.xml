@@ -4,4 +4,8 @@
 	<maintainer type="person">
 		<email>ops@adjust.com</email>
 	</maintainer>
+        <use>
+                <flag name="x-pack">Enable additional features (may need a license)</flag>
+        </use>
 </pkgmetadata>
+
