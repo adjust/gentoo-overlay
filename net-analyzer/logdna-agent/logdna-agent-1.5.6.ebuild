@@ -35,8 +35,8 @@ src_install() {
 	doinitd scripts/logdna-agent
 
 	dobin "${FILESDIR}"/logdna-agent
-	sed -i "s/@LIBDIR@/$(get_libdir)/" "${FILESDIR}"/99logdna-agent || die "sed failed"
-	doenvd "${FILESDIR}"/99logdna-agent
+	sed -e "s/@LIBDIR@/$(get_libdir)/" < "${FILESDIR}"/99logdna-agent > 99logdna-agent || die "sed failed"
+	doenvd 99logdna-agent
 
 	dosym "${ED%/}"/usr/$(get_libdir)/logdna-agent/bin/logdna-agent /usr/bin/logdna-agent
 }
