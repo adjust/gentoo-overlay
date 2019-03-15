@@ -192,8 +192,7 @@ src_install() {
 		systemd_dounit "${FILESDIR}"/clickhouse-server.service
 	fi
 
-	mkdir -p "${D}"/var/log/clickhouse-server
-	keepdir "${D}"/var/log/clickhouse-server
+	keepdir /var/log/clickhouse-server
 	chown clickhouse:clickhouse "${D}"/var/log/clickhouse-server
 }
 
