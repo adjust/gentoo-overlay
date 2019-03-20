@@ -83,6 +83,6 @@ then
 fi
 
 # start the process and wait for the reaper
-java $EXTRA_ARGS -jar /opt/metabase/bin/metabase.jar &
+java $EXTRA_ARGS -jar /opt/metabase/bin/metabase-bin.jar &
 wait -n $!
 
