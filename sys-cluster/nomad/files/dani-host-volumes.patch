@@ -1,0 +1,392 @@
+diff --git a/src/github.com/hashicorp/nomad/api/tasks.go b/src/github.com/hashicorp/nomad/api/tasks.go
+index a55e90f45..a00de8319 100644
+--- a/src/github.com/hashicorp/nomad/api/tasks.go
++++ b/src/github.com/hashicorp/nomad/api/tasks.go
+@@ -480,6 +480,20 @@ func (m *MigrateStrategy) Copy() *MigrateStrategy {
+ 	return nm
+ }
+ 
++// HostVolume declares a dependency on a host volume mount
++type HostVolume struct {
++	Name     string
++	Path     string
++	ReadOnly bool
++}
++
++// VolumeMount describes a relationship between a volume and a task.
++type VolumeMount struct {
++	VolumeName string `mapstructure:"volume_name"`
++	MountPath  string `mapstructure:"mount_path"`
++	ReadOnly   bool
++}
++
+ // TaskGroup is the unit of scheduling.
+ type TaskGroup struct {
+ 	Name             *string
+@@ -488,6 +502,7 @@ type TaskGroup struct {
+ 	Affinities       []*Affinity
+ 	Tasks            []*Task
+ 	Spreads          []*Spread
++	HostVolumes      map[string]*HostVolume
+ 	RestartPolicy    *RestartPolicy
+ 	ReschedulePolicy *ReschedulePolicy
+ 	EphemeralDisk    *EphemeralDisk
+@@ -688,6 +703,7 @@ type Task struct {
+ 	KillTimeout     *time.Duration `mapstructure:"kill_timeout"`
+ 	LogConfig       *LogConfig     `mapstructure:"logs"`
+ 	Artifacts       []*TaskArtifact
++	VolumeMounts    []*VolumeMount
+ 	Vault           *Vault
+ 	Templates       []*Template
+ 	DispatchPayload *DispatchPayloadConfig
+diff --git a/src/github.com/hashicorp/nomad/client/allocrunner/taskrunner/mount_hook.go b/src/github.com/hashicorp/nomad/client/allocrunner/taskrunner/mount_hook.go
+new file mode 100644
+index 000000000..e9480dca9
+--- /dev/null
++++ b/src/github.com/hashicorp/nomad/client/allocrunner/taskrunner/mount_hook.go
+@@ -0,0 +1,59 @@
++package taskrunner
++
++import (
++	"context"
++	"fmt"
++
++	log "github.com/hashicorp/go-hclog"
++	"github.com/hashicorp/nomad/client/allocrunner/interfaces"
++	"github.com/hashicorp/nomad/nomad/structs"
++	"github.com/hashicorp/nomad/plugins/drivers"
++)
++
++type mountHook struct {
++	alloc  *structs.Allocation
++	runner *TaskRunner
++	logger log.Logger
++}
++
++func newMountHook(runner *TaskRunner, logger log.Logger) *mountHook {
++	h := &mountHook{
++		alloc:  runner.Alloc(),
++		runner: runner,
++	}
++	h.logger = logger.Named(h.Name())
++	return h
++}
++
++func (*mountHook) Name() string {
++	return "mounts"
++}
++
++func (h *mountHook) Prestart(ctx context.Context, req *interfaces.TaskPrestartRequest, resp *interfaces.TaskPrestartResponse) error {
++	volumes := h.alloc.Job.LookupTaskGroup(h.alloc.TaskGroup).HostVolumes
++	volumesByName := make(map[string]*structs.HostVolume, len(volumes))
++	for _, v := range volumes {
++		volumesByName[v.Name] = v
++	}
++
++	mounts := h.runner.hookResources.getMounts()
++
++	for _, s := range req.Task.VolumeMounts {
++		v, ok := volumesByName[s.VolumeName]
++		if !ok {
++			return fmt.Errorf("Could not find host volume declaration named %s", s.VolumeName)
++		}
++
++		dm := &drivers.MountConfig{
++			HostPath: v.Path,
++			TaskPath: s.MountPath,
++			Readonly: v.ReadOnly || s.ReadOnly,
++		}
++		mounts = append(mounts, dm)
++	}
++
++	h.runner.hookResources.setMounts(mounts)
++
++	resp.Done = true
++	return nil
++}
+diff --git a/src/github.com/hashicorp/nomad/client/allocrunner/taskrunner/task_runner_hooks.go b/src/github.com/hashicorp/nomad/client/allocrunner/taskrunner/task_runner_hooks.go
+index 0419f3e54..d9f2e4ba5 100644
+--- a/src/github.com/hashicorp/nomad/client/allocrunner/taskrunner/task_runner_hooks.go
++++ b/src/github.com/hashicorp/nomad/client/allocrunner/taskrunner/task_runner_hooks.go
+@@ -62,6 +62,7 @@ func (tr *TaskRunner) initHooks() {
+ 		newLogMonHook(tr.logmonHookConfig, hookLogger),
+ 		newDispatchHook(tr.Alloc(), hookLogger),
+ 		newArtifactHook(tr, hookLogger),
++		newMountHook(tr, hookLogger),
+ 		newStatsHook(tr, tr.clientConfig.StatsCollectionInterval, hookLogger),
+ 		newDeviceHook(tr.devicemanager, hookLogger),
+ 	}
+diff --git a/src/github.com/hashicorp/nomad/command/agent/job_endpoint.go b/src/github.com/hashicorp/nomad/command/agent/job_endpoint.go
+index e343af649..0842e5971 100644
+--- a/src/github.com/hashicorp/nomad/command/agent/job_endpoint.go
++++ b/src/github.com/hashicorp/nomad/command/agent/job_endpoint.go
+@@ -708,6 +708,17 @@ func ApiTgToStructsTG(taskGroup *api.TaskGroup, tg *structs.TaskGroup) {
+ 		}
+ 	}
+ 
++	if l := len(taskGroup.HostVolumes); l != 0 {
++		tg.HostVolumes = make(map[string]*structs.HostVolume, l)
++		for i, vol := range taskGroup.HostVolumes {
++			tg.HostVolumes[i] = &structs.HostVolume{
++				Name:     vol.Name,
++				Path:     vol.Path,
++				ReadOnly: vol.ReadOnly,
++			}
++		}
++	}
++
+ 	if taskGroup.Update != nil {
+ 		tg.Update = &structs.UpdateStrategy{
+ 			Stagger:          *taskGroup.Update.Stagger,
+@@ -747,6 +758,17 @@ func ApiTaskToStructsTask(apiTask *api.Task, structsTask *structs.Task) {
+ 	structsTask.Constraints = ApiConstraintsToStructs(apiTask.Constraints)
+ 	structsTask.Affinities = ApiAffinitiesToStructs(apiTask.Affinities)
+ 
++	if l := len(apiTask.VolumeMounts); l != 0 {
++		structsTask.VolumeMounts = make([]*structs.VolumeMount, l)
++		for i, mount := range apiTask.VolumeMounts {
++			structsTask.VolumeMounts[i] = &structs.VolumeMount{
++				VolumeName: mount.VolumeName,
++				ReadOnly:   mount.ReadOnly,
++				MountPath:  mount.MountPath,
++			}
++		}
++	}
++
+ 	if l := len(apiTask.Services); l != 0 {
+ 		structsTask.Services = make([]*structs.Service, l)
+ 		for i, service := range apiTask.Services {
+diff --git a/src/github.com/hashicorp/nomad/jobspec/parse.go b/src/github.com/hashicorp/nomad/jobspec/parse.go
+index f1914a586..467e1fb62 100644
+--- a/src/github.com/hashicorp/nomad/jobspec/parse.go
++++ b/src/github.com/hashicorp/nomad/jobspec/parse.go
+@@ -315,6 +315,7 @@ func parseGroups(result *api.Job, list *ast.ObjectList) error {
+ 			"vault",
+ 			"migrate",
+ 			"spread",
++			"host_volume",
+ 		}
+ 		if err := helper.CheckHCLKeys(listVal, valid); err != nil {
+ 			return multierror.Prefix(err, fmt.Sprintf("'%s' ->", n))
+@@ -356,6 +357,13 @@ func parseGroups(result *api.Job, list *ast.ObjectList) error {
+ 			}
+ 		}
+ 
++		// Parse volumes
++		if o := listVal.Filter("host_volume"); len(o.Items) > 0 {
++			if err := parseHostVolumes(&g.HostVolumes, o); err != nil {
++				return multierror.Prefix(err, fmt.Sprintf("'%s', host_volume ->", n))
++			}
++		}
++
+ 		// Parse restart policy
+ 		if o := listVal.Filter("restart"); len(o.Items) > 0 {
+ 			if err := parseRestartPolicy(&g.RestartPolicy, o); err != nil {
+@@ -688,6 +696,41 @@ func parseAffinities(result *[]*api.Affinity, list *ast.ObjectList) error {
+ 	return nil
+ }
+ 
++func parseHostVolumes(result *map[string]*api.HostVolume, list *ast.ObjectList) error {
++	parsed := make(map[string]*api.HostVolume, len(list.Items))
++
++	for _, o := range list.Items {
++		n := o.Keys[0].Token.Value().(string)
++
++		// Check for invalid keys
++		valid := []string{
++			"readonly",
++			"path",
++		}
++		if err := helper.CheckHCLKeys(o.Val, valid); err != nil {
++			return err
++		}
++
++		var m map[string]interface{}
++		if err := hcl.DecodeObject(&m, o.Val); err != nil {
++			return err
++		}
++
++		var v api.HostVolume
++		if err := mapstructure.WeakDecode(m, &v); err != nil {
++			return err
++		}
++
++		v.Name = n
++
++		parsed[n] = &v
++	}
++
++	*result = parsed
++
++	return nil
++}
++
+ func parseEphemeralDisk(result **api.EphemeralDisk, list *ast.ObjectList) error {
+ 	list = list.Elem()
+ 	if len(list.Items) > 1 {
+@@ -874,6 +917,7 @@ func parseTasks(jobName string, taskGroupName string, result *[]*api.Task, list
+ 			"user",
+ 			"vault",
+ 			"kill_signal",
++			"volume_mount",
+ 		}
+ 		if err := helper.CheckHCLKeys(listVal, valid); err != nil {
+ 			return multierror.Prefix(err, fmt.Sprintf("'%s' ->", n))
+@@ -928,6 +972,12 @@ func parseTasks(jobName string, taskGroupName string, result *[]*api.Task, list
+ 			}
+ 		}
+ 
++		if o := listVal.Filter("volume_mount"); len(o.Items) > 0 {
++			if err := parseVolumeMounts(jobName, taskGroupName, &t, o); err != nil {
++				return multierror.Prefix(err, fmt.Sprintf("'%s',", n))
++			}
++		}
++
+ 		if o := listVal.Filter("service"); len(o.Items) > 0 {
+ 			if err := parseServices(jobName, taskGroupName, &t, o); err != nil {
+ 				return multierror.Prefix(err, fmt.Sprintf("'%s',", n))
+@@ -1192,6 +1242,38 @@ func parseTemplates(result *[]*api.Template, list *ast.ObjectList) error {
+ 	return nil
+ }
+ 
++func parseVolumeMounts(jobName string, taskGroupName string, task *api.Task, volumeMountObjs *ast.ObjectList) error {
++	task.VolumeMounts = make([]*api.VolumeMount, len(volumeMountObjs.Items))
++	for idx, o := range volumeMountObjs.Items {
++		n := o.Keys[0].Token.Value().(string)
++
++		// Check for invalid keys
++		valid := []string{
++			"readonly",
++			"mount_path",
++		}
++		if err := helper.CheckHCLKeys(o.Val, valid); err != nil {
++			return multierror.Prefix(err, fmt.Sprintf("volume_mount (%d) ->", idx))
++		}
++
++		var mount api.VolumeMount
++		var m map[string]interface{}
++		if err := hcl.DecodeObject(&m, o.Val); err != nil {
++			return err
++		}
++
++		if err := mapstructure.WeakDecode(m, &mount); err != nil {
++			return err
++		}
++
++		mount.VolumeName = n
++
++		task.VolumeMounts[idx] = &mount
++	}
++
++	return nil
++}
++
+ func parseServices(jobName string, taskGroupName string, task *api.Task, serviceObjs *ast.ObjectList) error {
+ 	task.Services = make([]*api.Service, len(serviceObjs.Items))
+ 	for idx, o := range serviceObjs.Items {
+diff --git a/src/github.com/hashicorp/nomad/nomad/structs/structs.go b/src/github.com/hashicorp/nomad/nomad/structs/structs.go
+index 88b2db372..fe7b517fc 100644
+--- a/src/github.com/hashicorp/nomad/nomad/structs/structs.go
++++ b/src/github.com/hashicorp/nomad/nomad/structs/structs.go
+@@ -4413,6 +4413,9 @@ type TaskGroup struct {
+ 	// be scheduled.
+ 	Count int
+ 
++	// HostVolumes are the collection of storage volumes that the task group requests
++	HostVolumes map[string]*HostVolume
++
+ 	// Update is used to control the update strategy for this task group
+ 	Update *UpdateStrategy
+ 
+@@ -4457,6 +4460,7 @@ func (tg *TaskGroup) Copy() *TaskGroup {
+ 	*ntg = *tg
+ 	ntg.Update = ntg.Update.Copy()
+ 	ntg.Constraints = CopySliceConstraints(ntg.Constraints)
++	ntg.HostVolumes = CopyMapStringVolume(ntg.HostVolumes)
+ 	ntg.RestartPolicy = ntg.RestartPolicy.Copy()
+ 	ntg.ReschedulePolicy = ntg.ReschedulePolicy.Copy()
+ 	ntg.Affinities = CopySliceAffinities(ntg.Affinities)
+@@ -5174,6 +5178,9 @@ type Task struct {
+ 	// the task.
+ 	Artifacts []*TaskArtifact
+ 
++	// VolumeMounts are the configuration options for mounts that the task requires.
++	VolumeMounts []*VolumeMount
++
+ 	// Leader marks the task as the leader within the group. When the leader
+ 	// task exits, other tasks will be gracefully terminated.
+ 	Leader bool
+@@ -5212,6 +5219,7 @@ func (t *Task) Copy() *Task {
+ 	nt.Resources = nt.Resources.Copy()
+ 	nt.Meta = helper.CopyMapStringString(nt.Meta)
+ 	nt.DispatchPayload = nt.DispatchPayload.Copy()
++	nt.VolumeMounts = CopySliceVolumeMount(t.VolumeMounts)
+ 
+ 	if t.Artifacts != nil {
+ 		artifacts := make([]*TaskArtifact, 0, len(t.Artifacts))
+diff --git a/src/github.com/hashicorp/nomad/nomad/structs/volume.go b/src/github.com/hashicorp/nomad/nomad/structs/volume.go
+new file mode 100644
+index 000000000..5f0e39c8c
+--- /dev/null
++++ b/src/github.com/hashicorp/nomad/nomad/structs/volume.go
+@@ -0,0 +1,60 @@
++package structs
++
++// HostVolume is a representation of a storage volume from the host
++type HostVolume struct {
++	Name     string
++	Path     string
++	ReadOnly bool
++}
++
++func (v *HostVolume) Copy() *HostVolume {
++	if v == nil {
++		return nil
++	}
++	nv := new(HostVolume)
++	*nv = *v
++	return nv
++}
++
++func CopyMapStringVolume(s map[string]*HostVolume) map[string]*HostVolume {
++	l := len(s)
++	if l == 0 {
++		return nil
++	}
++
++	c := make(map[string]*HostVolume, l)
++	for i, v := range s {
++		c[i] = v.Copy()
++	}
++	return c
++}
++
++// VolumeMount is a representation of the configuration required to mount a Volume
++// into a Task
++type VolumeMount struct {
++	VolumeName string
++	MountPath  string
++	ReadOnly   bool
++}
++
++func (v *VolumeMount) Copy() *VolumeMount {
++	if v == nil {
++		return nil
++	}
++	nv := new(VolumeMount)
++	*nv = *v
++	return nv
++}
++
++func CopySliceVolumeMount(s []*VolumeMount) []*VolumeMount {
++	l := len(s)
++	if l == 0 {
++		return nil
++	}
++
++	c := make([]*VolumeMount, l)
++	for i, v := range s {
++		c[i] = v.Copy()
++	}
++	return c
++}

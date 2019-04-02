@@ -32,6 +32,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+	eapply "${FILESDIR}/dani-host-volumes.patch"
 	eapply_user
 
 	rm -rf "${S}/src/github.com/hashicorp/nomad/vendor/golang.org/x/"{crypto,net}
