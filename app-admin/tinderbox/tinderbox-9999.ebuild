@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND="app-admin/sex"
+DEPEND="app-admin/trex"
 RDEPEND="${DEPEND}"
 
 src_install() {
