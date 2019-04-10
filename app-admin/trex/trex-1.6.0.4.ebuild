@@ -16,14 +16,14 @@ else
 	# shouldn't. Like making ${S} contain "Rex" when the git clone has "rex"
 	# Also prevents perl-module.eclass provisioning SRC_URI
 	#DIST_AUTHOR=JFRIED
-	DIST_NAME=Sex
+	DIST_NAME=trex
 	KEYWORDS="~amd64 ~x86"
 fi
 
 inherit perl-module ${VCS_ECLASS}
 
-DESCRIPTION="(S)!ex is a (R)?ex fork to ease the execution of remote commands"
-SRC_URI="https://files.adjust.com/Sex-${PV}-TRIAL.tar.gz"
+DESCRIPTION="T(R)?ex is a (R)?ex fork to ease the execution of remote commands"
+SRC_URI="https://files.adjust.com/trex-${PV}-TRIAL.tar.gz"
 
 SLOT="0"
 IUSE="test"
