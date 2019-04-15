@@ -9,7 +9,7 @@ KEYWORDS="~amd64"
 EGO_PN="github.com/hashicorp/${PN}"
 DESCRIPTION="The cluster manager from Hashicorp"
 HOMEPAGE="http://www.nomadproject.io"
-SRC_URI="https://github.com/hashicorp/${PN}/archive/v${PV/_/-}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/hashicorp/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 SLOT="0"
 LICENSE="MPL-2.0"
