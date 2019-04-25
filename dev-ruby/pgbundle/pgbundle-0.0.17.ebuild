@@ -20,4 +20,5 @@ ruby_add_bdepend "
 	dev-ruby/net-ssh
 	dev-ruby/pg
 	dev-ruby/thor
+	dev-ruby/zip
 	"
