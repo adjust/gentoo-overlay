@@ -33,14 +33,13 @@ pkg_setup() {
 
 src_unpack() {
 	#cp because we don't actually unpack jars
-	mkdir -p "${WORKDIR}/${MY_P}/bin" || die
-	mkdir -p "${WORKDIR}/${MY_P}/lib" || die
+	mkdir -p "${S}/"{bin,lib,plugins} || die
 
-	cp "${DISTDIR}/${P}.jar" "${WORKDIR}/${MY_P}/bin/${PN}.jar" || die
+	cp "${DISTDIR}/${P}.jar" "${S}/bin/${PN}.jar" || die
 	cp "${FILESDIR}/metabase-server-start.sh" \
-		"${WORKDIR}/${MY_P}/bin" || die
+		"${S}/bin" || die
 	cp "${FILESDIR}/metabase-log4j.properties" \
-		"${WORKDIR}/${MY_P}/lib/log4j.properties" || die
+		"${S}/lib/log4j.properties" || die
 }
 
 src_install() {

@@ -82,6 +82,11 @@ then
 	export MB_JETTY_SSL_Keystore_Password="${METABASE_SSL_KEYSTORE_PASSWORD}"
 fi
 
+if [ -d "${METABASE_PLUGINS_DIR}" ]
+then
+	export MB_PLUGINS_DIR="${METABASE_PLUGINS_DIR}"
+fi
+
 # start the process and wait for the reaper
 java $EXTRA_ARGS -jar /opt/metabase/bin/metabase-bin.jar &
 wait -n $!

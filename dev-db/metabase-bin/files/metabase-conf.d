@@ -18,7 +18,7 @@ METABASE_PASSWORD_LENGTH=10
 #METABASE_DB_PASS=""
 #METABASE_DB_HOST="localhost"
 ##only relevant if TYPE is h2
-#METABASE_DB_FILE='/opt/metabase/lib/metabase.db.mv.db'
+#METABASE_DB_FILE="/opt/metabase/lib/metabase.db.mv.db"
 
 ## passed to java/jetty as env
 #METABASE_BIND_ADDR="0.0.0.0:6000"
@@ -26,3 +26,4 @@ METABASE_PASSWORD_LENGTH=10
 #METABASE_SSL_KEYSTORE=""
 #METABASE_SSL_KEYSTORE_PASSWORD=""
 
+METABASE_PLUGINS_DIR="/opt/metabase/plugins"
