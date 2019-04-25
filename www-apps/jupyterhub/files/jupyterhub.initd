@@ -1,0 +1,27 @@
+#!/sbin/openrc-run
+# Copyright 2019 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="jupyterhub daemon"
+description=""
+command=/usr/bin/jupyterhub
+command_args="-f /etc/jupyterhub/jupyterhub_conf.py \
+	${jupyterhub_args}"
+command_background="true"
+command_user="${RC_SVCNAME}"
+directory="/var/lib/${RC_SVCNAME}"
+output_log="/var/log/${RC_SVCNAME}/${RC_SVCNAME}.log"
+error_log="/var/log/${RC_SVCNAME}/${RC_SVCNAME}.log"
+pidfile="/run/${RC_SVCNAME}"
+
+depend() {
+	need net
+}
+
+start_pre() {
+	if [ ! -e /etc/jupyterhub/jupyterhub_config.py ]; then
+		eerror "Please first generate a config file using:"
+		eerror "        jupyterhub --generate-config -f /etc/jupyterhub/jupyterhub_config.py"
+		return 1
+	fi
+}
