@@ -33,7 +33,7 @@ pkg_setup() {
 
 src_unpack() {
 	#cp because we don't actually unpack jars
-	mkdir -p "${S}/"{bin,lib,plugins} || die
+	mkdir -p "${S}/"{bin,lib} || die
 
 	cp "${DISTDIR}/${P}.jar" "${S}/bin/${PN}.jar" || die
 	cp "${FILESDIR}/metabase-server-start.sh" \

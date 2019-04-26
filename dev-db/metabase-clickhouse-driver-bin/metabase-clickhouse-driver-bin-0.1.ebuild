@@ -22,7 +22,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${MY_P}"
-INSTALL_DIR="/opt/metabase/plugins"
+INSTALL_DIR="/opt/metabase/lib/plugins"
 
 src_unpack() {
 	mkdir -p "${S}" || die
