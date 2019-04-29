@@ -14,7 +14,7 @@ if [[ ${QT4_BUILD_TYPE} == release ]]; then
 	KEYWORDS="~amd64"
 fi
 
-IUSE="+gstreamer icu +jit wkhtmltopdf"
+IUSE="icu +jit wkhtmltopdf"
 
 # libxml2[!icu?] is needed for bugs 407315 and 411091
 DEPEND="
@@ -24,12 +24,6 @@ DEPEND="
 	~dev-qt/qtxmlpatterns-${PV}[aqua=,debug=,wkhtmltopdf=,${MULTILIB_USEDEP_HACK}]
 	>=x11-libs/libX11-1.5.0-r1[${MULTILIB_USEDEP_HACK}]
 	>=x11-libs/libXrender-0.9.7-r1[${MULTILIB_USEDEP_HACK}]
-	gstreamer? (
-		dev-libs/glib:2[${MULTILIB_USEDEP_HACK}]
-		dev-libs/libxml2:2[!icu?,${MULTILIB_USEDEP_HACK}]
-		>=media-libs/gstreamer-0.10.36-r2:0.10[${MULTILIB_USEDEP_HACK}]
-		>=media-libs/gst-plugins-base-0.10.36-r2:0.10[${MULTILIB_USEDEP_HACK}]
-	)
 	icu? ( dev-libs/icu:=[${MULTILIB_USEDEP_HACK}] )
 "
 RDEPEND="${DEPEND}"
@@ -75,7 +69,7 @@ multilib_src_configure() {
 		-system-sqlite
 		$(qt_use icu)
 		$(qt_use jit javascript-jit)
-		$(use gstreamer || echo -DENABLE_VIDEO=0)
+		-DENABLE_VIDEO=0
 	)
 	qt4_multilib_src_configure
 }
