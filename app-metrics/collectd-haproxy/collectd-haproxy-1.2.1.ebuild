@@ -19,5 +19,5 @@ DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
 RESTRICT="test"
 
 python_install() {
-	distutils-r1_python_install --install-scripts="${EPREFIX}/usr/share/collectd/"
+	distutils-r1_python_install
 }
