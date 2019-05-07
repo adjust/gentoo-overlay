@@ -13,7 +13,7 @@ SRC_URI="https://github.com/hashicorp/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz
 
 SLOT="0"
 LICENSE="MPL-2.0"
-IUSE=""
+IUSE="ui volumes"
 
 RESTRICT="strip test"
 
@@ -23,6 +23,10 @@ DEPEND="
 	dev-go/go-tools
 	dev-go/go-crypto
 	dev-go/go-net
+	ui? (
+		sys-apps/yarn
+		net-libs/nodejs
+	)
 	"
 RDEPEND=""
 
@@ -32,7 +36,8 @@ pkg_setup() {
 }
 
 src_prepare() {
-	eapply "${FILESDIR}/dani-host-volumes.patch"
+	use volumes && eapply "${FILESDIR}/dani-host-volumes.patch"
+	use ui && EGO_BUILD_FLAGS="-tags 'ui'"
 	eapply_user
 
 	rm -rf "${S}/src/github.com/hashicorp/nomad/vendor/golang.org/x/"{crypto,net}
@@ -45,18 +50,9 @@ src_prepare() {
 		-i "${S}/src/${EGO_PN}/GNUmakefile" || die
 }
 
-#src_compile() {
-#	# The dev target sets causes build.sh to set appropriate XC_OS
-#	# and XC_ARCH, and skips generation of an unused zip file,
-#	# avoiding a dependency on app-arch/zip.
-#	GOPATH="${S}" \
-#		emake -C "${S}/src/${EGO_PN}" pkg/linux_amd64$(use lxc && echo '-lxc')/${PN}
-#}
-
 src_install() {
 	local x
 
-	#dobin "${S}/src/${EGO_PN}/pkg/linux_amd64$(use lxc && echo '-lxc')/${PN}"
 	dobin "${S}/nomad" || die
 
 	for x in /var/{lib,log}/${PN}; do

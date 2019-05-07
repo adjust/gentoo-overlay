@@ -32,6 +32,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+	use ui && EGO_BUILD_FLAGS="-tags 'ui'"
 	eapply_user
 
 	rm -rf "${S}/src/github.com/hashicorp/nomad/vendor/golang.org/x/"{crypto,net}
