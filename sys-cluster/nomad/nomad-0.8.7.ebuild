@@ -13,7 +13,7 @@ SRC_URI="https://github.com/hashicorp/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz
 
 SLOT="0"
 LICENSE="MPL-2.0"
-IUSE=""
+IUSE="ui"
 
 RESTRICT="strip test"
 
