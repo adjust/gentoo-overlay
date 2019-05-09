@@ -12,7 +12,7 @@ EGIT_REPO_URI="https://github.com/adjust/schaufel.git"
 LICENSE="MIT"
 SLOT="0"
 
-IUSE=""
+IUSE="doc"
 
 if [[ ${PV} == 9999 ]]
 then
@@ -31,11 +31,23 @@ dev-libs/hiredis
 dev-db/postgresql
 >=dev-libs/json-c-0.13
 dev-libs/libconfig
+doc? (
+	sys-apps/groff
+	app-text/ghostscript-gpl
+)
 "
 
 pkg_setup() {
 	enewgroup ${PN}
 	enewuser ${PN} -1 -1 /var/lib/${PN} ${PN}
+}
+
+src_compile() {
+	default
+	if use doc
+	then
+		emake docs
+	fi;
 }
 
 src_install() {
