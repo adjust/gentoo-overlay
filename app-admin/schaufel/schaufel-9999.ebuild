@@ -52,6 +52,7 @@ src_compile() {
 
 src_install() {
 	export PREFIX="/usr"
+	export DOCDIR="${PREFIX}/share/doc/${P}"
 	default
 
 	newconfd "${FILESDIR}/${PN}.confd" ${PN}
