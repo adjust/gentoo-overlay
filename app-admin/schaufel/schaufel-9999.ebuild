@@ -29,6 +29,8 @@ RDEPEND="${DEPEND}
 >=dev-libs/librdkafka-0.9.4[lz4]
 dev-libs/hiredis
 dev-db/postgresql
+>=dev-libs/json-c-0.13
+dev-libs/libconfig
 "
 
 pkg_setup() {
