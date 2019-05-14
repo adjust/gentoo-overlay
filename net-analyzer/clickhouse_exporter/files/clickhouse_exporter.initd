@@ -1,0 +1,25 @@
+#!/sbin/openrc-run
+# Copyright 2019 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="clickhouse_exporter daemon"
+description="Clickhouse Exporter for Prometheus"
+command=/usr/bin/clickhouse_exporter
+command_args="-log.level ${CE_LOG_LEVEL:-error} \
+	-insecure ${CE_INSECURE:-true} \
+	-scrape_uri ${CE_SCRAPE_URI:-http://localhost:8123/} \
+	-telemetry.address ${CE_TELEMETRY_ADDRESS:-:9116} \
+	-telemetry.endpoint ${CE_TELEMETRY_ENDPOINT:-/metrics} \
+	${CLICKHOUSE_USER+-e CLICKHOUSE_USER=}${CLICKHOUSE_USER} \
+	${CLICKHOUSE_PASSWORD+-e CLICKHOUSE_PASSWORD=}${CLICKHOUSE_PASSWORD}"
+command_user="${RC_SVCNAME}"
+command_background="true"
+pidfile="/run/${RC_SVCNAME}"
+output_log="/var/log/${RC_SVCNAME}/${RC_SVCNAME}.log"
+error_log="/var/log/${RC_SVCNAME}/${RC_SVCNAME}.log"
+
+depend() {
+	need net
+	after net
+}
+
