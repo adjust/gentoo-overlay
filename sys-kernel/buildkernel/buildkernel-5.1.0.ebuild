@@ -5,13 +5,14 @@ EAPI="5"
 
 KEYWORDS="~amd64"
 HOMEPAGE="https://www.gentoo.org"
-IUSE="protection docker"
+IUSE="protection docker virt"
 SLOT="0"
 LICENSE="GPL-2"
 
 DESCRIPTION="Autogenerate kernel images with genkernel"
 SRC_URI="https://files.adjust.com/${PF}-hardened
 	https://files.adjust.com/${PF}-docker
+	https://files.adjust.com/${PF}-virt
 	https://files.adjust.com/${PF}"
 
 DEPEND="
@@ -25,8 +26,9 @@ DEPEND="
 	"
 
 REQUIRED_USE="
-	protection? ( !docker )
-	docker? ( !protection )
+	protection? ( !docker !virt )
+	docker? ( !protection !virt )
+	virt? ( !docker !protection )
 "
 
 src_unpack() {
@@ -45,6 +47,8 @@ src_compile() {
 		cp "${DISTDIR}/${PF}-hardened" "$S/tmp/kernel/.config" || die
 	elif use docker; then
 		cp "${DISTDIR}/${PF}-docker" "$S/tmp/kernel/.config" || die
+	elif use virt; then
+		cp "${DISTDIR}/${PF}-virt" "$S/tmp/kernel/.config" || die
 	else
 		cp "${DISTDIR}/${PF}" "$S/tmp/kernel/.config" || die
 	fi
@@ -93,4 +97,5 @@ src_install() {
 	mv binkernel-${PV}.tar.xz "${D}/usr/share" || die
 	use protection && mv "${D}/usr/share/binkernel-${PV}.tar.xz" "${D}/usr/share/binkernel-hard-${PV}.tar.xz"
 	use docker && mv "${D}/usr/share/binkernel-${PV}.tar.xz" "${D}/usr/share/binkernel-docker-${PV}.tar.xz"
+	use virt && mv "${D}/usr/share/binkernel-${PV}.tar.xz" "${D}/usr/share/binkernel-virt-${PV}.tar.xz"
 }

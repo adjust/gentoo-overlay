@@ -23,23 +23,32 @@ SRC_URI="
 			https://files.adjust.com/buildkernel-${PV}-docker
 		)
 	)
+	virt? (
+		https://files.adjust.com/binkernel-virt-${PV}.tar.xz
+		sources? (
+			https://files.adjust.com/buildkernel-${PV}-virt
+		)
+	)
 	!protection? (
 		!docker? (
-			https://files.adjust.com/binkernel-${PV}.tar.xz
-			sources? (
-				https://files.adjust.com/buildkernel-${PV}
+			!virt? (
+				https://files.adjust.com/binkernel-${PV}.tar.xz
+				sources? (
+					https://files.adjust.com/buildkernel-${PV}
+				)
 			)
 		)
 	)
 "
 
-IUSE="sources protection docker"
+IUSE="sources protection docker virt"
 
 DEPEND="sources? ( =sys-kernel/gentoo-sources-${PV} )"
 
 REQUIRED_USE="
 	protection? ( !docker )
 	docker? ( !protection )
+	virt? ( !docker !protection )
 "
 
 S=${WORKDIR}
@@ -56,6 +65,8 @@ src_install() {
 			cp "${DISTDIR}/buildkernel-${PV}-hardened" "${D}"/usr/src/linux-${PV}-gentoo/.config
 		elif use docker; then
 			cp "${DISTDIR}/buildkernel-${PV}-docker" "${D}"/usr/src/linux-${PV}-gentoo/.config
+		elif use virt; then
+			cp "${DISTDIR}/buildkernel-${PV}-virt" "${D}"/usr/src/linux-${PV}-gentoo/.config
 		else
 			cp "${DISTDIR}/buildkernel-${PV}" "${D}"/usr/src/linux-${PV}-gentoo/.config;
 		fi
