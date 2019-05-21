@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+<email>valeriy@adjust.com</email>
+</maintainer>
+        <upstream>
+                <remote-id type="github">apache/arrow</remote-id>
+        </upstream>
+<longdescription lang="en">
+	Apache Arrow is a cross-language development platform for in-memory data. It specifies a standardized language-independent columnar memory format for flat and hierarchical data, organized for efficient analytic operations on modern hardware. This ebuild is only for C/C++ version that works with Parquet.
+</longdescription>
+</pkgmetadata>

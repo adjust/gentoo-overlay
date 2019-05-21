@@ -1,11 +1,13 @@
-EAPI=7
+# Copyright 1999-2019 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=6
 inherit eutils cmake-utils 
 
-ARROW_VSN="0.13.0"
 DESCRIPTION="Apache Arrow & Parquet libraries"
 HOMEPAGE="https://arrow.apache.org/"
-SRC_URI="https://github.com/apache/arrow/archive/apache-arrow-${ARROW_VSN}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/arrow-apache-arrow-${ARROW_VSN}/cpp"
+SRC_URI="https://github.com/apache/arrow/archive/apache-arrow-${PV}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/arrow-apache-arrow-${PV}/cpp"
 
 LICENSE="Apache-2.0"
 SLOT="0"
