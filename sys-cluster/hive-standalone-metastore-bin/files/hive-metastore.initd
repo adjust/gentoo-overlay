@@ -1,0 +1,28 @@
+#!/sbin/openrc-run
+# Copyright 2019 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+JAVA_HOME=$(java-config -O)
+
+name="hive-metastore daemon"
+description=""
+command="/opt/hive-standalone-metastore/bin/start-metastore"
+command_args="${hive_args}"
+command_background="true"
+command_user="${RC_SVCNAME}"
+directory="/var/lib/${RC_SVCNAME}"
+output_log="/var/log/${RC_SVCNAME}/${RC_SVCNAME}.log"
+error_log="/var/log/${RC_SVCNAME}/${RC_SVCNAME}.log"
+pidfile="/run/${RC_SVCNAME}.pid"
+start_stop_daemon_args="-e HADOOP_HOME=${HADOOP_HOME} -e JAVA_HOME=${JAVA_HOME}"
+
+depend() {
+	need net
+}
+
+start_pre() {
+	if [ ! -e "${directory}/metastore_db" ]; then
+		eerror "Please initialise the database with 'schematool' in '${directory}'."
+		return 1
+	fi
+}
