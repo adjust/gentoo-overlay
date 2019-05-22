@@ -13,6 +13,9 @@
 		<flag name="cassert">
 			Enable assertion checks (for debugging)
 		</flag>
+                <flag name="llvm">
+                        Add support for llvm JIT engine
+                </flag>
 		<flag name="ltree">
 			Enable or disable the build of the ltree extension.
 		</flag>

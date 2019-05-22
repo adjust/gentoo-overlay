@@ -41,10 +41,10 @@ index a55e90f45..a00de8319 100644
  	DispatchPayload *DispatchPayloadConfig
 diff --git a/src/github.com/hashicorp/nomad/client/allocrunner/taskrunner/mount_hook.go b/src/github.com/hashicorp/nomad/client/allocrunner/taskrunner/mount_hook.go
 new file mode 100644
-index 000000000..e9480dca9
+index 000000000..145bc22d7
 --- /dev/null
 +++ b/src/github.com/hashicorp/nomad/client/allocrunner/taskrunner/mount_hook.go
-@@ -0,0 +1,59 @@
+@@ -0,0 +1,55 @@
 +package taskrunner
 +
 +import (
@@ -78,15 +78,11 @@ index 000000000..e9480dca9
 +
 +func (h *mountHook) Prestart(ctx context.Context, req *interfaces.TaskPrestartRequest, resp *interfaces.TaskPrestartResponse) error {
 +	volumes := h.alloc.Job.LookupTaskGroup(h.alloc.TaskGroup).HostVolumes
-+	volumesByName := make(map[string]*structs.HostVolume, len(volumes))
-+	for _, v := range volumes {
-+		volumesByName[v.Name] = v
-+	}
 +
 +	mounts := h.runner.hookResources.getMounts()
 +
 +	for _, s := range req.Task.VolumeMounts {
-+		v, ok := volumesByName[s.VolumeName]
++		v, ok := volumes[s.VolumeName]
 +		if !ok {
 +			return fmt.Errorf("Could not find host volume declaration named %s", s.VolumeName)
 +		}

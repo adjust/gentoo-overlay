@@ -12,7 +12,7 @@ EGIT_REPO_URI="https://github.com/adjust/schaufel.git"
 LICENSE="MIT"
 SLOT="0"
 
-IUSE=""
+IUSE="doc"
 
 if [[ ${PV} == 9999 ]]
 then
@@ -29,6 +29,12 @@ RDEPEND="${DEPEND}
 >=dev-libs/librdkafka-0.9.4[lz4]
 dev-libs/hiredis
 dev-db/postgresql
+>=dev-libs/json-c-0.13
+dev-libs/libconfig
+doc? (
+	sys-apps/groff
+	app-text/ghostscript-gpl
+)
 "
 
 pkg_setup() {
@@ -36,11 +42,19 @@ pkg_setup() {
 	enewuser ${PN} -1 -1 /var/lib/${PN} ${PN}
 }
 
+src_compile() {
+	default
+	if use doc
+	then
+		emake docs
+	fi;
+}
+
 src_install() {
-	emake PREFIX="${D}" install
-	insinto /usr/bin
-	doins "${D}/${PN}"
-	fperms +x /usr/bin/${PN}
+	export PREFIX="/usr"
+	export DOCDIR="${PREFIX}/share/doc/${P}"
+	default
+
 	newconfd "${FILESDIR}/${PN}.confd" ${PN}
 	newinitd "${FILESDIR}/${PN}.initd" ${PN}
 	diropts -m 0755 -o ${PN} -g ${PN}

@@ -13,7 +13,7 @@ SRC_URI="https://github.com/hashicorp/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz
 
 SLOT="0"
 LICENSE="MPL-2.0"
-IUSE=""
+IUSE="ui"
 
 RESTRICT="strip test"
 
@@ -42,6 +42,11 @@ src_prepare() {
 		-e 's@go get -u -v $(GOTOOLS)@@' \
 		-e 's@ vendorfmt @@' \
 		-i "${S}/src/${EGO_PN}/GNUmakefile" || die
+}
+
+src_compile() { 
+        use ui && EGO_BUILD_FLAGS="-tags 'ui'"
+        golang-build_src_compile 
 }
 
 #src_compile() {
