@@ -7,7 +7,7 @@ inherit distutils-r1
 
 DESCRIPTION="Collectd plugin for HAProxy"
 HOMEPAGE="https://github.com/wglass/collectd-haproxy"
-SRC_URI="${HOMEPAGE}/archive/${PV}.tar.gz"
+SRC_URI="${HOMEPAGE}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
@@ -17,7 +17,3 @@ IUSE=""
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
 
 RESTRICT="test"
-
-python_install() {
-	distutils-r1_python_install
-}
