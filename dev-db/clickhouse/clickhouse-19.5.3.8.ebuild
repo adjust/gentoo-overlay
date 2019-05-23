@@ -189,13 +189,13 @@ src_install() {
 	if use server; then
 		newinitd "${FILESDIR}"/clickhouse-server.initd clickhouse-server
 		systemd_dounit "${FILESDIR}"/clickhouse-server.service
-	fi
 
-	keepdir /var/log/clickhouse-server
-	chown clickhouse:clickhouse "${D}"/var/log/clickhouse-server
+		keepdir /var/log/clickhouse-server
+		fowners -R clickhouse:clickhouse /var/log/clickhouse-server
+	fi
 }
 
-pkg_preinst() {
+pkg_setup() {
 	if use server; then
 		enewgroup clickhouse
 		enewuser clickhouse -1 -1 /var/lib/clickhouse clickhouse
