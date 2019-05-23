@@ -14,7 +14,9 @@ directory="/var/lib/${RC_SVCNAME}"
 output_log="/var/log/${RC_SVCNAME}/${RC_SVCNAME}.log"
 error_log="/var/log/${RC_SVCNAME}/${RC_SVCNAME}.log"
 pidfile="/run/${RC_SVCNAME}.pid"
-start_stop_daemon_args="-e HADOOP_HOME=${HADOOP_HOME} -e JAVA_HOME=${JAVA_HOME}"
+start_stop_daemon_args="-e HADOOP_HOME=${HADOOP_HOME} -e JAVA_HOME=${JAVA_HOME} \
+	-e METASTORE_HOME=${METASTORE_HOME:-/opt/hive-standalone-metastore} \
+	-e METASTORE_CONF_DIR=${METASTORE_CONF_DIR:-/opt/hive-standalone-metastore/conf}"
 
 depend() {
 	need net

@@ -1,1 +1,2 @@
 METASTORE_HOME=/opt/hive-standalone-metastore
+METASTORE_CONF_DIR=/etc/hive-metastore

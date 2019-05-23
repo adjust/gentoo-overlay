@@ -61,8 +61,14 @@ src_install() {
 	insinto "opt/${MY_PN}/bin"
 	doins -r bin/ext
 
+	dodir "etc/${HIVE_USER}"
+	insinto "etc/${HIVE_USER}"
+	for conf in 'metastore-log4j2.properties' 'metastore-site.xml' 'metastore-site.xml.template'; do
+		doins "conf/${conf}"
+	done
+
 	keepdir /var/log/"${HIVE_USER}"
-        fowners -R "${HIVE_USER}:${HIVE_USER}" /var/log/"${HIVE_USER}"
+	fowners -R "${HIVE_USER}:${HIVE_USER}" /var/log/"${HIVE_USER}"
 
 	newinitd "${FILESDIR}"/hive-metastore.initd "${HIVE_USER}"
 	doenvd "${FILESDIR}"/99metastore
