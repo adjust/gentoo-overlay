@@ -7,6 +7,7 @@
 #LISTENER_USER=schaufel
 #LISTENER_GROUP=schaufel
 #LISTENER_TIMEOUT=60
+#HOSTNAME_OVERRIDE=
 
 ############################################
 #Listener settings passed to schaufel

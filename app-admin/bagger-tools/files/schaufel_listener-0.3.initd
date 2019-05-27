@@ -41,6 +41,8 @@ else
 fi
 	[ -n "${INFIX}" ] && \
 		LISTENER_OPTS+=" -i ${INFIX}"
+[ -n "${HOSTNAME_OVERRIDE}" ] && \
+    LISTENER_OPTS+=" -h ${HOSTNAME_OVERRIDE}"
 
 command=/usr/bin/listener.pl
 command_args="${LISTENER_OPTS}"
