@@ -10,5 +10,6 @@
 	<use>
 		<flag name="schaufel">Init scripts for schaufel listener/schaufel dependency</flag>
 		<flag name="bagger">Also build and install the database insert trigger</flag>
+		<flag name="master">Install baggers master server postgres extension</flag>
 	</use>
 </pkgmetadata>
