@@ -3,7 +3,6 @@
 
 EAPI=6
 POSTGRES_COMPAT=( "9.6" "10" )
-POSTGRES_USEDEP="bagger"
 BUILD_DIR="${S}/sql/bagger_master"
 inherit postgres-multi
 
