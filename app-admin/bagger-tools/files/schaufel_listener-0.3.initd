@@ -27,7 +27,7 @@ LISTENER_TIMEOUT=${LISTENER_TIMEOUT:-60}
 
 LISTENER_OPTS="-m ${LISTENER_MASTER:-master-1:5432}"
 
-if [ -n ${LISTENER_CONFIG} ]
+if [ ! -z ${LISTENER_CONFIG} ]
 then
 	LISTENER_OPTS+=" -c ${LISTENER_CONFIG}"
 else
@@ -42,7 +42,7 @@ fi
 	[ -n "${INFIX}" ] && \
 		LISTENER_OPTS+=" -i ${INFIX}"
 [ -n "${HOSTNAME_OVERRIDE}" ] && \
-    LISTENER_OPTS+=" -h ${HOSTNAME_OVERRIDE}"
+		LISTENER_OPTS+=" -h ${HOSTNAME_OVERRIDE}"
 
 command=/usr/bin/listener.pl
 command_args="${LISTENER_OPTS}"
