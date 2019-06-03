@@ -55,6 +55,9 @@ src_install() {
 	export DOCDIR="${PREFIX}/share/doc/${P}"
 	default
 
+	insinto /etc/logrotate.d
+	newins "${FILESDIR}/${PN}.logrotate" ${PN}
+
 	newconfd "${FILESDIR}/${PN}.confd" ${PN}
 	newinitd "${FILESDIR}/${PN}.initd" ${PN}
 	diropts -m 0755 -o ${PN} -g ${PN}

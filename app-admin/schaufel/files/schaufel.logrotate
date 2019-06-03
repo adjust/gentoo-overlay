@@ -1,0 +1,9 @@
+/var/log/schaufel/*.log {
+        daily
+        rotate 7
+        copytruncate
+        compress
+        delaycompress
+        missingok
+        notifempty
+}
