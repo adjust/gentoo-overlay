@@ -26,7 +26,7 @@ DESCRIPTION="T(R)?ex is a (R)?ex fork to ease the execution of remote commands"
 SRC_URI="https://files.adjust.com/trex-${PV}-TRIAL.tar.gz"
 
 SLOT="0"
-IUSE="test"
+IUSE="test offensive"
 
 DZIL_DEPENDS="
 	dev-perl/Dist-Zilla
@@ -145,4 +145,12 @@ src_prepare() {
 	fi
 	cd "${S}" || die "Can't enter build dir"
 	perl-module_src_prepare
+}
+
+src_install() {
+	default
+	if use offensive; then
+		ln -s trex "${ED}/usr/bin/${PN/tr/s}" || die
+		ln -s trexify "${ED}/usr/bin/${PN/tr/s}" || die
+	fi
 }

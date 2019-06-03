@@ -7,4 +7,8 @@
 	<upstream>
 		<remote-id type="github">adjust/Rex</remote-id>
 	</upstream>
+	<use>
+		<flag name="test">Tests testing tests </flag>
+		<flag name="offensive">Compatibility with older deployments</flag>
+	</use>
 </pkgmetadata>
