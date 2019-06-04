@@ -4,16 +4,13 @@
 
 description="nomad agent"
 extra_started_commands="reload"
-export GOMAXPROCS=${GOMAXPROCS:-2}
-group=${group:-${RC_SVCNAME}}
-user=${user:-${RC_SVCNAME}}
 pidfile=${pidfile:-"/run/${RC_SVCNAME}.pid"}
-command="/usr/bin/${RC_SVCNAME}"
-command_args="agent ${command_args:-config=/etc/consul.d}"
+command="/usr/bin/nomad"
+command_args="agent ${NOMAD_ARGS:-config=/etc/nomad.d}"
 command_background="true"
-start_stop_daemon_args="--user ${user} --group ${group} \
-	--stdout /var/log/${RC_SVCNAME}/${RC_SVCNAME}.log \
-	--stderr /var/log/${RC_SVCNAME}/${RC_SVCNAME}.log"
+command_user=${user:-${RC_SVCNAME}}
+stdout_log="/var/log/${RC_SVCNAME}/${RC_SVCNAME}.log"
+error_log="/var/log/${RC_SVCNAME}/${RC_SVCNAME}.log"
 stopsig="SIGINT"
 
 depend() {
@@ -22,6 +19,6 @@ depend() {
 
 reload() {
 	ebegin "Reloading ${RC_SVCNAME}"
-	${command} reload
+	start-stop-daemon --signal HUP --pidfile ${pidfile}
 	eend $?
 }

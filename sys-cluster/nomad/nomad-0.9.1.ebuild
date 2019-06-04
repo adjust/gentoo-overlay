@@ -65,5 +65,4 @@ src_install() {
 	done
 
 	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
-	newconfd "${FILESDIR}/${PN}.confd" "${PN}"
 }
