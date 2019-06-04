@@ -151,6 +151,6 @@ src_install() {
 	default
 	if use offensive; then
 		ln -s trex "${ED}/usr/bin/${PN/tr/s}" || die
-		ln -s trexify "${ED}/usr/bin/${PN/tr/s}" || die
+		ln -s trexify "${ED}/usr/bin/${PN/tr/s}ify" || die
 	fi
 }
