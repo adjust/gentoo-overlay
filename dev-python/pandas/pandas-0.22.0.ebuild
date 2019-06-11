@@ -170,4 +170,3 @@ pkg_postinst() {
 	optfeature "miscellaneous statistical functions" sci-libs/scipy
 	optfeature "necessary to use pandas.io.clipboard.read_clipboard support" dev-python/PyQt5 dev-python/pygtk x11-misc/xclip x11-misc/xsel
 }
-

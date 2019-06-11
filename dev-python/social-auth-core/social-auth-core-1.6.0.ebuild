@@ -26,4 +26,3 @@ RDEPEND="
 	dev-python/pyjwt[${PYTHON_USEDEP}]
 	dev-python/python3-openid[${PYTHON_USEDEP}]
 "
-
