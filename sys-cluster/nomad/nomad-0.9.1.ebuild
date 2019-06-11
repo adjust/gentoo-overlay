@@ -49,9 +49,9 @@ src_prepare() {
 		-i "${S}/src/${EGO_PN}/GNUmakefile" || die
 }
 
-src_compile() { 
+src_compile() {
 	use ui && EGO_BUILD_FLAGS="-tags 'ui'"
-	golang-build_src_compile 
+	golang-build_src_compile
 }
 
 src_install() {
