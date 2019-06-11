@@ -6,11 +6,11 @@ EAPI="6"
 PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
 
 inherit autotools eutils flag-o-matic linux-info multilib pam prefix python-single-r1 \
-		systemd user versionator
+		systemd user eapi7-ver
 
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~ppc-macos ~x86-solaris"
 
-SLOT=$(get_major_version)
+SLOT=$(ver_cut 1)
 
 MY_PV=${PV/_/}
 S="${WORKDIR}/${PN}-${MY_PV}"
