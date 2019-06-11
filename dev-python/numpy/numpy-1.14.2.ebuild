@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -8,7 +8,7 @@ PYTHON_REQ_USE="threads(+)"
 
 FORTRAN_NEEDED=lapack
 
-inherit distutils-r1 flag-o-matic fortran-2 multiprocessing toolchain-funcs versionator
+inherit distutils-r1 flag-o-matic fortran-2 multiprocessing toolchain-funcs
 
 DOC_PV="${PV}"
 DOC_P="${PN}-${DOC_PV}"
