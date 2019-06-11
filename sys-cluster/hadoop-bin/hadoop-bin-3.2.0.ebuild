@@ -8,7 +8,7 @@ inherit java-pkg-2
 MY_PN="${PN%-bin}"
 MY_P="${MY_PN}-${PV}"
 
-DESCRIPTION="The Apache Hadoop project develops open-source software for reliable, scalable, distributed computing."
+DESCRIPTION="Apache Hadoop project develops open-source software distributed computing."
 HOMEPAGE="https://hadoop.apache.org/"
 SRC_URI="https://www-eu.apache.org/dist/hadoop/common/${MY_P}/${MY_P}.tar.gz"
 
