@@ -10,7 +10,10 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-DEPEND=""
+DEPEND="dev-libs/boost
+		dev-libs/openssl
+		sys-devel/bison
+		sys-devel/flex"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 

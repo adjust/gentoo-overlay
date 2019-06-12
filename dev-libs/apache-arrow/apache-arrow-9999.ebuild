@@ -10,6 +10,7 @@ LICENSE="Apache-2.0"
 KEYWORDS="~amd64 ~x86"
 HOMEPAGE="https://arrow.apache.org/"
 EGIT_REPO_URI="https://github.com/apache/arrow.git"
+EGIT_COMMIT="8f5df459c7c77c38730b9543ed96d6d28d9ac64a"
 SRC_URI="https://github.com/jemalloc/jemalloc/archive/5.2.0.tar.gz -> jemalloc-5.2.0.tar.gz"
 SLOT="0"
 DEPEND="dev-libs/boost
