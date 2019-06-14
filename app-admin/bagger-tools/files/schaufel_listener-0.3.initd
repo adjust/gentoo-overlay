@@ -36,13 +36,13 @@ else
 		LISTENER_OPTS+=" -g ${LISTENER_BROKER_GROUP}"
 	[ -n "${LISTENER_BROKER}" ] && \
 		LISTENER_OPTS+=" -b ${LISTENER_BROKER}"
-	[ -n "${LISTENER_JOBS}" ] && \
-		LISTENER_OPTS+=" -j ${LISTENER_JOBS}"
 fi
 	[ -n "${INFIX}" ] && \
 		LISTENER_OPTS+=" -i ${INFIX}"
 [ -n "${HOSTNAME_OVERRIDE}" ] && \
 		LISTENER_OPTS+=" -h ${HOSTNAME_OVERRIDE}"
+[ -n "${LISTENER_JOBS}" ] && \
+	LISTENER_OPTS+=" -j ${LISTENER_JOBS}"
 
 command=/usr/bin/listener.pl
 command_args="${LISTENER_OPTS}"
