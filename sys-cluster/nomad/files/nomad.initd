@@ -6,7 +6,7 @@ description="nomad agent"
 extra_started_commands="reload"
 pidfile=${pidfile:-"/run/${RC_SVCNAME}.pid"}
 command="/usr/bin/nomad"
-command_args="agent ${NOMAD_ARGS:-config=/etc/nomad.d}"
+command_args="agent ${NOMAD_ARGS:--config=/etc/nomad.d}"
 command_background="true"
 command_user=${user:-${RC_SVCNAME}}
 stdout_log="/var/log/${RC_SVCNAME}/${RC_SVCNAME}.log"
