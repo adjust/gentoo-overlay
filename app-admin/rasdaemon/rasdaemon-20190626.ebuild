@@ -3,13 +3,11 @@
 
 EAPI=7
 
-inherit autotools linux-info systemd git-r3
+inherit autotools linux-info systemd vcs-snapshot
 
 DESCRIPTION="Reliability, Availability and Serviceability logging tool"
 HOMEPAGE="http://www.infradead.org/~mchehab/rasdaemon/"
-
-EGIT_REPO_URI="git://git.infradead.org/users/mchehab/rasdaemon.git"
-EGIT_BRANCH="master"
+SRC_URI="http://git.infradead.org/users/mchehab/rasdaemon.git/snapshot/ea32e446e9ae6e3053f786b7d7c7bf451ff82af7.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
