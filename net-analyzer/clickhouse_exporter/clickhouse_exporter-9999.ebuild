@@ -18,7 +18,8 @@ IUSE=""
 EXPORTER_USER=clickhouse_exporter
 
 pkg_setup() {
-	enewuser "${EXPORTER_USER}" -1 -1 -1
+	enewgroup "${EXPORTER_USER}"
+	enewuser "${EXPORTER_USER}" -1 -1 -1 "${EXPORTER_USER}"
 }
 
 src_install() {
