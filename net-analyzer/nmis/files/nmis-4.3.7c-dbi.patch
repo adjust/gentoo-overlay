@@ -8,7 +8,7 @@ diff -ur nmis4.3.7c/install/nmis.conf nmis4.3.7c/install/nmis.conf
 -# MySQL DB location and permissions
 +# SQL DB location and permissions
 +# Available values for SQL Drivers are declared by system:
-+# perl -mDBI -e 'print join "\n", DBI->available_drivers;'
++# perl -mDBI -e 'print join "\n", DBI->available_drivers;' MAKE SURE TO REPLACE THEM IN PRODUCTION
 +sqldrv=mysql
  sqldb=nmis
  sqlhost=localhost
@@ -25,10 +25,10 @@ diff -ur nmis4.3.7c/lib/NMIS.pm nmis4.3.7c/lib/NMIS.pm
  # persistent perl is also an option here. ( #!/usr/bin/perperl)
 -# therefore pass around file handles - let mysql handle the connections.
 +# therefore pass around file handles - let sql driver handle the connections.
- 
+
  # return new DB handle
  sub eventDBConnect{
- 
+
  	my $dbh;
 -	$dbh = DBI->connect("DBI:mysql:$NMIS::config{sqldb}:$NMIS::config{sqlhost}", "$NMIS::config{dbuser}", "$NMIS::config{dbpass}", { RaiseError => 1, AutoCommit => 1}) or warn ("$dbh->errstr");
 +	$dbh = DBI->connect("DBI:$NMIS::config{sqldrv}:dbname=$NMIS::config{sqldb};host=$NMIS::config{sqlhost};port=$NMIS::config{sqlport};",
@@ -38,7 +38,7 @@ diff -ur nmis4.3.7c/lib/NMIS.pm nmis4.3.7c/lib/NMIS.pm
  }
 @@ -905,10 +906,17 @@
  	my $escalate = -1;
- 
+
  	my $dbh = eventDBConnect;
 +	my $sql_dup;
 +
@@ -47,11 +47,11 @@ diff -ur nmis4.3.7c/lib/NMIS.pm nmis4.3.7c/lib/NMIS.pm
 +	} else {
 +		$sql_dup = 'on duplicate key update';
 +	}
- 
+
  		if ( $event !~ /syslog|node failover|proactive|up/i or $event =~ /proactive/i ) {
  			# Update the event file
 -			$dbh->do( "insert into event (startdate,lastchange,node,event,event_level,details,ack,escalate,notify) values (?,?,?,?,?,?,?,?,?) on duplicate key update lastchange=? ", undef, $time, $time, $node, $event, $level, $details, 'false', $escalate, 'false' , $time ) or warn "DB insert failed: ". $dbh->errstr();
 +			$dbh->do( "insert into event (startdate,lastchange,node,event,event_level,details,ack,escalate,notify) values (?,?,?,?,?,?,?,?,?) $sql_dup lastchange=? ", undef, $time, $time, $node, $event, $level, $details, 'false', $escalate, 'false' , $time ) or warn "DB insert failed: ". $dbh->errstr();
  		}
- 
+
  	eventDBDisconnect($dbh);
