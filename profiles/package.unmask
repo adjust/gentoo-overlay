@@ -22,3 +22,6 @@ app-eselect/eselect-qtgraphicssystem
 
 # python3-openid for aqcuired
 =dev-python/python3-openid-3.1.0
+
+# sigh
+sys-process/vixie-cron
