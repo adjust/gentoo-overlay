@@ -37,7 +37,7 @@ kerberos? ( virtual/krb5 )
 ldap? ( net-nds/openldap )
 llvm? ( sys-devel/llvm:=
 	sys-devel/clang:= )
-pam? ( virtual/pam )
+pam? ( sys-libs/pam )
 perl? ( >=dev-lang/perl-5.8:= )
 python? ( ${PYTHON_DEPS} )
 readline? ( sys-libs/readline:0= )
