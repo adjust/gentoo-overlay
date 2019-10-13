@@ -6,7 +6,7 @@
     <name>Adjust Ops Team</name>
   </maintainer>
   <use>
-  	<flag name="scala211"></flag>
-	<flag name="scala212"></flag>
+    <flag name="scala211"></flag>
+    <flag name="scala212"></flag>
   </use>
 </pkgmetadata>
