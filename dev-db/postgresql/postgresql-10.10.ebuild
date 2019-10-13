@@ -8,7 +8,7 @@ PYTHON_COMPAT=( python2_7 python3_{5,6} )
 inherit autotools eutils flag-o-matic linux-info multilib pam prefix python-single-r1 \
 		systemd user eapi7-ver
 
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~ppc-macos ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 
 SLOT=$(ver_cut 1)
 
