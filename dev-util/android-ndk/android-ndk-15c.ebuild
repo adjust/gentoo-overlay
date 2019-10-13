@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -19,7 +19,7 @@ RESTRICT="mirror strip installsources test"
 DEPEND="app-arch/p7zip"
 RDEPEND=">=dev-util/android-sdk-update-manager-10
 	>=sys-devel/make-3.81
-	sys-libs/ncurses:5/5[tinfo]
+	sys-libs/ncurses-compat:5/5[tinfo]
 "
 
 S="${WORKDIR}/${PN}-r${PV}"
