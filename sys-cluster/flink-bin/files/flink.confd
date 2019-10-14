@@ -1,0 +1,7 @@
+#FLINK_PID_DIR=
+#FLINK_LOG_DIR=
+#FLINK_CONF_DIR=/etc/flink/instance
+
+#FLINK_ROLE=taskmanager
+#FLINK_ROLE=jobmanager
+#FLINK_ARGS=
