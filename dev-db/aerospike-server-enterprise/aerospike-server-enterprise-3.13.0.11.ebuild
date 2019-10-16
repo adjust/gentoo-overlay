@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
@@ -17,6 +17,7 @@ SRC_URI="http://www.aerospike.com/artifacts/${PN}/${PV}/${P}-debian7.tgz"
 RDEPEND="!dev-db/aerospike-server-community
 	sys-process/numactl
 	sys-libs/readline-compat
+	dev-libs/openssl-compat:1.0.0
 	${PYTHON_DEPS}"
 DEPEND="${RDEPEND}"
 
