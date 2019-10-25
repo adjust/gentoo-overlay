@@ -8,7 +8,7 @@ inherit golang-vcs-snapshot golang-build user
 KEYWORDS="~amd64"
 EGO_PN="github.com/hashicorp/${PN}"
 DESCRIPTION="The cluster manager from Hashicorp"
-HOMEPAGE="http://www.nomadproject.io"
+HOMEPAGE="https://www.nomadproject.io"
 SRC_URI="https://github.com/hashicorp/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 SLOT="0"
@@ -18,6 +18,7 @@ IUSE="ui volumes"
 RESTRICT="strip test"
 
 DEPEND="
+	!sys-cluster/nomad-bin
 	dev-go/gox
 	dev-lang/go
 	dev-go/go-tools
