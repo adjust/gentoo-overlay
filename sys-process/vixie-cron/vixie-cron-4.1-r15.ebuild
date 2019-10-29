@@ -20,10 +20,10 @@ KEYWORDS="amd64"
 IUSE="selinux pam debug"
 
 DEPEND="selinux? ( sys-libs/libselinux )
-	pam? ( virtual/pam )"
+	pam? ( sys-libs/pam )"
 
 RDEPEND="selinux? ( sys-libs/libselinux )
-	 pam? ( virtual/pam )"
+	 pam? ( sys-libs/pam )"
 
 #vixie-cron supports /etc/crontab
 CRON_SYSTEM_CRONTAB="yes"
