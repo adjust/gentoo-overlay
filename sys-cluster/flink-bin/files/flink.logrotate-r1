@@ -1,0 +1,8 @@
+# Logrotate file for flink
+  
+/var/log/flink/*.log /var/log/flink/*/*.log /var/log/flink/*/*.out {
+	copytruncate
+	delaycompress
+	missingok
+	notifempty
+}
