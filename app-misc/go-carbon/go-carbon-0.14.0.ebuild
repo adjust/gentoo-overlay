@@ -23,7 +23,7 @@ CARBON_USER="carbon"
 
 pkg_setup() {
 	enewgroup "${CARBON_USER}"
-	enewuser "${CARBON_USER}" -1 -1 -1 "${CARBON_USER}"
+	enewuser "${CARBON_USER}" -1 -1 "/var/lib/graphite" "${CARBON_USER}"
 }
 
 src_compile() {
