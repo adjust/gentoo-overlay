@@ -39,11 +39,11 @@ src_install() {
 	keepdir /var/log/flink /etc/flink
 	fowners -R flink:flink /var/log/flink
 
-	newinitd "${FILESDIR}"/flink.initd flink
+	newinitd "${FILESDIR}"/flink.initd-r1 flink
 	newconfd "${FILESDIR}"/flink.confd flink
 	doenvd "${FILESDIR}"/99flink
 	einstalldocs
 
 	insinto /etc/logrotate.d
-	newins "${FILESDIR}"/flink.logrotate flink
+	newins "${FILESDIR}"/flink.logrotate-r1 flink
 }

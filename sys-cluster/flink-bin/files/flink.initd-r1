@@ -9,6 +9,7 @@ command_user="${FLINK_USER:-flink:flink}"
 output_log="/var/log/flink/${RC_SVCNAME}.log"
 error_log="/var/log/flink/${RC_SVCNAME}-crash.log"
 pidfile="${FLINK_PID_DIR}/flink-${command_user%:*}-${FLINK_ROLE}.pid"
+retry="TERM/20/KILL/5"
 start_stop_daemon_args="
  --background \
  -e FLINK_PID_DIR=${FLINK_PID_DIR} \
@@ -21,6 +22,7 @@ depend() {
 
 start_pre() {
     checkpath -d -m 0755 -o "${command_user}" "${FLINK_LOG_DIR}"
+    checkpath -d -m 0755 -o "${command_user}" $(dirname ${FLINK_PID_DIR})
     checkpath -d -m 0755 -o "${command_user}" "${FLINK_PID_DIR}"
 
     if [ -z ${FLINK_ROLE} ]; then
