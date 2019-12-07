@@ -18,6 +18,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="
+	dev-libs/openssl-compat:1.0.0
 	>=virtual/jre-1.8
 "
 
