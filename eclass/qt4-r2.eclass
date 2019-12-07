@@ -12,12 +12,11 @@
 # 2, 3, 4, and 5. Use qmake-utils.eclass in EAPI 6 and later.
 
 case ${EAPI} in
-	2|3|4|5) : ;;
-	6) die "qt4-r2.eclass is banned in EAPI 6 and later" ;;
+	2|3|4|5|6|7) : ;;
 	*) die "qt4-r2.eclass: unsupported EAPI=${EAPI:-0}" ;;
 esac
 
-inherit base eutils qmake-utils
+inherit eutils qmake-utils
 
 export XDG_CONFIG_HOME="${T}"
 
