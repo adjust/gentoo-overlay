@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -11,6 +11,8 @@ SRC_URI="
 	!scala212? ( scala211? ( https://github.com/hashicorp/nomad-spark/releases/download/v2.4.3.0/spark-2.4.3-bin-nomad-0.tgz -> ${P}-2.11.tgz ) )
 	!scala211? ( scala212? ( https://github.com/hashicorp/nomad-spark/releases/download/v2.4.3.0/spark-2.4.3-bin-nomad-0_2.12.tgz -> ${P}-2.12.tgz ) )
 "
+
+REQUIRED_USE="^^ ( scala211 scala212 )"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -33,7 +35,9 @@ IUSE="+scala211 scala212"
 
 src_unpack() {
 	unpack ${A}
-	use scala212 && mv "${WORKDIR}/spark-${PV}-bin-nomad-0_2.12" "${S}" || die
+	if use scala212; then
+		mv "${WORKDIR}/spark-${PV}-bin-nomad-0_2.12" "${S}" || die
+	fi
 }
 
 # Nothing to compile here.
