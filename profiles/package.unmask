@@ -25,3 +25,6 @@ app-eselect/eselect-qtgraphicssystem
 
 # sigh
 sys-process/vixie-cron
+
+# sigh sigh. sigh
+dev-db/clickhouse
