@@ -43,7 +43,8 @@ DEPEND="
 
 S="${WORKDIR}/${MYP}"
 
-PATCHES=( "${FILESDIR}"/${PN}-0.18.1-system-cblas.patch )
+PATCHES=( "${FILESDIR}"/${PN}-0.18.1-system-cblas.patch
+	"${FILESDIR}"/${PN}-0.20.2-fix-cdfast.patch )
 
 python_prepare_all() {
 	# bug #397605
