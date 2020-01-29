@@ -1,0 +1,155 @@
+From 87fed2a197abc1397b63ee74b3fa7eb20471fff5 Mon Sep 17 00:00:00 2001
+From: Tom Lane <tgl@sss.pgh.pa.us>
+Date: Tue, 28 Jan 2020 17:26:37 -0500
+Subject: [PATCH] Fix dangling pointer in EvalPlanQual machinery.
+
+EvalPlanQualStart() supposed that it could re-use the relsubs_rowmark
+and relsubs_done arrays from a prior instantiation.  But since they are
+allocated in the es_query_cxt of the recheckestate, that's just wrong;
+EvalPlanQualEnd() will blow away that storage.  Therefore we were using
+storage that could have been reallocated to something else, causing all
+sorts of havoc.
+
+I think this was modeled on the old code's handling of es_epqTupleSlot,
+but since the code was anyway clearing the arrays at re-use, there's
+clearly no expectation of importing any outside state.  So it's just
+a dubious savings of a couple of pallocs, which is negligible compared
+to setting up a new planstate tree.  Therefore, just allocate the
+arrays always.  (I moved the allocations slightly for readability.)
+
+In principle this bug could cause a problem whenever EPQ rechecks are
+needed in more than one target table of a ModifyTable plan node.
+In practice it seems not quite so easy to trigger as that; I couldn't
+readily duplicate a crash with a partitioned target table, for instance.
+That's probably down to incidental choices about when to free or
+reallocate stuff.  The added isolation test case does seem to reliably
+show an assertion failure, though.
+
+Per report from Oleksii Kliukin.  Back-patch to v12 where the bug was
+introduced (evidently by commit 3fb307bc4).
+
+Discussion: https://postgr.es/m/EEF05F66-2871-4786-992B-5F45C92FEE2E@hintbits.com
+---
+ src/backend/executor/execMain.c               | 34 ++++++-------------
+ .../isolation/expected/eval-plan-qual.out     |  7 ++++
+ src/test/isolation/specs/eval-plan-qual.spec  |  4 +++
+ 3 files changed, 22 insertions(+), 23 deletions(-)
+
+diff --git a/src/backend/executor/execMain.c b/src/backend/executor/execMain.c
+index ac92340af5..2275a2988f 100644
+--- a/src/backend/executor/execMain.c
++++ b/src/backend/executor/execMain.c
+@@ -2891,33 +2891,13 @@ EvalPlanQualStart(EPQState *epqstate, Plan *planTree)
+ 											 subplanstate);
+ 	}
+ 
+-	/*
+-	 * These arrays are reused across different plans set with
+-	 * EvalPlanQualSetPlan(), which is safe because they all use the same
+-	 * parent EState. Therefore we can reuse if already allocated.
+-	 */
+-	if (epqstate->relsubs_rowmark == NULL)
+-	{
+-		Assert(epqstate->relsubs_done == NULL);
+-		epqstate->relsubs_rowmark = (ExecAuxRowMark **)
+-			palloc0(rtsize * sizeof(ExecAuxRowMark *));
+-		epqstate->relsubs_done = (bool *)
+-			palloc0(rtsize * sizeof(bool));
+-	}
+-	else
+-	{
+-		Assert(epqstate->relsubs_done != NULL);
+-		memset(epqstate->relsubs_rowmark, 0,
+-			   rtsize * sizeof(ExecAuxRowMark *));
+-		memset(epqstate->relsubs_done, 0,
+-			   rtsize * sizeof(bool));
+-	}
+-
+ 	/*
+ 	 * Build an RTI indexed array of rowmarks, so that
+ 	 * EvalPlanQualFetchRowMark() can efficiently access the to be fetched
+ 	 * rowmark.
+ 	 */
++	epqstate->relsubs_rowmark = (ExecAuxRowMark **)
++		palloc0(rtsize * sizeof(ExecAuxRowMark *));
+ 	foreach(l, epqstate->arowMarks)
+ 	{
+ 		ExecAuxRowMark *earm = (ExecAuxRowMark *) lfirst(l);
+@@ -2925,6 +2905,12 @@ EvalPlanQualStart(EPQState *epqstate, Plan *planTree)
+ 		epqstate->relsubs_rowmark[earm->rowmark->rti - 1] = earm;
+ 	}
+ 
++	/*
++	 * Initialize per-relation EPQ tuple states to not-fetched.
++	 */
++	epqstate->relsubs_done = (bool *)
++		palloc0(rtsize * sizeof(bool));
++
+ 	/*
+ 	 * Initialize the private state information for all the nodes in the part
+ 	 * of the plan tree we need to run.  This opens files, allocates storage
+@@ -2993,7 +2979,9 @@ EvalPlanQualEnd(EPQState *epqstate)
+ 	FreeExecutorState(estate);
+ 
+ 	/* Mark EPQState idle */
++	epqstate->origslot = NULL;
+ 	epqstate->recheckestate = NULL;
+ 	epqstate->recheckplanstate = NULL;
+-	epqstate->origslot = NULL;
++	epqstate->relsubs_rowmark = NULL;
++	epqstate->relsubs_done = NULL;
+ }
+diff --git a/src/test/isolation/expected/eval-plan-qual.out b/src/test/isolation/expected/eval-plan-qual.out
+index 71393d4e7e..755c4bd1c7 100644
+--- a/src/test/isolation/expected/eval-plan-qual.out
++++ b/src/test/isolation/expected/eval-plan-qual.out
+@@ -673,6 +673,13 @@ a              b              c
+ 2              3              0              
+ step c2: COMMIT;
+ 
++starting permutation: writep3a writep3b c1 c2
++step writep3a: UPDATE p SET b = -b WHERE c = 0;
++step writep3b: UPDATE p SET b = -b WHERE c = 0; <waiting ...>
++step c1: COMMIT;
++step writep3b: <... completed>
++step c2: COMMIT;
++
+ starting permutation: wx2 partiallock c2 c1 read
+ step wx2: UPDATE accounts SET balance = balance + 450 WHERE accountid = 'checking' RETURNING balance;
+ balance        
+diff --git a/src/test/isolation/specs/eval-plan-qual.spec b/src/test/isolation/specs/eval-plan-qual.spec
+index b4a8b0a4c8..3ecf9f5ba1 100644
+--- a/src/test/isolation/specs/eval-plan-qual.spec
++++ b/src/test/isolation/specs/eval-plan-qual.spec
+@@ -97,10 +97,12 @@ step "upsert1"	{
+ # readp1/writep1/readp2 tests a bug where nodeLockRows did the wrong thing
+ # when the first updated tuple was in a non-first child table.
+ # writep2/returningp1 tests a memory allocation issue
++# writep3a/writep3b tests updates touching more than one table
+ 
+ step "readp1"	{ SELECT tableoid::regclass, ctid, * FROM p WHERE b IN (0, 1) AND c = 0 FOR UPDATE; }
+ step "writep1"	{ UPDATE p SET b = -1 WHERE a = 1 AND b = 1 AND c = 0; }
+ step "writep2"	{ UPDATE p SET b = -b WHERE a = 1 AND c = 0; }
++step "writep3a"	{ UPDATE p SET b = -b WHERE c = 0; }
+ step "c1"	{ COMMIT; }
+ step "r1"	{ ROLLBACK; }
+ 
+@@ -203,6 +205,7 @@ step "returningp1" {
+ 	WITH u AS ( UPDATE p SET b = b WHERE a > 0 RETURNING * )
+ 	  SELECT * FROM u;
+ }
++step "writep3b"	{ UPDATE p SET b = -b WHERE c = 0; }
+ step "readforss"	{
+ 	SELECT ta.id AS ta_id, ta.value AS ta_value,
+ 		(SELECT ROW(tb.id, tb.value)
+@@ -338,6 +341,7 @@ permutation "wx1" "delwctefail" "c1" "c2" "read"
+ permutation "upsert1" "upsert2" "c1" "c2" "read"
+ permutation "readp1" "writep1" "readp2" "c1" "c2"
+ permutation "writep2" "returningp1" "c1" "c2"
++permutation "writep3a" "writep3b" "c1" "c2"
+ permutation "wx2" "partiallock" "c2" "c1" "read"
+ permutation "wx2" "lockwithvalues" "c2" "c1" "read"
+ permutation "wx2_ext" "partiallock_ext" "c2" "c1" "read_ext"
+-- 
+2.19.0
+
