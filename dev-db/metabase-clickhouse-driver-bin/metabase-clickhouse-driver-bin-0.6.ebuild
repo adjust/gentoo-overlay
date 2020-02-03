@@ -18,7 +18,7 @@ IUSE=""
 RDEPEND="
 	>=dev-db/metabase-bin-0.32.0
 	<dev-db/metabase-bin-0.34
-	"
+"
 
 DEPEND="${RDEPEND}"
 
