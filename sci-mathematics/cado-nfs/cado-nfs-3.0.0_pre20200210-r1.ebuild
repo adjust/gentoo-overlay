@@ -6,7 +6,6 @@ EAPI=6
 PYTHON_COMPAT=( python{2_7,3_4,3_5,3_6} )
 PYTHON_REQ_USE="sqlite"
 
-
 inherit eutils cmake-utils python-r1
 
 DESCRIPTION="Number Field Sieve (NFS) implementation for factoring integers"
@@ -44,7 +43,7 @@ src_prepare() {
 }
 
 src_configure() {
-	export FLAGS_SIZE="-D__SIZEOF_P_R_VALUES__=8"
+	export FLAGS_SIZE="-DSIZEOF_P_R_VALUES=8"
 	DESTINATION="/usr/libexec/cado-nfs" cmake-utils_src_configure
 }
 src_compile() {
