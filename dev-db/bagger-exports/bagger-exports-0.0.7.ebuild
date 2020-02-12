@@ -54,6 +54,6 @@ src_unpack() {
 		return
 
 	default
-	mv "${WORKDIR}/bagger-exports-${PVR}" "${WORKDIR}/${P}" \
+	mv "${WORKDIR}/bagger_exports-${PVR}" "${WORKDIR}/${P}" \
 		|| die "Renaming src dir failed"
 }
