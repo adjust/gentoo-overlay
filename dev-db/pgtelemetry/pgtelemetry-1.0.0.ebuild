@@ -3,7 +3,7 @@
 
 EAPI=6
 
-POSTGRES_COMPAT=( 9.6 10 )
+POSTGRES_COMPAT=( 9.6 10 11 12)
 
 inherit postgres-multi
 
