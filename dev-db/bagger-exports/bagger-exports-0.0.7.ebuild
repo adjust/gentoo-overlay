@@ -57,3 +57,8 @@ src_unpack() {
 	mv "${WORKDIR}/bagger_exports-${PVR}" "${WORKDIR}/${P}" \
 		|| die "Renaming src dir failed"
 }
+
+src_install() {
+	default
+	dobin "${WORKDIR}/${P}/scripts/"*
+}
