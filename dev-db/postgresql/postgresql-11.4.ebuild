@@ -25,7 +25,7 @@ DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="http://www.postgresql.org/"
 
 IUSE="bagger doc kerberos kernel_linux ldap libressl llvm ltree nls pam perl python +readline
-	  selinux +server systemd ssl static-libs tcl threads uuid xml zlib"
+	  selinux +server systemd ssl static-libs tcl +threads uuid xml zlib"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
