@@ -5,7 +5,10 @@ EAPI="6"
 
 PYTHON_COMPAT=( python3_{6,7} )
 
-inherit autotools eutils flag-o-matic linux-info multilib pam prefix python-single-r1 \
+PLOCALES="af cs de en es fa fr hr hu it ko nb pl pt_BR ro ru sk sl sv tr zh_CN
+		 zh_TW"
+
+inherit flag-o-matic l10n linux-info multilib pam prefix python-single-r1 \
 		systemd user eapi7-ver
 
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
@@ -21,21 +24,10 @@ LICENSE="POSTGRESQL GPL-2"
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="http://www.postgresql.org/"
 
-IUSE="bagger doc kerberos kernel_linux ldap libressl ltree nls pam perl python +readline
+IUSE="bagger doc kerberos kernel_linux ldap libressl llvm ltree nls pam perl python +readline
 	  selinux +server systemd ssl static-libs tcl +threads uuid xml zlib"
+
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
-
-wanted_languages() {
-	local linguas="af cs de en es fa fr hr hu it ko nb pl pt_BR ro ru
-		sk sl sv tr zh_CN zh_TW"
-	local enable_langs lingua
-
-	for lingua in ${linguas} ; do
-		has ${lingua} ${LINGUAS-${lingua}} && enable_langs+="${lingua} "
-	done
-
-	echo -n ${enable_langs}
-}
 
 CDEPEND="
 >=app-eselect/eselect-postgresql-2.0
@@ -43,6 +35,8 @@ sys-apps/less
 virtual/libintl
 kerberos? ( virtual/krb5 )
 ldap? ( net-nds/openldap )
+llvm? ( sys-devel/llvm:=
+	sys-devel/clang:= )
 pam? ( sys-libs/pam )
 perl? ( >=dev-lang/perl-5.8:= )
 python? ( ${PYTHON_DEPS} )
@@ -105,13 +99,10 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}/${PN}-wo-ltree.patch"
+	epatch "${FILESDIR}/${PN}-${SLOT}-wo-ltree.patch"
 	# ^^ wo-ltree patches configure.in
 	eautoconf
 	eautoheader
-
-	# Work around PPC{,64} compilation bug where bool is already defined
-	sed '/#ifndef __cplusplus/a #undef bool' -i src/include/c.h || die
 
 	# Set proper run directory
 	sed "s|\(PGSOCKET_DIR\s\+\)\"/tmp\"|\1\"${EPREFIX}/run/postgresql\"|" \
@@ -122,10 +113,10 @@ src_prepare() {
 	# hardened and non-hardened environments. (Bug #528786)
 	sed 's/@install_bin@/install -c/' -i src/Makefile.global.in || die
 
-	use server || eapply "${FILESDIR}/${PN}-10.2-no-server.patch"
+	use server || eapply "${FILESDIR}/${PN}-11_beta1-no-server.patch"
 
 	if use pam ; then
-		sed -e "s/\(#define PGSQL_PAM_SERVICE \"postgresql\)/\1-${SLOT}/" \
+		sed "s/\(#define PGSQL_PAM_SERVICE \"postgresql\)/\1-${SLOT}/" \
 			-i src/backend/libpq/auth.c || \
 			die 'PGSQL_PAM_SERVICE rename failed.'
 	fi
@@ -171,7 +162,7 @@ src_configure() {
 		$(use_enable threads thread-safety) \
 		$(use_with kerberos gssapi) \
 		$(use_with ldap) \
-		$(use_with ltree) \
+		$(use_with llvm) \
 		$(use_with pam) \
 		$(use_with perl) \
 		$(use_with python) \
@@ -183,7 +174,7 @@ src_configure() {
 		$(use_with xml libxml) \
 		$(use_with xml libxslt) \
 		$(use_with zlib) \
-		"$(use_enable nls nls "$(wanted_languages)")"
+		$(use_enable nls nls "'$(l10n_get_locales)'")
 }
 
 src_compile() {
@@ -316,6 +307,14 @@ pkg_postinst() {
 		elog "Then, execute the following command to setup the initial database"
 		elog "environment:"
 		elog "    emerge --config =${CATEGORY}/${PF}"
+
+		if [[ -n ${REPLACING_VERSIONS} ]] ; then
+			ewarn "If your system is using 'pg_stat_statements' and you are running a"
+			ewarn "version of PostgreSQL ${SLOT}, we advise that you execute"
+			ewarn "the following command after upgrading:"
+			ewarn
+			ewarn "ALTER EXTENSION pg_stat_statements UPDATE;"
+		fi
 	fi
 }
 
