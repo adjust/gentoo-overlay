@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -37,8 +37,6 @@ RDEPEND="
 			sys-libs/ncurses:0=
 			sys-libs/readline:0=
 		)
-
-		dev-libs/double-conversion
 		dev-libs/capnproto
 		dev-libs/libltdl:0
 		sys-libs/libunwind:7
@@ -68,7 +66,6 @@ DEPEND="${RDEPEND}
 			sys-libs/ncurses:0=[static-libs]
 			sys-libs/readline:0=[static-libs]
 		)
-		dev-libs/double-conversion[static-libs]
 		dev-libs/capnproto[static-libs]
 		dev-libs/libltdl[static-libs]
 		sys-libs/libunwind:7[static-libs]

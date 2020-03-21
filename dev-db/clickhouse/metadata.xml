@@ -13,6 +13,5 @@
 		<flag name="kafka">Enables support for kafka consumer.</flag>
 		<flag name="mongodb">Enabled support for MongoDB-based dictionaries</flag>
 		<flag name="tools">Build various tools, like benchmark, copier, etc.</flag>
-		<flag name="zookeeper">Enable support for clustering (based on Zookeeper).</flag>
 	</use>
 </pkgmetadata>
