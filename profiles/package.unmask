@@ -23,6 +23,9 @@ app-eselect/eselect-qtgraphicssystem
 # python3-openid for aqcuired
 =dev-python/python3-openid-3.1.0
 
+# more py stuff
+dev-python/django-appconf
+
 # sigh
 sys-process/vixie-cron
 
