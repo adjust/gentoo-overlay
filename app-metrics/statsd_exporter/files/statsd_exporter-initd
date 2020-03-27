@@ -10,8 +10,8 @@ UDP_PORT="${UDP_PORT:-9125}"
 UNIXSOCKET="${UNIXSOCKET:-\"\"}"
 
 command=/usr/bin/statsd_exporter
-command_args="--web.listen-address=:${WEB_PORT} --statsd.listen-udp=:${UDP_PORT} --statsd.listen-unixgram=${UNIXSOCKET}"
-command_user="${command_user:-statsd_exporter:statsd_exporter}"
+command_args="--web.listen-address=:${WEB_PORT} --statsd.listen-udp=:${UDP_PORT} --statsd.listen-unixgram=${UNIXSOCKET} --statsd.unixsocket-mode=775"
+command_user="${command_user:-statsd_exporter:unbotify}"
 command_background=yes
 error_log="/var/log/statsd_exporter/error.log"
 
