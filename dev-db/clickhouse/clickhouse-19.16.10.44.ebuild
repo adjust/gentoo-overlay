@@ -175,7 +175,7 @@ src_install() {
 	cmake-utils_src_install
 
 	# wtf ur doin
-	rm  ${D}/usr/cmake/global.cmake
+	rm  "${D}/usr/cmake/global.cmake"
 
 	if ! use test; then
 		rm -rf "${D}/usr/share/clickhouse-test" || die "failed to remove tests"
