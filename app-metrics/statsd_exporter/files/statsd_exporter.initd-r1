@@ -1,0 +1,22 @@
+#!/sbin/openrc-run
+# Copyright 1999-2020 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Id$
+
+description="Prometheus StatsD Exporter"
+
+WEB_PORT="${WEB_PORT:-9102}"
+UDP_PORT="${UDP_PORT:-9125}"
+UNIXSOCKET="${UNIXSOCKET:-\"\"}"
+
+command=/usr/bin/statsd_exporter
+command_args="--web.listen-address=:${WEB_PORT} --statsd.listen-udp=:${UDP_PORT} --statsd.listen-unixgram=${UNIXSOCKET} ${command_args_extra}"
+command_user="${command_user:-statsd_exporter:statsd_exporter}"
+command_background=yes
+error_log="/var/log/statsd_exporter/error.log"
+
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+	need net
+}
