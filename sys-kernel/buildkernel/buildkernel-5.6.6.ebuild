@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="5"
@@ -74,14 +74,15 @@ src_compile() {
 	# this will fail for -rN kernel revisions as kerneldir is hardcoded badly
 	fakeroot genkernel initramfs --no-mountboot --bootdir="$S/final/boot" \
 		--logfile="$S/genkernel.log"  \
-		--tempdir="$S/tmp" \
 		--module-prefix="$S/final" \
 		--kerneldir=/usr/src/linux-${PV}-gentoo \
 		--mdadm \
 		--no-zfs --no-btrfs \
 		--kernel-config="$S/tmp/kernel/.config" \
 		--cachedir="$S/cache" \
-		--microcode || die
+		--tmpdir="$S/tmp" \
+		--initramfs-filename='initramfs-genkernel-x86_64-%%KV%%' \
+		--loglevel=5  --no-sandbox || die
 }
 
 src_install() {
