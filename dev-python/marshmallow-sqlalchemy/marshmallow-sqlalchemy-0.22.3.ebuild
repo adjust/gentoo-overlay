@@ -25,6 +25,7 @@ BDEPEND="
 		dev-python/mock[${PYTHON_USEDEP}]
 		dev-python/pytest-lazy-fixture[${PYTHON_USEDEP}]
 		>=dev-python/sqlalchemy-1.2.0[sqlite,${PYTHON_USEDEP}]
+		>=dev-python/marshmallow-2.15.2[${PYTHON_USEDEP}]
 	)
 "
 
