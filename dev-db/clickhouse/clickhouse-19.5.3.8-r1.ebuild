@@ -37,6 +37,8 @@ RDEPEND="
 			sys-libs/ncurses:0=
 			sys-libs/readline:0=
 		)
+
+		dev-libs/double-conversion
 		dev-libs/capnproto
 		dev-libs/libltdl:0
 		sys-libs/libunwind
@@ -53,7 +55,6 @@ RDEPEND="
 	>=dev-libs/poco-1.9.0
 	dev-libs/libpcre
 	dev-libs/jemalloc
-	dev-libs/protobuf
 "
 
 DEPEND="${RDEPEND}
@@ -81,7 +82,7 @@ DEPEND="${RDEPEND}
 		dev-db/mysql-connector-c[static-libs]
 		kafka? ( dev-libs/librdkafka[static-libs] )
 	)
-	=dev-cpp/gtest-1.8*
+
 	sys-libs/libtermcap-compat
 	dev-util/patchelf
 	>=sys-devel/lld-6.0.0
@@ -186,8 +187,7 @@ src_install() {
 	fi
 
 	if use server; then
-		newinitd "${FILESDIR}"/clickhouse-server.initd-r1 clickhouse-server
-		newconfd "${FILESDIR}"/clickhouse-server.confd clickhouse-server
+		newinitd "${FILESDIR}"/clickhouse-server.initd clickhouse-server
 		systemd_dounit "${FILESDIR}"/clickhouse-server.service
 	fi
 

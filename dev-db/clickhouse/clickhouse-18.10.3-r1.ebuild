@@ -15,12 +15,12 @@ MY_PN="ClickHouse"
 TYPE="stable"
 
 CCTZ_COMMIT="4f9776a"
-SRC_URI="https://github.com/yandex/${MY_PN}/archive/v${PV}-${TYPE}.zip -> ${P}.zip
+SRC_URI="https://github.com/yandex/${MY_PN}/archive/v${PV}-${TYPE}.tar.gz -> ${P}.tar.gz
 	https://github.com/google/cctz/archive/${CCTZ_COMMIT}.tar.gz -> cctz-${CCTZ_COMMIT}.tar.gz
 "
 
 SLOT="0/${TYPE}"
-IUSE="+client cpu_flags_x86_sse4_2 +server debug doc kafka mongodb mysql static test tools"
+IUSE="+client cpu_flags_x86_sse4_2 +server debug doc kafka mongodb mysql static test tools zookeeper"
 KEYWORDS="~amd64"
 
 REQUIRED_USE="
@@ -37,23 +37,27 @@ RDEPEND="
 			sys-libs/ncurses:0=
 			sys-libs/readline:0=
 		)
+
+		dev-libs/double-conversion
 		dev-libs/capnproto
 		dev-libs/libltdl:0
 		sys-libs/libunwind
 		sys-libs/zlib
-		dev-libs/poco[odbc]
+		|| (
+			dev-db/unixODBC
+			dev-libs/poco[odbc]
+		)
 		dev-libs/icu:=
 		dev-libs/glib
 		>=dev-libs/boost-1.65.0:=
 		dev-libs/openssl:0=
+		dev-libs/zookeeper-c
 		kafka? ( dev-libs/librdkafka:= )
 		mysql? ( dev-db/mysql-connector-c:= )
 	)
 
 	>=dev-libs/poco-1.9.0
 	dev-libs/libpcre
-	dev-libs/jemalloc
-	dev-libs/protobuf
 "
 
 DEPEND="${RDEPEND}
@@ -78,15 +82,18 @@ DEPEND="${RDEPEND}
 		dev-libs/glib[static-libs]
 		>=dev-libs/boost-1.65.0[static-libs]
 		dev-libs/openssl[static-libs]
+		dev-libs/zookeeper-c[static-libs]
 		dev-db/mysql-connector-c[static-libs]
 		kafka? ( dev-libs/librdkafka[static-libs] )
 	)
-	=dev-cpp/gtest-1.8*
+
 	sys-libs/libtermcap-compat
 	dev-util/patchelf
 	>=sys-devel/lld-6.0.0
-	>=sys-devel/gcc-7.0
-	>=sys-devel/clang-6.0
+	|| (
+		>=sys-devel/gcc-7.0
+		>=sys-devel/clang-6.0
+	)
 "
 
 S="${WORKDIR}/${MY_PN}-${PV}-${TYPE}"
@@ -134,14 +141,10 @@ src_unpack() {
 	default_src_unpack
 	[[ ${PV} == 9999 ]] && return 0
 	cd "${S}/contrib" || die "failed to cd to contrib"
-	mkdir -p cctz zstd || die "failed to create directories"
+	mkdir -p cctz zookeeper zstd || die "failed to create directories"
 	tar --strip-components=1 -C cctz -xf "${DISTDIR}/cctz-${CCTZ_COMMIT}.tar.gz" || die "failed to unpack cctz"
 }
 
-src_prepare() {
-	eapply_user
-	cmake-utils_src_prepare
-}
 src_configure() {
 	local mycmakeargs=(
 		-DENABLE_POCO_MONGODB="$(usex mongodb)"
@@ -158,9 +161,7 @@ src_configure() {
 		-DENABLE_CLICKHOUSE_EXTRACT_FROM_CONFIG="$(usex tools)"
 		-DENABLE_CLICKHOUSE_COMPRESSOR="$(usex tools)"
 		-DENABLE_CLICKHOUSE_COPIER="$(usex tools)"
-		# As of now, clickhouse fails to build if odbc is disabled
-		-DENABLE_ODBC=True
-		-DENABLE_CLICKHOUSE_ODBC_BRIDGE=True
+		-DENABLE_CLICKHOUSE_COPIER="$(usex tools)"
 		-DENABLE_CLICKHOUSE_ALL=OFF
 		-DUSE_INTERNAL_SSL_LIBRARY=False
 		-DUSE_INTERNAL_CITYHASH_LIBRARY=ON # Clickhouse explicitly requires bundled patched cityhash
@@ -186,13 +187,9 @@ src_install() {
 	fi
 
 	if use server; then
-		newinitd "${FILESDIR}"/clickhouse-server.initd-r1 clickhouse-server
-		newconfd "${FILESDIR}"/clickhouse-server.confd clickhouse-server
+		newinitd "${FILESDIR}"/clickhouse-server.initd clickhouse-server
 		systemd_dounit "${FILESDIR}"/clickhouse-server.service
 	fi
-
-	keepdir /var/log/clickhouse-server
-	chown clickhouse:clickhouse "${D}"/var/log/clickhouse-server
 }
 
 pkg_preinst() {

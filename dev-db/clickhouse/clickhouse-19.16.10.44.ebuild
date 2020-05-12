@@ -39,7 +39,7 @@ RDEPEND="
 		)
 		dev-libs/capnproto
 		dev-libs/libltdl:0
-		sys-libs/libunwind:0
+		sys-libs/libunwind
 		sys-libs/zlib
 		dev-libs/poco[odbc]
 		dev-libs/icu:=
@@ -66,9 +66,10 @@ DEPEND="${RDEPEND}
 			sys-libs/ncurses:0=[static-libs]
 			sys-libs/readline:0=[static-libs]
 		)
+		dev-libs/double-conversion
 		dev-libs/capnproto[static-libs]
 		dev-libs/libltdl[static-libs]
-		sys-libs/libunwind:0[static-libs]
+		sys-libs/libunwind[static-libs]
 		sys-libs/zlib[static-libs]
 		|| (
 			dev-db/unixODBC[static-libs]

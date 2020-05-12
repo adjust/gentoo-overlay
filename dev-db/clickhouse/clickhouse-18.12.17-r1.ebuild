@@ -15,7 +15,7 @@ MY_PN="ClickHouse"
 TYPE="stable"
 
 CCTZ_COMMIT="4f9776a"
-SRC_URI="https://github.com/yandex/${MY_PN}/archive/v${PV}-${TYPE}.zip -> ${P}.zip
+SRC_URI="https://github.com/yandex/${MY_PN}/archive/v${PV}-${TYPE}.tar.gz -> ${P}.tar.gz
 	https://github.com/google/cctz/archive/${CCTZ_COMMIT}.tar.gz -> cctz-${CCTZ_COMMIT}.tar.gz
 "
 
@@ -37,11 +37,16 @@ RDEPEND="
 			sys-libs/ncurses:0=
 			sys-libs/readline:0=
 		)
+
+		dev-libs/double-conversion
 		dev-libs/capnproto
 		dev-libs/libltdl:0
 		sys-libs/libunwind
 		sys-libs/zlib
-		dev-libs/poco[odbc]
+		|| (
+			dev-db/unixODBC
+			dev-libs/poco[odbc]
+		)
 		dev-libs/icu:=
 		dev-libs/glib
 		>=dev-libs/boost-1.65.0:=
@@ -52,8 +57,6 @@ RDEPEND="
 
 	>=dev-libs/poco-1.9.0
 	dev-libs/libpcre
-	dev-libs/jemalloc
-	dev-libs/protobuf
 "
 
 DEPEND="${RDEPEND}
@@ -81,12 +84,14 @@ DEPEND="${RDEPEND}
 		dev-db/mysql-connector-c[static-libs]
 		kafka? ( dev-libs/librdkafka[static-libs] )
 	)
-	=dev-cpp/gtest-1.8*
+
 	sys-libs/libtermcap-compat
 	dev-util/patchelf
 	>=sys-devel/lld-6.0.0
-	>=sys-devel/gcc-7.0
-	>=sys-devel/clang-6.0
+	|| (
+		>=sys-devel/gcc-7.0
+		>=sys-devel/clang-6.0
+	)
 "
 
 S="${WORKDIR}/${MY_PN}-${PV}-${TYPE}"
@@ -138,10 +143,6 @@ src_unpack() {
 	tar --strip-components=1 -C cctz -xf "${DISTDIR}/cctz-${CCTZ_COMMIT}.tar.gz" || die "failed to unpack cctz"
 }
 
-src_prepare() {
-	eapply_user
-	cmake-utils_src_prepare
-}
 src_configure() {
 	local mycmakeargs=(
 		-DENABLE_POCO_MONGODB="$(usex mongodb)"
@@ -186,13 +187,9 @@ src_install() {
 	fi
 
 	if use server; then
-		newinitd "${FILESDIR}"/clickhouse-server.initd-r1 clickhouse-server
-		newconfd "${FILESDIR}"/clickhouse-server.confd clickhouse-server
+		newinitd "${FILESDIR}"/clickhouse-server.initd clickhouse-server
 		systemd_dounit "${FILESDIR}"/clickhouse-server.service
 	fi
-
-	keepdir /var/log/clickhouse-server
-	chown clickhouse:clickhouse "${D}"/var/log/clickhouse-server
 }
 
 pkg_preinst() {
