@@ -26,7 +26,7 @@ SLOT="0"
 CPU_FLAGS_X86=(sse{,2,3,4_1,4_2} ssse3)
 
 IUSE="babeltrace cephfs dpdk fuse jemalloc ldap libressl lttng +mgr"
-IUSE+=" numa +radosgw +ssl static-libs +system-boost systemd +tcmalloc"
+IUSE+=" numa +radosgw +ssl +system-boost systemd +tcmalloc"
 IUSE+=" test xfs zfs"
 IUSE+=" $(printf "cpu_flags_x86_%s\n" ${CPU_FLAGS_X86[@]})"
 
@@ -35,47 +35,47 @@ IUSE+=" $(printf "cpu_flags_x86_%s\n" ${CPU_FLAGS_X86[@]})"
 #>=dev-libs/gf-complete-2.0.0
 COMMON_DEPEND="
 	virtual/libudev:=
-	app-arch/bzip2:=[static-libs?]
-	app-arch/lz4:=[static-libs?]
-	app-arch/snappy:=[static-libs?]
-	app-arch/zstd:=[static-libs?]
-	app-misc/jq:=[static-libs?]
-	dev-libs/crypto++:=[static-libs?]
-	dev-libs/leveldb:=[snappy,static-libs?,tcmalloc?]
-	dev-libs/libaio:=[static-libs?]
-	dev-libs/libxml2:=[static-libs?]
+	app-arch/bzip2:=
+	app-arch/lz4:=
+	app-arch/snappy:=
+	app-arch/zstd:=
+	app-misc/jq:=
+	dev-libs/crypto++:=
+	dev-libs/leveldb:=
+	dev-libs/libaio:=
+	dev-libs/libxml2:=
 	dev-libs/nss:=
 	sys-auth/oath-toolkit:=
-	sys-apps/keyutils:=[static-libs?]
-	sys-apps/util-linux:=[static-libs?]
-	sys-libs/zlib:=[static-libs?]
+	sys-apps/keyutils:=
+	sys-apps/util-linux:=
+	sys-libs/zlib:=
 	babeltrace? ( dev-util/babeltrace )
-	ldap? ( net-nds/openldap:=[static-libs?] )
+	ldap? ( net-nds/openldap:= )
 	lttng? ( dev-util/lttng-ust:= )
-	fuse? ( sys-fs/fuse:0=[static-libs?] )
-	numa? ( sys-process/numactl:=[static-libs?] )
+	fuse? ( sys-fs/fuse:0= )
+	numa? ( sys-process/numactl:= )
 	ssl? (
-		!libressl? ( dev-libs/openssl:=[static-libs?] )
-		libressl? ( dev-libs/libressl:=[static-libs?] )
+		!libressl? ( dev-libs/openssl:= )
+		libressl? ( dev-libs/libressl:= )
 	)
-	xfs? ( sys-fs/xfsprogs:=[static-libs?] )
-	zfs? ( sys-fs/zfs:=[static-libs?] )
+	xfs? ( sys-fs/xfsprogs:= )
+	zfs? ( sys-fs/zfs:= )
 	radosgw? (
-		dev-libs/expat:=[static-libs?]
+		dev-libs/expat:=
 		!libressl? (
-			dev-libs/openssl:=[static-libs?]
-			net-misc/curl:=[curl_ssl_openssl,static-libs?]
+			dev-libs/openssl:=
+			net-misc/curl:=[curl_ssl_openssl]
 		)
 		libressl? (
-			dev-libs/libressl:=[static-libs?]
-			net-misc/curl:=[curl_ssl_libressl,static-libs?]
+			dev-libs/libressl:=
+			net-misc/curl:=[curl_ssl_libressl]
 		)
 	)
 	system-boost? (
-		>=dev-libs/boost-1.67:=[threads,context,python,static-libs?,${PYTHON_USEDEP}]
+		>=dev-libs/boost-1.67:=[threads,context,python,${PYTHON_USEDEP}]
 	)
-	jemalloc? ( dev-libs/jemalloc:=[static-libs?] )
-	!jemalloc? ( >=dev-util/google-perftools-2.4:=[static-libs?] )
+	jemalloc? ( dev-libs/jemalloc:= )
+	!jemalloc? ( >=dev-util/google-perftools-2.4:= )
 	${PYTHON_DEPS}
 	"
 DEPEND="${COMMON_DEPEND}
@@ -213,7 +213,7 @@ ceph_src_configure() {
 		-DWITH_TESTS=$(usex test)
 		-DWITH_XFS=$(usex xfs)
 		-DWITH_ZFS=$(usex zfs)
-		-DENABLE_SHARED=$(usex static-libs '' 'yes' 'no')
+		-DENABLE_SHARED='yes'
 		-DALLOCATOR=$(usex tcmalloc 'tcmalloc' "$(usex jemalloc 'jemalloc' 'libc')")
 		-DWITH_SYSTEM_BOOST=$(usex system-boost)
 		-DBOOST_J=$(makeopts_jobs)
