@@ -9,7 +9,7 @@ inherit distutils-r1
 MY_PN="newrelic"
 MY_P="${MY_PN}-${PV}.138"
 
-DESCRIPTION="performance monitoring and advanced performance analytics for your python application"
+DESCRIPTION="performance monitoring and advanced analytics for python applications"
 HOMEPAGE="https://pypi.org/project/newrelic/"
 SRC_URI="https://files.pythonhosted.org/packages/d5/35/c017210a282c773f8b8dd8d23df1bd39c1bd271ed1f1b8bc29b60b64dbd8/${MY_P}.tar.gz"
 
