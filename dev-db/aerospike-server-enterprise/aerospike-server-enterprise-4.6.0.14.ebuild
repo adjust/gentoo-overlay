@@ -18,7 +18,8 @@ RDEPEND="!dev-db/aerospike-server-community
 	net-nds/openldap
 	sys-process/numactl
 	${PYTHON_DEPS}
-	|| ( dev-libs/openssl-compat:1.0.0 <dev-libs/openssl-1.1:* )"
+	|| ( dev-libs/openssl-compat:1.0.0 <dev-libs/openssl-1.1:* )
+	sys-libs/readline-compat"
 DEPEND="${RDEPEND}
 	app-arch/xz-utils"
 
