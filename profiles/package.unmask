@@ -26,6 +26,7 @@ app-eselect/eselect-qtgraphicssystem
 # more py stuff
 dev-python/django-appconf
 dev-python/django-picklefield
+dev-python/raven
 
 # sigh
 sys-process/vixie-cron
