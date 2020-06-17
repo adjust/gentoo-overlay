@@ -26,8 +26,6 @@ src_install() {
 	#dodir logdna-agent
 	#into usr/$(get_libdir)/logdna-agent
 
-
-
 	insinto usr/$(get_libdir)/logdna-agent
 	doins -r lib
 	doins -r node_modules
@@ -40,5 +38,5 @@ src_install() {
 	sed -e "s/@LIBDIR@/$(get_libdir)/" < "${FILESDIR}"/99logdna-agent > 99logdna-agent || die "sed failed"
 	doenvd 99logdna-agent
 
-	dosym "${ED%/}"/usr/$(get_libdir)/logdna-agent/bin/logdna-agent /usr/bin/logdna-agent
+	#dosym "${ED%/}"/usr/$(get_libdir)/logdna-agent/bin/logdna-agent /usr/bin/logdna-agent
 }
