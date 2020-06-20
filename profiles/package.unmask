@@ -34,5 +34,3 @@ sys-process/vixie-cron
 # sigh sigh. sigh
 dev-db/clickhouse
 
-# [long list of rude words]
-net-analyzer/zabbix
