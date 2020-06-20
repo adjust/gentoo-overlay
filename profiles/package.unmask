@@ -34,3 +34,5 @@ sys-process/vixie-cron
 # sigh sigh. sigh
 dev-db/clickhouse
 
+# just in case
+sys-cluster/zookeeper-bin
