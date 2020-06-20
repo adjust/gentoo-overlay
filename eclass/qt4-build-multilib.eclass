@@ -52,7 +52,7 @@ fi
 
 DEPEND="
 	dev-lang/perl
-	virtual/pkgconfig[${MULTILIB_USEDEP}]
+	virtual/pkgconfig
 "
 RDEPEND="
 	dev-qt/qtchooser
