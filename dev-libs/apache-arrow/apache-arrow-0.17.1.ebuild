@@ -9,14 +9,13 @@ DESCRIPTION="Apache Arrow and Parquet libraries"
 LICENSE="Apache-2.0"
 KEYWORDS="~amd64 ~x86"
 HOMEPAGE="https://arrow.apache.org/"
-SRC_URI="https://github.com/apache/arrow/archive/apache-arrow-${PV}.tar.gz
-	https://github.com/jemalloc/jemalloc/archive/5.2.1.tar.gz -> jemalloc-5.2.1.tar.gz"
+SRC_URI="https://github.com/apache/arrow/archive/apache-arrow-${PV}.tar.gz"
 SLOT="0"
-DEPEND="dev-libs/boost"
-RDEPEND="${DEPEND}
+DEPEND="dev-libs/boost
 	dev-libs/thrift
 	dev-libs/rapidjson
 	dev-libs/double-conversion
+	dev-libs/jemalloc
 	dev-cpp/gflags
 	dev-cpp/glog
 	app-arch/zstd
@@ -24,6 +23,7 @@ RDEPEND="${DEPEND}
 	app-arch/snappy
 	app-arch/brotli
 "
+RDEPEND="${DEPEND}"
 S="${WORKDIR}/arrow-apache-arrow-${PV}"
 
 CMAKE_BUILD_TYPE="release"
@@ -31,9 +31,9 @@ CMAKE_USE_DIR="${S}/cpp"
 CMAKE_MAKEFILE_GENERATOR="emake"
 
 src_configure() {
-	export ARROW_JEMALLOC_URL="${DISTDIR}/jemalloc-5.2.1.tar.gz"
 	local mycmakeargs=(
 		-DARROW_PARQUET=ON
+		-DARROW_JEMALLOC=OFF
 	)
 
 	cmake-utils_src_configure
