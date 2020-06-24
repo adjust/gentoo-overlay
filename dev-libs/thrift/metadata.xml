@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>ildar@adjust.com</email>
+	<maintainer type="project">
+		<email>ops@adjust.com</email>
 	</maintainer>
+	<use>
+		<flag name="glib">Build C glib library</flag>
+		<flag name="zlib">Add zlib support</flag>
+		<flag name="static-libs">Build static versions of dynamic libraries</flag>
+	</use>
 </pkgmetadata>
