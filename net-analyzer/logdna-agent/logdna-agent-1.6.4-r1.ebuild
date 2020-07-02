@@ -32,7 +32,7 @@ src_install() {
 	doins index.js
 	doins package.json
 
-	doinitd ${FILESDIR}/logdna.init
+	doinitd ${FILESDIR}/logdna.init logdna-agent
 
 	dobin "${FILESDIR}"/logdna-agent
 	sed -e "s/@LIBDIR@/$(get_libdir)/" < "${FILESDIR}"/99logdna-agent > 99logdna-agent || die "sed failed"
