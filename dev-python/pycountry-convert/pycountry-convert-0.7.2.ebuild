@@ -3,6 +3,7 @@
 
 EAPI=7
 
+RESTRICT="test"
 PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit distutils-r1
@@ -20,7 +21,6 @@ KEYWORDS="~amd64"
 #aaaaAAAAaaaaaaaAAAAAA
 DEPEND="dev-python/pycountry[${PYTHON_USEDEP}]
 	dev-python/pprintpp[${PYTHON_USEDEP}]
-	dev-python/pytest-runner[${PYTHON_USEDEP}]
 	dev-python/wheel[${PYTHON_USEDEP}]
 	dev-python/repoze-lru[${PYTHON_USEDEP}]
 	dev-python/pytest-cov[${PYTHON_USEDEP}]
@@ -28,3 +28,7 @@ DEPEND="dev-python/pycountry[${PYTHON_USEDEP}]
 	"
 RDEPEND="${DEPEND}"
 
+src_prepare() {
+	sed -i -e 's/pytest-runner//' setup.py || die
+	default
+}
