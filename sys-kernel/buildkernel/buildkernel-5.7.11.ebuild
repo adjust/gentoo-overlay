@@ -79,6 +79,7 @@ src_compile() {
 		--mdadm \
 		--no-zfs --no-btrfs \
 		--kernel-config="$S/tmp/kernel/.config" \
+		--kernel-outputdir="$S/tmp/kernel/" \
 		--cachedir="$S/cache" \
 		--tmpdir="$S/tmp" \
 		--initramfs-filename='initramfs-genkernel-x86_64-%%KV%%' \
