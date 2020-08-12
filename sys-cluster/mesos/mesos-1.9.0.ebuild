@@ -26,6 +26,9 @@ DEPEND="
 	dev-libs/leveldb
 	dev-vcs/subversion
 	net-libs/http-parser
+	dev-cpp/picojson
+	dev-libs/rapidjson
+	dev-libs/protobuf
 	virtual/jdk
 "
 
@@ -42,9 +45,6 @@ src_prepare() {
 src_configure() {
 	econf \
 		--disable-bundled \
-		--disable-bundled-pip \
-		--disable-bundled-setuptools \
-		--disable-bundled-wheel \
 		--with-boost="${ESYSROOT}"/usr \
 		--with-gmock="${ESYSROOT}"/usr \
 
