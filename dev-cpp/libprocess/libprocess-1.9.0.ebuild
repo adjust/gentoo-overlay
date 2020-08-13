@@ -27,7 +27,11 @@ DEPEND="dev-libs/libev
 MESOS_S="${WORKDIR}"/mesos-${PV}
 S="${MESOS_S}"/3rdparty/${PN}
 
+PATCHES=( "${FILESDIR}"/3rdparty_libprocess_include_process_grpc.patch )
+
 src_prepare() {
+	default
+
 	cp "${DISTDIR}"/libprocess-1.9.0-configure.ac "${S}"/configure.ac
 	cp -r "${MESOS_S}"/m4 "${S}"
 	sed -i \
@@ -35,7 +39,6 @@ src_prepare() {
 		configure.ac
 
 	eautoreconf
-	default
 }
 
 src_configure() {
