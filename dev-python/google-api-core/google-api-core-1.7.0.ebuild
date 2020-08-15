@@ -26,5 +26,4 @@ RDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	dev-python/six[${PYTHON_USEDEP}]
 	dev-python/pytz[${PYTHON_USEDEP}]
-	virtual/python-futures[${PYTHON_USEDEP}]
 "
