@@ -10,7 +10,7 @@ MY_P="zookeeper"
 MY_PN=${MY_P}-${PV}
 
 DESCRIPTION="A high-performance coordination service for distributed applications."
-HOMEPAGE="http://zookeeper.apache.org/"
+HOMEPAGE="https://zookeeper.apache.org/"
 SRC_URI="mirror://apache/${MY_P}/${MY_PN}/${MY_PN}.tar.gz"
 
 LICENSE="Apache-2.0"
