@@ -2,10 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 <maintainer type="person">
-<email>chris.travers@adjust</email>
+<email>chris.travers@adjust.com</email>
 </maintainer>
-<description>
-URI::Escape is great, but URI::Escape::XS is faster. This module loads 
-URI::Escape::XS and imports the two most common methods if XS is installed.
-</description>
 </pkgmetadata>
