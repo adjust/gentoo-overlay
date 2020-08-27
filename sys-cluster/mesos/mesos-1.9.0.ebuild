@@ -19,25 +19,32 @@ DEPEND="
 	dev-cpp/elfio
 	dev-cpp/glog
 	dev-cpp/gtest
+	dev-cpp/picojson
 	dev-java/maven-bin
+	dev-java/protobuf-java
 	dev-libs/apr
 	dev-libs/boost
 	dev-libs/cyrus-sasl
 	dev-libs/leveldb
+	dev-libs/protobuf
+	dev-libs/rapidjson
 	dev-vcs/subversion
 	net-libs/http-parser
-	dev-cpp/picojson
-	dev-libs/rapidjson
-	dev-libs/protobuf
 	virtual/jdk
 "
 
 DOCS=( LICENSE NOTICE README.md )
 
+src_unpack() {
+	default
+	unpack "${S}"/3rdparty/nvml-352.79.tar.gz
+}
+
 src_prepare() {
 	sed -i \
 		's@^GMOCKSRC="gmock-all.cc"$@GMOCKSRC="gmock/gmock.h"@' \
 		configure.ac
+	export PROTOBUF_JAR="/usr/share/protobuf-java/lib/protobuf.jar"
 	eautoconf
 	default
 }
@@ -47,5 +54,6 @@ src_configure() {
 		--disable-bundled \
 		--with-boost="${ESYSROOT}"/usr \
 		--with-gmock="${ESYSROOT}"/usr \
+		--with-nvml="${WORKDIR}"/nvml-352.79 \
 
 }
