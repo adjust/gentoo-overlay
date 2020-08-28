@@ -1,0 +1,3 @@
+# Ali Polatel <alip@adjust.com> (2020-08-20)
+# New version, masked for testing
+=app-admin/trex-1.12.1*
