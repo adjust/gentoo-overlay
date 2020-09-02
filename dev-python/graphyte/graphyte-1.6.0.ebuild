@@ -8,7 +8,7 @@ inherit distutils-r1 python-r1
 
 DESCRIPTION="A small library to send data to graphite"
 HOMEPAGE="https://pypi.org/project/graphyte/"
-SRC_URI="https://github.com/Jetsetter/${PN}/archive/v${PV}.tar.gz"
+SRC_URI="https://github.com/Jetsetter/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
