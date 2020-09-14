@@ -1,8 +1,8 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-POSTGRES_COMPAT=( "9.6" "10" "11" )
+POSTGRES_COMPAT=( "9.6" "10" "11" "12" )
 POSTGRES_USEDEP="bagger"
 BUILD_DIR="${S}/sql/bagger_data"
 inherit postgres-multi
