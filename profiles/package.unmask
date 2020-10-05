@@ -36,3 +36,6 @@ dev-db/clickhouse
 
 # just in case
 sys-cluster/zookeeper-bin
+
+# eh
+dev-python/ipaddress
