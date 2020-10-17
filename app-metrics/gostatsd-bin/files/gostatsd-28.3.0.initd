@@ -1,0 +1,29 @@
+#!/sbin/openrc-run
+# Copyright 2015-2019 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+description="gostatsd (statds in go)"
+pidfile=${pidfile:-"/run/${RC_SVCNAME}.pid"}
+
+command="/usr/bin/gostatsd"
+command_args="
+	--config-path=${GOSTATSD_CONFIG_PATH}
+	--backends=${GOSTATSD_BACKENDS:-graphite}
+	${GOSTATSD_EXTRA_ARGS}
+"
+
+command_background="true"
+command_user="${GOSTATSD_USER:-$RC_SVCNAME}"
+command_group="${GOSTATSD_GROUP:-$GOSTATSD_GROUP}"
+
+output_log="/var/log/${RC_SVCNAME}/${RC_SVCNAME}.log"
+error_log="/var/log/${RC_SVCNAME}/${RC_SVCNAME}.log"
+
+start_pre() {
+	checkpath -m 0750 -o "$command_user:$command_group" \
+		-d /var/log/"${RC_SVCNAME}"
+}
+
+depend() {
+	need net
+}

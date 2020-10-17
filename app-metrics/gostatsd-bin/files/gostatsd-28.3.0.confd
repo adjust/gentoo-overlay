@@ -1,0 +1,10 @@
+#GOSTATSD_USER=""
+#GOSTATDS_GROUP=""
+
+# graphite is the standard backend
+GOSTATDS_BACKENDS=graphite
+# Backend configuration is mandatory
+GOSTATSD_CONFIG_PATH=/etc/gostatsd.toml
+
+# Put all important stuff here
+#GOSTATSD_EXTRA_ARGS=""
