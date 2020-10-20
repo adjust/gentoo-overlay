@@ -14,6 +14,9 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64"
 
+# TODO: USE, read through output of configure
+# configure: WARNING: libev found must have been built with -DEV_CHILD_ENABLE=0
+
 DEPEND="
 	dev-cpp/concurrentqueue
 	dev-cpp/elfio
@@ -31,6 +34,10 @@ DEPEND="
 	dev-vcs/subversion
 	net-libs/http-parser
 	virtual/jdk
+	dev-python/protobuf-python[python_targets_python2_7]
+	dev-libs/zookeeper-c
+	sys-devel/automake:1.13
+
 "
 
 DOCS=( LICENSE NOTICE README.md )
@@ -42,7 +49,7 @@ src_unpack() {
 
 src_prepare() {
 	sed -i \
-		's@^GMOCKSRC="gmock-all.cc"$@GMOCKSRC="gmock/gmock.h"@' \
+		-e 's@^GMOCKSRC="gmock-all.cc"$@GMOCKSRC="gmock/gmock.h"@' \
 		configure.ac
 	export PROTOBUF_JAR="/usr/share/protobuf-java/lib/protobuf.jar"
 	eautoconf
@@ -50,6 +57,7 @@ src_prepare() {
 }
 
 src_configure() {
+	export PYTHON="${ESYSROOT}"/usr/bin/python2.7
 	econf \
 		--disable-bundled \
 		--with-boost="${ESYSROOT}"/usr \
