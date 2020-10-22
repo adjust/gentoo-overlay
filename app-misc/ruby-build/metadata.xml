@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+		<maintainer type="person">
+				<email>ops@adjust.com</email>
+		</maintainer>
+		<longdescription lang="en">
+		Command-line utility to install virtually any version of Ruby
+		</longdescription>
+		<use>
+			<flag name="rbenv">Install rbenv plugin providing rbenv install and uninstall commands</flag>
+		</use>
+</pkgmetadata>
