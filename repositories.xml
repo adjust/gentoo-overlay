@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE repositories SYSTEM "/dtd/repositories.dtd">
+<repositories xmlns="" version="1.0">
+  <repo quality="stable" status="unofficial">
+    <name>adjust></name>
+    <description lang="en">Adjust Gentoo Overlay></description>
+    <homepage>https://github.com/adjust/gentoo-overlay</homepage>
+    <owner type="project">
+        <email>ops@adjust.com</email>
+        <name>Adjust Ops Team</name>
+    </owner>
+    <source type="git">git://github.com/adjust/gentoo-overlay.git</source>
+    <feed>https://github.com/adjust/gentoo-overlay/commits/master.atom</feed>
+  </repo>
+</repositories>
