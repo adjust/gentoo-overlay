@@ -51,6 +51,9 @@ src_prepare() {
 	sed -i \
 		-e 's@^GMOCKSRC="gmock-all.cc"$@GMOCKSRC="gmock/gmock.h"@' \
 		configure.ac
+	sed -i \
+		-e 's/^\(SUBDIRS = . stout\) libprocess$/\1/' \
+		3rdparty/Makefile.am
 	export PROTOBUF_JAR="/usr/share/protobuf-java/lib/protobuf.jar"
 	eautoconf
 	default
