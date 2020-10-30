@@ -1,0 +1,45 @@
+# Apache Mesos master node conf.d file.
+# Copyright 1999-2020 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+# Mesos master node IP.
+# 0.0.0.0 means Mesos will listen on all interfaces by default.
+MESOS_MASTER_IP="0.0.0.0"
+
+# ZooKeeper server IP.
+ZOOKEEPER_HOST="foobar.adjust.com"
+
+# ZooKeeper TCP port.
+# Default port is 2181.
+ZOOKEEPER_PORT="2181"
+
+# Default cluster name.
+MESOS_MASTER_CLUSTER_NAME="'adjust Apache Mesos cluster'"
+
+# Default working directory.
+MESOS_MASTER_WORK_DIR="/var/lib/warden/mesos"
+
+# Default log file.
+MESOS_MASTER_LOG_FILE="/var/log/warden/mesos-master.log"
+
+# Default log level.
+# Possible values: `INFO`, `WARNING`, `ERROR`.
+MESOS_MASTER_LOG_LEVEL="INFO"
+
+# Number of Mesos master servers managed by ZK.
+MESOS_MASTER_QUORUM="1"
+
+# Mesos master node arguments.
+# See mesos-master --help for a complete list of available options.
+MESOS_MASTER_ARGS=(
+    "--ip=${MESOS_MASTER_IP}"
+    "--work_dir=${MESOS_MASTER_WORK_DIR}"
+    "--logging_level=${MESOS_MASTER_LOG_LEVEL}"
+    "--zk=zk://${ZOOKEEPER_HOST}:${ZOOKEEPER_PORT}/mesos"
+    "--cluster=${MESOS_MASTER_CLUSTER_NAME}"
+    "--root_submissions=false"
+    "--quorum=${MESOS_MASTER_QUORUM}"
+    "--hostname=$(curl -s ifconfig.co)"
+)
+
+MESOS_MASTER_ARGS="${MESOS_MASTER_ARGS[@]}"
