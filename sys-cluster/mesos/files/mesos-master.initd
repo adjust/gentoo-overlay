@@ -1,0 +1,17 @@
+#!/sbin/openrc-run
+# Copyright 1999-2020 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+description="Apache Mesos is a computer cluster manager"
+name="Mesos [master]"
+command="/usr/sbin/${RC_SVCNAME}"
+command_args="${MESOS_MASTER_ARGS}"
+command_background="true"
+start_stop_daemon_args="--user warden --group warden"
+pidfile="/var/run/${RC_SVCNAME}.pid"
+stdout_log="${MESOS_MASTER_LOG_FILE}"
+error_log="${MESOS_MASTER_LOG_FILE}"
+
+depend() {
+    use net
+}
