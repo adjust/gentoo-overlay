@@ -1,0 +1,32 @@
+# Apache Mesos agent node conf.d file.
+# Copyright 1999-2020 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+# ZooKeeper server IP.
+ZOOKEEPER_HOST="example.com"
+
+# ZooKeeper TCP port.
+# Default port is 2181.
+ZOOKEEPER_PORT="2181"
+
+# Default working directory.
+MESOS_AGENT_WORK_DIR="/var/lib/warden/mesos"
+
+# Default log file.
+MESOS_AGENT_LOG_FILE="/var/log/warden/mesos-agent.log"
+
+# Default log level.
+# Possible values: `INFO`, `WARNING`, `ERROR`.
+MESOS_AGENT_LOG_LEVEL="INFO"
+
+# Mesos agent node arguments.
+# See mesos-agent --help for a complete list of available options.
+MESOS_AGENT_ARGS=(
+    "--master=zk://${ZOOKEEPER_HOST}:${ZOOKEEPER_PORT}/mesos"
+    "--work_dir=${MESOS_AGENT_WORK_DIR}"
+    "--logging_level=${MESOS_AGENT_LOG_LEVEL}"
+    "--switch_user=true"
+    "--systemd_enable_support=false"
+)
+
+MESOS_AGENT_ARGS="${MESOS_AGENT_ARGS[@]}"
