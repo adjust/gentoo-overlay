@@ -7,8 +7,8 @@ PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit distutils-r1
 
-DESCRIPTION="NS1 Python SDK"
-HOMEPAGE="https://github.com/ns1/ns1-python"
+DESCRIPTION="Add support for pytest runner to setup.py"
+HOMEPAGE="https://github.com/pytest-dev/pytest-runner/"
 SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
@@ -16,8 +16,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 DEPEND="
-	dev-python/pytest-runner[${PYTHON_USEDEP}]
-	dev-python/wheel[${PYTHON_USEDEP}]
+	dev-python/setuptools[${PYTHON_USEDEP}]
 "
 
 RDEPEND="
