@@ -15,4 +15,5 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 
+DEPEND="dev-python/pytest-runner dev-python/wheel"
 RDEPEND="dev-python/requests[${PYTHON_USEDEP}]"
