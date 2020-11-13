@@ -1,0 +1,43 @@
+# Copyright 1999-2020 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+# JVM options.
+JVM_OPTS=""
+
+# ZooKeeper server IP/hostname.
+ZOOKEEPER_IP="foobar.adjust.com"
+
+# ZooKeeper TCP port.
+# Default port is 2181.
+ZOOKEEPER_PORT="2181"
+
+# Chronos JAR file location.
+CHRONOS_JAR="/usr/share/chronos-bin/lib/chronos-bin.jar"
+
+# Chronos log file.
+CHRONOS_LOG_FILE="/var/log/warden/chronos.log"
+
+# Chronos main method.
+CHRONOS_MAIN="org.apache.mesos.chronos.scheduler.Main"
+
+# Chronos web UI HTTP port.
+CHRONOS_HTTP_PORT="8080"
+
+# Chronos framework username.
+# This is the username the Mesos agent daemon will run jobs/tasks as.
+# This username has to exist on the server the Mesos agent runs on.
+# We will use the same username the Mesos agent runs on which is "warden".
+# If not specified, the default framework username Chronos uses is "root"
+# and that can cause *A LOT OF* problems.
+CHRONOS_FRAMEWORK_USER="warden"
+
+# Chronos program arguments.
+CHRONOS_ARGS=(
+    "--master zk://${ZOOKEEPER_IP}:${ZOOKEEPER_PORT}/mesos"
+    "--zk_hosts ${ZOOKEEPER_IP}:${ZOOKEEPER_PORT}"
+    "--hostname $(curl -s ifconfig.co)"
+    "--http_port ${CHRONOS_HTTP_PORT}"
+    "--user ${CHRONOS_FRAMEWORK_USER}"
+)
+
+CHRONOS_ARGS="${CHRONOS_ARGS[@]}"

@@ -1,0 +1,17 @@
+#!/sbin/openrc-run
+# Copyright 1999-2020 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+description="Chronos is a fault tolerant job scheduler for Mesos"
+name="Chronos"
+command="/usr/bin/java"
+command_args="${JVM_OPTS} -cp ${CHRONOS_JAR} ${CHRONOS_MAIN} ${CHRONOS_ARGS}"
+command_background="true"
+start_stop_daemon_args="--user warden --group warden"
+pidfile="/var/run/${RC_SVCNAME}.pid"
+stdout_log="${CHRONOS_LOG_FILE}"
+error_log="${CHRONOS_LOG_FILE}"
+
+depend() {
+    need net
+}
