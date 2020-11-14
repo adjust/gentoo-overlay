@@ -35,6 +35,8 @@ src_install()
 	# user postgres should exist implicitly by dev-db/postgresql
 	diropts -m 0775 -g postgres
 	keepdir /var/log/"${PN}"
+	# async wal archiving requires a spooler directory
+	keepdir /var/spool/"{PN}"
 
 	insinto /etc/logrotate.d
 	newins "${FILESDIR}/${PN}.logrotate" ${PN}
