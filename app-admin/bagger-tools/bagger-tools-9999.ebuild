@@ -27,10 +27,12 @@ DEPEND="
 	dev-perl/DateTime
 	dev-perl/DateTime-Format-Strptime
 	dev-perl/DateTimeX-Easy
+	dev-perl/JSON
 	dev-perl/Module-Build
 	dev-perl/Parallel-ForkManager
 	dev-perl/Term-ProgressBar
 	dev-perl/Digest-SHA1
+	virtual/perl-Sys-Syslog
 "
 
 RDEPEND="${DEPEND}
