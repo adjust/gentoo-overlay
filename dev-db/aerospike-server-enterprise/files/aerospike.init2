@@ -4,8 +4,8 @@ config_file=${config_file:-/etc/aerospike/${SVCNAME}.conf}
 run_dir=${run_dir:-/run/aerospike}
 
 pidfile=${run_dir}/${SVCNAME}.pid
-user=${user:-aerospike}
-group=${group:-aerospike}
+user=${user:-root}
+group=${group:-root}
 start_stop_daemon_args="--user ${user} --group ${group}"
 required_files="${config_file}"
 sysctl=`which sysctl`
