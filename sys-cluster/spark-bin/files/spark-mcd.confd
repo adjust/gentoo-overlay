@@ -1,0 +1,32 @@
+# Apache Spark Mesos Cluster Dispatcher conf.d file.
+# Copyright 1999-2020 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+# Mesos master hostname.
+SPARK_MCD_MASTER_HOSTNAME="spark-master.example.com"
+
+# Mesos master port.
+SPARK_MCD_MASTER_PORT="5050"
+
+# Mesos cluster hostname.
+SPARK_MCD_HOSTNAME="mesos-master.example.com"
+
+# Mesos cluster port.
+SPARK_MCD_PORT="7077"
+
+# Mesos cluster log file.
+SPARK_MCD_LOG_FILE="/var/log/warden/spark-mcd.log"
+
+# Mesos cluster class.
+SPARK_MCD_CLASS="org.apache.spark.deploy.mesos.MesosClusterDispatcher"
+
+# Mesos cluster arguments.
+# See https://github.com/apache/spark/blob/master/resource-managers/mesos/src/main/scala/org/apache/spark/deploy/mesos/MesosClusterDispatcherArguments.scala
+# for a complete list of args.
+SPARK_MCD_ARGS=(
+    "--host ${SPARK_MCD_HOSTNAME}"
+    "--port ${SPARK_MCD_PORT}"
+    "--master mesos://${SPARK_MCD_MASTER_HOSTNAME}:${SPARK_MCD_MASTER_PORT}"
+)
+
+SPARK_MCD_ARGS="${SPARK_MCD_ARGS[@]}"
