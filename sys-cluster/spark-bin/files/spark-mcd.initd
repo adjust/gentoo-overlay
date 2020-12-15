@@ -1,0 +1,20 @@
+#!/sbin/openrc-run
+# Copyright 1999-2020 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+export JAVA_HOME="/etc/java-config-2/current-system-vm"
+export SPARK_DIST_CLASSPATH=$(/opt/hadoop/bin/hadoop classpath)
+
+description="Apache Spark: Mesos Cluster Dispatcher"
+name="Spark Mesos Cluster Dispatcher"
+command="/opt/spark-2/bin/spark-class"
+command_args="${SPARK_MCD_CLASS} ${SPARK_MCD_ARGS}"
+command_background="true"
+start_stop_daemon_args="--user warden --group warden"
+pidfile="/var/run/${RC_SVCNAME}.pid"
+stdout_log="${SPARK_MCD_LOG_FILE}"
+error_log="${SPARK_MCD_LOG_FILE}"
+
+depend() {
+    use net
+}

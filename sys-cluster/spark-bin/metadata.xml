@@ -5,4 +5,8 @@
     <email>ops@adjust.com</email>
     <name>Adjust Ops Team</name>
   </maintainer>
+  <use>
+    <flag name="scala211">Install Spark with Scala 2.11 pre-built JARs.</flag>
+    <flag name="scala212">Install Spark with Scala 2.12 pre-built JARs.</flag>
+  </use>
 </pkgmetadata>
