@@ -1,0 +1,29 @@
+# Apache Spark History conf.d file.
+# Copyright 1999-2020 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+# Web UI port.
+SPARK_HISTORY_PORT="18080"
+
+# Server log.
+SPARK_HISTORY_LOG_FILE="/var/log/warden/spark-history.log"
+
+# Events directory.
+SPARK_HISTORY_EVENTS_DIRECTORY="/var/spark/history"
+
+# Update interval (in seconds).
+SPARK_HISTORY_UPDATE_INTERVAL="10s"
+
+# Spark History class.
+SPARK_HISTORY_CLASS="org.apache.spark.deploy.history.HistoryServer"
+
+# Spark History server arguments.
+# See https://github.com/apache/spark/blob/master/core/src/main/scala/org/apache/spark/deploy/history/HistoryServerArguments.scala#L65
+# for a complete list of args.
+SPARK_HISTORY_ARGS=(
+    "-Dspark.history.ui.port=${SPARK_HISTORY_PORT}"
+    "-Dspark.history.fs.logDirectory=${SPARK_HISTORY_EVENTS_DIRECTORY}"
+    "-Dspark.history.fs.update.interval=${SPARK_HISTORY_UPDATE_INTERVAL}"
+)
+
+SPARK_HISTORY_ARGS="${SPARK_HISTORY_ARGS[@]}"
