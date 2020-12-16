@@ -11,7 +11,7 @@ PLOCALES="af cs de en es fa fr hr hu it ko nb pl pt_BR ro ru sk sl sv tr zh_CN
 inherit flag-o-matic l10n linux-info multilib pam prefix python-single-r1 \
 		systemd
 
-KEYWORDS=""
+KEYWORDS="amd64 ~x86"
 
 SLOT=$(ver_cut 1)
 

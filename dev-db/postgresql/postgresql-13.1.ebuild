@@ -1,14 +1,17 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit autotools eutils flag-o-matic linux-info multilib pam prefix python-single-r1 \
-		systemd eapi7-ver autotools
+PLOCALES="af cs de en es fa fr hr hu it ko nb pl pt_BR ro ru sk sl sv tr zh_CN
+		 zh_TW"
 
-KEYWORDS="amd64 ~x86"
+inherit flag-o-matic l10n linux-info multilib pam prefix python-single-r1 \
+		systemd
+
+KEYWORDS="amd64"
 
 SLOT=$(ver_cut 1)
 
@@ -21,21 +24,11 @@ LICENSE="POSTGRESQL GPL-2"
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="http://www.postgresql.org/"
 
-IUSE="bagger doc kerberos kernel_linux ldap libressl ltree nls pam perl python +readline
-	  selinux +server systemd ssl static-libs tcl +threads uuid xml zlib"
+IUSE="bagger debug doc icu kerberos kernel_linux ldap libressl llvm nls pam
+	  perl python +readline selinux +server systemd ssl static-libs tcl
+	  +threads uuid xml zlib"
+
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
-
-wanted_languages() {
-	local linguas="af cs de en es fa fr hr hu it ko nb pl pt_BR ro ru
-		sk sl sv tr zh_CN zh_TW"
-	local enable_langs lingua
-
-	for lingua in ${linguas} ; do
-		has ${lingua} ${LINGUAS-${lingua}} && enable_langs+="${lingua} "
-	done
-
-	echo -n ${enable_langs}
-}
 
 CDEPEND="
 >=app-eselect/eselect-postgresql-2.0
@@ -43,8 +36,13 @@ acct-group/postgres
 acct-user/postgres
 sys-apps/less
 virtual/libintl
+icu? ( dev-libs/icu:= )
 kerberos? ( virtual/krb5 )
 ldap? ( net-nds/openldap )
+llvm? (
+	sys-devel/llvm:=
+	sys-devel/clang:=
+)
 pam? ( sys-libs/pam )
 perl? ( >=dev-lang/perl-5.8:= )
 python? ( ${PYTHON_DEPS} )
@@ -104,14 +102,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}/${PN}-wo-ltree.patch"
-	# ^^ wo-ltree patches configure.in
-	eautoconf
-	eautoheader
-
-	# Work around PPC{,64} compilation bug where bool is already defined
-	sed '/#ifndef __cplusplus/a #undef bool' -i src/include/c.h || die
-
 	# Set proper run directory
 	sed "s|\(PGSOCKET_DIR\s\+\)\"/tmp\"|\1\"${EPREFIX}/run/postgresql\"|" \
 		-i src/include/pg_config_manual.h || die
@@ -121,16 +111,16 @@ src_prepare() {
 	# hardened and non-hardened environments. (Bug #528786)
 	sed 's/@install_bin@/install -c/' -i src/Makefile.global.in || die
 
-	use server || eapply "${FILESDIR}/${PN}-10.2-no-server.patch"
+	use server || eapply "${FILESDIR}/${PN}-12.1-no-server.patch"
 
 	if use pam ; then
-		sed -e "s/\(#define PGSQL_PAM_SERVICE \"postgresql\)/\1-${SLOT}/" \
+		sed "s/\(#define PGSQL_PAM_SERVICE \"postgresql\)/\1-${SLOT}/" \
 			-i src/backend/libpq/auth.c || \
 			die 'PGSQL_PAM_SERVICE rename failed.'
 	fi
 
 	# bagger
-	use bagger && epatch "${FILESDIR}/index.patch"
+	use bagger && eapply "${FILESDIR}/eapply_index.patch"
 
 	eapply_user
 }
@@ -167,10 +157,12 @@ src_configure() {
 		--sysconfdir="${PO}/etc/postgresql-${SLOT}" \
 		--with-system-tzdata="${PO}/usr/share/zoneinfo" \
 		$(use_enable !alpha spinlocks) \
+		$(use_enable debug) \
 		$(use_enable threads thread-safety) \
+		$(use_with icu) \
 		$(use_with kerberos gssapi) \
 		$(use_with ldap) \
-		$(use_with ltree) \
+		$(use_with llvm) \
 		$(use_with pam) \
 		$(use_with perl) \
 		$(use_with python) \
@@ -182,7 +174,7 @@ src_configure() {
 		$(use_with xml libxml) \
 		$(use_with xml libxslt) \
 		$(use_with zlib) \
-		"$(use_enable nls nls "$(wanted_languages)")"
+		$(use_enable nls nls "'$(l10n_get_locales)'")
 }
 
 src_compile() {
@@ -194,7 +186,7 @@ src_install() {
 	emake DESTDIR="${D}" install
 	emake DESTDIR="${D}" install -C contrib
 
-	dodoc README HISTORY doc/{TODO,bug.template}
+	dodoc README HISTORY
 
 	# man pages are already built, but if we have the target make them,
 	# they'll be generated from source before being installed so we
@@ -249,14 +241,12 @@ src_install() {
 		find "${ED}" -name '*.a' ! -name libpgport.a ! -name libpgcommon.a \
 			 -delete
 
+	# Make slot specific links to programs
 	local f bn
 	for f in $(find "${ED}/usr/$(get_libdir)/postgresql-${SLOT}/bin" \
 					-mindepth 1 -maxdepth 1)
 	do
 		bn=$(basename "${f}")
-		# Temporarily tack on tmp to workaround a file collision
-		# issue. This is only necessary for 9.7 and earlier. 10 never
-		# had this issue.
 		dosym "../$(get_libdir)/postgresql-${SLOT}/bin/${bn}" \
 			  "/usr/bin/${bn}${SLOT/.}"
 	done
@@ -315,6 +305,14 @@ pkg_postinst() {
 		elog "Then, execute the following command to setup the initial database"
 		elog "environment:"
 		elog "    emerge --config =${CATEGORY}/${PF}"
+
+		if [[ -n ${REPLACING_VERSIONS} ]] ; then
+			ewarn "If your system is using 'pg_stat_statements' and you are running a"
+			ewarn "version of PostgreSQL ${SLOT}, we advise that you execute"
+			ewarn "the following command after upgrading:"
+			ewarn
+			ewarn "ALTER EXTENSION pg_stat_statements UPDATE;"
+		fi
 	fi
 }
 
@@ -397,9 +395,9 @@ pkg_config() {
 
 	einfo "Creating the data directory ..."
 	if [[ ${EUID} == 0 ]] ; then
-		mkdir -p "${DATA_DIR}"
-		chown -Rf postgres:postgres "${DATA_DIR}"
-		chmod 0700 "${DATA_DIR}"
+		mkdir -p "$(dirname ${DATA_DIR%/})" || die "Couldn't parent dirs"
+		mkdir -m 0700 "${DATA_DIR%/}" || die "Couldn't make DATA_DIR"
+		chown -h postgres:postgres "${DATA_DIR%/}" || die "Couldn't chown"
 	fi
 
 	einfo "Initializing the database ..."
