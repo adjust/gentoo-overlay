@@ -7,7 +7,7 @@ RESTRICT="mirror"
 
 KEYWORDS="~amd64"
 HOMEPAGE="https://github.com/adjust/gentoo-overlay"
-SLOT="${PV}"
+SLOT="$(ver_cut 1-2)"
 LICENSE="GPL-2 freedist"
 
 DESCRIPTION="Prebuilt gentoo kernel image with genkernel initramfs"
