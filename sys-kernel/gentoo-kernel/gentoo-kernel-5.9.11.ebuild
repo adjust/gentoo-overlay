@@ -3,6 +3,8 @@
 
 EAPI="5"
 
+RESTRICT="mirror"
+
 KEYWORDS="~amd64"
 HOMEPAGE="https://github.com/adjust/gentoo-overlay"
 SLOT="${PV}"
