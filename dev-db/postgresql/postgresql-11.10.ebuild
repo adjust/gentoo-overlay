@@ -1,9 +1,9 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="6"
 
-PYTHON_COMPAT=( python3_{6,7} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 PLOCALES="af cs de en es fa fr hr hu it ko nb pl pt_BR ro ru sk sl sv tr zh_CN
 		 zh_TW"
