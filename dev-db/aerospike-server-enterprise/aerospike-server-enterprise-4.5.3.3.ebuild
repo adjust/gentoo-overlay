@@ -66,6 +66,8 @@ src_install() {
 		doins "${FILESDIR}/${conf}"
 	done
 
+	newconfd "${FILESDIR}/aerospike" aerospike
+
 	insinto /usr/bin
 	doins usr/bin/*
 	fperms +x -R /usr/bin/asd
@@ -73,7 +75,7 @@ src_install() {
 	insinto /etc/logrotate.d
 	newins "${FILESDIR}"/aerospike.logrotate aerospike
 
-	newinitd "${FILESDIR}"/aerospike.init2 aerospike
+	newinitd "${FILESDIR}"/aerospike.init3 aerospike
 
 	fowners -R aerospike:aerospike /opt/aerospike/
 	fowners aerospike:aerospike /usr/bin/asd
