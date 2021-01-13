@@ -5,12 +5,12 @@ EAPI=7
 
 inherit golang-base user
 
-EGO_PN="github.com/lomik/go-carbon"
+EGO_PN="github.com/go-graphite/go-carbon"
 SRC_URI="https://${EGO_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 KEYWORDS="~amd64"
 
 DESCRIPTION="carbon-cache replacement written in go"
-HOMEPAGE="https://github.com/lomik/go-carbon"
+HOMEPAGE="https://github.com/go-graphite/go-carbon"
 LICENSE="MIT"
 SLOT="0"
 IUSE=""
