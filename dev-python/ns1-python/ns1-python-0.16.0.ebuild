@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_8 )
 
 inherit distutils-r1
 
@@ -16,7 +16,6 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 DEPEND="
-	dev-python/pytest-runner[${PYTHON_USEDEP}]
 	dev-python/wheel[${PYTHON_USEDEP}]
 "
 
