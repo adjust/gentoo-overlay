@@ -12,10 +12,10 @@ SRC_URI="https://github.com/spotify/luigi/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="amd64"
+KEYWORDS="~amd64"
 IUSE=""
 
-RDEPEND="=www-servers/tornado-4*
+RDEPEND="www-servers/tornado
 	<dev-python/python-daemon-3.0"
 
 python_install() {
