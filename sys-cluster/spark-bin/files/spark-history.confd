@@ -1,5 +1,5 @@
 # Apache Spark History conf.d file.
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # Web UI port.
@@ -16,6 +16,12 @@ SPARK_HISTORY_UPDATE_INTERVAL="10s"
 
 # Spark History class.
 SPARK_HISTORY_CLASS="org.apache.spark.deploy.history.HistoryServer"
+
+# User account the Spark History process runs as.
+SPARK_HISTORY_USER="spark"
+
+# Group the Spark History process runs as.
+SPARK_HISTORY_GROUP="spark"
 
 # Spark History server arguments.
 # See https://github.com/apache/spark/blob/master/core/src/main/scala/org/apache/spark/deploy/history/HistoryServerArguments.scala#L65

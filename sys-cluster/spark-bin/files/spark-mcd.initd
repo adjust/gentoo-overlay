@@ -1,5 +1,5 @@
 #!/sbin/openrc-run
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 export JAVA_HOME="/etc/java-config-2/current-system-vm"
@@ -10,11 +10,18 @@ name="Spark Mesos Cluster Dispatcher"
 command="/opt/spark-2/bin/spark-class"
 command_args="${SPARK_MCD_CLASS} ${SPARK_MCD_ARGS}"
 command_background="true"
-start_stop_daemon_args="--user warden --group warden"
+start_stop_daemon_args="--user ${SPARK_MCD_USER} --group ${SPARK_MCD_GROUP}"
 pidfile="/var/run/${RC_SVCNAME}.pid"
 stdout_log="${SPARK_MCD_LOG_FILE}"
 error_log="${SPARK_MCD_LOG_FILE}"
 
 depend() {
     use net
+}
+
+start_pre() {
+    local SPARK_MCD_LOG_DIR=$(dirname ${SPARK_MCD_LOG_FILE})
+    checkpath -m 0755 \
+        -o "${SPARK_MCD_USER}:${SPARK_MCD_GROUP}" \
+        -d "${SPARK_MCD_LOG_DIR}"
 }
