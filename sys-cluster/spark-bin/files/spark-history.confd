@@ -5,8 +5,14 @@
 # Web UI port.
 SPARK_HISTORY_PORT="18080"
 
+# User account the Spark History process runs as.
+SPARK_HISTORY_USER="spark"
+
+# Group the Spark History process runs as.
+SPARK_HISTORY_GROUP="spark"
+
 # Server log.
-SPARK_HISTORY_LOG_FILE="/var/log/warden/spark-history.log"
+SPARK_HISTORY_LOG_FILE="/var/log/${SPARK_HISTORY_USER}/spark-history.log"
 
 # Events directory.
 SPARK_HISTORY_EVENTS_DIRECTORY="/var/spark/history"
@@ -16,12 +22,6 @@ SPARK_HISTORY_UPDATE_INTERVAL="10s"
 
 # Spark History class.
 SPARK_HISTORY_CLASS="org.apache.spark.deploy.history.HistoryServer"
-
-# User account the Spark History process runs as.
-SPARK_HISTORY_USER="spark"
-
-# Group the Spark History process runs as.
-SPARK_HISTORY_GROUP="spark"
 
 # Spark History server arguments.
 # See https://github.com/apache/spark/blob/master/core/src/main/scala/org/apache/spark/deploy/history/HistoryServerArguments.scala#L65

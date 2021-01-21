@@ -11,17 +11,17 @@ SPARK_MCD_MASTER_PORT="5050"
 # Mesos cluster hostname.
 SPARK_MCD_HOSTNAME="mesos-master.example.com"
 
-# Mesos cluster port.
-SPARK_MCD_PORT="7077"
-
-# Mesos cluster log file.
-SPARK_MCD_LOG_FILE="/var/log/warden/spark-mcd.log"
-
 # User account the Spark MCD process runs as.
 SPARK_MCD_USER="spark"
 
 # Group the Spark MCD process runs as.
 SPARK_MCD_GROUP="spark"
+
+# Mesos cluster port.
+SPARK_MCD_PORT="7077"
+
+# Mesos cluster log file.
+SPARK_MCD_LOG_FILE="/var/log/${SPARK_MCD_USER}/spark-mcd.log"
 
 # Mesos cluster class.
 SPARK_MCD_CLASS="org.apache.spark.deploy.mesos.MesosClusterDispatcher"
