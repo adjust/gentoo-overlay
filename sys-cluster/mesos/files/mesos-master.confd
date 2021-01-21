@@ -1,5 +1,5 @@
 # Apache Mesos master node conf.d file.
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # Mesos master node IP.
@@ -16,11 +16,17 @@ ZOOKEEPER_PORT="2181"
 # Default cluster name.
 MESOS_MASTER_CLUSTER_NAME="'Apache Mesos cluster'"
 
+# User account the Mesos master process runs as.
+MESOS_MASTER_USER="warden"
+
+# Group the Mesos master process runs as.
+MESOS_MASTER_GROUP="warden"
+
 # Default working directory.
-MESOS_MASTER_WORK_DIR="/var/lib/warden/mesos"
+MESOS_MASTER_WORK_DIR="/var/lib/${MESOS_MASTER_USER}/mesos"
 
 # Default log file.
-MESOS_MASTER_LOG_FILE="/var/log/warden/mesos-master.log"
+MESOS_MASTER_LOG_FILE="/var/log/${MESOS_MASTER_USER}/mesos-master.log"
 
 # Default log level.
 # Possible values: `INFO`, `WARNING`, `ERROR`.
