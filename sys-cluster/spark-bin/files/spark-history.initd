@@ -24,4 +24,7 @@ start_pre() {
     checkpath -m 0755 \
         -o "${SPARK_HISTORY_USER}:${SPARK_HISTORY_GROUP}" \
         -d "${SPARK_HISTORY_LOG_DIR}"
+    checkpath -m 0755 \
+        -o "${SPARK_HISTORY_USER}:${SPARK_HISTORY_GROUP}" \
+        -d "${SPARK_HISTORY_EVENTS_DIRECTORY}"
 }
