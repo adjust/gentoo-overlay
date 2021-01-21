@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # JVM options.
@@ -11,11 +11,17 @@ ZOOKEEPER_HOST="example.com"
 # Default port is 2181.
 ZOOKEEPER_PORT="2181"
 
+# User account the Chronos process runs as.
+CHRONOS_USER="chronos"
+
+# Group the Chronos process runs as.
+CHRONOS_GROUP="chronos"
+
 # Chronos JAR file location.
 CHRONOS_JAR="/usr/share/chronos-bin/lib/chronos-bin.jar"
 
 # Chronos log file.
-CHRONOS_LOG_FILE="/var/log/warden/chronos.log"
+CHRONOS_LOG_FILE="/var/log/${CHRONOS_USER}/chronos.log"
 
 # Chronos main method.
 CHRONOS_MAIN="org.apache.mesos.chronos.scheduler.Main"
