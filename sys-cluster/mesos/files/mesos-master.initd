@@ -9,7 +9,7 @@ command_args="${MESOS_MASTER_ARGS}"
 command_background="true"
 start_stop_daemon_args="--user ${MESOS_MASTER_USER} --group ${MESOS_MASTER_GROUP}"
 pidfile="/var/run/${RC_SVCNAME}.pid"
-stdout_log="${MESOS_MASTER_LOG_FILE}"
+output_log="${MESOS_MASTER_LOG_FILE}"
 error_log="${MESOS_MASTER_LOG_FILE}"
 
 depend() {

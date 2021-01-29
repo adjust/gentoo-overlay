@@ -12,7 +12,7 @@ command_args="${SPARK_MCD_CLASS} ${SPARK_MCD_ARGS}"
 command_background="true"
 start_stop_daemon_args="--user ${SPARK_MCD_USER} --group ${SPARK_MCD_GROUP}"
 pidfile="/var/run/${RC_SVCNAME}.pid"
-stdout_log="${SPARK_MCD_LOG_FILE}"
+output_log="${SPARK_MCD_LOG_FILE}"
 error_log="${SPARK_MCD_LOG_FILE}"
 
 depend() {

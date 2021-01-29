@@ -12,7 +12,7 @@ command_args="${SPARK_HISTORY_ARGS} ${SPARK_HISTORY_CLASS}"
 command_background="true"
 start_stop_daemon_args="--user ${SPARK_HISTORY_USER} --group ${SPARK_HISTORY_GROUP}"
 pidfile="/var/run/${RC_SVCNAME}.pid"
-stdout_log="${SPARK_HISTORY_LOG_FILE}"
+output_log="${SPARK_HISTORY_LOG_FILE}"
 error_log="${SPARK_HISTORY_LOG_FILE}"
 
 depend() {
