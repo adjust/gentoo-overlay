@@ -4,9 +4,9 @@
 EAPI=7
 
 # Python is required for tests and some build tasks.
-PYTHON_COMPAT=( python2_7 )
+#PYTHON_COMPAT=( python2_7 )
 CMAKE_ECLASS=cmake
-inherit cmake-multilib python-any-r1
+inherit cmake-multilib # python-any-r1
 
 if [[ ${PV} == "9999" ]]; then
 	inherit git-r3
@@ -25,7 +25,7 @@ SLOT="0"
 IUSE="doc examples test"
 RESTRICT="!test? ( test )"
 
-DEPEND="test? ( ${PYTHON_DEPS} )"
+#DEPEND="test? ( ${PYTHON_DEPS} )"
 RDEPEND="!dev-cpp/gmock"
 
 PATCHES=(
@@ -33,9 +33,9 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-1.8.0-increase-clone-stack-size.patch
 )
 
-pkg_setup() {
-	use test && python-any-r1_pkg_setup
-}
+#pkg_setup() {
+#	use test && python-any-r1_pkg_setup
+#}
 
 src_prepare() {
 	cmake_src_prepare
