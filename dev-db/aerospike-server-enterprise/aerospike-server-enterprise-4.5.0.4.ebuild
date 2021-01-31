@@ -2,8 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-PYTHON_COMPAT=( python2_7 )
-inherit eutils python-single-r1 user
+inherit eutils user
 
 DESCRIPTION="Flash-optimized, in-memory, nosql database"
 HOMEPAGE="http://www.aerospike.com"
@@ -15,6 +14,7 @@ IUSE=""
 SRC_URI="http://www.aerospike.com/artifacts/${PN}/${PV}/${P}-debian8.tgz"
 
 RDEPEND="!dev-db/aerospike-server-community
+	dev-lang/python:2.7
 	net-nds/openldap
 	sys-process/numactl
 	${PYTHON_DEPS}
@@ -78,5 +78,10 @@ src_install() {
 	fowners aerospike:aerospike /usr/bin/asd
 	fowners -R aerospike:aerospike /var/log/aerospike
 
-	python_fix_shebang opt/aerospike/bin
+	for i in  opt/aerospike/bin/*; do
+		echo $i
+		sed -i -e "1s: python$: python2:" $i
+		sed -i -e "1s:/usr/bin/python:/usr/bin/python2:" $i
+		head -n1 $i
+	done
 }
