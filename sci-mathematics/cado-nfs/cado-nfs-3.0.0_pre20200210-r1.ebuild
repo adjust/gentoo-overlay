@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python{2_7,3_4,3_5,3_6} )
+PYTHON_COMPAT=( python{3_6,3_7,3_8} )
 PYTHON_REQ_USE="sqlite"
 
 inherit eutils cmake-utils python-r1
