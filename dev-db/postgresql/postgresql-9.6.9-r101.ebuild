@@ -3,7 +3,7 @@
 
 EAPI="5"
 
-PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
+PYTHON_COMPAT=( python3_{4,5,6,7,8} )
 
 inherit autotools eutils flag-o-matic linux-info multilib pam prefix python-single-r1 \
 		systemd user eapi7-ver
