@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit cmake-utils
+inherit cmake
 
 DESCRIPTION="Apache Arrow and Parquet libraries"
 HOMEPAGE="https://arrow.apache.org"
@@ -15,7 +15,10 @@ SLOT="0"
 
 DEPEND="dev-libs/boost
 	dev-libs/thrift
-	dev-libs/rapidjson
+	|| (
+		dev-libs/rapidjson
+		sys-cluster/mesos
+	)
 	dev-libs/double-conversion
 	dev-libs/jemalloc
 	dev-cpp/gflags
@@ -45,5 +48,5 @@ src_configure() {
 		-DARROW_WITH_ZSTD=ON
 	)
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }
