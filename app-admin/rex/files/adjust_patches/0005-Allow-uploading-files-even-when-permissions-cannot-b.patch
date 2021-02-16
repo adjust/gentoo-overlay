@@ -1,0 +1,35 @@
+From 7cf37a10fd9c4899164fb72c8631118b252acd74 Mon Sep 17 00:00:00 2001
+From: Oleksii Kliukin <alexk@hintbits.com>
+Date: Thu, 18 Jun 2020 23:36:42 +0200
+Subject: [PATCH 1/2] Allow uploading files even when permissions cannot be
+ set.
+
+By default, the "file" function uses sftp to upload the target file to
+the server. During the upload, the Net::SFTP::Foreign runs chmod
+unconditionally, failing if the target file is not owned by the ssh
+user, unless that user is a root. This commit changes that behavior by
+passing an optional "best_effort" flag that instructs sftp to continue
+even if setting permissions has failed.
+
+As a result, an unprivileged user will be able to use Rex scenarios that
+call the "file" function without getting permission denied errors.
+---
+ lib/Rex/Interface/Fs/OpenSSH.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/Rex/Interface/Fs/OpenSSH.pm b/lib/Rex/Interface/Fs/OpenSSH.pm
+index 01eea665..b9ddaa84 100644
+--- a/lib/Rex/Interface/Fs/OpenSSH.pm
++++ b/lib/Rex/Interface/Fs/OpenSSH.pm
+@@ -142,7 +142,7 @@ sub upload {
+   Rex::Commands::profiler()->start("upload: $source -> $target");
+ 
+   my $sftp = Rex::get_sftp();
+-  unless ( $sftp->put( $source, $target ) ) {
++  unless ( $sftp->put( $source, $target, best_effort => 1) ) {
+     Rex::Logger::debug("upload: $target is not writable");
+ 
+     Rex::Commands::profiler()->end("upload: $source -> $target");
+-- 
+2.28.0
+

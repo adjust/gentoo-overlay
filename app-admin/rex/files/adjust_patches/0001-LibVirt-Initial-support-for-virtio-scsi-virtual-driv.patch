@@ -1,0 +1,72 @@
+From a2e15c2fdc17d9257afe66f54d57e2ebb7f53784 Mon Sep 17 00:00:00 2001
+From: Ali Polatel <alip@adjust.com>
+Date: Thu, 11 Apr 2019 14:49:14 +0200
+Subject: [PATCH 1/2] LibVirt: Initial support for virtio-scsi virtual drives
+ (read: ssd trim)
+
+1. Honour `driver_cache` and `driver_discard` keys in storage disk config.
+2. Add a SCSI controller if any of the storage disks have SCSI as the target bus.
+
+The SCSI model defaults to `virtio-scsi` and may be overriden by the
+`scsi_model` parameter.
+
+The second change is also a bug fix since without a SCSI controller
+configuration a VM with a virtual disk attached to a SCSI bus won't
+boot.
+---
+ lib/Rex/Virtualization/LibVirt/create.pm | 22 +++++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
+
+diff --git a/lib/Rex/Virtualization/LibVirt/create.pm b/lib/Rex/Virtualization/LibVirt/create.pm
+index 4f0776fa..956f73d9 100644
+--- a/lib/Rex/Virtualization/LibVirt/create.pm
++++ b/lib/Rex/Virtualization/LibVirt/create.pm
+@@ -329,11 +329,15 @@ sub _set_storage_defaults {
+           function => "0x0",
+         };
+       }
+-      elsif ( $store->{"bus"} eq "ide" && !exists $store->{"address"} ) {
++      elsif (
++        ( $store->{"bus"} =~ /\Aide|scsi\Z/ && !exists $store->{"address"} ) )
++      {
++ # The scsi conditional for the bus works around this error during virsh define:
++ # error: internal error: SCSI controller only supports 1 bus
+         $store->{"address"} = {
+           type       => "drive",
+           controller => 0,
+-          bus        => 1,
++          bus        => $store->{"bus"} eq "scsi" ? 0 : 1,
+           unit       => 0,
+         };
+       }
+@@ -444,7 +448,14 @@ __DATA__
+ 
+    <% for my $disk (@{$::storage}) { %>
+    <disk type="<%= $disk->{type} %>" device="<%= $disk->{device} %>">
+-    <driver name="qemu" type="<%= $disk->{driver_type} %>"/>
++    <driver name="qemu" type="<%= $disk->{driver_type} %>"
++      <% if(exists $disk->{driver_cache}) { %>
++        cache="<%= $disk->{driver_cache} %>"
++      <% } %>
++      <% if(exists $disk->{driver_discard}) { %>
++        discard="<%= $disk->{driver_discard} %>"
++      <% } %>
++    />
+     <% if ($disk->{type} eq "file") { %>
+     <source file="<%= $disk->{file} %>"/>
+     <% } elsif ($disk->{file} eq "block") { %>
+@@ -460,6 +471,11 @@ __DATA__
+    <controller type="ide" index="0">
+     <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x1"/>
+    </controller>
++   <% if (grep { exists($_->{bus}) && $_->{bus} =~ /scsi/ } @{$::storage}) { %>
++   <controller type='scsi' index='0' model='<%= $::scsi_model // 'virtio-scsi' %>'>
++     <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
++   </controller>
++   <% } %>
+    <% for my $netdev (@{$::network}) { %>
+    <interface type="<%= $netdev->{type} %>">
+     <% if(exists $netdev->{mac}) { %>
+-- 
+2.28.0
+

@@ -1,0 +1,80 @@
+From 0ed1472c8581960d58ce10f8015bbf93742a7d1e Mon Sep 17 00:00:00 2001
+From: "Max E. Aubrey" <max@adjust.com>
+Date: Mon, 15 Jul 2019 10:07:32 +0200
+Subject: [PATCH] Shell.pm: add iLO support
+
+---
+ lib/Rex/Interface/Shell.pm     |  1 +
+ lib/Rex/Interface/Shell/Ilo.pm | 47 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 48 insertions(+)
+ create mode 100644 lib/Rex/Interface/Shell/Ilo.pm
+
+diff --git a/lib/Rex/Interface/Shell.pm b/lib/Rex/Interface/Shell.pm
+index c11416d5..c10d78bc 100644
+--- a/lib/Rex/Interface/Shell.pm
++++ b/lib/Rex/Interface/Shell.pm
+@@ -19,6 +19,7 @@ my %SHELL_PROVIDER = (
+   bash  => "Rex::Interface::Shell::Bash",
+   csh   => "Rex::Interface::Shell::Csh",
+   idrac => "Rex::Interface::Shell::Idrac",
+   idrac4 => "Rex::Interface::Shell::Idrac4",
++  ilo   => "Rex::Interface::Shell::Ilo",
+   ksh   => "Rex::Interface::Shell::Ksh",
+   sh    => "Rex::Interface::Shell::Sh",
+   tcsh  => "Rex::Interface::Shell::Tcsh",
+diff --git a/lib/Rex/Interface/Shell/Ilo.pm b/lib/Rex/Interface/Shell/Ilo.pm
+new file mode 100644
+index 00000000..8267ce66
+--- /dev/null
++++ b/lib/Rex/Interface/Shell/Ilo.pm
+@@ -0,0 +1,47 @@
++#
++# (c) Ferenc Erki <erkiferenc@gmail.com>, adjust GmbH
++#
++# vim: set ts=2 sw=2 tw=0:
++# vim: set expandtab:
++
++package Rex::Interface::Shell::Ilo;
++
++use strict;
++use warnings;
++
++# VERSION
++
++use Rex::Interface::Shell::Default;
++use base qw(Rex::Interface::Shell::Default);
++
++sub new {
++  my $class = shift;
++  my $proto = ref($class) || $class;
++  my $self  = $proto->SUPER::new(@_);
++
++  bless( $self, $class );
++
++  return $self;
++}
++
++sub detect {
++  my ( $self, $con ) = @_;
++
++  my ($output);
++  eval {
++    ($output) = $con->direct_exec('version');
++    1;
++  };
++  if ( $output && $output =~ m/SM-CLP Version/ ) {
++    return 1;
++  }
++
++  return 0;
++}
++
++sub exec {
++  my ( $self, $cmd, $option ) = @_;
++  return $cmd;
++}
++
++1;
+-- 
+2.28.0
+

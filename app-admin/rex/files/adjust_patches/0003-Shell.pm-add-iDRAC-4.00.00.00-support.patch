@@ -1,0 +1,79 @@
+From 0e0711c19c3d7518b591a0575fccf93cc69b9a7e Mon Sep 17 00:00:00 2001
+From: "Maxine E. Aubrey" <max@adjust.com>
+Date: Tue, 17 Mar 2020 11:36:28 +0100
+Subject: [PATCH] Shell.pm: add iDRAC 4.00.00.00 support
+
+---
+ lib/Rex/Interface/Shell.pm        |  1 +
+ lib/Rex/Interface/Shell/Idrac4.pm | 47 +++++++++++++++++++++++++++++++
+ 2 files changed, 48 insertions(+)
+ create mode 100644 lib/Rex/Interface/Shell/Idrac4.pm
+
+diff --git a/lib/Rex/Interface/Shell.pm b/lib/Rex/Interface/Shell.pm
+index c11416d5..d9480910 100644
+--- a/lib/Rex/Interface/Shell.pm
++++ b/lib/Rex/Interface/Shell.pm
+@@ -19,6 +19,7 @@ my %SHELL_PROVIDER = (
+   bash  => "Rex::Interface::Shell::Bash",
+   csh   => "Rex::Interface::Shell::Csh",
+   idrac => "Rex::Interface::Shell::Idrac",
++  idrac4 => "Rex::Interface::Shell::Idrac4",
+   ksh   => "Rex::Interface::Shell::Ksh",
+   sh    => "Rex::Interface::Shell::Sh",
+   tcsh  => "Rex::Interface::Shell::Tcsh",
+diff --git a/lib/Rex/Interface/Shell/Idrac4.pm b/lib/Rex/Interface/Shell/Idrac4.pm
+new file mode 100644
+index 00000000..7454f4a8
+--- /dev/null
++++ b/lib/Rex/Interface/Shell/Idrac4.pm
+@@ -0,0 +1,47 @@
++#
++# (c) Ferenc Erki <erkiferenc@gmail.com>, adjust GmbH
++#
++# vim: set ts=2 sw=2 tw=0:
++# vim: set expandtab:
++
++package Rex::Interface::Shell::Idrac4;
++
++use strict;
++use warnings;
++
++# VERSION
++
++use Rex::Interface::Shell::Default;
++use base qw(Rex::Interface::Shell::Default);
++
++sub new {
++  my $class = shift;
++  my $proto = ref($class) || $class;
++  my $self  = $proto->SUPER::new(@_);
++
++  bless( $self, $class );
++
++  return $self;
++}
++
++sub detect {
++  my ( $self, $con ) = @_;
++
++  my ($output);
++  eval {
++    ($output) = $con->direct_exec('racadm getversion');
++    1;
++  };
++  if ( $output && $output =~ m/iDRAC Version/ ) {
++    return 1;
++  }
++
++  return 0;
++}
++
++sub exec {
++  my ( $self, $cmd, $option ) = @_;
++  return $cmd;
++}
++
++1;
+-- 
+2.28.0
+
