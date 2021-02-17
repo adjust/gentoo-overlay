@@ -20,7 +20,7 @@ LICENSE="POSTGRESQL GPL-2"
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="https://www.postgresql.org/"
 
-IUSE="debug doc icu kerberos kernel_linux ldap libressl nls pam perl
+IUSE="bagger debug doc icu kerberos kernel_linux ldap libressl nls pam perl
 	  python +readline selinux +server systemd ssl static-libs tcl
 	  threads uuid xml zlib"
 
@@ -109,6 +109,11 @@ src_prepare() {
 			-i src/backend/libpq/auth.c || \
 			die 'PGSQL_PAM_SERVICE rename failed.'
 	fi
+
+        # bagger
+        if use bagger ; then
+                eapply "${FILESDIR}"/${PN}-10.0-index.patch
+        fi
 
 	# https://bugs.gentoo.org/753257
 	eapply "${FILESDIR}"/postgresql-10.0-icu68.patch
