@@ -20,7 +20,7 @@ LICENSE="POSTGRESQL GPL-2"
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="https://www.postgresql.org/"
 
-IUSE="bagger debug doc kerberos kernel_linux ldap libressl ltree nls pam perl
+IUSE="bagger cassert debug doc kerberos kernel_linux ldap libressl ltree nls pam perl
 	  -pg-legacytimestamp python +readline selinux +server systemd ssl
 	  static-libs tcl threads uuid xml zlib"
 
@@ -156,6 +156,7 @@ src_configure() {
 		--sysconfdir="${PO}/etc/postgresql-${SLOT}" \
 		--with-system-tzdata="${PO}/usr/share/zoneinfo" \
 		$(use_enable !alpha spinlocks) \
+		$(use_enable cassert) \
 		$(use_enable !pg-legacytimestamp integer-datetimes) \
 		$(use_enable debug) \
 		$(use_enable threads thread-safety) \

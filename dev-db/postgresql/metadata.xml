@@ -10,6 +10,9 @@
 			Extend indexes to 64 per table for bagger. Incompatible
 			change to on-disk format.
 		</flag>
+		<flag name="cassert">
+			Enable assertion checks (for debugging)
+		</flag>
 		<flag name="llvm">
 			Add support for llvm JIT engine
 		</flag>
