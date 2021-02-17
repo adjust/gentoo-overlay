@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{7,8,9} )
 
 inherit autotools flag-o-matic linux-info multilib pam prefix python-single-r1 systemd
 
-KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~mips ppc ppc64 ~s390 sparc x86 ~ppc-macos ~x86-solaris"
+KEYWORDS="amd64"
 
 SLOT=$(ver_cut 1)
 
