@@ -1,17 +1,16 @@
-diff -Naruw a/contrib/Makefile b/contrib/Makefile
---- a/contrib/Makefile	2016-10-24 16:08:51.000000000 -0400
-+++ b/contrib/Makefile	2016-10-28 11:41:00.450589656 -0400
-@@ -5,58 +5,9 @@
+--- a/contrib/Makefile
++++ b/contrib/Makefile
+@@ -5,56 +5,9 @@
  include $(top_builddir)/src/Makefile.global
  
  SUBDIRS = \
 -		adminpack	\
+-		amcheck		\
 -		auth_delay	\
 -		auto_explain	\
 -		bloom		\
 -		btree_gin	\
 -		btree_gist	\
--		chkpass		\
 -		citext		\
 -		cube		\
 -		dblink		\
@@ -47,7 +46,6 @@ diff -Naruw a/contrib/Makefile b/contrib/Makefile
 -		test_decoding	\
 -		tsm_system_rows \
 -		tsm_system_time \
--		tsearch2	\
 -		unaccent	\
  		vacuumlo
  
@@ -56,58 +54,71 @@ diff -Naruw a/contrib/Makefile b/contrib/Makefile
 -else
 -ALWAYS_SUBDIRS += sslinfo
 -endif
--
+ 
  ifneq ($(with_uuid),no)
  SUBDIRS += uuid-ossp
- else
-diff -Naruw a/src/backend/Makefile b/src/backend/Makefile
---- a/src/backend/Makefile	2016-10-24 16:08:51.000000000 -0400
-+++ b/src/backend/Makefile	2016-10-28 11:48:58.571353118 -0400
-@@ -51,7 +51,7 @@
+--- a/src/backend/Makefile
++++ b/src/backend/Makefile
+@@ -53,7 +53,7 @@
  
  ##########################################################################
  
--all: submake-libpgport submake-schemapg postgres $(POSTGRES_IMP)
-+all: someheaders
+-all: submake-libpgport submake-catalog-headers submake-utils-headers postgres $(POSTGRES_IMP)
++all: generated-headers
  
  ifneq ($(PORTNAME), cygwin)
  ifneq ($(PORTNAME), win32)
-@@ -110,7 +110,7 @@
- endif # aix
+@@ -192,23 +192,7 @@
  
- # Update the commonly used headers before building the subdirectories
--$(SUBDIRS:%=%-recursive): | generated-headers
-+someheaders $(SUBDIRS:%=%-recursive): | generated-headers
+ ##########################################################################
  
- # src/port needs a convenient way to force just errcodes.h to get built
- submake-errcodes: $(top_builddir)/src/include/utils/errcodes.h
-diff -Naruw a/src/bin/Makefile b/src/bin/Makefile
---- a/src/bin/Makefile	2016-10-24 16:08:51.000000000 -0400
-+++ b/src/bin/Makefile	2016-10-28 11:42:26.000129832 -0400
-@@ -14,19 +14,8 @@
+-install: all installdirs install-bin
+-ifeq ($(PORTNAME), cygwin)
+-ifeq ($(MAKE_DLL), true)
+-	$(INSTALL_DATA) libpostgres.a '$(DESTDIR)$(libdir)/libpostgres.a'
+-endif
+-endif
+-ifeq ($(PORTNAME), win32)
+-ifeq ($(MAKE_DLL), true)
+-	$(INSTALL_DATA) libpostgres.a '$(DESTDIR)$(libdir)/libpostgres.a'
+-endif
+-endif
+-	$(MAKE) -C catalog install-data
+-	$(MAKE) -C tsearch install-data
+-	$(MAKE) -C utils install-data
+-	$(INSTALL_DATA) $(srcdir)/libpq/pg_hba.conf.sample '$(DESTDIR)$(datadir)/pg_hba.conf.sample'
+-	$(INSTALL_DATA) $(srcdir)/libpq/pg_ident.conf.sample '$(DESTDIR)$(datadir)/pg_ident.conf.sample'
+-	$(INSTALL_DATA) $(srcdir)/utils/misc/postgresql.conf.sample '$(DESTDIR)$(datadir)/postgresql.conf.sample'
++install:
+ 
+ ifeq ($(with_llvm), yes)
+ install-bin: install-postgres-bitcode
+--- a/src/bin/Makefile
++++ b/src/bin/Makefile
+@@ -14,20 +14,8 @@
  include $(top_builddir)/src/Makefile.global
  
  SUBDIRS = \
 -	initdb \
 -	pg_archivecleanup \
 -	pg_basebackup \
+-	pg_checksums \
  	pg_config \
 -	pg_controldata \
 -	pg_ctl \
  	pg_dump \
--	pg_resetxlog \
+-	pg_resetwal \
 -	pg_rewind \
 -	pg_test_fsync \
 -	pg_test_timing \
 -	pg_upgrade \
--	pg_xlogdump \
+-	pg_waldump \
  	pgbench \
  	psql \
  	scripts
-diff -Naruw a/src/Makefile b/src/Makefile
---- a/src/Makefile	2016-10-24 16:08:51.000000000 -0400
-+++ b/src/Makefile	2016-10-28 11:41:00.453922971 -0400
-@@ -15,19 +15,11 @@
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -15,21 +15,12 @@
  SUBDIRS = \
  	common \
  	port \
@@ -118,13 +129,15 @@ diff -Naruw a/src/Makefile b/src/Makefile
  	include \
  	interfaces \
 -	backend/replication/libpqwalreceiver \
--	fe_utils \
+-	backend/replication/pgoutput \
+ 	fe_utils \
  	bin \
 -	pl \
 -	makefiles \
 -	test/regress \
+-	test/isolation \
 -	test/perl
 +	makefiles
  
- # There are too many interdependencies between the subdirectories, so
- # don't attempt parallel make here.
+ ifeq ($(with_llvm), yes)
+ SUBDIRS += backend/jit/llvm
