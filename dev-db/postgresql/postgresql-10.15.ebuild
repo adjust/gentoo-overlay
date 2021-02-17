@@ -5,7 +5,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{7,8,9} )
 
-inherit flag-o-matic linux-info multilib pam prefix python-single-r1 systemd
+inherit autotools flag-o-matic linux-info multilib pam prefix python-single-r1 systemd
 
 KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~mips ppc ppc64 ~s390 sparc x86 ~ppc-macos ~x86-solaris"
 
@@ -20,7 +20,7 @@ LICENSE="POSTGRESQL GPL-2"
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="https://www.postgresql.org/"
 
-IUSE="bagger debug doc icu kerberos kernel_linux ldap libressl nls pam perl
+IUSE="bagger debug doc icu kerberos kernel_linux ldap libressl ltree nls pam perl
 	  python +readline selinux +server systemd ssl static-libs tcl
 	  threads uuid xml zlib"
 
@@ -90,6 +90,14 @@ pkg_setup() {
 }
 
 src_prepare() {
+
+        # make ltree optional
+        eapply "${FILESDIR}/${PN}-9.6-wo-ltree.patch"
+
+        # ^^ wo-ltree patches configure.in
+        eautoconf
+        eautoheader
+
 	# Work around PPC{,64} compilation bug where bool is already defined
 	sed '/#ifndef __cplusplus/a #undef bool' -i src/include/c.h || die
 
@@ -157,6 +165,7 @@ src_configure() {
 		$(use_with icu) \
 		$(use_with kerberos gssapi) \
 		$(use_with ldap) \
+		$(use_with ltree) \
 		$(use_with pam) \
 		$(use_with perl) \
 		$(use_with python) \
