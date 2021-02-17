@@ -22,7 +22,7 @@ HOMEPAGE="https://www.postgresql.org/"
 
 IUSE="bagger cassert debug doc icu kerberos kernel_linux ldap libressl ltree nls pam perl
 	  python +readline selinux +server systemd ssl static-libs tcl
-	  threads uuid xml zlib"
+	  +threads uuid xml zlib"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
