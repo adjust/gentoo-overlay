@@ -1,0 +1,57 @@
+diff -ur nmis4.3.7c/install/nmis.conf nmis4.3.7c/install/nmis.conf
+--- nmis4.3.7c/install/nmis.conf	2016-06-08 11:43:37.000000000 +0200
++++ nmis4.3.7c/install/nmis.conf	2017-09-14 14:43:45.756964220 +0200
+@@ -84,9 +84,13 @@
+ username=nmis
+ fileperm=0775
+ #
+-# MySQL DB location and permissions
++# SQL DB location and permissions
++# Available values for SQL Drivers are declared by system:
++# perl -mDBI -e 'print join "\n", DBI->available_drivers;' MAKE SURE TO REPLACE THEM IN PRODUCTION
++sqldrv=mysql
+ sqldb=nmis
+ sqlhost=localhost
++sqlport=3306
+ dbuser=nmis
+ dbpass=nmis
+ #
+diff -ur nmis4.3.7c/lib/NMIS.pm nmis4.3.7c/lib/NMIS.pm
+--- nmis4.3.7c/lib/NMIS.pm	2016-06-08 11:43:38.000000000 +0200
++++ nmis4.3.7c/lib/NMIS.pm	2017-09-14 14:52:42.387519411 +0200
+@@ -204,13 +204,14 @@
+ # nmisdev 3Sep2009
+ # Cannot maintain DB handle across forks and multithread, and modperl
+ # persistent perl is also an option here. ( #!/usr/bin/perperl)
+-# therefore pass around file handles - let mysql handle the connections.
++# therefore pass around file handles - let sql driver handle the connections.
+
+ # return new DB handle
+ sub eventDBConnect{
+
+ 	my $dbh;
+-	$dbh = DBI->connect("DBI:mysql:$NMIS::config{sqldb}:$NMIS::config{sqlhost}", "$NMIS::config{dbuser}", "$NMIS::config{dbpass}", { RaiseError => 1, AutoCommit => 1}) or warn ("$dbh->errstr");
++	$dbh = DBI->connect("DBI:$NMIS::config{sqldrv}:dbname=$NMIS::config{sqldb};host=$NMIS::config{sqlhost};port=$NMIS::config{sqlport};",
++		"$NMIS::config{dbuser}", "$NMIS::config{dbpass}", { RaiseError => 1, AutoCommit => 1}) or warn ("$dbh->errstr");
+ 	#$NMIS::debug && logMessage("eventDBReconnect, reconnecting to event DB, called by " . whowasi() .' from '. whowasii() );
+ 	return $dbh;
+ }
+@@ -905,10 +906,17 @@
+ 	my $escalate = -1;
+
+ 	my $dbh = eventDBConnect;
++	my $sql_dup;
++
++	if ( $NMIS::config{sqldrv} == 'Pg' ) {
++		$sql_dup = 'on conflict (node,event,details) do update set';
++	} else {
++		$sql_dup = 'on duplicate key update';
++	}
+
+ 		if ( $event !~ /syslog|node failover|proactive|up/i or $event =~ /proactive/i ) {
+ 			# Update the event file
+-			$dbh->do( "insert into event (startdate,lastchange,node,event,event_level,details,ack,escalate,notify) values (?,?,?,?,?,?,?,?,?) on duplicate key update lastchange=? ", undef, $time, $time, $node, $event, $level, $details, 'false', $escalate, 'false' , $time ) or warn "DB insert failed: ". $dbh->errstr();
++			$dbh->do( "insert into event (startdate,lastchange,node,event,event_level,details,ack,escalate,notify) values (?,?,?,?,?,?,?,?,?) $sql_dup lastchange=? ", undef, $time, $time, $node, $event, $level, $details, 'false', $escalate, 'false' , $time ) or warn "DB insert failed: ". $dbh->errstr();
+ 		}
+
+ 	eventDBDisconnect($dbh);

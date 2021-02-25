@@ -1,0 +1,53 @@
+------------------------------------------------------------------------
+INSTALLATION
+
+The ebuild installs most parts of nmis automatically, but
+you will have to create a database for the nmis event records.
+
+Note: You may use either MySQL or PostgreSQL based on the respective USE flag
+enabled during build time. PostgreSQL is not supported by upstream.
+
+== Instructions for MySQL:
+
+You can do this using the following commands as the mysql root user:
+
+> mysql -u root -p -e "DROP DATABASE IF EXISTS nmis;
+                       CREATE DATABASE nmis;
+                       GRANT CREATE, SELECT, INSERT, UPDATE, DELETE ON nmis.* TO 'nmis'@'localhost'
+                       IDENTIFIED BY 'pass';
+                       FLUSH PRIVILEGES;"
+
+Please do not forget to choose a password that is more sensible than 'pass' ;)
+
+Now as user "nmis":
+
+> mysql -u nmis -ppass nmis < ${MY_SQLSCRIPTSDIR}/mysql/${PV}_create.sql
+
+You also need to set the MySQL password for the nmis user in the
+${MY_HOSTROOTDIR}/conf/nmis.conf file so that nmis can access the database.
+
+You may want to edit your MySQL configuration as per upstream recommendations.
+See /usr/share/doc/${PF}/my.cnf.example for reference.
+
+== Instructions for PostgreSQL:
+
+1. Create nmis user & database:
+
+> psql -U postgres -c "CREATE USER nmis WITH PASSWORD 'pass'
+> createdb -E LATIN1 -l C -T template0 -U postgres -O nmis nmis
+
+Please do not forget to choose a password that is more sensible than 'pass' ;)
+
+2. Now as user nmis, create database tables:
+
+> env PGPASSWORD='pass' psql -U nmis -d nmis -f ${MY_SQLSCRIPTSDIR}/postgres/${PV}_create.sql
+
+You also need to set the PostgreSQL password for the nmis user in the
+${MY_HOSTROOTDIR}/conf/nmis.conf file so that nmis can access the database.
+Additionally you need to set "sqldrv=Pg" and configure sqlhost and sqlport
+accordingly so that nmis can access the database.
+
+Now you can go to http://${VHOST_HOSTNAME}/${VHOST_APPDIR} and use the
+application.
+
+------------------------------------------------------------------------
