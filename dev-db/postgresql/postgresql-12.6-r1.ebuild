@@ -5,7 +5,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{7,8,9} )
 
-inherit autotools flag-o-matic linux-info multilib pam prefix python-single-r1 systemd
+inherit flag-o-matic linux-info multilib pam prefix python-single-r1 systemd
 
 KEYWORDS="amd64"
 
@@ -20,7 +20,7 @@ LICENSE="POSTGRESQL GPL-2"
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="https://www.postgresql.org/"
 
-IUSE="bagger cassert debug doc icu kerberos kernel_linux ldap libressl llvm ltree nls pam
+IUSE="bagger cassert debug doc icu kerberos kernel_linux ldap libressl llvm nls pam
 	  perl python +readline selinux +server systemd ssl static-libs tcl
 	  +threads uuid xml zlib"
 
@@ -95,13 +95,6 @@ pkg_setup() {
 
 src_prepare() {
 
-        # make ltree optional
-        eapply "${FILESDIR}/${PN}-11-wo-ltree.patch"
-
-        # ^^ wo-ltree patches configure.in
-        eautoconf
-        eautoheader
-
 	# Set proper run directory
 	sed "s|\(PGSOCKET_DIR\s\+\)\"/tmp\"|\1\"${EPREFIX}/run/postgresql\"|" \
 		-i src/include/pg_config_manual.h || die
@@ -165,7 +158,6 @@ src_configure() {
 		$(use_with kerberos gssapi) \
 		$(use_with ldap) \
 		$(use_with llvm) \
-		$(use_with ltree) \
 		$(use_with pam) \
 		$(use_with perl) \
 		$(use_with python) \

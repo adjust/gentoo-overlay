@@ -16,9 +16,6 @@
 		<flag name="llvm">
 			Add support for llvm JIT engine
 		</flag>
-	        <flag name="ltree">
-        	    	Enable or disable the build of the ltree extension.
-        	</flag>
 		<flag name="pg-legacytimestamp">
 			Use double precision floating-point numbers instead of
 			64-bit integers for timestamp storage.
