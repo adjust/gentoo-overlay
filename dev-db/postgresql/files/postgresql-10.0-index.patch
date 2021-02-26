@@ -1,6 +1,6 @@
---- src/include/pg_config_manual.h	2017-05-15 12:59:22.376786672 +0000
-+++ lala/1	2017-05-15 12:59:34.376888536 +0000
-@@ -43,7 +43,7 @@
+--- a/src/include/pg_config_manual.h	2017-05-15 12:59:22.376786672 +0000
++++ b/src/include/pg_config_manual.h	2017-05-15 12:59:34.376888536 +0000
+@@ -49,7 +49,7 @@
   *
   * Changing this requires an initdb.
   */
@@ -9,4 +9,3 @@
  
  /*
   * Set the upper and lower bounds of sequence values.
-
