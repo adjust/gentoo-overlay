@@ -1,0 +1,118 @@
+--- a/bin/nmis.pl	2021-03-02 16:55:52.559239261 -0000
++++ b/bin/nmis.pl	2021-03-02 16:54:00.029239379 -0000
+@@ -29,8 +29,7 @@
+ 
+ # Auto configure to the <nmis-base>/lib and <nmis-base>/files/nmis.conf
+ use FindBin;
+-use lib "$FindBin::Bin/../lib";
+-use lib "/usr/local/rrdtool/lib/perl";
++
+ #
+ # ****** Shouldn't be anything else to customise below here *******************
+ # best to customise in the nmis.conf file.
+@@ -142,7 +142,7 @@
+ 	  close(F);
+ 	  chomp $pid;
+ 	  if ($pid != $$) {
+-	    print "Error: nmis.pl, previous pidfile exists, killing the process $pid check your process run-time\n";
++	    print STDERR "Error: nmis.pl, previous pidfile exists, killing the process $pid check your process run-time\n";
+ 	    kill -15, $pid; # AWH: have had better luck killing the process group
+ 	    unlink($PIDFILE);
+ 	    print "\t pidfile $PIDFILE deleted\n" if $debug;
+@@ -4676,9 +4676,9 @@
+ 		
+ 		# if the device is a cisco router or IOS based switch do collect some extra system info
+ 		# AWH: include CiscoATM devices for additional collection
+-		if ( 	( $NMIS::systemTable{nodeModel} =~ /CiscoRouter|CatalystIOS|CiscoATM/i )
++		if ( 	( $NMIS::systemTable{nodeModel} =~ /CiscoRouter|CatalystIOS|CiscoATM|Arastr*/i )
+ 				&&
+-				( $NMIS::systemTable{nodeVendor} =~ /Cisco Systems|ciscoSystems/i )
++				( $NMIS::systemTable{nodeVendor} =~ /Cisco Systems|ciscoSystems|Arastr*/i )
+ 				)
+ 		{
+ 			if ($debug)  { print returnTime." Getting Cisco IOS Serial Number\n"; }
+@@ -6879,7 +6879,6 @@
+ 					$SNMP_Simple::errmsg = "";
+ 					goto END_createInterfaceFile;
+ 				}
+-
+ 				# portDuplex ENUMs
+ 				$interfaces->{$index}{portDuplex} = $ENUMportDuplex[$interfaces->{$index}{portDuplex}];
+ 				# portSpantreeFastStart ENUMs
+@@ -7247,14 +7246,16 @@
+ 				$interfaces->{$index}{ifSpeed},
+ 				$interfaces->{$index}{ifAdminStatus},
+ 				$interfaces->{$index}{ifOperStatus},
+-				$interfaces->{$index}{ifLastChange}
++				$interfaces->{$index}{ifLastChange},
++				$interfaces->{$index}{Description} ## mre
+ 			) = $session->snmpget(
+ 				'ifDescr'.".$index",
+ 				'ifType'.".$index",
+ 				'ifSpeed'.".$index",
+ 				'ifAdminStatus'.".$index",
+ 				'ifOperStatus'.".$index",
+-				'ifLastChange'.".$index"
++				'ifLastChange'.".$index",
++				'ifAlias'.".$index"  ## mre
+ 			);
+ 
+ 			# trap ifdescr 'noSuchName' error and fudge an ifdescr
+@@ -8104,10 +8105,10 @@
+ 						print "\t collect=false: no_collect_ifAlias_gen\n" if $debug; }
+ 					elsif (
+ 						# no collect for interfaces with no description
+-                        $interfaces->{$index}{Description} eq "" ) {
++                        $interfaces->{$index}{Description} eq "MRE Adjust please collect interfaces up without description." ||  $interfaces->{$index}{ifOperStatus} ne "up") {
+                         $interfaces->{$index}{collect} = "false";
+-						$interfaces->{$index}{nocollect} = "no Description (ifAlias)"; # reason
+-                        print "\t collect=false: no Description (ifAlias)\n" if $debug; }
++						$interfaces->{$index}{nocollect} = "no Description (ifAlias), and interface down MRE for Adjust"; # reason
++                        print "\t collect=false: no Description (ifAlias), and interface down MRE for Adjust\n" if $debug; }
+ 
+ 				}
+ 				# AWH: added Ciena
+@@ -8182,7 +8183,7 @@
+ 						print "\t collect=false: no_collect_ifDescr_gen\n" if $debug; }
+ 					elsif (
+                     	# or if the interface is of this name - description
+-						$interfaces->{$index}{Description} eq "" ) {
++						$interfaces->{$index}{Description} eq " adjust mod arista" ) {
+ 						$interfaces->{$index}{collect} = "false";
+  						$interfaces->{$index}{nocollect} = "no Description (ifAlias)"; # reason
+ 						print "\t collect=false: no Description (ifAlias)\n" if $debug; }
+@@ -8223,6 +8224,34 @@
+ 					) { $interfaces->{$index}{collect} = "false";
+  						$interfaces->{$index}{nocollect} = "ifType eq tunnel|softwareLoopback|other|pppMultilinkBundle"; # reason
+                        print "\t collect=false: ifType eq 'tunnel|softwareLoopback|other|pppMultilinkBundle'\n" if $debug; }
++                                       # GJA we need to monitor aggregates, they have type ieee8023adLag, we don't want unit.0 here
++                                        elsif (
++                                                $interfaces->{$index}{ifType} =~ /ieee8023adLag/ &&
++                                                $interfaces->{$index}{ifOperStatus} eq "up" &&
++                                                $interfaces->{$index}{ifDescr} !~ /ae\d+\.0/ ) {
++                                                $interfaces->{$index}{collect} = 'true'; }
++                                        # GJA added here notcollect for no Description, usually this is for unit 0 on eth interfaces
++                                        elsif (
++						$interfaces->{$index}{ifType}  !~ /ethernetCsmacd/ &&
++                                                $interfaces->{$index}{Description} eq "" ) {
++                                                $interfaces->{$index}{collect} = 'false';
++                                                $interfaces->{$index}{nocollect} = "no Description (ifAlias)"; # reason
++                        print "\t collect=false: no Description (ifAlias)\n" if $debug; }
++                                        # GJA added here notcollect for special Juniper interfaces like me0 and so on
++                                        elsif (
++                                                $interfaces->{$index}{ifDescr} =~ /me0/ ||
++                                                $interfaces->{$index}{ifDescr} =~ /vlan$/ ||
++                                                $interfaces->{$index}{ifDescr} =~ /jsrv/ ) {
++                                                $interfaces->{$index}{collect} = 'false';
++                                                $interfaces->{$index}{nocollect} = "virtual interface me0/bme0/vlan/jsrv (ifAlias)"; # reason
++                        print "\t collect=false: virtual interface me0/bme0/vlan/jsrv (ifAlias)\n" if $debug; }
++                                        # GJA added here notcollect for no Description, usually this is for unit 0 on eth interfaces
++                                        elsif (
++                                        $interfaces->{$index}{ifDescr} =~ /$qr_no_collect_ifDescr_gen/i ) {
++                                                $interfaces->{$index}{collect} = "false";
++                                                $interfaces->{$index}{nocollect} = "no_collect_ifDescr_gen"; # reason
++                         print "\t collect=false: no_collect_ifDescr_gen\n" if $debug; }
++## mre
+ 				}
+ 				### AlteonLB
+ 				elsif ( $NMIS::systemTable{nodeModel} =~ /AlteonLB/ ) {
