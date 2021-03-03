@@ -1,18 +1,26 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
-MODULE_AUTHOR="DMITRI"
-MODULE_VERSION="1.28"
+DIST_AUTHOR="DMITRI"
+DIST_VERSION="1.29"
 
 inherit perl-module
 
 DESCRIPTION="a module to manage process id files"
+HOMEPAGE="https://metacpan.org/pod/Proc::PID::File"
 
-LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
-SLOT="0"
 KEYWORDS="~amd64"
+LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
+
+SLOT="0"
+
 IUSE=""
 
-DEPEND="dev-lang/perl"
+DEPEND="
+"
+
+RDEPEND="
+	${DEPEND}
+"
