@@ -1,21 +1,29 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
-MODULE_AUTHOR="EINHVERFR"
-MODULE_VERSION="0.02"
+DIST_AUTHOR="EINHVERFR"
+DIST_VERSION="0.02"
 
 inherit perl-module
 
 DESCRIPTION="Manage PG replication standbys"
+HOMEPAGE="https://metacpan.org/pod/PGObject::Util::Replication::Standby"
 
-LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
-SLOT="0"
 KEYWORDS="~amd64"
+LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
+
+SLOT="0"
+
 IUSE=""
 
-DEPEND="dev-perl/Moo
+DEPEND="
+	dev-perl/Moo
 	dev-perl/PGObject-Util-Replication-SMO
 	>=dev-perl/URI-1.710.0
-	dev-lang/perl"
+"
+
+RDEPEND="
+	${DEPEND}
+"
