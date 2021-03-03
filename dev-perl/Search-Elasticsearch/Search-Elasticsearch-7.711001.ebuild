@@ -4,7 +4,7 @@
 EAPI=7
 
 DIST_AUTHOR="EZIMUEL"
-DIST_VERSION="6.81"
+DIST_VERSION="7.711001"
 
 inherit perl-module
 
