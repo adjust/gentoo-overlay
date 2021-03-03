@@ -1,20 +1,28 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
-MODULE_AUTHOR="RJBS"
-MODULE_VERSION="0.100003"
+DIST_AUTHOR="RJBS"
+DIST_VERSION="0.100005"
 
 inherit perl-module
 
 DESCRIPTION="allow a module's pod to contain Pod::Coverage hints"
+HOMEPAGE="https://metacpan.org/pod/Pod::Coverage::TrustPod"
 
-LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
-SLOT="0"
 KEYWORDS="~amd64"
+LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
+
+SLOT="0"
+
 IUSE=""
 
-DEPEND="dev-perl/Pod-Eventual
+DEPEND="
+	dev-perl/Pod-Eventual
 	dev-perl/Pod-Coverage
-	dev-lang/perl"
+"
+
+RDEPEND="
+	${DEPEND}
+"
