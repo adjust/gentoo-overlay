@@ -1,20 +1,25 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 DIST_AUTHOR="DWHEELER"
-DIST_VERSION=0.998
+DIST_VERSION=v1.1.0
+
 inherit perl-module
 
-DESCRIPTION="db stuff"
+DESCRIPTION="App::Sqitch - Sensible database change management"
+HOMEPAGE="https://metacpan.org/pod/App::Sqitch"
 
-#LICENSE="|| ( Artistic GPL-1+ )"
-SLOT="0"
 KEYWORDS="~amd64 ~x86"
+#LICENSE="|| ( Artistic GPL-1+ )"
+
+SLOT="0"
+
 IUSE=""
 
-RDEPEND="
+DEPEND="
+	dev-perl/File-HomeDir
 	dev-perl/DBD-Pg
 	dev-perl/Module-Build
 	dev-perl/Moo
@@ -36,4 +41,6 @@ RDEPEND="
 	dev-perl/URI-db
 "
 
-DEPEND="${RDEPEND}"
+RDEPEND="
+	${DEPEND}
+"
