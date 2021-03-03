@@ -1,19 +1,26 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
-MODULE_AUTHOR="PHRED"
-MODULE_VERSION="0.01"
+DIST_AUTHOR="PHRED"
+DIST_VERSION="0.01"
 
 inherit perl-module
 
 DESCRIPTION="Load URI::Escape::XS preferentially over URI::Escape"
+HOMEPAGE="https://metacpan.org/pod/Any::URI::Escape"
 
 LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
 SLOT="0"
 KEYWORDS="~amd64"
+
 IUSE=""
 
-DEPEND="dev-perl/URI
-	dev-lang/perl"
+DEPEND="
+	dev-perl/URI
+"
+
+RDEPEND="
+	${DEPEND}
+"
