@@ -1,0 +1,11 @@
+diff -Naur ClickHouse-19.16.10.44-stable-r1/dbms/src/Processors/Port.h ClickHouse-19.16.10.44-stable/dbms/src/Processors/Port.h
+--- ClickHouse-19.16.10.44-stable-r1/dbms/src/Processors/Port.h	2021-03-04 10:50:38.391427601 -0500
++++ ClickHouse-19.16.10.44-stable/dbms/src/Processors/Port.h	2021-03-04 10:52:34.007992821 -0500
+@@ -4,6 +4,7 @@
+ #include <vector>
+ #include <variant>
+ #include <cstdint>
++#include <atomic>
+ 
+ #include <Core/Block.h>
+ #include <Core/Defines.h>

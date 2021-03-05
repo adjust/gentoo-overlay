@@ -1,0 +1,12 @@
+diff -Naur ClickHouse-19.16.10.44-stable-r1/dbms/src/Processors/Formats/Impl/CapnProtoRowInputFormat.cpp ClickHouse-19.16.10.44-stable/dbms/src/Processors/Formats/Impl/CapnProtoRowInputFormat.cpp
+--- ClickHouse-19.16.10.44-stable-r1/dbms/src/Processors/Formats/Impl/CapnProtoRowInputFormat.cpp	2021-03-04 13:21:06.155562095 -0500
++++ ClickHouse-19.16.10.44-stable/dbms/src/Processors/Formats/Impl/CapnProtoRowInputFormat.cpp	2021-03-04 13:21:45.707755455 -0500
+@@ -242,7 +242,7 @@
+ 
+     auto array = readMessage();
+ 
+-#if CAPNP_VERSION >= 8000
++#if CAPNP_VERSION >= 7000 && CAPNP_VERSION < 8000
+     capnp::UnalignedFlatArrayMessageReader msg(array);
+ #else
+     capnp::FlatArrayMessageReader msg(array);

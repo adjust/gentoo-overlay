@@ -1,0 +1,12 @@
+diff -Naur ClickHouse-19.16.10.44-stable/dbms/src/Interpreters/addMissingDefaults.h ClickHouse-19.16.10.44-stable-r1/dbms/src/Interpreters/addMissingDefaults.h
+--- ClickHouse-19.16.10.44-stable/dbms/src/Interpreters/addMissingDefaults.h	2019-12-28 23:03:23.000000000 -0500
++++ ClickHouse-19.16.10.44-stable-r1/dbms/src/Interpreters/addMissingDefaults.h	2021-03-04 11:00:57.638454946 -0500
+@@ -1,7 +1,7 @@
+ #pragma once
+ 
+ #include <unordered_map>
+-
++#include <string>
+ 
+ namespace DB
+ {

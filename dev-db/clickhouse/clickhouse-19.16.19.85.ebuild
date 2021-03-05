@@ -140,9 +140,24 @@ src_unpack() {
 
 src_prepare() {
 	sed -i -e 's~add_subdirectory(contrib/libunwind-cmake)~~' cmake/find/unwind.cmake || die "Failed to succeed"
+
+	# clickhouse has a faulty ver check to perform specific capnproto functions
+	eapply "${FILESDIR}"/${PN}-19.16-capnproto-ver-check.patch
+
+	eapply "${FILESDIR}"/${PN}-19.16-dwarf-fixes.patch
+
+	# missing includes
+	eapply "${FILESDIR}"/${PN}-19.16-include-atomic.patch
+	eapply "${FILESDIR}"/${PN}-19.16-include-string.patch
+
+	# required fix due to changes in {mysql,mariadb}-connector-{c,c++}
+	eapply "${FILESDIR}"/${PN}-19.16-my_bool.patch
+
 	eapply_user
+
 	cmake-utils_src_prepare
 }
+
 src_configure() {
 	local mycmakeargs=(
 		-DENABLE_POCO_MONGODB="$(usex mongodb)"
@@ -173,6 +188,9 @@ src_configure() {
 
 src_install() {
 	cmake-utils_src_install
+
+	# wtf ur doin
+	rm  "${D}/usr/cmake/global.cmake"
 
 	if ! use test; then
 		rm -rf "${D}/usr/share/clickhouse-test" || die "failed to remove tests"
