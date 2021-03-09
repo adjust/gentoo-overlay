@@ -1,0 +1,12 @@
+diff -Naur ClickHouse-19.16.10.44-stable/libs/libmysqlxx/src/Connection.cpp ClickHouse-19.16.10.44-stable-r1/libs/libmysqlxx/src/Connection.cpp
+--- ClickHouse-19.16.10.44-stable/libs/libmysqlxx/src/Connection.cpp	2019-12-28 23:03:23.000000000 -0500
++++ ClickHouse-19.16.10.44-stable-r1/libs/libmysqlxx/src/Connection.cpp	2021-03-04 10:27:35.168665369 -0500
+@@ -116,7 +116,7 @@
+         throw ConnectionFailed(errorMessage(driver.get()), mysql_errno(driver.get()));
+ 
+     /// Enables auto-reconnect.
+-    my_bool reconnect = true;
++    char reconnect = true;
+     if (mysql_options(driver.get(), MYSQL_OPT_RECONNECT, reinterpret_cast<const char *>(&reconnect)))
+         throw ConnectionFailed(errorMessage(driver.get()), mysql_errno(driver.get()));
+ 
