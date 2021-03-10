@@ -1,0 +1,21 @@
+############################################
+#Listener daemon settings
+
+#LISTENER_DIR="/var/lib/schaufel"
+#LISTENER_LOG_DIR="/var/log/schaufel"
+#LISTENER_LOG_FILE="schaufel_listener.log"
+#LISTENER_USER=schaufel
+#LISTENER_GROUP=schaufel
+#LISTENER_TIMEOUT=60
+#HOSTNAME_OVERRIDE=
+
+############################################
+#Listener settings passed to schaufel
+
+#LISTENER_MASTER="host:port"
+#LISTENER_TOPIC="kafka topic"
+#LISTENER_BROKER_GROUP="kafka group"
+#LISTENER_BROKER="host:port"
+#LISTENER_JOBS=4
+#LISTENER_REPLICATION=1
+#LISTENER_CONFIG="/etc/schaufel/schaufel.conf"
