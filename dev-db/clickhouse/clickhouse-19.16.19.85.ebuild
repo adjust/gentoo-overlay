@@ -47,9 +47,9 @@ RDEPEND="
 		>=dev-libs/boost-1.65.0:=
 		dev-libs/openssl:0=
 		kafka? ( dev-libs/librdkafka:= )
-		mysql? ( dev-db/mysql-connector-c:= )
 	)
-
+	dev-db/mysql-connector-c:=
+	dev-db/mysql-connector-c++:=
 	>=dev-libs/poco-1.9.0
 	dev-libs/libpcre
 	dev-libs/jemalloc
