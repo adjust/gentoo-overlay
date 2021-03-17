@@ -50,6 +50,7 @@ RDEPEND="
 	)
 	dev-db/mysql-connector-c:=
 	dev-db/mysql-connector-c++:=
+	dev-libs/double-conversion
 	>=dev-libs/poco-1.9.0
 	dev-libs/libpcre
 	dev-libs/jemalloc
