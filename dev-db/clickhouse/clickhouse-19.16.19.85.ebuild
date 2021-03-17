@@ -160,8 +160,6 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
-		-DPARALLEL_LINK_JOBS=${MAKEOPTS}
-		-DPARALELL_COMPILE_JOBS=${MAKEOPTS}
 		-DENABLE_POCO_MONGODB="$(usex mongodb)"
 		-DENABLE_RDKAFKA="$(usex kafka)"
 		-DENABLE_TESTS="$(usex test)"
