@@ -1,21 +1,25 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
-MODULE_AUTHOR="EZIMUEL"
-MODULE_VERSION="6.81"
+DIST_AUTHOR="EZIMUEL"
+DIST_VERSION="6.81"
 
 inherit perl-module
 
 DESCRIPTION="The official client for Elasticsearch"
+HOMEPAGE="https://metacpan.org/pod/Search::Elasticsearch"
 
-LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
-SLOT="0"
 KEYWORDS="~amd64"
+LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
+
+SLOT="0"
+
 IUSE=""
 
-DEPEND="dev-perl/Module-Runtime
+DEPEND="
+	dev-perl/Module-Runtime
 	dev-perl/Test-Exception
 	dev-perl/Test-Pod
 	dev-perl/Any-URI-Escape
@@ -35,4 +39,8 @@ DEPEND="dev-perl/Module-Runtime
 	dev-perl/Test-Deep
 	dev-perl/libwww-perl
 	>=dev-perl/Package-Stash-0.370.0
-	dev-lang/perl"
+"
+
+RDEPEND="
+	${DEPEND}
+"
