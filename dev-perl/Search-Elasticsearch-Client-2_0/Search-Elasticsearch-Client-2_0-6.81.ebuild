@@ -9,6 +9,7 @@ MODULE_VERSION="6.81"
 inherit perl-module
 
 DESCRIPTION="Thin client with full support for Elasticsearch 2.x APIs"
+SRC_URI="https://cpan.metacpan.org/authors/id/E/EZ/EZIMUEL/Search-Elasticsearch-Client-2_0-${PV}.tar.gz"
 
 KEYWORDS="~amd64"
 LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"

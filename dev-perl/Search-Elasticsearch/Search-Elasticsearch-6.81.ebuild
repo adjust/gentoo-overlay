@@ -10,6 +10,7 @@ inherit perl-module
 
 DESCRIPTION="The official client for Elasticsearch"
 HOMEPAGE="https://metacpan.org/pod/Search::Elasticsearch"
+SRC_URI="https://cpan.metacpan.org/authors/id/E/EZ/EZIMUEL/Search-Elasticsearch-${PV}.tar.gz"
 
 KEYWORDS="~amd64"
 LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
