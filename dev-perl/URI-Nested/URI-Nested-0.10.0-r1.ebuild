@@ -11,7 +11,7 @@ inherit perl-module
 DESCRIPTION="URI::Nested - Nested URIs"
 HOMEPAGE="https://metacpan.org/pod/URI::Nested"
 
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64"
 #LICENSE="|| ( Artistic GPL-1+ )"
 
 SLOT="0"

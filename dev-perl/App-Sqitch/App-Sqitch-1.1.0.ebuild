@@ -11,7 +11,7 @@ inherit perl-module
 DESCRIPTION="App::Sqitch - Sensible database change management"
 HOMEPAGE="https://metacpan.org/pod/App::Sqitch"
 
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64"
 #LICENSE="|| ( Artistic GPL-1+ )"
 
 SLOT="0"

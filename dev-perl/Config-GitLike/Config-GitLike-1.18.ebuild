@@ -11,7 +11,7 @@ inherit perl-module
 DESCRIPTION="Config::GitLike - git-compatible config file parsing"
 HOMEPAGE="https://metacpan.org/pod/Config::GitLike"
 
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64"
 #LICENSE="|| ( Artistic GPL-1+ )"
 
 SLOT="0"
