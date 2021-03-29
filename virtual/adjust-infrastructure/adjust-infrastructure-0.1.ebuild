@@ -5,17 +5,18 @@ EAPI=7
 
 DESCRIPTION="Meta package for tools used in Adjust's infrastructure"
 
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64"
 
 SLOT="0"
 
 IUSE=""
 
-DEPEND="
+RDEPEND="
+	app-admin/trex
 	dev-perl/autovivification
 	dev-perl/Data-Printer
 	dev-perl/Digest-CRC
-	dev-perl/HTTP-Messages
+	dev-perl/HTTP-Message
 	dev-perl/JSON
 	dev-perl/JSON-MaybeXS
 	dev-perl/libwww-perl
@@ -30,8 +31,4 @@ DEPEND="
 	dev-perl/Try-Tiny
 	dev-perl/YAML
 	dev-perl/Zabbix-Tiny
-"
-
-RDEPEND="
-	${DEPEND}
 "
