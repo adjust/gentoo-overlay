@@ -1,9 +1,0 @@
-/var/log/logstash/*.log /var/log/logstash/*.stderr /var/log/logstash/*.stdout {
-        daily
-        rotate 7
-        copytruncate
-        compress
-        delaycompress
-        missingok
-        notifempty
-}
