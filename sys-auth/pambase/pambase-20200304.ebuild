@@ -9,7 +9,7 @@ SRC_URI="https://github.com/gentoo/pambase/archive/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64"
+KEYWORDS="amd64 x86"
 IUSE="caps +cracklib debug elogind minimal mktemp +nullok pam_krb5 pam_ssh passwdqc securetty selinux +sha512 systemd"
 
 RESTRICT="binchecks"
@@ -29,7 +29,7 @@ RDEPEND="
 	)
 	caps? ( sys-libs/libcap[pam] )
 	pam_ssh? ( sys-auth/pam_ssh )
-	passwdqc? ( sys-auth/pam_passwdqc )
+	passwdqc? ( sys-auth/passwdqc )
 	selinux? ( sys-libs/pam[selinux] )
 	sha512? ( >=sys-libs/pam-${MIN_PAM_REQ} )
 	systemd? ( sys-apps/systemd[pam] )
