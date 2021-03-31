@@ -17,12 +17,9 @@ SRC_URI="https://files.adjust.com/${PF}-hardened
 DEPEND="
 	sys-firmware/intel-microcode
 	=sys-kernel/gentoo-sources-${PV}
-	|| (
-		>=sys-kernel/genkernel-3.5.0.9
-		sys-kernel/genkernel-next
-	)
+	>=sys-kernel/genkernel-3.5.0.9
 	sys-apps/fakeroot
-	"
+"
 
 REQUIRED_USE="
 	protection? ( !docker )
