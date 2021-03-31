@@ -15,7 +15,7 @@ SRC_URI="http://www.linux-pam.org/library/${MY_P}.tar.bz2
 
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
-KEYWORDS="alpha amd64 arm arm64 hppa ia64 m68k ~mips ppc ppc64 ~riscv s390 sh sparc x86 ~amd64-linux ~x86-linux"
+KEYWORDS="amd64 x86"
 IUSE="audit berkdb +cracklib debug nis nls +pie selinux test"
 RESTRICT="!test? ( test )"
 
@@ -28,9 +28,9 @@ RDEPEND="nls? ( >=virtual/libintl-0-r1[${MULTILIB_USEDEP}] )
 
 DEPEND="${RDEPEND}
 	>=sys-devel/libtool-2
-	>=sys-devel/flex-2.5.39-r1[${MULTILIB_USEDEP}]
+	>=sys-devel/flex-2.5.39-r1
 	nls? ( sys-devel/gettext )
-	nis? ( >=virtual/pkgconfig-0-r1[${MULTILIB_USEDEP}] )"
+	nis? ( virtual/pkgconfig )"
 PDEPEND="sys-auth/pambase"
 
 RDEPEND="${RDEPEND}"
