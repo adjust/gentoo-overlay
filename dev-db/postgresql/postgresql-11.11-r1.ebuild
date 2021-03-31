@@ -112,10 +112,10 @@ src_prepare() {
 			die 'PGSQL_PAM_SERVICE rename failed.'
 	fi
 
-        # bagger
-        if use bagger ; then
-                eapply "${FILESDIR}"/${PN}-10.0-index.patch
-        fi
+	# bagger
+	if use bagger ; then
+		eapply "${FILESDIR}"/${PN}-10.0-index.patch
+	fi
 
 	eapply_user
 }
