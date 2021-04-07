@@ -9,7 +9,7 @@ MY_PV=$(replace_version_separator 2 '-')
 
 DESCRIPTION="HPE Smart Storage Administrator (HPE SSA) CLI (HPSSACLI, formerly HPACUCLI)"
 HOMEPAGE="https://support.hpe.com/hpsc/swd/public/detail?swItemId=MTX_688838b13b194c7abe1aa98584"
-SRC_URI="https://downloads.hpe.com/pub/softlib2/software1/pubsw-linux/p1857046646/v152535/ssacli-3.40-3.0.x86_64.rpm"
+SRC_URI="https://downloads.linux.hpe.com/SDR/repo/spp/2019.03.0/packages/ssacli-${MY_PV}.x86_64.rpm"
 
 LICENSE="hpe"
 SLOT="0"
