@@ -22,7 +22,7 @@ else
 fi
 
 DEPEND="
-    dev-perl/Moo
+	dev-perl/Moo
 	dev-perl/YAML
 	dev-perl/libwww-perl
 "
