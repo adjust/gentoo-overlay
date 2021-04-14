@@ -3,10 +3,11 @@
 
 EAPI=7
 
-inherit perl-module git-r3
+inherit perl-module
 
 DESCRIPTION="Module to manage ruby versions in non-interactive environments"
 HOMEPAGE="https://github.com/adjust/p5-Ruby-VersionManager"
+SRC_URI="https://github.com/adjust/p5-Ruby-VersionManager/archive/refs/tags/v${PVR}.tar.gz -> ${PN}-${PV}.tar.gz"
 
 KEYWORDS="~amd64"
 LICENSE="MIT"
@@ -14,12 +15,6 @@ LICENSE="MIT"
 SLOT="0"
 
 IUSE=""
-
-if [[ ${PV} == 9999* ]] ; then
-	EGIT_REPO_URI="https://github.com/adjust/p5-Ruby-VersionManager.git"
-else
-	SRC_URI="https://github.com/adjust/p5-Ruby-VersionManager/archive/v${PVR}.tar.gz"
-fi
 
 DEPEND="
 	dev-perl/Moo
@@ -32,8 +27,9 @@ RDEPEND="
 "
 
 src_unpack() {
-	unpack v${PVR}.tar.gz
-	mv p5-Ruby-VersionManager-${PVR} ${PN}-${PV}
+	default
+
+        mv "${WORKDIR}"/p5-${PN}-${PV} "${WORKDIR}"/${PN}-${PV}
 }
 
 src_install() {
