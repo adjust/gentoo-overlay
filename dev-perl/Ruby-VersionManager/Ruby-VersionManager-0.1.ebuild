@@ -3,11 +3,11 @@
 
 EAPI=7
 
-inherit perl-module
+inherit perl-module vcs-snapshot
 
 DESCRIPTION="Module to manage ruby versions in non-interactive environments"
 HOMEPAGE="https://github.com/adjust/p5-Ruby-VersionManager"
-SRC_URI="https://github.com/adjust/p5-Ruby-VersionManager/archive/refs/tags/v${PVR}.tar.gz -> ${PN}-${PV}.tar.gz"
+SRC_URI="https://github.com/adjust/p5-Ruby-VersionManager/archive/refs/tags/v${PVR}.tar.gz -> ${P}.tar.gz"
 
 KEYWORDS="~amd64"
 LICENSE="MIT"
@@ -19,18 +19,10 @@ IUSE=""
 DEPEND="
 	dev-perl/Moo
 	dev-perl/YAML
-	dev-perl/libwww-perl
-"
+	dev-perl/libwww-perl"
 
 RDEPEND="
-	${DEPEND}
-"
-
-src_unpack() {
-	default
-
-        mv "${WORKDIR}"/p5-${PN}-${PV} "${WORKDIR}"/${PN}-${PV}
-}
+	${DEPEND}"
 
 src_install() {
 	mytargets="install"
