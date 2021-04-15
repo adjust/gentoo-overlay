@@ -5,7 +5,8 @@ ebuilds for the adjust infrastructure.
 
 ## Build status
 
-[![Build Status](https://travis-ci.org/adjust/gentoo-overlay.svg?branch=master)](https://travis-ci.org/adjust/gentoo-overlay)
+![pkgcheck](https://github.com/adjust/gentoo-overlay/actions/workflows/pkgcheck.yml/badge.svg)
+![RepoMan](https://github.com/adjust/gentoo-overlay/actions/workflows/repoman.yml/badge.svg)
 
 ## Setup
 
