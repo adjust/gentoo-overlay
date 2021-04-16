@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -53,15 +53,20 @@ EGO_VENDOR=(
 inherit eutils golang-build golang-vcs-snapshot
 
 ARCHIVE_URI="https://${EGO_PN}/archive/${EGIT_COMMIT}.tar.gz -> ${P}.tar.gz"
-KEYWORDS="~amd64"
-IUSE="rootless symlink"
 
 DESCRIPTION="Lightweight Kubernetes. 5 less than k8s."
 HOMEPAGE="https://k3s.io"
-SRC_URI="${ARCHIVE_URI}
-	${EGO_VENDOR_URI}"
+SRC_URI="
+	${ARCHIVE_URI}
+	${EGO_VENDOR_URI}
+"
+
 LICENSE="Apache-2.0"
+KEYWORDS="~amd64"
+
 SLOT="0"
+
+IUSE="rootless symlink"
 
 DEPEND="
 	>=dev-lang/go-1.12
@@ -70,6 +75,13 @@ DEPEND="
 "
 
 RESTRICT="strip mirror"
+
+pkg_setup() {
+        if use rootless; then
+                enewgroup ${PN}
+                enewuser ${PN} -1 -1 /var/lib/rancher/${PN} ${PN}
+        fi
+}
 
 src_prepare() {
 	default
@@ -145,12 +157,5 @@ pkg_postinst() {
 		elog "configured for root, run:"
 		elog "usermod --add-subuids 1065536-1131071 <user>"
 		elog "usermod --add-subgids 1065536-1131071 <user>"
-	fi
-}
-
-pkg_setup() {
-	if use rootless; then
-		enewgroup ${PN}
-		enewuser ${PN} -1 -1 /var/lib/rancher/${PN} ${PN}
 	fi
 }
