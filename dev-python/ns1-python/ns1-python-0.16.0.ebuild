@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_8 )
+PYTHON_COMPAT=( python3_{7,8,9} )
 
 inherit distutils-r1
 
@@ -12,8 +12,9 @@ HOMEPAGE="https://github.com/ns1/ns1-python"
 SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
-SLOT="0"
 KEYWORDS="~amd64"
+
+SLOT="0"
 
 DEPEND="
 	dev-python/wheel[${PYTHON_USEDEP}]
