@@ -9,7 +9,6 @@ DESCRIPTION="Redis failover scripts"
 HOMEPAGE="https://github.com/adjust/redis_failover"
 
 SLOT="0"
-KEYWORDS="~amd64"
 LICENSE="MIT"
 
 IUSE=""
@@ -17,6 +16,7 @@ IUSE=""
 if [[ ${PV} == 9999* ]] ; then
 	EGIT_REPO_URI="https://github.com/adjust/redis_failover.git"
 else
+	KEYWORDS="~amd64"
 	SRC_URI="https://github.com/adjust/redis_failover/archive/v${PVR}.tar.gz"
 fi
 
