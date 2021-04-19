@@ -1,17 +1,21 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-PYTHON_COMPAT=( python3_8 )
+EAPI=7
 
-inherit distutils-r1 vcs-snapshot
+PYTHON_COMPAT=( python3_{7,8,9} )
+
+inherit distutils-r1
 
 DESCRIPTION="RQ (Redis Queue)"
 HOMEPAGE="https://github.com/AcquiredIO/rq"
-LICENSE="rq"
-SLOT="0"
-IUSE=""
+
 KEYWORDS="~amd64 ~x86"
+LICENSE="rq"
+
+SLOT="0"
+
+IUSE=""
 
 if [[ "${PV}" == "9999" ]]; then
 	EGIT_REPO_URI="${HOMEPAGE}"
@@ -23,6 +27,7 @@ fi
 DEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "
+
 RDEPEND="
 	dev-python/redis-py[${PYTHON_USEDEP}]
 	dev-python/click[${PYTHON_USEDEP}]
