@@ -8,7 +8,6 @@ inherit perl-module git-r3
 DESCRIPTION="Adjust PostgreSQL Tools"
 HOMEPAGE="https://github.com/adjust/postgres_tools"
 
-KEYWORDS="~amd64"
 LICENSE="MIT"
 
 SLOT="0"
@@ -18,6 +17,7 @@ IUSE=""
 if [[ ${PV} == 9999* ]] ; then
 	EGIT_REPO_URI="https://github.com/adjust/postgres_tools.git"
 else
+	KEYWORDS="~amd64"
 	SRC_URI="https://github.com/adjust/postgres_tools/archive/v${PVR}.tar.gz"
 fi
 
