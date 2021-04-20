@@ -1,36 +1,35 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+
 POSTGRES_COMPAT=( "10" "11" "12")
+
 #POSTGRES_USEDEP="bagger"
 #BUILD_DIR="${S}/sql/bagger_data"
-inherit postgres-multi
+
+inherit postgres-multi vcs-snapshot
 
 DESCRIPTION="adjust bagger json exports extension"
 HOMEPAGE="https://github.com/adjust/bagger_exports"
+
+# We do this package name dance to reuse the tarball from bagger-tools
+SRC_URI="https://github.com/adjust/bagger_exports/archive/v${PV}.tar.gz -> bagger-exports-${PV}.tar.gz"
+
+LICENSE="Unlicense"
+KEYWORDS="~amd64"
+
 SLOT="0"
+
 IUSE="+schaufel"
 
 LICENSE="Unlicense"
 
-if [[ ${PV} == 9999 ]]
-then
-	inherit git-r3
-	KEYWORDS=""
-	EGIT_REPO_URI="https://github.com/adjust/bagger_exports.git"
-else
-	inherit vcs-snapshot
-	# We do this package name dance to
-	# reuse the tarball from bagger-tools
-	SRC_URI="https://github.com/adjust/bagger_exports/archive/v${PVR}.tar.gz -> bagger-exports-${PVR}.tar.gz"
-	KEYWORDS="~amd64"
-fi
-
 DEPEND="
 "
 
-RDEPEND="${DEPEND}
+RDEPEND="
+	${DEPEND}
 	${POSTGRES_DEP}
 	schaufel? (
 		>=app-admin/schaufel-0.7
@@ -49,12 +48,8 @@ pkg_nofetch() {
 }
 
 src_unpack() {
-	[ -z "${SRC_URI}" ] && \
-		git-r3_src_unpack && \
-		return
-
 	default
-	mv "${WORKDIR}/bagger_exports-${PVR}" "${WORKDIR}/${P}" \
+	mv "${WORKDIR}/bagger_exports-${PV}" "${WORKDIR}/${P}" \
 		|| die "Renaming src dir failed"
 }
 
