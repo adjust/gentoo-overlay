@@ -2,11 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-inherit perl-module
+
+inherit perl-module vcs-snapshot
 
 DESCRIPTION="adjust bagger tools"
 HOMEPAGE="https://github.com/adjust/bagger"
-SRC_URI="https://github.com/adjust/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/adjust/${PN}/archive/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 
 LICENSE="Unlicense"
 KEYWORDS="~amd64"
