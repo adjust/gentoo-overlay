@@ -14,15 +14,19 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
+RDEPEND="
+	acct-group/karmabot
+	acct-user/karmabot
+"
+
+DEPEND="
+	${RDEPEND}
+"
+
 DAEMON_USER="karmabot"
 LOG_DIR="/var/log/karmabot"
 
 S="${WORKDIR}"
-
-pkg_setup() {
-	enewgroup karmabot
-	enewuser karmabot -1 /bin/bash /home/karmabot karmabot
-}
 
 src_install() {
 	dobin "karmabot"
