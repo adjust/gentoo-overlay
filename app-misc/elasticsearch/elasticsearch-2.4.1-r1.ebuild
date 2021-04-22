@@ -32,12 +32,6 @@ pkg_preinst() {
 	fi
 }
 
-pkg_setup() {
-	enewgroup ${MY_PN}
-	enewuser ${MY_PN} -1 /bin/bash /usr/share/${MY_PN} ${MY_PN}
-	esethome ${MY_PN} /usr/share/${MY_PN}
-}
-
 src_prepare() {
 	rm -rf bin/*.{bat,exe}
 	rm LICENSE.txt
