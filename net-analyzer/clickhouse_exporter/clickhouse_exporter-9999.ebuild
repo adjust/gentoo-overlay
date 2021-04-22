@@ -7,7 +7,7 @@ RESTRICT="test"
 
 EGO_PN="github.com/f1yegor/${PN}"
 
-inherit golang-vcs golang-build user
+inherit golang-vcs golang-build
 
 DESCRIPTION="Clickhouse Prometheus Exporter"
 HOMEPAGE="https://github.com/f1yegor/clickhouse_exporter"
@@ -16,11 +16,6 @@ SLOT="0"
 IUSE=""
 
 EXPORTER_USER=clickhouse_exporter
-
-pkg_setup() {
-	enewgroup "${EXPORTER_USER}"
-	enewuser "${EXPORTER_USER}" -1 -1 -1 "${EXPORTER_USER}"
-}
 
 src_install() {
 	newbin clickhouse_exporter "${PN}"
