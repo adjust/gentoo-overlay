@@ -3,8 +3,6 @@
 
 EAPI=6
 
-inherit user
-
 DESCRIPTION="A java DB query builder and visualizer"
 HOMEPAGE="https://www.metabase.com/"
 
@@ -18,6 +16,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="
+	acct-group/metabase
+	acct-user/metabase
 	virtual/jre:1.8
 "
 
@@ -25,11 +25,6 @@ DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${MY_P}"
 INSTALL_DIR="/opt/${MY_PN}"
-
-pkg_setup() {
-	enewgroup metabase
-	enewuser metabase -1 -1 /opt/metabase metabase
-}
 
 src_unpack() {
 	#cp because we don't actually unpack jars
