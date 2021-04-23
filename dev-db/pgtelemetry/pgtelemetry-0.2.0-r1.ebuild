@@ -1,7 +1,7 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 POSTGRES_COMPAT=( 9.6 10 )
 
@@ -10,8 +10,8 @@ inherit postgres-multi
 DESCRIPTION="Useful views and queries for PostgreSQL monitoring"
 HOMEPAGE="http://big-elephants.com/pg-telemetry"
 SRC_URI="https://api.pgxn.org/dist/pgtelemetry/${PV}/pgtelemetry-${PV}.zip"
-LICENSE="POSTGRESQL GPL-2"
 
+LICENSE="POSTGRESQL GPL-2"
 KEYWORDS="~amd64"
 
 SLOT=0

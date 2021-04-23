@@ -1,34 +1,30 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-POSTGRES_COMPAT=( "9.6" "10" "11" )
+EAPI=7
+
+POSTGRES_COMPAT=( 9.6 10 11 )
 BUILD_DIR="${S}/sql/bagger_master"
-inherit postgres-multi
+
+inherit postgres-multi vcs-snapshot
 
 DESCRIPTION="adjust bagger master extension"
 HOMEPAGE="https://github.com/adjust/bagger"
-SLOT="0"
-IUSE=""
+
+# We do this package name dance to reuse the tarball from bagger-tools
+SRC_URI="https://github.com/adjust/bagger/archive/v${PV}.tar.gz -> bagger-tools-${PV}.tar.gz"
 
 LICENSE="Unlicense"
+KEYWORDS="~amd64"
 
-if [[ ${PV} == 9999 ]]
-then
-	inherit git-r3
-	KEYWORDS=""
-	EGIT_REPO_URI="https://github.com/adjust/bagger.git"
-else
-	inherit vcs-snapshot
-	# We do this package name dance to
-	# reuse the tarball from bagger-tools
-	SRC_URI="https://github.com/adjust/bagger/archive/v${PVR}.tar.gz -> bagger-tools-${PVR}.tar.gz"
-	KEYWORDS="~amd64"
-fi
+SLOT="0"
+
+IUSE=""
 
 DEPEND=""
 
-RDEPEND="${DEPEND}
+RDEPEND="
+	${DEPEND}
 	${POSTGRES_DEP}
 "
 
@@ -44,11 +40,7 @@ pkg_nofetch() {
 }
 
 src_unpack() {
-	[ -z "${SRC_URI}" ] && \
-		git-r3_src_unpack && \
-		return
-
 	default
-	mv "${WORKDIR}/bagger-${PVR}" "${WORKDIR}/${P}" \
+	mv "${WORKDIR}/bagger-${PV}" "${WORKDIR}/${P}" \
 		|| die "Renaming src dir failed"
 }
