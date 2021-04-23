@@ -18,8 +18,12 @@ if [[ ${PV} == 9999* ]] ; then
 	EGIT_REPO_URI="https://github.com/adjust/redis_failover.git"
 else
 	KEYWORDS="~amd64"
-	SRC_URI="https://github.com/adjust/redis_failover/archive/v${PVR}.tar.gz"
+	SRC_URI="https://github.com/adjust/redis_failover/archive/v${PVR}.tar.gz -> ${P}.tar.gz"
 fi
+
+BDEPEND="
+	dev-perl/Module-Build
+"
 
 DEPEND="
 	dev-perl/Moo
@@ -32,7 +36,7 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 src_unpack() {
-	unpack v${PVR}.tar.gz
+	unpack ${P}.tar.gz
 	mv redis_failover-${PVR} ${PN}-${PV}
 }
 
