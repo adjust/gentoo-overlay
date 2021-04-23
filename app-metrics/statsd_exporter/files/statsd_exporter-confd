@@ -1,5 +1,0 @@
-# config file for /etc/init.d/statsd_exporter
-
-WEB_PORT=9102
-UDP_PORT=9125
-UNIXSOCKET=""
