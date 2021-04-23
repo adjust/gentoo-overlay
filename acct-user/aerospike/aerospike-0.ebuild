@@ -7,7 +7,7 @@ inherit acct-user
 
 DESCRIPTION="TODO"
 
-ACCT_USER_ID=119
+ACCT_USER_ID=118
 ACCT_USER_GROUPS=( ${PN} )
 ACCT_USER_HOME="/opt/${PN}"
 ACCT_USER_SHELL="/bin/bash"
