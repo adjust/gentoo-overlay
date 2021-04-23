@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit perl-module git-r3
+inherit perl-module
 
 DESCRIPTION="Redis failover scripts"
 HOMEPAGE="https://github.com/adjust/redis_failover"
@@ -14,6 +14,7 @@ LICENSE="MIT"
 IUSE=""
 
 if [[ ${PV} == 9999* ]] ; then
+	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adjust/redis_failover.git"
 else
 	KEYWORDS="~amd64"
