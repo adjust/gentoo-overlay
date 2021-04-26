@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit perl-module git-r3
+inherit perl-module
 
 DESCRIPTION="Adjust PostgreSQL Tools"
 HOMEPAGE="https://github.com/adjust/postgres_tools"
@@ -15,11 +15,16 @@ SLOT="0"
 IUSE=""
 
 if [[ ${PV} == 9999* ]] ; then
+	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adjust/postgres_tools.git"
 else
 	KEYWORDS="~amd64"
-	SRC_URI="https://github.com/adjust/postgres_tools/archive/v${PVR}.tar.gz"
+	SRC_URI="https://github.com/adjust/postgres_tools/archive/v${PVR}.tar.gz -> ${P}.tar.gz"
 fi
+
+BDEPEND="
+	dev-perl/Module-Build
+"
 
 DEPEND="
 	dev-perl/Moo
@@ -38,7 +43,7 @@ RDEPEND="
 "
 
 src_unpack() {
-	unpack v${PVR}.tar.gz
+	unpack ${P}.tar.gz
 	mv postgres_tools-${PVR} ${PN}-${PV}
 }
 

@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit perl-module git-r3
+inherit perl-module
 
 DESCRIPTION="Redis failover scripts"
 HOMEPAGE="https://github.com/adjust/redis_failover"
@@ -14,11 +14,16 @@ LICENSE="MIT"
 IUSE=""
 
 if [[ ${PV} == 9999* ]] ; then
+	inherit git-r3
 	EGIT_REPO_URI="https://github.com/adjust/redis_failover.git"
 else
 	KEYWORDS="~amd64"
-	SRC_URI="https://github.com/adjust/redis_failover/archive/v${PVR}.tar.gz"
+	SRC_URI="https://github.com/adjust/redis_failover/archive/v${PVR}.tar.gz -> ${P}.tar.gz"
 fi
+
+BDEPEND="
+	dev-perl/Module-Build
+"
 
 DEPEND="
 	dev-perl/Moo
@@ -31,7 +36,7 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 src_unpack() {
-	unpack v${PVR}.tar.gz
+	unpack ${P}.tar.gz
 	mv redis_failover-${PVR} ${PN}-${PV}
 }
 
