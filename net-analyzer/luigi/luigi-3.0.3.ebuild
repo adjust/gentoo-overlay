@@ -22,6 +22,7 @@ RDEPEND="
 	${PYTHON_DEPS}
 	www-servers/tornado
 	<dev-python/python-daemon-3.0
+	dev-python/dateutil
 "
 
 DEPEND="
