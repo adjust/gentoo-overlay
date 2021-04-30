@@ -23,6 +23,7 @@ DEPEND="
 	${PYTHON_DEPS}
 	>=virtual/jdk-1.8
 	dev-java/maven-bin:3.8
+	sys-devel/gcc:9.3.0
 	dev-libs/cyrus-sasl
 	dev-vcs/subversion
 	dev-python/six
