@@ -22,8 +22,7 @@ RDEPEND="
 DEPEND="
 	${PYTHON_DEPS}
 	>=virtual/jdk-1.8
-	dev-java/maven-bin:3.6
-	dev-java/openjdk-bin
+	dev-java/maven-bin:3.8
 	dev-libs/cyrus-sasl
 	dev-vcs/subversion
 	dev-python/six
