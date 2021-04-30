@@ -64,6 +64,8 @@ src_compile() {
 	eapply "${FILESDIR}/${P}-gettid-log_linux.cc.patch"
 	# useless parens causing a build failure. remove them.
 	eapply "${FILESDIR}/${P}-boost-assert.hpp.patch"
+	# warning suggest parentheses around assignment used as truth value.
+	eapply "${FILESDIR}/${P}-picojson.h.patch"
 
 	# let's restart the compilation process.
 	emake
