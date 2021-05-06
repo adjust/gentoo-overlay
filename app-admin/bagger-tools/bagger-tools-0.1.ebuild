@@ -1,20 +1,24 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-
-inherit perl-module vcs-snapshot
+EAPI=5
+inherit perl-module
 
 DESCRIPTION="adjust bagger tools"
 HOMEPAGE="https://github.com/adjust/bagger"
-SRC_URI="https://github.com/adjust/${PN}/archive/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
-
-LICENSE="Unlicense"
-KEYWORDS="~amd64"
-
 SLOT="0"
-
 IUSE="schaufel"
+
+if [[ ${PV} == 9999 ]]
+then
+	inherit git-r3
+	KEYWORDS=""
+	EGIT_REPO_URI="https://github.com/adjust/bagger.git"
+else
+	inherit vcs-snapshot
+	SRC_URI="https://github.com/adjust/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+	KEYWORDS="~amd64"
+fi
 
 DEPEND="
 	dev-perl/Moo
@@ -28,8 +32,7 @@ DEPEND="
 	dev-perl/Digest-SHA1
 "
 
-RDEPEND="
-	${DEPEND}
+RDEPEND="${DEPEND}
 	schaufel? (
 		app-admin/schaufel
 	)
@@ -50,7 +53,8 @@ src_install() {
 	mytargets="install"
 	perl-module_src_install
 
-	if use schaufel ; then
+	if use schaufel;
+	then
 		newinitd "${FILESDIR}"/schaufel_listener.initd schaufel_listener
 		newconfd "${FILESDIR}"/schaufel_listener.confd schaufel_listener
 	fi
