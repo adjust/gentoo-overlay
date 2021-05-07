@@ -25,7 +25,7 @@ SLOT="0"
 
 CPU_FLAGS_X86=(sse{,2,3,4_1,4_2} ssse3)
 
-IUSE="babeltrace cephfs dpdk fuse jemalloc ldap libressl lttng +mgr"
+IUSE="babeltrace cephfs dpdk fuse jemalloc ldap lttng +mgr"
 IUSE+=" numa +radosgw +ssl +system-boost systemd +tcmalloc"
 IUSE+=" test xfs zfs"
 IUSE+=" $(printf "cpu_flags_x86_%s\n" ${CPU_FLAGS_X86[@]})"
@@ -54,22 +54,13 @@ COMMON_DEPEND="
 	lttng? ( dev-util/lttng-ust:= )
 	fuse? ( sys-fs/fuse:0= )
 	numa? ( sys-process/numactl:= )
-	ssl? (
-		!libressl? ( dev-libs/openssl:= )
-		libressl? ( dev-libs/libressl:= )
-	)
+	ssl? ( dev-libs/openssl:= )
 	xfs? ( sys-fs/xfsprogs:= )
 	zfs? ( sys-fs/zfs:= )
 	radosgw? (
 		dev-libs/expat:=
-		!libressl? (
-			dev-libs/openssl:=
-			net-misc/curl:=[curl_ssl_openssl]
-		)
-		libressl? (
-			dev-libs/libressl:=
-			net-misc/curl:=[curl_ssl_libressl]
-		)
+		dev-libs/openssl:=
+		net-misc/curl:=[curl_ssl_openssl]
 	)
 	system-boost? (
 		>=dev-libs/boost-1.67:=[threads,context,python,${PYTHON_USEDEP}]
