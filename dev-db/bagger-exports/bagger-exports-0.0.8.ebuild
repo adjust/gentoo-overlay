@@ -52,6 +52,6 @@ src_unpack() {
 }
 
 src_install() {
-	default
+	postgres-multi_src_install
 	dobin "${WORKDIR}/${P}/scripts/"*
 }
