@@ -25,6 +25,7 @@ RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${P}/src/${PN}"
 
+
 src_compile() {
 	# need to explicit because makefile does a docker by default
 	use cluster &&	emake -j8 vmagent vmalert vmbackup vmrestore vminsert vmselect vmstorage
@@ -33,6 +34,11 @@ src_compile() {
 
 src_install() {
 	# what do you mean make install? you crazy?!
-	mkdir -p "${D}/usr/bin"
-	cp bin/* "${D}/usr/bin"
+	mkdir -p "${D}/usr/bin" || die
+	cp bin/* "${D}/usr/bin" || die
+
+	keepdir /var/log/${PN} /etc/${PN}
+
+	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
+	newconfd "${FILESDIR}/${PN}.confd" "${PN}"
 }
