@@ -85,12 +85,14 @@ src_install() {
 		dosym /usr/bin/clickhouse /usr/bin/clickhouse-format
 		dosym /usr/bin/clickhouse /usr/bin/clickhouse-local
 		dosym /usr/bin/clickhouse /usr/bin/clickhouse-obfuscator
+		dosym /opt/${MY_PN}/etc/clickhouse-client /etc/clickhouse-client
 	fi
 
 	if use server; then
 		dosym /usr/bin/clickhouse /usr/bin/clickhouse-copier
 		dosym /usr/bin/clickhouse /usr/bin/clickhouse-report
 		dosym /usr/bin/clickhouse /usr/bin/clickhouse-server
+		dosym /opt/${MY_PN}/etc/clickhouse-server /etc/clickhouse-server
 
 		newinitd "${FILESDIR}"/clickhouse-server.initd-r1 clickhouse-server
 		newconfd "${FILESDIR}"/clickhouse-server.confd clickhouse-server
@@ -99,6 +101,7 @@ src_install() {
 
 		keepdir /var/log/clickhouse-server
 		chown clickhouse:clickhouse "${D}"/var/log/clickhouse-server
+		chown clickhouse:clickhouse /etc/clickhouse-*
 	fi
 
 	if use test; then
