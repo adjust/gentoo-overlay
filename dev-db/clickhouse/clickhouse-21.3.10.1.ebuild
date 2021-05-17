@@ -47,21 +47,20 @@ pkg_setup() {
 }
 
 src_unpack() {
-	default
+	unpack "${A}"
 
 	# create merged work dir
-	mkdir "${WORKDIR}"/${MY_PN}-${PV}
+	mkdir "${WORKDIR}"/${MY_PN}-${PV} || die
 
 	# merge the directories
-	cp -R "${WORKDIR}"/${MY_PN}-*/* ${MY_PN}-${PV}/
+	cp -R "${WORKDIR}"/${MY_PN}-*/* ${MY_PN}-${PV}/ || die
 
 	# tidy up leftover mess
-	rm -rf "${S}"/{install,usr/share/doc}
-	rm -rf "${WORKDIR}"/${MY_PN}-{client,server,common-static}-${PV}
+	rm -r "${S}"/{install,usr/share/doc} || die
+	rm -r "${WORKDIR}"/${MY_PN}-{client,server,common-static}-${PV} || die
 }
 
 src_install() {
-
 	insinto "/opt/${MY_PN}"
 	doins -r *
 
@@ -79,20 +78,21 @@ src_install() {
 
 	dosym /usr/bin/clickhouse /usr/bin/clickhouse-extract-from-config
 
-	if use client ; then
-                dosym /usr/bin/clickhouse /usr/bin/clickhouse-benchmark
-                dosym /usr/bin/clickhouse /usr/bin/clickhouse-client
-                dosym /usr/bin/clickhouse /usr/bin/clickhouse-compressor
-                dosym /usr/bin/clickhouse /usr/bin/clickhouse-format
-                dosym /usr/bin/clickhouse /usr/bin/clickhouse-local
-                dosym /usr/bin/clickhouse /usr/bin/clickhouse-obfuscator
+	if use client; then
+		dosym /usr/bin/clickhouse /usr/bin/clickhouse-benchmark
+		dosym /usr/bin/clickhouse /usr/bin/clickhouse-client
+		dosym /usr/bin/clickhouse /usr/bin/clickhouse-compressor
+		dosym /usr/bin/clickhouse /usr/bin/clickhouse-format
+		dosym /usr/bin/clickhouse /usr/bin/clickhouse-local
+		dosym /usr/bin/clickhouse /usr/bin/clickhouse-obfuscator
+		dosym /opt/${MY_PN}/etc/clickhouse-client /etc/clickhouse-client
 	fi
 
-	if use server ; then
-
+	if use server; then
 		dosym /usr/bin/clickhouse /usr/bin/clickhouse-copier
 		dosym /usr/bin/clickhouse /usr/bin/clickhouse-report
 		dosym /usr/bin/clickhouse /usr/bin/clickhouse-server
+		dosym /opt/${MY_PN}/etc/clickhouse-server /etc/clickhouse-server
 
 		newinitd "${FILESDIR}"/clickhouse-server.initd-r1 clickhouse-server
 		newconfd "${FILESDIR}"/clickhouse-server.confd clickhouse-server
@@ -101,9 +101,10 @@ src_install() {
 
 		keepdir /var/log/clickhouse-server
 		chown clickhouse:clickhouse "${D}"/var/log/clickhouse-server
+		chown clickhouse:clickhouse /etc/clickhouse-*
 	fi
 
-	if use test ; then
+	if use test; then
 		dosym /usr/bin/clickhouse /usr/bin/clickhouse-test
 	fi
 
