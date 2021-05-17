@@ -33,8 +33,10 @@ RDEPEND="
 "
 
 QA_PREBUILT="
-	opt/clickhouse/usr/bin/clickhouse-odbc-bridge
 	opt/clickhouse/usr/bin/clickhouse
+	opt/clickhouse/usr/bin/clickhouse-odbc-bridge
+	opt/clickhouse/usr/bin/clickhouse-report
+	opt/clickhouse/usr/bin/clickhouse-test
 "
 
 pkg_setup() {
@@ -63,7 +65,14 @@ src_install() {
 	insinto "/opt/${MY_PN}"
 	doins -r *
 
-	fperms 755 /opt/${MY_PN}/usr/bin/*
+	# common
+	fperms 755 /opt/${MY_PN}/usr/bin/clickhouse{-extract-from-config,-odbc-bridge}
+	# server
+	use server && fperms 755 /opt/${MY_PN}/usr/bin/clickhouse{-copier,-report,-server}
+	# client
+	use client && fperms 755 /opt/${MY_PN}/usr/bin/clickhouse{-benchmark,-client,-compressor,-compressor,-format,-local,-obfuscator}
+	# test
+	use test && fperms 755 /opt/${MY_PN}/usr/bin/clickhouse-test
 
 	dosym /opt/${MY_PN}/usr/bin/clickhouse /usr/bin/clickhouse
 	dosym /opt/${MY_PN}/usr/bin/clickhouse-odbc-bridge /usr/bin/clickhouse-odbc-bridge
@@ -102,5 +111,5 @@ src_install() {
 	chown clickhouse:clickhouse "${D}"/var/log/clickhouse-server
 
 	insinto /etc/security/limits.d/
-	doins  /opt/${MY_PN}/etc/security/limits.d/clickhouse.conf /etc/security/limits.d/
+	doins  "${S}"/etc/security/limits.d/clickhouse.conf /etc/security/limits.d/
 }
