@@ -1,0 +1,5 @@
+# Felix W. <felix@adjust.com>  (2021-05-17)
+# Schaufel 0.9 unmasks a logical bug in schaufels handling of librdkafka
+# Removal on release of 0.9-r1
+# Bug: https://github.com/adjust/schaufel/issues/93
+=app-admin/schaufel-0.9
