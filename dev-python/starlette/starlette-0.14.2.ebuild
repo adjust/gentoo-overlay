@@ -25,17 +25,19 @@ SLOT="0"
 # though there are less errors now
 RESTRICT="test"
 
-DEPEND="test? (
-	dev-python/aiofiles[${PYTHON_USEDEP}]
-	dev-python/aiosqlite[${PYTHON_USEDEP}]
-	dev-python/graphene[${PYTHON_USEDEP}]
-	dev-python/itsdangerous[${PYTHON_USEDEP}]
-	dev-python/jinja[${PYTHON_USEDEP}]
-	dev-python/python-multipart[${PYTHON_USEDEP}]
-	dev-python/pyyaml[${PYTHON_USEDEP}]
-	dev-python/sse-starlette[${PYTHON_USEDEP}]
-	dev-python/ujson[${PYTHON_USEDEP}]
-)"
+DEPEND="
+	test? (
+		dev-python/aiofiles[${PYTHON_USEDEP}]
+		dev-python/aiosqlite[${PYTHON_USEDEP}]
+		dev-python/graphene[${PYTHON_USEDEP}]
+		dev-python/itsdangerous[${PYTHON_USEDEP}]
+		dev-python/jinja[${PYTHON_USEDEP}]
+		dev-python/python-multipart[${PYTHON_USEDEP}]
+		dev-python/pyyaml[${PYTHON_USEDEP}]
+		dev-python/sse-starlette[${PYTHON_USEDEP}]
+		dev-python/ujson[${PYTHON_USEDEP}]
+	)
+"
 
 python_prepare_all() {
 	# do not install LICENSE to /usr/
