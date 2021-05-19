@@ -12,15 +12,13 @@ DOCS_AUTODOC=1
 inherit distutils-r1 docs optfeature
 
 DESCRIPTION="The little ASGI framework that shines"
-HOMEPAGE="
-	https://www.starlette.io/
-	https://github.com/encode/starlette
-"
+HOMEPAGE="https://www.starlette.io/"
 SRC_URI="https://github.com/encode/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="BSD"
+KEYWORDS="~amd64"
+
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
 
 # ModuleNotFoundError: No module named 'graphql.execution.executors'
 # Now graphql is at the newest version and this still doesn't work :(
