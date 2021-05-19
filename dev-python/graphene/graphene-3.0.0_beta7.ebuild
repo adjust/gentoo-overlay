@@ -15,7 +15,7 @@ HOMEPAGE="https://github.com/graphql-python/graphene"
 SRC_URI="https://github.com/graphql-python/${PN}/archive/v${MYPV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="MIT"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64"
 
 SLOT="0"
 
