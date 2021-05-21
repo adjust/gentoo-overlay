@@ -28,8 +28,8 @@ S="${WORKDIR}/${P}/src/${PN}"
 
 src_compile() {
 	# need to explicit because makefile does a docker by default
-	use cluster &&	emake -j8 vmagent vmalert vmbackup vmrestore vminsert vmselect vmstorage
-	use cluster ||  emake -j8 victoria-metrics vmagent vmalert vmbackup vmrestore
+	use cluster &&	emake vmagent vmalert vmbackup vmrestore vminsert vmselect vmstorage
+	use cluster ||  emake victoria-metrics vmagent vmalert vmbackup vmrestore
 }
 
 src_install() {
