@@ -1,0 +1,28 @@
+#!/sbin/openrc-run
+
+export VM_storageDataPath="${VM_STORAGE_DATA_PATH:-/var/lib/victoria-metrics}"
+export VM_retentionPeriod="${VM_RETENTION_PERIOD:-1}"
+export VM_tls="${VM_TLS-:false}"
+export VM_tlsCertFile="${VM_TLS_CERT_FILE}"
+export VM_tlsKeyFile="${VM_TLS_KEY_FILE}"
+export VM_graphiteListenAddr="${VM_GRAPHITE_LISTEN_ADDR}"
+
+name="VictoriaMetrics"
+
+pidfile="/run/${RC_SVCNAME}"
+
+command="/usr/bin/victoria-metrics"
+command_args="-envflag.enable -envflag.prefix=VM_"
+command_background=yes
+
+output_log="/var/log/victoria-metrics/${RC_SVCNAME}.log"
+error_log="/var/log/victoria-metrics/${RC_SVCNAME}-error.log"
+
+depend() {
+	need local
+	use net
+}
+
+start_pre() {
+	checkpath -d -m 0755 -o "${command_user}" $(dirname ${output_log})
+}
