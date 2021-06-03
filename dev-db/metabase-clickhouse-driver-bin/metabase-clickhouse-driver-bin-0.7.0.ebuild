@@ -7,8 +7,7 @@ DESCRIPTION="MetaBase driver for the ClickHouse database"
 HOMEPAGE="https://github.com/enqueue/metabase-clickhouse-driver"
 
 MY_PN="clickhouse.metabase-driver"
-MY_P="v${PV}"
-SRC_URI="${HOMEPAGE}/releases/download/${PV}/${MY_PN}.jar -> ${P}.jar"
+SRC_URI="${HOMEPAGE}/releases/download/${PV/_/-}/${MY_PN}.jar -> ${P}.jar"
 
 LICENSE="eclipse-2.0"
 SLOT="0"
@@ -16,9 +15,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="
-	>=dev-db/metabase-bin-0.32.0
-	<dev-db/metabase-bin-0.34
-	"
+	>=dev-db/metabase-bin-0.34.0
+"
 
 DEPEND="${RDEPEND}"
 
