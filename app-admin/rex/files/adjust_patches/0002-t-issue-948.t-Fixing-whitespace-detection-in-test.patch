@@ -1,0 +1,25 @@
+From 9ccb48425932078f8fe3336576aa4498f895fb6d Mon Sep 17 00:00:00 2001
+From: Chris Travers <chris.travers@gmail.com>
+Date: Fri, 12 Feb 2021 10:19:01 +0100
+Subject: [PATCH 2/2] t/issue/948.t: Fixing whitespace detection in test
+
+---
+ t/issue/948.t | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/t/issue/948.t b/t/issue/948.t
+index 5460058c..4e4468ae 100644
+--- a/t/issue/948.t
++++ b/t/issue/948.t
+@@ -26,7 +26,7 @@ sub Rex::Commands::File::file {
+   my ( $name, %params ) = @_;
+ 
+   my $fmt = get_image_format();
+-  like $params{content}, qr|<driver name="qemu" type="$fmt"/>|,
++  like $params{content}, qr|<driver name="qemu" type="$fmt"\s*/>|,
+     "Found file content for $fmt format.";
+   $count_file++;
+ }
+-- 
+2.28.0
+

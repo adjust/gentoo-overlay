@@ -1,0 +1,25 @@
+From 0ed1472c8581960d58ce10f8015bbf93742a7d1e Mon Sep 17 00:00:00 2001
+From: "Max E. Aubrey" <max@adjust.com>
+Date: Mon, 15 Jul 2019 10:07:32 +0200
+Subject: [PATCH] Shell.pm: add iLO support
+
+---
+ lib/Rex/Interface/Shell.pm     |  1 +
+ 1 files changed, 1 insertions(+)
+
+diff --git a/lib/Rex/Interface/Shell.pm b/lib/Rex/Interface/Shell.pm
+index c11416d5..c10d78bc 100644
+--- a/lib/Rex/Interface/Shell.pm
++++ b/lib/Rex/Interface/Shell.pm
+@@ -19,6 +19,7 @@ my %SHELL_PROVIDER = (
+   bash  => "Rex::Interface::Shell::Bash",
+   csh   => "Rex::Interface::Shell::Csh",
+   idrac => "Rex::Interface::Shell::Idrac",
+   idrac4 => "Rex::Interface::Shell::Idrac4",
++  ilo   => "Rex::Interface::Shell::Ilo",
+   ksh   => "Rex::Interface::Shell::Ksh",
+   sh    => "Rex::Interface::Shell::Sh",
+   tcsh  => "Rex::Interface::Shell::Tcsh",
+-- 
+2.28.0
+

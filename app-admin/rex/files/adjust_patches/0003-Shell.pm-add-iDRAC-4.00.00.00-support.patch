@@ -1,0 +1,24 @@
+From 0e0711c19c3d7518b591a0575fccf93cc69b9a7e Mon Sep 17 00:00:00 2001
+From: "Maxine E. Aubrey" <max@adjust.com>
+Date: Tue, 17 Mar 2020 11:36:28 +0100
+Subject: [PATCH] Shell.pm: add iDRAC 4.00.00.00 support
+
+---
+ lib/Rex/Interface/Shell.pm        |  1 +
+ 1 files changed, 1 insertions(+)
+
+diff --git a/lib/Rex/Interface/Shell.pm b/lib/Rex/Interface/Shell.pm
+index c11416d5..d9480910 100644
+--- a/lib/Rex/Interface/Shell.pm
++++ b/lib/Rex/Interface/Shell.pm
+@@ -19,6 +19,7 @@ my %SHELL_PROVIDER = (
+   bash  => "Rex::Interface::Shell::Bash",
+   csh   => "Rex::Interface::Shell::Csh",
+   idrac => "Rex::Interface::Shell::Idrac",
++  idrac4 => "Rex::Interface::Shell::Idrac4",
+   ksh   => "Rex::Interface::Shell::Ksh",
+   sh    => "Rex::Interface::Shell::Sh",
+   tcsh  => "Rex::Interface::Shell::Tcsh",
+-- 
+2.28.0
+
