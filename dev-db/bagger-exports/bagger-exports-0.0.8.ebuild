@@ -29,7 +29,7 @@ RDEPEND="
 	${DEPEND}
 	${POSTGRES_DEP}
 	schaufel? (
-		>=app-admin/schaufel-0.9
+		>=app-admin/schaufel-0.8
 	)
 	>=dev-lang/perl-5.26
 "
