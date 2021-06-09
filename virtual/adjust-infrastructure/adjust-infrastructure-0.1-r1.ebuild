@@ -27,11 +27,14 @@ RDEPEND="
 	dev-perl/Net-CIDR-Lite
 	dev-perl/Number-Bytes-Human
 	dev-perl/Path-Tiny
+	dev-perl/Rex-Hook-File-Diff
+	dev-perl/Rex-Hook-File-Impostor
 	dev-perl/Rex-Interface-Shell-Idrac4
 	dev-perl/Rex-Interface-Shell-Ilo
 	dev-perl/Search-Elasticsearch
 	dev-perl/Search-Elasticsearch-Client-2_0
 	dev-perl/String-ShellQuote
+	dev-perl/Template-Toolkit
 	dev-perl/Term-ProgressBar
 	dev-perl/Try-Tiny
 	dev-perl/YAML
