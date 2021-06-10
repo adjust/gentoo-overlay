@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7,8} )
+PYTHON_COMPAT=( python3_{7..10} )
 
 inherit distutils-r1
 
@@ -26,21 +26,9 @@ RDEPEND="
 "
 
 DEPEND="
-	test? (
-		dev-python/iso8601[${PYTHON_USEDEP}]
-		dev-python/mock[${PYTHON_USEDEP}]
-		dev-python/promise[${PYTHON_USEDEP}]
-		dev-python/pytest-asyncio[${PYTHON_USEDEP}]
-		dev-python/pytest-benchmark[${PYTHON_USEDEP}]
-		dev-python/pytest-mock[${PYTHON_USEDEP}]
-		dev-python/pytz[${PYTHON_USEDEP}]
-		dev-python/snapshottest[${PYTHON_USEDEP}]
-	)
+	${RDEPEND}
 "
 
-S="${WORKDIR}/${MYP}"
+RESTRICT="test"
 
-distutils_enable_tests pytest
-# ModuleNotFoundError: No module named 'sphinx_graphene_theme'
-# There is a archived github, but no releases at the moment
-#distutils_enable_sphinx docs
+S="${WORKDIR}/${MYP}"

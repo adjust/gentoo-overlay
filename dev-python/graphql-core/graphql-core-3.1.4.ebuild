@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7,8} )
+PYTHON_COMPAT=( python3_{7..10} )
 
 inherit distutils-r1
 
@@ -16,7 +16,6 @@ KEYWORDS="~amd64"
 
 SLOT="0"
 
-BDEPEND="test? ( dev-python/pytest-benchmark[${PYTHON_USEDEP}] )"
+RESTRICT="test"
 
-distutils_enable_tests pytest
 distutils_enable_sphinx docs dev-python/sphinx_rtd_theme
