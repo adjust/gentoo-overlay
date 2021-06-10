@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=(python3_{7,8} )
+PYTHON_COMPAT=( python3_{7..9} )
 
 inherit distutils-r1
 
@@ -16,18 +16,12 @@ KEYWORDS="~amd64"
 
 SLOT="0"
 
-# RuntimeError: Unsafe load() call disabled by Gentoo. See bug #659348
 RESTRICT="test"
 
-RDEPEND="dev-python/six[${PYTHON_USEDEP}]"
-
-DEPEND="
-	test? (
-		dev-python/mock[${PYTHON_USEDEP}]
-		dev-python/pyyaml[${PYTHON_USEDEP}]
-	)
+RDEPEND="
+	dev-python/six[${PYTHON_USEDEP}]
 "
 
-distutils_enable_tests pytest
-# there are docs on github, but there is no 0.0.5 release tarball there for some reason
-#distutils_enable_sphinx docs/source dev-python/sphinx-bootstrap-theme
+DEPEND="
+	${RDEPEND}
+"

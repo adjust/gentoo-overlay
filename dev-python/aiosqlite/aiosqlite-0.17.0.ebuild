@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7,8} )
+PYTHON_COMPAT=( python3_{7..9} )
 DISTUTILS_USE_SETUPTOOLS=no
 
 inherit distutils-r1
@@ -17,15 +17,4 @@ KEYWORDS="~amd64"
 
 SLOT="0"
 
-IUSE="test"
-RESTRICT="!test? ( test )"
-
-BDEPEND="
-	test? (
-		dev-python/aiounittest[${PYTHON_USEDEP}]
-		dev-python/twine[${PYTHON_USEDEP}]
-)"
-
-distutils_enable_tests unittest
-# TypeError: add_source_parser() takes 2 positional arguments but 3 were given
-#distutils_enable_sphinx docs
+RESTRICT="test"
