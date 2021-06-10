@@ -28,7 +28,7 @@ RDEPEND="
 	dev-python/graphene[${PYTHON_USEDEP}]
 	dev-python/itsdangerous[${PYTHON_USEDEP}]
 	dev-python/jinja[${PYTHON_USEDEP}]
-	dev-python/multipart[${PYTHON_USEDEP}]
+	dev-python/python-multipart[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	dev-python/sse-starlette[${PYTHON_USEDEP}]
 	dev-python/ujson[${PYTHON_USEDEP}]
