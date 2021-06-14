@@ -3,8 +3,8 @@
 
 EAPI=7
 
-DISTUTILS_USE_SETUPTOOLS=no
-PYTHON_COMPAT=( pypy3 python3_{7..9} )
+DISTUTILS_USE_SETUPTOOLS=bdepend
+PYTHON_COMPAT=( pypy3 python3_{7..10} )
 PYTHON_REQ_USE='bzip2(+),threads(+)'
 TMPFILES_OPTIONAL=1
 
@@ -73,7 +73,8 @@ PDEPEND="
 # coreutils-6.4 rdep is for date format in emerge-webrsync #164532
 # NOTE: FEATURES=installsources requires debugedit and rsync
 
-SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
+SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz
+	https://github.com/gentoo/portage/commit/a4d882964ee1931462f911d0c46a80e27e59fa48.patch -> portage-3.0.20-bug-777492-a4d8829.patch"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-3.0.13-silence-deprecated-profile-check.patch"
@@ -87,6 +88,9 @@ pkg_pretend() {
 
 python_prepare_all() {
 	distutils-r1_python_prepare_all
+
+	# Revert due to regression: https://bugs.gentoo.org/777492#c4
+	eapply -R "${DISTDIR}/portage-3.0.20-bug-777492-a4d8829.patch"
 
 	sed -e "s:^VERSION = \"HEAD\"$:VERSION = \"${PV}\":" -i lib/portage/__init__.py || die
 
@@ -169,6 +173,8 @@ python_prepare_all() {
 		eerror ""
 	fi
 }
+
+
 
 python_compile_all() {
 	local targets=()
