@@ -120,7 +120,10 @@ if [[ ${PV} == 9999* ]]; then
 	DEPEND="${DEPEND} app-text/asciidoc"
 fi
 
-PATCHES=( "${FILESDIR}"/genkernel-4.2.1-post-release-fixes.patch )
+PATCHES=(
+	"${FILESDIR}"/genkernel-4.2.1-post-release-fixes.patch
+	"${FILESDIR}"/genkernel-4.2.1-include-udev-rules.patch
+)
 
 src_unpack() {
 	if [[ ${PV} == 9999* ]]; then

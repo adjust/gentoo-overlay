@@ -1,0 +1,108 @@
+From 322988e49eb0af660abf7434e5640d298908aeda Mon Sep 17 00:00:00 2001
+From: Dave Hughes <davidhughes205@gmail.com>
+Date: Fri, 11 Jun 2021 13:12:14 -0400
+Subject: [PATCH 1/1] Implement --[no-]udev-rules which will optionally include
+ udev rules in the initramfs
+
+---
+ doc/genkernel.8.txt  | 3 +++
+ gen_cmdline.sh       | 6 ++++++
+ gen_determineargs.sh | 1 +
+ gen_initramfs.sh     | 9 +++++++++
+ genkernel.conf       | 3 +++
+ 5 files changed, 22 insertions(+)
+
+diff --git a/doc/genkernel.8.txt b/doc/genkernel.8.txt
+index aa18496..374a1bf 100644
+--- a/doc/genkernel.8.txt
++++ b/doc/genkernel.8.txt
+@@ -564,6 +564,9 @@ NOTE: System.map filename and System.map symlink name must be different.
+     Directory structure to include in the initramfs, only available
+     on >=2.6 kernels.
+ 
++*--*[*no-*]*udev-rules*::
++    Enable or disables copying of udev rules into initramfs.
++
+ *--*[*no-*]*firmware*::
+     Enable or disables copying of firmware into initramfs.
+ 
+diff --git a/gen_cmdline.sh b/gen_cmdline.sh
+index 33bf1c5..afd4d72 100755
+--- a/gen_cmdline.sh
++++ b/gen_cmdline.sh
+@@ -116,6 +116,8 @@ longusage() {
+   echo "	--do-keymap-auto	Forces keymap selection at boot"
+   echo "	--keymap		Enables keymap selection support"
+   echo "	--no-keymap		Disables keymap selection support"
++  echo "        --udev-rules            Enable copying of udev rules into initramfs"
++  echo "        --no-udev-rules         Disable copying of udev rules into initramfs"
+   echo "	--bcache		Include block layer cache (bcache) support"
+   echo "	--no-bcache		Exclude block layer cache (bcache) support"
+   echo "	--lvm			Include LVM support"
+@@ -767,6 +769,10 @@ parse_cmdline() {
+ 			CMD_GPG=$(parse_optbool "$*")
+ 			print_info 3 "CMD_GPG: ${CMD_GPG}"
+ 			;;
++		--udev-rules|--no-udev-rules)
++                        CMD_UDEV_RULES=$(parse_optbool "$*")
++                        print_info 3 "CMD_UDEV_RULES: ${CMD_UDEV_RULES}"
++                        ;;
+ 		--firmware|--no-firmware)
+ 			CMD_FIRMWARE=$(parse_optbool "$*")
+ 			print_info 3 "CMD_FIRMWARE: ${CMD_FIRMWARE}"
+diff --git a/gen_determineargs.sh b/gen_determineargs.sh
+index 3e6e4dd..9a550c8 100755
+--- a/gen_determineargs.sh
++++ b/gen_determineargs.sh
+@@ -406,6 +406,7 @@ determine_real_args() {
+ 	set_config_with_override BOOL   BTRFS                                 CMD_BTRFS                                 "$(rootfs_type_is btrfs)"
+ 	set_config_with_override BOOL   VIRTIO                                CMD_VIRTIO                                "no"
+ 	set_config_with_override BOOL   MULTIPATH                             CMD_MULTIPATH                             "no"
++	set_config_with_override BOOL   UDEV_RULES                            CMD_UDEV_RULES                            "no"
+ 	set_config_with_override BOOL   FIRMWARE                              CMD_FIRMWARE                              "no"
+ 	set_config_with_override STRING FIRMWARE_DIR                          CMD_FIRMWARE_DIR                          "/lib/firmware"
+ 	set_config_with_override STRING FIRMWARE_FILES                        CMD_FIRMWARE_FILES
+diff --git a/gen_initramfs.sh b/gen_initramfs.sh
+index b826f17..92521e4 100755
+--- a/gen_initramfs.sh
++++ b/gen_initramfs.sh
+@@ -486,6 +486,7 @@ append_base_layout() {
+ 	isTrue "${STRACE}" && build_parameters+=( --strace ) || build_parameters+=( --no-strace )
+ 	isTrue "${GPG}" && build_parameters+=( --gpg ) || build_parameters+=( --no-gpg )
+ 	isTrue "${LUKS}" && build_parameters+=( --luks ) || build_parameters+=( --no-luks )
++	isTrue "${UDEV_RULES}" && build_parameters+=( --udev-rules ) || build_parameters+=( --no-udev-rules )
+ 	isTrue "${FIRMWARE}" && build_parameters+=( --firmware ) || build_parameters+=( --no-firmware )
+ 	[ -n "${FIRMWARE_DIR}" ] && build_parameters+=( --firmware-dir="${FIRMWARE_DIR}" )
+ 	[ -n "${FIRMWARE_FILES}" ] && build_parameters+=( --firmware-files="${FIRMWARE_FILES}" )
+@@ -646,6 +647,14 @@ append_eudev() {
+ 	echo "" > usr/lib/udev/rules.d/80-net-name-slot.rules \
+ 		|| gen_die "Failed to disable predictable network interface naming rule"
+ 
++	if isTrue "${UDEV_RULES}"
++	then
++		print_info 2 "$(get_indent 2)${PN}: >> Adding udev rules ..."
++		cp -a "/etc/udev/rules.d"/* etc/udev/rules.d/ || gen_die "Failed to copy udev rules"
++	else
++		print_info 2 "$(get_indent 2)${PN}: >> --udev-rules not set; Skipping inclusion of udev rules ..."
++	fi
++
+ 	log_future_cpio_content
+ 	find . -print0 | "${CPIO_COMMAND}" ${CPIO_ARGS} --append -F "${CPIO_ARCHIVE}" \
+ 		|| gen_die "Failed to append ${PN} to cpio!"
+diff --git a/genkernel.conf b/genkernel.conf
+index 6c350a6..7898713 100644
+--- a/genkernel.conf
++++ b/genkernel.conf
+@@ -137,6 +137,9 @@ NOCOLOR="false"
+ # Add xfsprogs support
+ #XFSPROGS="no"
+ 
++# Add udev rules to the initramfs
++#UDEV_RULES="no"
++
+ # Install firmware onto root filesystem
+ # Will conflict with sys-kernel/linux-firmware package
+ #FIRMWARE_INSTALL="no"
+-- 
+2.32.0
+
