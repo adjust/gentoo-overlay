@@ -20,12 +20,15 @@ SLOT="0"
 
 IUSE=""
 
-DEPEND="
-	app-admin/trex
+RDEPEND="
+	|| (
+		app-admin/rex
+		app-admin/trex
+	)
 "
 
-RDEPEND="
-	${DEPEND}
+DEPEND="
+	${RDEPEND}
 "
 
 src_install() {
