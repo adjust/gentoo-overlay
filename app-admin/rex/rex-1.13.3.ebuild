@@ -21,9 +21,10 @@ fi
 inherit bash-completion-r1 perl-module ${VCS_ECLASS}
 
 DESCRIPTION="(R)?ex, the friendly automation framework"
+HOMEPAGE="https://metacpan.org/release/Rex https://www.rexify.org"
 
 SLOT="0"
-IUSE="minimal test"
+IUSE="minimal test trex-compat"
 RESTRICT="!test? ( test )"
 
 DZIL_DEPENDS="
@@ -48,6 +49,9 @@ RDEPEND="
 		dev-perl/IPC-Shareable
 		dev-perl/XML-LibXML
 	)
+	trex-compat? (
+		!app-admin/trex
+	)
 	virtual/perl-Carp
 	virtual/perl-Data-Dumper
 	dev-perl/Data-Validate-IP
@@ -62,11 +66,10 @@ RDEPEND="
 	dev-perl/IO-String
 	dev-perl/IO-Tty
 	dev-perl/JSON-MaybeXS
-	dev-perl/List-MoreUtils
 	virtual/perl-MIME-Base64
 	dev-perl/Net-OpenSSH
 	dev-perl/Net-SFTP-Foreign
-	virtual/perl-Scalar-List-Utils
+	>=virtual/perl-Scalar-List-Utils-1.450.0
 	dev-perl/Parallel-ForkManager
 	dev-perl/Sort-Naturally
 	dev-perl/String-Escape
@@ -83,6 +86,7 @@ RDEPEND="
 	virtual/perl-version
 "
 
+# NB: would add test? !minimal? Test-mysqld, but I can't get that to work
 BDEPEND="
 	${RDEPEND}
 	>=virtual/perl-CPAN-Meta-Requirements-2.120.620
@@ -90,6 +94,9 @@ BDEPEND="
 	>=dev-perl/File-ShareDir-Install-0.60.0
 	virtual/perl-Module-Metadata
 	test? (
+		!minimal? (
+			dev-perl/File-LibMagic
+		)
 		virtual/perl-File-Temp
 		dev-perl/Test-Deep
 		dev-perl/Test-Output
@@ -110,7 +117,7 @@ PATCHES=(
 [[ ${PV} == 9999 ]] && BDEPEND+=" ${DZIL_DEPENDS}"
 
 src_unpack() {
-	if [[ $PV == 9999 ]]; then
+	if [[ ${PV} == 9999 ]]; then
 		"${VCS_ECLASS}"_src_unpack
 		mkdir -p "${S}" || die "Can't make ${S}"
 	else
@@ -132,6 +139,8 @@ dzil_src_prep() {
 	sed -e '/^\[Test::Kwalitee\]/d' \
 		-e '/^\[Test::Perl::Critic\]/d' \
 		-e '/^\[PodSyntaxTests\]/d' \
+		-e '/^Perl::Critic::Freenode =/d' \
+		-e '/^Perl::Critic::TooMuchCode =/d' \
 		-e '/^Test::Kwalitee =/d' \
 		-e '/^Test::PerlTidy =/d' \
 		-e '/^Test::Pod =/d' \
@@ -139,10 +148,16 @@ dzil_src_prep() {
 		-e '/^\[OptionalFeature/,/^$/d' \
 		-e '/^\[Test::MinimumVersion\]/{N;d}' \
 		-i dist.ini || die "Can't patch dist.ini"
+
+		# Removals/additions have to be tracked by git or dzil build fails
+		# Spurious warning during src_prepare
+		git rm -f xt/author/critic-progressive.t || die "Can't rm author/critic-progressive.t"
+		# Spurious warning during src_prepare
+		git rm -f xt/author/perltidy.t || die "Can't rm author/perltidy.t"
 }
 dzil_env_setup() {
 	# NextRelease noise :(
-	mkdir -p ~/.dzil/
+	mkdir -p ~/.dzil/ || die "mkdir -p ~/.dzil/ failed"
 	local user="$(whoami)"
 	local host="$(hostname)"
 	printf '[%%User]\nname = %s\nemail = %s' "${user}" "${user}@${host}" >> ~/.dzil/config.ini
@@ -155,7 +170,7 @@ dzil_to_distdir() {
 
 	cd "${dzil_root}" || die "Can't enter git workdir '${dzil_root}'";
 
-	dzil_src_prep
+	S="${dzil_root}" dzil_src_prep
 	dzil_env_setup
 
 	dzil_version="$(dzil version)" || die "Error invoking 'dzil version'"
@@ -199,6 +214,13 @@ src_prepare() {
 		dzil_to_distdir "${EGIT_CHECKOUT_DIR}" "${S}"
 	fi
 	cd "${S}" || die "Can't enter build dir"
+
+	# If you DIY installed Test::mysqld, but didn't patch
+	# it to handle the fact on Gentoo, mysql_install_db is NOT in PATH
+	# tests fail. So this test is patched out if mysql_install_db is not in PATH
+	if perl_has_module "Test::mysqld" && ! type -P mysql_install_db >/dev/null; then
+		perl_rm_files "t/db.t"
+	fi
 	perl-module_src_prepare
 }
 
@@ -209,4 +231,9 @@ src_install() {
 	newins "share/${PN}-tab-completion.zsh" "_${PN}"
 
 	perl-module_src_install
+
+	if use trex-compat; then
+		dosym /usr/bin/rex /usr/bin/trex || die "failed to set trex compat symlink"
+		dosym /usr/bin/rexify /usr/bin/trexify || die "failed to set trexify compat symlink"
+	fi
 }
