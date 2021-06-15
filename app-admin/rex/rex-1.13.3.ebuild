@@ -24,7 +24,7 @@ DESCRIPTION="(R)?ex, the friendly automation framework"
 HOMEPAGE="https://metacpan.org/release/Rex https://www.rexify.org"
 
 SLOT="0"
-IUSE="minimal test"
+IUSE="minimal test trex-compat"
 RESTRICT="!test? ( test )"
 
 DZIL_DEPENDS="
@@ -48,6 +48,9 @@ RDEPEND="
 		dev-perl/Expect
 		dev-perl/IPC-Shareable
 		dev-perl/XML-LibXML
+	)
+	trex-compat? (
+		!app-admin/trex
 	)
 	virtual/perl-Carp
 	virtual/perl-Data-Dumper
@@ -228,4 +231,9 @@ src_install() {
 	newins "share/${PN}-tab-completion.zsh" "_${PN}"
 
 	perl-module_src_install
+
+	if use trex-compat; then
+		dosym /usr/bin/rex /usr/bin/trex || die "failed to set trex compat symlink"
+		dosym /usr/bin/rexify /usr/bin/trexify || die "failed to set trexify compat symlink"
+	fi
 }
