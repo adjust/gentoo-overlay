@@ -4,25 +4,23 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_REQ_USE="threads(+)"
 
-inherit python-r1
+inherit distutils-r1
 
-DESCRIPTION="High performance, easy to learn, fast to code, ready for production"
-HOMEPAGE="https://pypi.org/project/fastapi/"
-SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
+DISTUTILS_USE_SETUPTOOLS=no
 
-LICENSE="BSD"
-KEYWORDS="~amd64"
+DESCRIPTION="FastAPI framework, high performance, easy to learn, fast to code, ready for production"
+HOMEPAGE="https://fastapi.tiangolo.com/"
+SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
+LICENSE="MIT"
 SLOT="0"
-
+KEYWORDS="~amd64"
 IUSE=""
 
 RDEPEND="
+	<dev-python/starlette-0.14.1[${PYTHON_USEDEP}]
 	dev-python/pydantic[${PYTHON_USEDEP}]
-	dev-python/starlette[${PYTHON_USEDEP}]
 "
 
-DEPEND="
-	${RDEPEND}
-"
