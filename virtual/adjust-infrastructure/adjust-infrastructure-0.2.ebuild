@@ -13,13 +13,13 @@ IUSE=""
 
 RDEPEND="
 	|| (
+		app-admin/trex
 		app-admin/rex (
 			dev-perl/Rex-Hook-File-Diff
 			dev-perl/Rex-Hook-File-Impostor
 			dev-perl/Rex-Interface-Shell-Idrac4
 			dev-perl/Rex-Interface-Shell-Ilo
 		)
-		app-admin/trex
 	)
 	dev-perl/autovivification
 	dev-perl/Data-Printer
