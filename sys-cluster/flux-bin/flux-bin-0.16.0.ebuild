@@ -26,7 +26,7 @@ QA_PREBUILT="
 
 src_install() {
 
-	insinto /opt/${MY_PN}
-	doins -r "${S}"/flux
+	exeinto /opt/${MY_PN}
+	doexe "${S}"/flux
 	dosym /opt/${MY_PN}/flux /usr/bin/flux
 }
