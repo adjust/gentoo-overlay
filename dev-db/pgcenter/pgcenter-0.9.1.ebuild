@@ -14,6 +14,10 @@ KEYWORDS="amd64"
 
 SLOT="0"
 
+RDEPEND="
+	>=dev-lang/go-1.16
+"
+
 # needs postgres
 RESTRICT="test"
 
