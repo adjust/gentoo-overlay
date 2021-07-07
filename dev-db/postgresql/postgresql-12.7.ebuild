@@ -3,13 +3,13 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7,8,9} )
+PYTHON_COMPAT=( python3_{8,9,10} )
 
-inherit flag-o-matic linux-info multilib pam prefix python-single-r1 systemd
+inherit flag-o-matic linux-info multilib pam prefix python-single-r1 systemd tmpfiles
 
 KEYWORDS="amd64"
 
-SLOT=$(ver_cut 1-2)
+SLOT=$(ver_cut 1)
 
 MY_PV=${PV/_/}
 S="${WORKDIR}/${PN}-${MY_PV}"
@@ -20,9 +20,9 @@ LICENSE="POSTGRESQL GPL-2"
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="https://www.postgresql.org/"
 
-IUSE="bagger cassert debug doc kerberos kernel_linux ldap nls pam perl
-	  -pg-legacytimestamp python +readline selinux +server systemd ssl
-	  static-libs tcl +threads uuid xml zlib"
+IUSE="bagger cassert debug doc icu kerberos kernel_linux ldap llvm nls pam
+	  perl python +readline selinux +server systemd ssl static-libs tcl
+	  +threads uuid xml zlib"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
@@ -32,14 +32,19 @@ acct-group/postgres
 acct-user/postgres
 sys-apps/less
 virtual/libintl
+icu? ( dev-libs/icu:= )
 kerberos? ( virtual/krb5 )
 ldap? ( net-nds/openldap )
+llvm? (
+	sys-devel/llvm:=
+	sys-devel/clang:=
+)
 pam? ( sys-libs/pam )
 perl? ( >=dev-lang/perl-5.8:= )
 python? ( ${PYTHON_DEPS} )
 readline? ( sys-libs/readline:0= )
-ssl? ( >=dev-libs/openssl-0.9.6-r1:0= )
 server? ( systemd? ( sys-apps/systemd ) )
+ssl? ( >=dev-libs/openssl-0.9.6-r1:0= )
 tcl? ( >=dev-lang/tcl-8:0= )
 xml? ( dev-libs/libxml2 dev-libs/libxslt )
 zlib? ( sys-libs/zlib )
@@ -87,9 +92,6 @@ pkg_setup() {
 
 src_prepare() {
 
-	# Work around PPC{,64} compilation bug where bool is already defined
-	sed '/#ifndef __cplusplus/a #undef bool' -i src/include/c.h || die
-
 	# Set proper run directory
 	sed "s|\(PGSOCKET_DIR\s\+\)\"/tmp\"|\1\"${EPREFIX}/run/postgresql\"|" \
 		-i src/include/pg_config_manual.h || die
@@ -99,10 +101,10 @@ src_prepare() {
 	# hardened and non-hardened environments. (Bug #528786)
 	sed 's/@install_bin@/install -c/' -i src/Makefile.global.in || die
 
-	use server || eapply "${FILESDIR}/${PN}-${SLOT}.3-no-server.patch"
+	use server || eapply "${FILESDIR}/${PN}-12.1-no-server.patch"
 
 	if use pam ; then
-		sed -e "s/\(#define PGSQL_PAM_SERVICE \"postgresql\)/\1-${SLOT}/" \
+		sed "s/\(#define PGSQL_PAM_SERVICE \"postgresql\)/\1-${SLOT}/" \
 			-i src/backend/libpq/auth.c || \
 			die 'PGSQL_PAM_SERVICE rename failed.'
 	fi
@@ -147,11 +149,12 @@ src_configure() {
 		--with-system-tzdata="${PO}/usr/share/zoneinfo" \
 		$(use_enable !alpha spinlocks) \
 		$(use_enable cassert) \
-		$(use_enable !pg-legacytimestamp integer-datetimes) \
 		$(use_enable debug) \
 		$(use_enable threads thread-safety) \
+		$(use_with icu) \
 		$(use_with kerberos gssapi) \
 		$(use_with ldap) \
+		$(use_with llvm) \
 		$(use_with pam) \
 		$(use_with perl) \
 		$(use_with python) \
@@ -175,7 +178,7 @@ src_install() {
 	emake DESTDIR="${D}" install
 	emake DESTDIR="${D}" install -C contrib
 
-	dodoc README HISTORY doc/{TODO,bug.template}
+	dodoc README HISTORY
 
 	# man pages are already built, but if we have the target make them,
 	# they'll be generated from source before being installed so we
@@ -185,7 +188,13 @@ src_install() {
 	doins -r doc/src/sgml/man{1,3,7}
 	if ! use server; then
 		# Remove man pages for non-existent binaries
-		for m in {initdb,pg_{controldata,ctl,resetxlog},post{gres,master}}; do
+		serverman=(
+			initdb
+			pg_{archivecleanup,controldata,ctl,resetwal,rewind,standby}
+			pg_{test_{fsync,timing},upgrade,waldump}
+			post{gres,master}
+		)
+		for m in ${serverman[@]} ; do
 			rm "${ED}/usr/share/postgresql-${SLOT}/man/man1/${m}.1"
 		done
 	fi
@@ -201,7 +210,7 @@ src_install() {
 
 		for f in "${ED}/usr/share/postgresql-${SLOT}/man/man${mansec}"/* ; do
 			bn=$(basename "${f}")
-			slotted_name=${bn%.${mansec}}${SLOT/.}.${mansec}
+			slotted_name=${bn%.${mansec}}${SLOT}.${mansec}
 			case ${bn} in
 				TABLE.7|WITH.7)
 					echo ".so ${rel_manpath}/SELECT.7" > ${slotted_name}
@@ -224,24 +233,19 @@ src_install() {
 		find "${ED}" -name '*.a' ! -name libpgport.a ! -name libpgcommon.a \
 			 -delete
 
+	# Make slot specific links to programs
 	local f bn
 	for f in $(find "${ED}/usr/$(get_libdir)/postgresql-${SLOT}/bin" \
 					-mindepth 1 -maxdepth 1)
 	do
 		bn=$(basename "${f}")
-		# Temporarily tack on tmp to workaround a file collision
-		# issue. This is only necessary for 9.7 and earlier. 10 never
-		# had this issue.
 		dosym "../$(get_libdir)/postgresql-${SLOT}/bin/${bn}" \
-			  "/usr/bin/${bn}${SLOT/.}tmp"
+			  "/usr/bin/${bn}${SLOT/.}"
 	done
 
 	if use doc ; then
 		docinto html
 		dodoc doc/src/sgml/html/*
-
-		docinto sgml
-		dodoc doc/src/sgml/*.{sgml,dsl}
 	fi
 
 	if use server; then
@@ -255,10 +259,9 @@ src_install() {
 			sed -e "s|@SLOT@|${SLOT}|g" -e "s|@LIBDIR@|$(get_libdir)|g" \
 				"${FILESDIR}/${PN}.service-9.6-r1" | \
 				systemd_newunit - ${PN}-${SLOT}.service
-			systemd_newtmpfilesd "${FILESDIR}"/${PN}.tmpfiles ${PN}-${SLOT}.conf
+			newbin "${FILESDIR}"/${PN}-check-db-dir ${PN}-${SLOT}-check-db-dir
+			newtmpfiles "${FILESDIR}"/${PN}.tmpfiles ${PN}-${SLOT}.conf
 		fi
-
-		newbin "${FILESDIR}"/${PN}-check-db-dir ${PN}-${SLOT}-check-db-dir
 
 		use pam && pamd_mimic system-auth ${PN}-${SLOT} auth account session
 
@@ -269,42 +272,8 @@ src_install() {
 	fi
 }
 
-pkg_preinst() {
-	# Find all of the slot-specific symlinks, if any, in /usr/bin (e.g.,
-	# /usr/bin/psql96). They may have been created by the
-	# postgresql.eselect module, but they're handled within this ebuild
-	# now. It's alright if we momentarily delete /usr/bin/psql as it
-	# will be recreated by the eselect module in pkg_ppostinst(). This
-	# is only necessary for 9.7 and earlier. 10 and later were never
-	# handled in this manner.
-	local canonicalise
-	if type -p realpath > /dev/null; then
-		canonicalise=realpath
-	elif type -p readlink > /dev/null; then
-		canonicalise='readlink -f'
-	else
-		# can't die, subshell
-		die "No readlink nor realpath found, cannot canonicalise"
-	fi
-
-	local l
-	# First remove any symlinks in /usr/bin that may have been created
-	# by the old eselect
-	for l in $(find "${ROOT}/usr/bin" -mindepth 1 -maxdepth 1 -type l) ; do
-		if [[ $(${canonicalise} "${l}") == *postgresql-${SLOT}* ]] ; then
-			rm "${l}" || ewarn "Couldn't remove ${l}"
-		fi
-	done
-
-	# Then move the symlinks created by the ebuild to their proper place.
-	for l in "${ED}"/usr/bin/*tmp ; do
-		mv "${l}" "${l%tmp}" \
-			|| ewarn "Couldn't rename $(basename ${l}) to $(basename ${l%tmp})"
-	done
-}
-
 pkg_postinst() {
-	use server && use systemd && systemd_tmpfiles_create ${PN}-${SLOT}.conf
+	use server && use systemd && tmpfiles_process ${PN}-${SLOT}.conf
 	postgresql-config update
 
 	elog "If you need a global psqlrc-file, you can place it in:"
@@ -328,6 +297,14 @@ pkg_postinst() {
 		elog "Then, execute the following command to setup the initial database"
 		elog "environment:"
 		elog "    emerge --config =${CATEGORY}/${PF}"
+
+		if [[ -n ${REPLACING_VERSIONS} ]] ; then
+			ewarn "If your system is using 'pg_stat_statements' and you are running a"
+			ewarn "version of PostgreSQL ${SLOT}, we advise that you execute"
+			ewarn "the following command after upgrading:"
+			ewarn
+			ewarn "ALTER EXTENSION pg_stat_statements UPDATE;"
+		fi
 	fi
 }
 
@@ -410,9 +387,9 @@ pkg_config() {
 
 	einfo "Creating the data directory ..."
 	if [[ ${EUID} == 0 ]] ; then
-		mkdir -p "${DATA_DIR}"
-		chown -Rf postgres:postgres "${DATA_DIR}"
-		chmod 0700 "${DATA_DIR}"
+		mkdir -p "$(dirname ${DATA_DIR%/})" || die "Couldn't parent dirs"
+		mkdir -m 0700 "${DATA_DIR%/}" || die "Couldn't make DATA_DIR"
+		chown -h postgres:postgres "${DATA_DIR%/}" || die "Couldn't chown"
 	fi
 
 	einfo "Initializing the database ..."

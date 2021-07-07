@@ -1,11 +1,11 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7,8,9} )
+PYTHON_COMPAT=( python3_{8,9,10} )
 
-inherit flag-o-matic linux-info multilib pam prefix python-single-r1 systemd
+inherit flag-o-matic linux-info multilib pam prefix python-single-r1 systemd tmpfiles
 
 KEYWORDS="amd64"
 
@@ -20,8 +20,8 @@ LICENSE="POSTGRESQL GPL-2"
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="https://www.postgresql.org/"
 
-IUSE="bagger cassert debug doc icu kerberos kernel_linux ldap llvm nls pam
-	  perl python +readline selinux +server systemd ssl static-libs tcl
+IUSE="bagger cassert debug doc icu kerberos kernel_linux ldap nls pam perl
+	  python +readline selinux +server systemd ssl static-libs tcl
 	  +threads uuid xml zlib"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
@@ -35,10 +35,6 @@ virtual/libintl
 icu? ( dev-libs/icu:= )
 kerberos? ( virtual/krb5 )
 ldap? ( net-nds/openldap )
-llvm? (
-	sys-devel/llvm:=
-	sys-devel/clang:=
-)
 pam? ( sys-libs/pam )
 perl? ( >=dev-lang/perl-5.8:= )
 python? ( ${PYTHON_DEPS} )
@@ -92,6 +88,9 @@ pkg_setup() {
 
 src_prepare() {
 
+	# Work around PPC{,64} compilation bug where bool is already defined
+	sed '/#ifndef __cplusplus/a #undef bool' -i src/include/c.h || die
+
 	# Set proper run directory
 	sed "s|\(PGSOCKET_DIR\s\+\)\"/tmp\"|\1\"${EPREFIX}/run/postgresql\"|" \
 		-i src/include/pg_config_manual.h || die
@@ -101,10 +100,10 @@ src_prepare() {
 	# hardened and non-hardened environments. (Bug #528786)
 	sed 's/@install_bin@/install -c/' -i src/Makefile.global.in || die
 
-	use server || eapply "${FILESDIR}/${PN}-13_beta1-no-server.patch"
+	use server || eapply "${FILESDIR}/${PN}-10.2-no-server.patch"
 
 	if use pam ; then
-		sed "s/\(#define PGSQL_PAM_SERVICE \"postgresql\)/\1-${SLOT}/" \
+		sed -e "s/\(#define PGSQL_PAM_SERVICE \"postgresql\)/\1-${SLOT}/" \
 			-i src/backend/libpq/auth.c || \
 			die 'PGSQL_PAM_SERVICE rename failed.'
 	fi
@@ -113,6 +112,11 @@ src_prepare() {
 	if use bagger ; then
 		eapply "${FILESDIR}"/${PN}-10.0-index.patch
 	fi
+
+	# https://bugs.gentoo.org/753257
+	# https://bugs.gentoo.org/766225
+	eapply "${FILESDIR}"/postgresql-10.0-icu68.patch \
+		   "${FILESDIR}"/postgresql-10.0-icu68-2.patch
 
 	eapply_user
 }
@@ -154,7 +158,6 @@ src_configure() {
 		$(use_with icu) \
 		$(use_with kerberos gssapi) \
 		$(use_with ldap) \
-		$(use_with llvm) \
 		$(use_with pam) \
 		$(use_with perl) \
 		$(use_with python) \
@@ -178,7 +181,7 @@ src_install() {
 	emake DESTDIR="${D}" install
 	emake DESTDIR="${D}" install -C contrib
 
-	dodoc README HISTORY
+	dodoc README HISTORY doc/{TODO,bug.template}
 
 	# man pages are already built, but if we have the target make them,
 	# they'll be generated from source before being installed so we
@@ -260,7 +263,7 @@ src_install() {
 				"${FILESDIR}/${PN}.service-9.6-r1" | \
 				systemd_newunit - ${PN}-${SLOT}.service
 			newbin "${FILESDIR}"/${PN}-check-db-dir ${PN}-${SLOT}-check-db-dir
-			systemd_newtmpfilesd "${FILESDIR}"/${PN}.tmpfiles ${PN}-${SLOT}.conf
+			newtmpfiles "${FILESDIR}"/${PN}.tmpfiles ${PN}-${SLOT}.conf
 		fi
 
 		use pam && pamd_mimic system-auth ${PN}-${SLOT} auth account session
@@ -273,7 +276,7 @@ src_install() {
 }
 
 pkg_postinst() {
-	use server && use systemd && systemd_tmpfiles_create ${PN}-${SLOT}.conf
+	use server && use systemd && tmpfiles_process ${PN}-${SLOT}.conf
 	postgresql-config update
 
 	elog "If you need a global psqlrc-file, you can place it in:"
@@ -387,9 +390,9 @@ pkg_config() {
 
 	einfo "Creating the data directory ..."
 	if [[ ${EUID} == 0 ]] ; then
-		mkdir -p "$(dirname ${DATA_DIR%/})" || die "Couldn't parent dirs"
-		mkdir -m 0700 "${DATA_DIR%/}" || die "Couldn't make DATA_DIR"
-		chown -h postgres:postgres "${DATA_DIR%/}" || die "Couldn't chown"
+		mkdir -p "${DATA_DIR}"
+		chown -Rf postgres:postgres "${DATA_DIR}"
+		chmod 0700 "${DATA_DIR}"
 	fi
 
 	einfo "Initializing the database ..."
@@ -447,12 +450,8 @@ pkg_config() {
 
 src_test() {
 	if use server && [[ ${UID} -ne 0 ]] ; then
-		# Some ICU tests fail if LC_CTYPE and LC_COLLATE aren't the same. We set
-		# LC_CTYPE to be equal to LC_COLLATE since LC_COLLATE is set by Portage.
-		local old_ctype=${LC_CTYPE}
-		export LC_CTYPE=${LC_COLLATE}
 		emake check
-		export LC_CTYPE=${old_ctype}
+
 		einfo "If you think other tests besides the regression tests are necessary, please"
 		einfo "submit a bug including a patch for this ebuild to enable them."
 	else

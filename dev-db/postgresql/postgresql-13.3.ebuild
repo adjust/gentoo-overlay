@@ -3,9 +3,9 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7,8,9} )
+PYTHON_COMPAT=( python3_{8,9,10} )
 
-inherit flag-o-matic linux-info multilib pam prefix python-single-r1 systemd
+inherit flag-o-matic linux-info multilib pam prefix python-single-r1 systemd tmpfiles
 
 KEYWORDS="amd64"
 
@@ -101,7 +101,7 @@ src_prepare() {
 	# hardened and non-hardened environments. (Bug #528786)
 	sed 's/@install_bin@/install -c/' -i src/Makefile.global.in || die
 
-	use server || eapply "${FILESDIR}/${PN}-12.1-no-server.patch"
+	use server || eapply "${FILESDIR}/${PN}-13_beta1-no-server.patch"
 
 	if use pam ; then
 		sed "s/\(#define PGSQL_PAM_SERVICE \"postgresql\)/\1-${SLOT}/" \
@@ -260,7 +260,7 @@ src_install() {
 				"${FILESDIR}/${PN}.service-9.6-r1" | \
 				systemd_newunit - ${PN}-${SLOT}.service
 			newbin "${FILESDIR}"/${PN}-check-db-dir ${PN}-${SLOT}-check-db-dir
-			systemd_newtmpfilesd "${FILESDIR}"/${PN}.tmpfiles ${PN}-${SLOT}.conf
+			newtmpfiles "${FILESDIR}"/${PN}.tmpfiles ${PN}-${SLOT}.conf
 		fi
 
 		use pam && pamd_mimic system-auth ${PN}-${SLOT} auth account session
@@ -273,7 +273,7 @@ src_install() {
 }
 
 pkg_postinst() {
-	use server && use systemd && systemd_tmpfiles_create ${PN}-${SLOT}.conf
+	use server && use systemd && tmpfiles_process ${PN}-${SLOT}.conf
 	postgresql-config update
 
 	elog "If you need a global psqlrc-file, you can place it in:"
@@ -447,8 +447,12 @@ pkg_config() {
 
 src_test() {
 	if use server && [[ ${UID} -ne 0 ]] ; then
+		# Some ICU tests fail if LC_CTYPE and LC_COLLATE aren't the same. We set
+		# LC_CTYPE to be equal to LC_COLLATE since LC_COLLATE is set by Portage.
+		local old_ctype=${LC_CTYPE}
+		export LC_CTYPE=${LC_COLLATE}
 		emake check
-
+		export LC_CTYPE=${old_ctype}
 		einfo "If you think other tests besides the regression tests are necessary, please"
 		einfo "submit a bug including a patch for this ebuild to enable them."
 	else
