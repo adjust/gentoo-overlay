@@ -1,27 +1,39 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-inherit eutils user
+
+inherit eutils
 
 DESCRIPTION="Flash-optimized, in-memory, nosql database"
 HOMEPAGE="http://www.aerospike.com"
-
-LICENSE="Apache-2.0"
-SLOT="0"
-KEYWORDS="~amd64"
-IUSE=""
 SRC_URI="http://www.aerospike.com/artifacts/${PN}/${PV}/${P}-debian8.tgz"
 
-RDEPEND="!dev-db/aerospike-server-community
+LICENSE="Apache-2.0"
+KEYWORDS="~amd64"
+
+IUSE=""
+
+RDEPEND="
+	${PYTHON_DEPS}
+	acct-group/aerospike
+	acct-user/aerospike
+	!dev-db/aerospike-server-community
 	dev-lang/python:2.7
 	net-nds/openldap
 	sys-process/numactl
-	${PYTHON_DEPS}
-	|| ( dev-libs/openssl-compat:1.0.0 <dev-libs/openssl-1.1:* )
-	virtual/jre:1.8"
-DEPEND="${RDEPEND}
-	app-arch/xz-utils"
+	|| (
+		dev-libs/openssl-compat:1.0.0
+		<dev-libs/openssl-1.1:*
+	)
+	virtual/jre:1.8
+	sys-libs/readline-compat
+"
+
+DEPEND="
+	${RDEPEND}
+	app-arch/xz-utils
+"
 
 S="${WORKDIR}/${P}-debian8"
 
@@ -29,12 +41,6 @@ RESTRICT="fetch"
 
 # change me at every version bump
 TOOLS_PV="3.18.1"
-
-pkg_setup() {
-	enewgroup aerospike
-	enewuser aerospike -1 /bin/bash /opt/aerospike aerospike
-	python-single-r1_pkg_setup
-}
 
 src_prepare() {
 	local server_deb="${P}.debian8.x86_64.deb"
