@@ -5,7 +5,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python2_7 )
 
-inherit autotools java-pkg-opt-2 python-any-r1 toolchain-funcs user
+inherit autotools java-pkg-opt-2 python-any-r1 toolchain-funcs
 
 DESCRIPTION="Apache Mesos is a computer cluster manager"
 HOMEPAGE="https://mesos.apache.org"
@@ -16,8 +16,15 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64"
 
+# The user account "warden" is used across all Mesos/Spark/Chronos services
+# to keep the whole user account management consistent across the cluster
+# and to avoid running into user permission errors.
 RDEPEND="
-	>=virtual/jre-1.8"
+	acct-group/warden
+	acct-user/warden
+
+	>=virtual/jdk-1.8
+"
 
 DEPEND="
 	${PYTHON_DEPS}
@@ -29,7 +36,8 @@ DEPEND="
 	dev-python/six
 	net-misc/curl
 	sys-libs/zlib
-	dev-libs/apr"
+	dev-libs/apr
+"
 
 DOCS=( LICENSE README.md NOTICE )
 
@@ -38,12 +46,6 @@ RESTRICT="test"
 pkg_setup() {
 	python-any-r1_pkg_setup
 	java-pkg-opt-2_pkg_setup
-
-	# The user account "warden" is used across all Mesos/Spark/Chronos services
-	# to keep the whole user account management consistent across the cluster
-	# and to avoid running into user permission errors.
-	enewgroup warden
-	enewuser warden -1 -1 /var/lib/warden warden
 }
 
 src_prepare() {
