@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit systemd user
+inherit systemd
 
 MY_PN="${PN%-bin}"
 MY_P=${MY_PN}-${PV}
@@ -19,14 +19,22 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="x-pack"
 
-RDEPEND=">=net-libs/nodejs-8.14.0"
+RDEPEND="
+	acct-group/kibana
+	acct-user/kibana
+	>=net-libs/nodejs-10.15.2
+	<net-libs/nodejs-14
+	x-pack? (
+		dev-libs/expat
+		dev-libs/nss
+	)
+"
+
+DEPEND="
+	${RDEPEND}
+"
 
 S="${WORKDIR}/${MY_P}-linux-x86_64"
-
-pkg_setup() {
-	enewgroup ${MY_PN}
-	enewuser ${MY_PN} -1 -1 /opt/${MY_PN} ${MY_PN}
-}
 
 src_prepare() {
 	default
