@@ -3,29 +3,29 @@
 
 EAPI=6
 
-RESTRICT="test"
-
 EGO_PN="github.com/adjust/${PN}"
-inherit golang-build user
+inherit golang-build
 
+HOMEPAGE="https://github.com/adjust/postgresql_exporter"
+DESCRIPTION="PostgreSQL Prometheus Exporter"
 SRC_URI="https://${EGO_PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
+
+LICENSE="MIT"
 KEYWORDS="~amd64"
 
-DESCRIPTION="PostgreSQL Prometheus Exporter"
-HOMEPAGE="https://github.com/adjust/postgresql_exporter"
-LICENSE="MIT"
 SLOT="0"
+
 IUSE=""
 
 # This package is meant as a replacement so it uses the same user.
-RDEPEND="!net-analyzer/prometheus-postgres_exporter"
+RDEPEND="
+	acct-group/postgresql_exporter
+	acct-user/postgresql_exporter
 
-EXPORTER_USER=prometheus-exporter
+	!net-analyzer/prometheus-postgres_exporter
+"
 
-pkg_setup() {
-	enewgroup "${EXPORTER_USER}"
-	enewuser "${EXPORTER_USER}" -1 -1 -1 "${EXPORTER_USER}"
-}
+RESTRICT="test"
 
 src_prepare() {
 	default
