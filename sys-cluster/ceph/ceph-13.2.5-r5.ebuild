@@ -6,7 +6,7 @@ PYTHON_COMPAT=( python3_8 )
 DISTUTILS_OPTIONAL=1
 
 inherit check-reqs cmake-utils distutils-r1 flag-o-matic multiprocessing \
-	python-r1 udev user readme.gentoo-r1 systemd bash-completion-r1
+	python-r1 udev readme.gentoo-r1 systemd bash-completion-r1
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -88,6 +88,8 @@ DEPEND="${COMMON_DEPEND}
 		sys-fs/btrfs-progs
 	)"
 RDEPEND="${COMMON_DEPEND}
+	acct-group/ceph
+	acct-user/ceph
 	net-misc/socat
 	sys-apps/gptfdisk
 	sys-block/parted
@@ -153,11 +155,6 @@ check-reqs_export_vars() {
 	export CHECKREQS_DISK_BUILD CHECKREQS_DISK_USR
 }
 
-user_setup() {
-	enewgroup ceph ${CEPH_GID}
-	enewuser ceph "${CEPH_UID:--1}" -1 /var/lib/ceph ceph
-}
-
 pkg_pretend() {
 	check-reqs_export_vars
 	check-reqs_pkg_pretend
@@ -167,7 +164,6 @@ pkg_setup() {
 	python_setup 'python3*'
 	check-reqs_export_vars
 	check-reqs_pkg_setup
-	user_setup
 }
 
 src_prepare() {
