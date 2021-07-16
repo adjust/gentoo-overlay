@@ -10,7 +10,7 @@ inherit distutils-r1
 
 DISTUTILS_USE_SETUPTOOLS=no
 
-DESCRIPTION="FastAPI framework, high performance, easy to learn, fast to code, ready for production"
+DESCRIPTION="High performance, easy to learn, fast to code, ready for production"
 HOMEPAGE="https://fastapi.tiangolo.com/"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
@@ -23,4 +23,3 @@ RDEPEND="
 	<dev-python/starlette-0.14.1[${PYTHON_USEDEP}]
 	dev-python/pydantic[${PYTHON_USEDEP}]
 "
-
