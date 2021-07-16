@@ -350,4 +350,7 @@
 		<remote-id type="cpan-module">Rex::Virtualization::VBox::start</remote-id>
 		<remote-id type="cpan-module">Rex::Virtualization::VBox::status</remote-id>
 	</upstream>
+	<use>
+		<flag name="trex-compat">Install compatibility symlinks rex -> trex</flag>
+	</use>
 </pkgmetadata>
