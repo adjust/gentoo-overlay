@@ -29,6 +29,10 @@ REQUIRED_USE="
 "
 
 RDEPEND="
+	server? (
+		acct-group/clickhouse
+		acct-user/clickhouse
+	)
 	dev-libs/re2:0=
 	!static? (
 		>=app-arch/lz4-1.8.0:=
@@ -213,11 +217,4 @@ src_install() {
 
 	keepdir /var/log/clickhouse-server
 	chown clickhouse:clickhouse "${D}"/var/log/clickhouse-server
-}
-
-pkg_preinst() {
-	if use server; then
-		enewgroup clickhouse
-		enewuser clickhouse -1 -1 /var/lib/clickhouse clickhouse
-	fi
 }

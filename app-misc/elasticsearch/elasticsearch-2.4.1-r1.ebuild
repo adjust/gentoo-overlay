@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit eutils systemd user
+inherit eutils systemd
 
 MY_PN="${PN%-bin}"
 DESCRIPTION="Open Source, Distributed, RESTful, Search Engine"
@@ -15,19 +15,21 @@ KEYWORDS="~amd64"
 
 RESTRICT="strip"
 
-RDEPEND="|| ( virtual/jre:1.8 virtual/jre:1.7 )
-	sys-process/numactl"
+RDEPEND="
+	acct-group/elasticsearch
+	acct-user/elasticsearch
+	|| ( virtual/jre:1.8 virtual/jre:1.7 )
+	sys-process/numactl
+"
+
+DEPEND="
+	${RDEPEND}
+"
 
 pkg_preinst() {
 	if has_version '<app-misc/elasticsearch-2.3.2'; then
 		export UPDATE_NOTES=1
 	fi
-}
-
-pkg_setup() {
-	enewgroup ${MY_PN}
-	enewuser ${MY_PN} -1 /bin/bash /usr/share/${MY_PN} ${MY_PN}
-	esethome ${MY_PN} /usr/share/${MY_PN}
 }
 
 src_prepare() {

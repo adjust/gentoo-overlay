@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit perl-functions user webapp
+inherit perl-functions webapp
 
 DESCRIPTION="Network Management Information System"
 HOMEPAGE="https://opmantek.com/network-management-system-nmis/"
@@ -21,7 +21,11 @@ DEPEND="
 "
 
 need_httpd_cgi # Extends DEPEND.
-RDEPEND="${DEPEND}
+RDEPEND="
+	acct-group/nmis
+	acct-user/nmis
+
+	${DEPEND}
 	dev-perl/BSD-Resource
 	dev-perl/CGI
 	dev-perl/Date-Calc
@@ -39,7 +43,8 @@ RDEPEND="${DEPEND}
 	<net-analyzer/rrdtool-1.6[perl,graph,rrdcgi]
 	virtual/perl-Data-Dumper
 	mysql? ( dev-perl/DBD-mysql )
-	postgres? ( dev-perl/DBD-Pg )"
+	postgres? ( dev-perl/DBD-Pg )
+"
 
 # TODO: sqlite should also be OK here.
 REQUIRED_USE='|| ( mysql postgres )'
@@ -49,9 +54,6 @@ NMIS_MODDIR="${PN}${PV:0:1}"
 
 pkg_setup() {
 	webapp_pkg_setup
-
-	enewgroup ${PN}
-	enewuser ${PN} -1 -1 /var/empty ${PN}
 }
 
 src_prepare() {

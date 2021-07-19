@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit eutils user
+inherit eutils
 
 DESCRIPTION="Scalable Batch and Stream Data Processing"
 HOMEPAGE="https://flink.apache.org"
@@ -14,18 +14,16 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 RDEPEND="
+	acct-group/flink
+	acct-user/flink
 	virtual/jre:1.8
 "
+
 DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/flink-${PV}"
 
 DOCS=( NOTICE README.txt )
-
-pkg_setup() {
-	enewgroup flink
-	enewuser flink -1 -1 /var/lib/flink flink
-}
 
 src_install() {
 	dodir usr/lib/flink

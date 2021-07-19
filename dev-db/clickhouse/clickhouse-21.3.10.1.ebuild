@@ -25,11 +25,15 @@ SLOT="0"
 
 IUSE="+client +server test"
 
-DEPEND="
+RDEPEND="
+	server? (
+		acct-group/clickhouse
+		acct-user/clickhouse
+	)
 "
 
-RDEPEND="
-	${DEPEND}
+DEPEND="
+	${RDEPEND}
 "
 
 QA_PREBUILT="
@@ -38,13 +42,6 @@ QA_PREBUILT="
 	opt/clickhouse/usr/bin/clickhouse-report
 	opt/clickhouse/usr/bin/clickhouse-test
 "
-
-pkg_setup() {
-	if use server; then
-		enewgroup clickhouse
-		enewuser clickhouse -1 -1 /var/lib/clickhouse clickhouse
-	fi
-}
 
 src_unpack() {
 	unpack "${A}"

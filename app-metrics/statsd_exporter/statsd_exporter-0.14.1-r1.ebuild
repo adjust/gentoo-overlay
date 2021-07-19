@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit go-module user
+inherit go-module
 
 DESCRIPTION="statsd_exporter receives StatsD metrics and exports them as Prometheus metrics"
 HOMEPAGE="https://prometheus.io"
@@ -128,10 +128,10 @@ SLOT="0"
 
 IUSE=""
 
-pkg_setup() {
-	enewgroup statsd_exporter
-	enewuser statsd_exporter -1 -1 -1 statsd_exporter
-}
+RDEPEND="
+	acct-group/statsd_exporter
+	acct-user/statsd_exporter
+"
 
 src_compile() {
 	go build

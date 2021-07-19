@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -7,20 +7,28 @@ RESTRICT="test"
 
 EGO_PN="github.com/f1yegor/${PN}"
 
-inherit golang-vcs golang-build user
+inherit golang-vcs golang-build
 
 DESCRIPTION="Clickhouse Prometheus Exporter"
 HOMEPAGE="https://github.com/f1yegor/clickhouse_exporter"
+
 LICENSE="MIT"
+KEYWORDS=""
+
 SLOT="0"
+
 IUSE=""
 
-EXPORTER_USER=clickhouse_exporter
+RDEPEND="
+	acct-group/clickhouse_exporter
+	acct-user/clickhouse_exporter
+"
 
-pkg_setup() {
-	enewgroup "${EXPORTER_USER}"
-	enewuser "${EXPORTER_USER}" -1 -1 -1 "${EXPORTER_USER}"
-}
+DEPEND="
+	${RDEPEND}
+"
+
+EXPORTER_USER=clickhouse_exporter
 
 src_install() {
 	newbin clickhouse_exporter "${PN}"
