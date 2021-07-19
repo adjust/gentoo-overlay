@@ -13,7 +13,7 @@ DESCRIPTION="Clickhouse Prometheus Exporter"
 HOMEPAGE="https://github.com/f1yegor/clickhouse_exporter"
 
 LICENSE="MIT"
-KEYWORDS="~amd64"
+KEYWORDS=""
 
 SLOT="0"
 

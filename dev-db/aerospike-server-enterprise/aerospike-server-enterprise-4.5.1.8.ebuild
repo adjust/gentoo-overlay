@@ -12,6 +12,8 @@ SRC_URI="http://www.aerospike.com/artifacts/${PN}/${PV}/${P}-debian8.tgz"
 LICENSE="Apache-2.0"
 KEYWORDS="~amd64"
 
+SLOT="0"
+
 IUSE=""
 
 RDEPEND="
