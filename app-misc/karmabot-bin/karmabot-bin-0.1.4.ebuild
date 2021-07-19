@@ -3,8 +3,6 @@
 
 EAPI=7
 
-inherit
-
 DESCRIPTION="Slack bot for karma tracking using reaction buttons"
 HOMEPAGE="https://github.com/adjust/karmabot"
 SRC_URI="https://files.adjust.com/karmabot-${PV}.tar.gz"
