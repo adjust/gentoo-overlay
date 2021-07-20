@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python2_7 )
 
 inherit autotools java-pkg-opt-2 python-any-r1 toolchain-funcs user
 
-DESCRIPTION="Apache Mesos is computer cluster manager"
+DESCRIPTION="Apache Mesos is a computer cluster manager"
 HOMEPAGE="https://mesos.apache.org"
 SRC_URI="mirror://apache/${PN}/${PV}/${P}.tar.gz"
 IUSE="master agent"
@@ -59,12 +59,14 @@ src_compile() {
 	# make will fail on:
 	# src/core/lib/gpr/log_linux.cc:42:13: error: ambiguating new declaration
 	# of ‘long int gettid()’
-	make -j4
+	make -j64
 
 	# fix this problem.
 	eapply "${FILESDIR}/${P}-gettid-log_linux.cc.patch"
 	# useless parens causing a build failure. remove them.
 	eapply "${FILESDIR}/${P}-boost-assert.hpp.patch"
+	# set the maven m2 directory location to S.
+	eapply "${FILESDIR}/${P}-maven-m2-directory-location.patch"
 
 	# let's restart the compilation process.
 	emake
