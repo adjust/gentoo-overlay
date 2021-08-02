@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_8 )
+PYTHON_COMPAT=( python3_{7..9} )
 
 inherit distutils-r1
 
@@ -19,6 +19,10 @@ SLOT="0"
 IUSE="ldapauthenticator"
 
 DEPEND="
+	dev-python/setuptools[${PYTHON_USEDEP}]
+"
+
+RDEPEND="
 	net-libs/nodejs
 	dev-python/alembic[${PYTHON_USEDEP}]
 	>=dev-python/async_generator-1.8[${PYTHON_USEDEP}]
@@ -35,10 +39,6 @@ DEPEND="
 	>=www-servers/tornado-5.0[${PYTHON_USEDEP}]
 	>=dev-python/traitlets-4.3.2[${PYTHON_USEDEP}]
 	ldapauthenticator? ( dev-python/jupyterhub-ldapauthenticator[${PYTHON_USEDEP}] )
-"
-
-RDEPEND="
-	${DEPEND}
 "
 
 src_prepare() {
