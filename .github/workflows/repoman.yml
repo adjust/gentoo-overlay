@@ -31,4 +31,4 @@ jobs:
         sudo ln -s /var/db/repos/gentoo/profiles/default/linux/amd64/17.1 /etc/portage/make.profile
     - name: Test with repoman
       run: |
-        python3 portage-*/repoman/bin/repoman full -dx
+        python3 portage-*/repoman/bin/repoman -adv full
