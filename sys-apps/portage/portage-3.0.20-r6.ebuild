@@ -4,7 +4,7 @@
 EAPI=7
 
 DISTUTILS_USE_SETUPTOOLS=bdepend
-PYTHON_COMPAT=( pypy3 python3_{8..9} )
+PYTHON_COMPAT=( pypy3 python3_{8..10} )
 PYTHON_REQ_USE='bzip2(+),threads(+)'
 TMPFILES_OPTIONAL=1
 
@@ -14,7 +14,7 @@ DESCRIPTION="Portage is the package management and distribution system for Gento
 HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Portage"
 
 LICENSE="GPL-2"
-KEYWORDS="amd64"
+KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86"
 SLOT="0"
 IUSE="apidoc build doc gentoo-dev +ipc +native-extensions +rsync-verify selinux test xattr"
 RESTRICT="!test? ( test )"
@@ -74,7 +74,11 @@ PDEPEND="
 # NOTE: FEATURES=installsources requires debugedit and rsync
 
 SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz
-	https://github.com/gentoo/portage/commit/a4d882964ee1931462f911d0c46a80e27e59fa48.patch -> portage-3.0.20-bug-777492-a4d8829.patch"
+	https://github.com/gentoo/portage/commit/a4d882964ee1931462f911d0c46a80e27e59fa48.patch -> portage-3.0.20-bug-777492-a4d8829.patch
+	https://github.com/gentoo/portage/commit/209be9a8bee13384dd04a4762436b4c2a5e35bc6.patch -> portage-3.0.20-bug-777492-209be9a.patch
+	https://github.com/gentoo/portage/compare/8e47286b7082aac21fe25402a1f9d03db968cd30...693f6bf5a54e2424e2ad49e1838b61f76bf78e40.patch -> portage-3.0.20-bug-796584-693f6bf.patch
+	https://github.com/gentoo/portage/commit/2ce11f06e48290efb2d4b6743c8edf01c176b0fc.patch -> portage-3.0.20-bug-796812-2ce11f0.patch
+	https://github.com/gentoo/portage/compare/2ce11f06e48290efb2d4b6743c8edf01c176b0fc...c3e4919fd004ce0f5c91c67ea377bbda83558ca9.patch -> portage-3.0.20-bug-796959-c8a52e1-c3e4919.patch"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-3.0.13-silence-deprecated-profile-check.patch"
@@ -89,8 +93,20 @@ pkg_pretend() {
 python_prepare_all() {
 	distutils-r1_python_prepare_all
 
-	# Revert due to regression: https://bugs.gentoo.org/777492#c4
+	# Revert due to regressions:
+	# https://bugs.gentoo.org/777492
+	# https://github.com/gentoo/portage/pull/728
+	eapply -R "${DISTDIR}/portage-3.0.20-bug-777492-209be9a.patch"
 	eapply -R "${DISTDIR}/portage-3.0.20-bug-777492-a4d8829.patch"
+
+	# Apply regression fix for https://bugs.gentoo.org/796584.
+	eapply "${DISTDIR}/portage-3.0.20-bug-796584-693f6bf.patch"
+
+	# Apply EAPI 8 fix for https://bugs.gentoo.org/796812.
+	eapply "${DISTDIR}/portage-3.0.20-bug-796812-2ce11f0.patch"
+
+	# Apply EAPI 8 fix for https://bugs.gentoo.org/796959
+	eapply "${DISTDIR}/portage-3.0.20-bug-796959-c8a52e1-c3e4919.patch"
 
 	sed -e "s:^VERSION = \"HEAD\"$:VERSION = \"${PV}\":" -i lib/portage/__init__.py || die
 
@@ -173,8 +189,6 @@ python_prepare_all() {
 		eerror ""
 	fi
 }
-
-
 
 python_compile_all() {
 	local targets=()
