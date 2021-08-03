@@ -1,34 +1,47 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit bash-completion-r1 autotools eutils flag-o-matic fortran-2 multilib toolchain-funcs
+inherit bash-completion-r1 autotools flag-o-matic fortran-2 toolchain-funcs
 
 # latest git commit for R bash completion: https://github.com/deepayan/rcompletion
 BCPV=78d6830e28ea90a046da79a9b4f70c39594bb6d6
 
 DESCRIPTION="Language and environment for statistical computing and graphics"
-HOMEPAGE="http://www.r-project.org/"
+HOMEPAGE="https://www.r-project.org/"
 SRC_URI="
-	mirror://cran/src/base/R-3/${P}.tar.gz
+	mirror://cran/src/base/R-4/${P}.tar.gz
 	https://raw.githubusercontent.com/deepayan/rcompletion/${BCPV}/bash_completion/R -> ${PN}-${BCPV}.bash_completion"
 
 LICENSE="|| ( GPL-2 GPL-3 ) LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="cairo doc icu java jpeg lapack minimal nls openmp perl png prefix profile readline static-libs tiff tk X"
-REQUIRED_USE="png? ( || ( cairo X ) ) jpeg? ( || ( cairo X ) ) tiff? ( || ( cairo X ) )"
+IUSE="cairo doc icu java jpeg lapack minimal nls openmp perl png prefix profile readline static-libs test tiff tk X"
 
-CDEPEND="
+REQUIRED_USE="png? ( || ( cairo X ) )
+	jpeg? ( || ( cairo X ) )
+	tiff? ( || ( cairo X ) )
+"
+
+# At least one package installation in the test suite requires TeX,
+# and will fail without it (bug #718056).
+BDEPEND="virtual/pkgconfig
+	doc? (
+		virtual/latex-base
+		dev-texlive/texlive-fontsrecommended
+	)
+	test? ( virtual/latex-base )"
+DEPEND="
 	app-arch/bzip2:0=
 	app-arch/xz-utils:0=
 	app-text/ghostscript-gpl
-	>=dev-libs/libpcre-8.35:3=
+	dev-libs/libpcre2:=
+	net-libs/libtirpc
 	net-misc/curl
 	virtual/blas:0
-	|| ( >=sys-apps/coreutils-8.15 app-misc/realpath )
-	cairo? ( x11-libs/cairo:0= x11-libs/pango:0= )
+	|| ( sys-apps/coreutils app-misc/realpath )
+	cairo? ( x11-libs/cairo:0=[X=] x11-libs/pango:0= )
 	icu? ( dev-libs/icu:= )
 	jpeg? ( virtual/jpeg:0 )
 	lapack? ( virtual/lapack:0 )
@@ -37,20 +50,14 @@ CDEPEND="
 	readline? ( sys-libs/readline:0= )
 	tiff? ( media-libs/tiff:0= )
 	tk? ( dev-lang/tk:0= )
-	X? ( x11-libs/libXmu:0= x11-misc/xdg-utils )"
+	X? ( x11-libs/libXmu:0= x11-libs/libXt x11-misc/xdg-utils )"
 
-DEPEND="${CDEPEND}
-	virtual/pkgconfig
-	doc? (
-		virtual/latex-base
-		dev-texlive/texlive-fontsrecommended
-	)"
+RDEPEND="${DEPEND}
+	sys-libs/zlib:0[minizip]
+	java? ( >=virtual/jre-1.8:* )"
 
-RDEPEND="${CDEPEND}
-	>=sys-libs/zlib-1.2.5.1-r2:0[minizip]
-	java? ( >=virtual/jre-1.5 )"
-
-RESTRICT="minimal? ( test )"
+RESTRICT="minimal? ( test )
+	!test? ( test )"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-3.4.1-parallel.patch
@@ -64,20 +71,12 @@ pkg_pretend() {
 
 pkg_setup() {
 	if [[ ${MERGE_TYPE} != binary ]] && use openmp; then
-		if ! tc-check-openmp; then
-			ewarn "OpenMP is not available in your current selected compiler"
-			die "need openmp capable compiler"
-		fi
 		FORTRAN_NEED_OPENMP=1
 	fi
 	fortran-2_pkg_setup
 	filter-ldflags -Wl,-Bdirect -Bdirect
 	# avoid using existing R installation
 	unset R_HOME
-	# Temporary fix for bug #419761
-	if [[ ($(tc-getCC) == *gcc) && ($(gcc-version) == 4.7) ]]; then
-		append-flags -fno-ipa-cp-clone
-	fi
 }
 
 src_prepare() {
@@ -88,7 +87,7 @@ src_prepare() {
 		-i src/library/tools/R/Rd.R || die
 
 	# fix Rscript path when installed (gentoo bug #221061)
-	sed -e "s:-DR_HOME='\"\$(rhome)\"':-DR_HOME='\"${EROOT%/}/usr/$(get_libdir)/${PN}\"':" \
+	sed -e "s:-DR_HOME='\"\$(rhome)\"':-DR_HOME='\"${EROOT}/usr/$(get_libdir)/${PN}\"':" \
 		-i src/unix/Makefile.in || die "sed unix Makefile failed"
 
 	# fix HTML links to manual (gentoo bug #273957)
@@ -116,14 +115,14 @@ src_prepare() {
 				-e "/SHLIB_EXT/s/\.so/.dylib/" \
 				-i configure.ac || die
 			# sort of "undo" 2.14.1-rmath-shared.patch
-			sed -e "s:-Wl,-soname=libRmath.so:-install_name ${EROOT%/}/usr/$(get_libdir)/libRmath.dylib:" \
+			sed -e "s:-Wl,-soname=libRmath.so:-install_name ${EROOT}/usr/$(get_libdir)/libRmath.dylib:" \
 				-i src/nmath/standalone/Makefile.in || die
 		else
-			append-ldflags -Wl,-rpath="${EROOT%/}/usr/$(get_libdir)/R/lib"
+			append-ldflags -Wl,-rpath="${EROOT}/usr/$(get_libdir)/R/lib"
 		fi
 	fi
-	AT_M4DIR=m4 eaclocal
-	eautoconf
+	AT_M4DIR=m4
+	eautoreconf
 }
 
 src_configure() {
@@ -134,7 +133,6 @@ src_configure() {
 		--enable-R-shlib \
 		--disable-R-framework \
 		--with-blas="$($(tc-getPKG_CONFIG) --libs blas)" \
-		--docdir="${EPREFIX}/usr/share/doc/${PF}" \
 		rdocdir="${EPREFIX}/usr/share/doc/${PF}" \
 		$(use_enable java) \
 		$(use_enable nls) \
@@ -175,8 +173,8 @@ src_install() {
 	fi
 
 	cat > 99R <<-EOF
-		LDPATH=${EROOT%/}/usr/$(get_libdir)/${PN}/lib
-		R_HOME=${EROOT%/}/usr/$(get_libdir)/${PN}
+		LDPATH=${EROOT}/usr/$(get_libdir)/${PN}/lib
+		R_HOME=${EROOT}/usr/$(get_libdir)/${PN}
 	EOF
 	doenvd 99R
 	newbashcomp "${DISTDIR}"/${PN}-${BCPV}.bash_completion ${PN}
@@ -194,7 +192,37 @@ src_install() {
 		done
 		popd > /dev/null
 	fi
-	docompress -x /usr/share/doc/${PF}/{BioC_mirrors.csv,CRAN_mirrors.csv,KEYWORDS.db,NEWS.rds}
+
+	# Users are encouraged to access some of the the R documentation
+	# interactively, through functions like "contributors()" that
+	# tries to open the "AUTHORS" file. Other files can be accessed
+	# by name with RShowDoc(), and the documentation for e.g. license()
+	# and RShowDoc() suggests a few of these names. Here we try to
+	# collect as many names as possible that a user might actually
+	# try to view through R, because if we don't decompress them,
+	# then R doesn't know what to do with 'em. Bug #556706.
+	INTERACTIVE_DOCS=(
+		AUTHORS
+		COPYING
+		FAQ
+		NEWS
+		THANKS
+	)
+
+	# Other data sources that are shipped as "documentation," but which
+	# need to be accessible via their original unmolested filenames.
+	INTERACTIVE_DATA=(
+		BioC_mirrors.csv
+		CRAN_mirrors.csv
+		KEYWORDS.db
+		NEWS.rds
+	)
+
+	NOCOMPRESS_DOCS=( "${INTERACTIVE_DOCS[@]}" "${INTERACTIVE_DATA[@]}" )
+
+	for f in "${NOCOMPRESS_DOCS[@]}"; do
+		docompress -x "/usr/share/doc/${PF}/${f}"
+	done
 }
 
 pkg_postinst() {
