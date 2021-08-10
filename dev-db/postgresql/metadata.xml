@@ -13,6 +13,10 @@
 		<flag name="cassert">
 			Enable assertion checks (for debugging)
 		</flag>
+		<flag name="hugelwlock">
+			Increase number of lwlock and buffer partitions. You do not
+			need this if you do not know what this is.
+		</flag>
 		<flag name="llvm">
 			Add support for llvm JIT engine
 		</flag>
