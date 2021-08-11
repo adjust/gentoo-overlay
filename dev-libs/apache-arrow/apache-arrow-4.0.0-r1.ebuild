@@ -20,7 +20,7 @@ DEPEND="
 	dev-libs/boost:=
 	dev-libs/thrift:=
 	|| (
-		dev-libs/rapidjson
+		dev-libs/rapidjson:=
 		sys-cluster/mesos
 	)
 	dev-libs/double-conversion:=
