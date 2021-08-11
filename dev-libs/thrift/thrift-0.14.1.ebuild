@@ -14,7 +14,7 @@ IUSE='test +zlib static-libs glib'
 DEPEND="
 	dev-libs/boost
 	dev-libs/openssl:=
-	zlib? ( sys-libs/zlib )
+	zlib? ( sys-libs/zlib:= )
 	glib? ( dev-libs/glib:2 )
 "
 
