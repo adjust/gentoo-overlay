@@ -47,6 +47,18 @@ CMAKE_BUILD_TYPE="release"
 CMAKE_USE_DIR="${S}/cpp"
 CMAKE_MAKEFILE_GENERATOR="emake"
 
+pkg_pretend() {
+
+	# perform sanity checks that only apply to source builds.
+	if [[ ${MERGE_TYPE} != binary ]]; then
+
+		# package fetches some things during build.... unfortnately.
+		if has network-sandbox ${FEATURES}; then
+			die "${P} requires network-sandbox to be disabled during build"
+		fi
+	fi
+}
+
 # - Arrow forces bundled jemalloc == disable
 # - ARROW_IPC requires Flatbuffers, which results in build errors due to
 #   broken find_program calls for flatc == disable
