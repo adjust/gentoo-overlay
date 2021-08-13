@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+<email>ops@adjust.com</email>
+</maintainer>
+<longdescription lang="en">
+This is the Aerospike's monitoring agent for Prometheus.
+You get more info at: https://docs.aerospike.com/docs/tools/monitorstack/index.html
+</longdescription>
+</pkgmetadata>

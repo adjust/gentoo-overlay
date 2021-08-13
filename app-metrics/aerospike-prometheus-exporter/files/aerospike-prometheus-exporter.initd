@@ -1,0 +1,30 @@
+#!/sbin/openrc-run
+# Copyright 2021 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+description="Aerospike's monitoring agent for Prometheus"
+name="Aerospike Prometheus Exporter"
+pidfile="/run/${SVCNAME}/${SVCNAME}.pid"
+user="prometheus-exporter"
+
+command="/usr/bin/${SVCNAME}"
+command_args="${command_args}"
+command_background="true"
+command_user="${user}"
+output_log="/var/log/prometheus/${SVCNAME}.log"
+error_log="/var/log/prometheus/${SVCNAME}.log"
+start_stop_daemon_args="--wait 1000 \
+    --config /etc/aerospike-prometheus-exporter/ape.toml"
+
+depend() {
+	need net
+	after net
+}
+
+start_pre() {
+	if [[ -z ${DATA_SOURCE_NAME} ]]; then
+		ewarn "DATA_SOURCE_NAME not set"
+		exit 1
+	fi
+	checkpath -d -m 0755 -o "${user}" "${pidfile%/*}"
+}
