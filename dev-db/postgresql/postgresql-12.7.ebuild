@@ -20,9 +20,9 @@ LICENSE="POSTGRESQL GPL-2"
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="https://www.postgresql.org/"
 
-IUSE="bagger cassert debug doc icu kerberos kernel_linux ldap llvm nls pam
-	  perl python +readline selinux +server systemd ssl static-libs tcl
-	  +threads uuid xml zlib"
+IUSE="bagger cassert debug doc hugelwlock icu kerberos kernel_linux ldap
+	  llvm nls pam perl python +readline selinux +server systemd ssl static-libs
+	  tcl +threads uuid xml zlib"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
@@ -112,6 +112,10 @@ src_prepare() {
 	# bagger
 	if use bagger ; then
 		eapply "${FILESDIR}"/${PN}-10.0-index.patch
+	fi
+
+	if use hugelwlock ; then
+		eapply "${FILESDIR}"/lock_partitions.patch
 	fi
 
 	eapply_user

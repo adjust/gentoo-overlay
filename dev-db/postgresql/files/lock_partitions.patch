@@ -1,0 +1,17 @@
+Index: postgresql-12.6/src/include/storage/lwlock.h
+===================================================================
+--- postgresql-12.6.orig/src/include/storage/lwlock.h
++++ postgresql-12.6/src/include/storage/lwlock.h
+@@ -110,10 +110,10 @@ extern PGDLLIMPORT int NamedLWLockTranch
+  */
+ 
+ /* Number of partitions of the shared buffer mapping hashtable */
+-#define NUM_BUFFER_PARTITIONS  128
++#define NUM_BUFFER_PARTITIONS  512
+ 
+ /* Number of partitions the shared lock tables are divided into */
+-#define LOG2_NUM_LOCK_PARTITIONS  4
++#define LOG2_NUM_LOCK_PARTITIONS  9
+ #define NUM_LOCK_PARTITIONS  (1 << LOG2_NUM_LOCK_PARTITIONS)
+ 
+ /* Number of partitions the shared predicate lock tables are divided into */
