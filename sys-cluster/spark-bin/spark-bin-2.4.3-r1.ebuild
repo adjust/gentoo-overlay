@@ -34,8 +34,7 @@ IUSE="scala211 +scala212"
 RDEPEND="
 	acct-group/warden
 	acct-user/warden
-	>=virtual/jdk-1.8
-"
+	>=virtual/jre-1.8"
 
 DEPEND="
 	${RDEPEND}
