@@ -28,14 +28,12 @@ RDEPEND="
 		dev-libs/openssl-compat:1.0.0
 		<dev-libs/openssl-1.1:*
 	)
-	virtual/jre:1.8
-	sys-libs/readline-compat
-"
+	>=virtual/jre-1.8
+	sys-libs/readline-compat"
 
 DEPEND="
-	${RDEPEND}
-	app-arch/xz-utils
-"
+	>=virtual/jdk-1.8
+	app-arch/xz-utils"
 
 S="${WORKDIR}/${P}-debian8"
 
