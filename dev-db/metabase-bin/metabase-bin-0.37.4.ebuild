@@ -18,13 +18,7 @@ IUSE=""
 RDEPEND="
 	acct-group/metabase
 	acct-user/metabase
-
-	virtual/jdk:1.8
-"
-
-DEPEND="
-	${RDEPEND}
-"
+	>=virtual/jre-1.8"
 
 RESTRICT="mirror" # convenience
 
