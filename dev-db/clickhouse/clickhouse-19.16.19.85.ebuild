@@ -5,7 +5,7 @@ EAPI=6
 
 CMAKE_MAKEFILE_GENERATOR="ninja"
 
-inherit cmake-utils systemd toolchain-funcs user
+inherit cmake-utils systemd toolchain-funcs
 
 DESCRIPTION="An OSS column-oriented database management system for real-time data analysis"
 HOMEPAGE="https://clickhouse.yandex"

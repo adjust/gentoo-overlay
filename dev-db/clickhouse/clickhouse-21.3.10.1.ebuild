@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit systemd user
+inherit systemd
 
 DESCRIPTION="An OSS column-oriented database management system for real-time data analysis"
 HOMEPAGE="https://clickhouse.yandex"
