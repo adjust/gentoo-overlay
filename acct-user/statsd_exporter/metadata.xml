@@ -2,6 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="person">
-                <email>ops@adjust.com</email>
-        </maintainer>
+		<email>ops@adjust.com</email>
+	</maintainer>
 </pkgmetadata>
