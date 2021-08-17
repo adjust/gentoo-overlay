@@ -5,7 +5,7 @@ EAPI=7
 
 # needed to make webapp-config dep optional
 WEBAPP_OPTIONAL="yes"
-inherit flag-o-matic webapp java-pkg-opt-2 user systemd toolchain-funcs
+inherit flag-o-matic webapp java-pkg-opt-2 systemd toolchain-funcs
 
 DESCRIPTION="ZABBIX is software for monitoring of your applications, network and servers"
 HOMEPAGE="https://www.zabbix.com/"
