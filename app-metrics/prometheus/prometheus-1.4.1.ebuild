@@ -4,7 +4,7 @@
 
 EAPI=6
 
-inherit user golang-build golang-vcs-snapshot
+inherit golang-build golang-vcs-snapshot
 
 EGO_PN="github.com/prometheus/prometheus/..."
 EGIT_COMMIT="v${PV}"
