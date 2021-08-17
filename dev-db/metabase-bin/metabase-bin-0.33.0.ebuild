@@ -1,9 +1,7 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-
-inherit user
 
 DESCRIPTION="A java DB query builder and visualizer"
 HOMEPAGE="https://www.metabase.com/"
@@ -18,18 +16,14 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="
-	virtual/jre:1.8
-"
+	acct-group/metabase
+	acct-user/metabase
+	>=virtual/jdk-1.8"
 
-DEPEND="${RDEPEND}"
+RESTRICT="mirror" # convenience
 
 S="${WORKDIR}/${MY_P}"
 INSTALL_DIR="/opt/${MY_PN}"
-
-pkg_setup() {
-	enewgroup metabase
-	enewuser metabase -1 -1 /opt/metabase metabase
-}
 
 src_unpack() {
 	#cp because we don't actually unpack jars

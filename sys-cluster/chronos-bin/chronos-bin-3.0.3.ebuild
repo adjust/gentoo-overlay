@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit java-pkg-opt-2 user
+inherit java-pkg-opt-2
 
 MY_PN="${PN/-bin/}"
 
@@ -15,23 +15,25 @@ LICENSE="MPL-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
 
+# The user account "warden" is used across all Mesos/Spark/Chronos services
+# to keep the whole user account management consistent across the cluster
+# and to avoid running into user permission errors.
 RDEPEND="
-	>=virtual/jre-1.8"
+	acct-group/warden
+	acct-user/warden
+
+	net-libs/nodejs
+	>=virtual/jdk-1.8
+"
 
 DEPEND="
-	net-libs/nodejs
-	>=virtual/jdk-1.8"
+	${RDEPEND}
+"
 
 S="${WORKDIR}"
 
 pkg_setup() {
 	java-pkg-opt-2_pkg_setup
-
-	# The user account "warden" is used across all Mesos/Spark/Chronos services
-	# to keep the whole user account management consistent across the cluster
-	# and to avoid running into user permission errors.
-	enewgroup warden
-	enewuser warden -1 -1 /var/lib/warden warden
 }
 
 src_install() {

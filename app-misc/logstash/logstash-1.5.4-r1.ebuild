@@ -3,8 +3,6 @@
 
 EAPI=5
 
-inherit user
-
 DESCRIPTION="A tool for managing events and logs"
 HOMEPAGE="https://www.elastic.co/products/logstash"
 SRC_URI="https://download.elastic.co/${PN}/${PN}/${P}.tar.gz"
@@ -14,12 +12,14 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-RDEPEND="virtual/jre"
+RDEPEND="
+	virtual/jre
+"
 
-pkg_setup() {
-	enewgroup logstash
-	enewuser logstash -1 -1 /var/lib/logstash logstash
-}
+DEPEND="
+	acct-group/logstash
+	acct-user/logstash
+"
 
 src_install() {
 	dodir "/etc/logstash/conf.d"

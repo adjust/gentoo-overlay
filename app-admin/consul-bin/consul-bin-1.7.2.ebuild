@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit eutils user
+inherit eutils
 
 MY_PN="${PN/-bin/}"
 
@@ -15,17 +15,17 @@ LICENSE="MPL-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
 
-RDEPEND=""
-DEPEND="
+RDEPEND="
 	!app-admin/consul
+	acct-group/consul
+	acct-user/consul
+"
+
+DEPEND="
+	${RDEPEND}
 "
 
 S="${WORKDIR}"
-
-pkg_setup() {
-	enewgroup ${MY_PN}
-	enewuser  ${MY_PN} -1 -1 /var/lib/${MY_PN} ${MY_PN}
-}
 
 src_install() {
 	local x

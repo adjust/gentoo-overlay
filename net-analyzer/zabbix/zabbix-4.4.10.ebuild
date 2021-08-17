@@ -5,13 +5,13 @@ EAPI=7
 
 # needed to make webapp-config dep optional
 WEBAPP_OPTIONAL="yes"
-inherit flag-o-matic webapp java-pkg-opt-2 user systemd toolchain-funcs
+inherit flag-o-matic webapp java-pkg-opt-2 systemd toolchain-funcs
 
 DESCRIPTION="ZABBIX is software for monitoring of your applications, network and servers"
 HOMEPAGE="https://www.zabbix.com/"
 MY_P=${P/_/}
 MY_PV=${PV/_/}
-SRC_URI="https://cdn.zabbix.com/${PN}/sources/stable/4.4/${P}.tar.gz"
+SRC_URI="https://cdn.zabbix.com/${PN}/sources/oldstable/4.4/${P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 WEBAPP_MANUAL_SLOT="yes"
@@ -23,6 +23,8 @@ REQUIRED_USE="|| ( agent frontend proxy server )
 	static? ( !oracle !snmp )"
 
 COMMON_DEPEND="
+	acct-group/zabbix
+	acct-user/zabbix
 	curl? ( net-misc/curl )
 	java? ( >=virtual/jdk-1.8:* )
 	ldap? (
@@ -119,9 +121,6 @@ pkg_setup() {
 	if use frontend; then
 		webapp_pkg_setup
 	fi
-
-	enewgroup zabbix
-	enewuser zabbix -1 -1 /var/lib/zabbix/home zabbix
 
 	java-pkg-opt-2_pkg_setup
 }
