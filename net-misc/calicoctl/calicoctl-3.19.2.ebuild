@@ -1,7 +1,7 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 EGO_VENDOR=(
 "cloud.google.com/go 3b1ae45394a234c385be014e9a488f2bb6eef821 github.com/GoogleCloudPlatform/gcloud-golang"
@@ -92,7 +92,7 @@ EGO_VENDOR=(
 
 inherit golang-vcs-snapshot
 
-CALICOCTL_COMMIT="231083c2ce934b7946ebed3ed96f4fc1a3ba4f69"
+CALICOCTL_COMMIT="f2e9082cc56d645ca9a07916ea22cca31288bc16"
 
 KEYWORDS="~amd64"
 DESCRIPTION="CLI to manage Calico network and security policy"
