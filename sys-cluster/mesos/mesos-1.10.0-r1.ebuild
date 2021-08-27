@@ -5,7 +5,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python2_7 )
 
-inherit autotools java-pkg-opt-2 python-any-r1 toolchain-funcs
+inherit autotools java-pkg-opt-2 python-any-r1 toolchain-funcs mesos
 
 DESCRIPTION="Apache Mesos is a computer cluster manager"
 HOMEPAGE="https://mesos.apache.org"
@@ -41,9 +41,13 @@ DOCS=( LICENSE README.md NOTICE )
 
 RESTRICT="test"
 
+CURRENT_GCC_V=0
+
 pkg_setup() {
 	python-any-r1_pkg_setup
 	java-pkg-opt-2_pkg_setup
+	CURRENT_GCC_V=$(get-current-gcc)
+	switch-to-gcc-9
 }
 
 src_prepare() {
@@ -96,4 +100,8 @@ src_install() {
 	done
 
 	einstalldocs
+}
+
+pkg_postinst() {
+	gcc-config $CURRENT_GCC_V
 }
