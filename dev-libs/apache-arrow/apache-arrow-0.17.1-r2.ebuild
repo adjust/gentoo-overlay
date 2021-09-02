@@ -3,6 +3,7 @@
 
 EAPI=7
 
+CMAKE_MAKEFILE_GENERATOR="emake"
 inherit cmake
 
 DESCRIPTION="Apache Arrow and Parquet libraries"
@@ -35,7 +36,6 @@ S="${WORKDIR}/arrow-apache-arrow-${PV}"
 
 CMAKE_BUILD_TYPE="release"
 CMAKE_USE_DIR="${S}/cpp"
-CMAKE_MAKEFILE_GENERATOR="emake"
 
 src_configure() {
 	local mycmakeargs=(
