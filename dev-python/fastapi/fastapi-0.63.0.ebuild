@@ -3,12 +3,11 @@
 
 EAPI=7
 
+DISTUTILS_USE_SETUPTOOLS=no
 PYTHON_COMPAT=( python3_{8..9} )
 PYTHON_REQ_USE="threads(+)"
 
 inherit distutils-r1
-
-DISTUTILS_USE_SETUPTOOLS=no
 
 DESCRIPTION="High performance, easy to learn, fast to code, ready for production"
 HOMEPAGE="https://fastapi.tiangolo.com/"
