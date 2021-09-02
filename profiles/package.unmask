@@ -1,16 +1,6 @@
-# django bits for graphite-web
-<dev-python/django-1.11
-
-# python3-openid for aqcuired
-=dev-python/python3-openid-3.1.0
-
 # more py stuff
 dev-python/django-appconf
 dev-python/django-picklefield
-dev-python/raven
-
-# sigh
-sys-process/vixie-cron
 
 # sigh sigh. sigh
 dev-db/clickhouse
