@@ -4,7 +4,7 @@
 EAPI=7
 
 # 9.4 still has build failure because tarball too difficult
-POSTGRES_COMPAT=( 9.5 9.6 10 )
+POSTGRES_COMPAT=( 9.6 10 )
 POSTGRES_USEDEP="static-libs"
 
 inherit postgres-multi
