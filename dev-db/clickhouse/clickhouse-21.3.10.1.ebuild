@@ -44,7 +44,7 @@ QA_PREBUILT="
 "
 
 src_unpack() {
-	unpack "${A}"
+	unpack ${A}
 
 	# create merged work dir
 	mkdir "${WORKDIR}"/${MY_PN}-${PV} || die
