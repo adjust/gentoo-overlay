@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit systemd
+inherit systemd java-pkg-opt-2
 
 MY_PN="${PN%-bin}"
 DESCRIPTION="Open Source, Distributed, RESTful, Search Engine"
@@ -26,6 +26,10 @@ DEPEND="
 	>=virtual/jdk-1.8
 "
 
+pkg_setup() {
+	java-pkg-opt-2_pkg_setup
+}
+
 pkg_preinst() {
 	if has_version '<app-misc/elasticsearch-2.3.2'; then
 		export UPDATE_NOTES=1
@@ -33,7 +37,7 @@ pkg_preinst() {
 }
 
 src_prepare() {
-	rm -rf bin/*.{bat,exe}
+	rm -r bin/*.{bat,exe} || die
 	rm LICENSE.txt
 }
 
@@ -43,7 +47,7 @@ src_install() {
 
 	insinto /etc/${MY_PN}
 	doins config/*
-	rm -rf config
+	rm -r config || die
 
 	insinto /usr/share/${MY_PN}
 	doins -r ./*
