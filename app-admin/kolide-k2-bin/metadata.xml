@@ -4,7 +4,4 @@
 		<maintainer type="person">
 				<email>ops@adjust.com</email>
 		</maintainer>
-	<longdescription lang="en">
-		Kolide-k2 supervision/telemetry system
-	</longdescription>
 </pkgmetadata>
