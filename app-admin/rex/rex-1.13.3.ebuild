@@ -16,7 +16,7 @@ else
 	# Also prevents perl-module.eclass provisioning SRC_URI
 	DIST_AUTHOR=FERKI
 	DIST_NAME=Rex
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS=""
 fi
 inherit bash-completion-r1 perl-module ${VCS_ECLASS}
 
