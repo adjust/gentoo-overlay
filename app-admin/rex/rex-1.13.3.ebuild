@@ -235,7 +235,7 @@ src_install() {
 	perl-module_src_install
 
 	if use trex-compat; then
-		dosym /usr/bin/rex /usr/bin/trex || die "failed to set trex compat symlink"
-		dosym /usr/bin/rexify /usr/bin/trexify || die "failed to set trexify compat symlink"
+		dosym usr/bin/rex /usr/bin/trex || die "failed to set trex compat symlink"
+		dosym usr/bin/rexify /usr/bin/trexify || die "failed to set trexify compat symlink"
 	fi
 }
