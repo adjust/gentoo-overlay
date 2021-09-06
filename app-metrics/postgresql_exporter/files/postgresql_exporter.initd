@@ -1,13 +1,11 @@
 #!/sbin/openrc-run
-# Copyright 2018 Gentoo Foundation
-# Distributed under the terms of the GNU General Public License v2
 
 description="Prometheus PostgreSQL exporter"
-pidfile=${pidfile:-"/run/${SVCNAME}/${SVCNAME}.pid"}
-user=${user:-prometheus-exporter}
+pidfile="/run/${SVCNAME}/${SVCNAME}.pid"
+user="${USER}"
 
 command="/usr/bin/${SVCNAME}"
-command_args="${command_args}"
+command_args="--config /etc/postgresql_exporter/config.yaml"
 command_background="true"
 start_stop_daemon_args="--user ${user} --wait 1000 \
 	--stdout /var/log/prometheus/${SVCNAME}.log \
