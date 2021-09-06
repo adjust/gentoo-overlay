@@ -43,6 +43,8 @@ QA_PREBUILT="
 	opt/clickhouse/usr/bin/clickhouse-test
 "
 
+RESTRICT="!test? ( test )"
+
 src_unpack() {
 	unpack ${A}
 
@@ -70,26 +72,26 @@ src_install() {
 	# test
 	use test && fperms 755 /opt/${MY_PN}/usr/bin/clickhouse-test
 
-	dosym /opt/${MY_PN}/usr/bin/clickhouse /usr/bin/clickhouse
-	dosym /opt/${MY_PN}/usr/bin/clickhouse-odbc-bridge /usr/bin/clickhouse-odbc-bridge
+	dosym opt/${MY_PN}/usr/bin/clickhouse /usr/bin/clickhouse
+	dosym opt/${MY_PN}/usr/bin/clickhouse-odbc-bridge /usr/bin/clickhouse-odbc-bridge
 
-	dosym /usr/bin/clickhouse /usr/bin/clickhouse-extract-from-config
+	dosym usr/bin/clickhouse /usr/bin/clickhouse-extract-from-config
 
 	if use client; then
-		dosym /usr/bin/clickhouse /usr/bin/clickhouse-benchmark
-		dosym /usr/bin/clickhouse /usr/bin/clickhouse-client
-		dosym /usr/bin/clickhouse /usr/bin/clickhouse-compressor
-		dosym /usr/bin/clickhouse /usr/bin/clickhouse-format
-		dosym /usr/bin/clickhouse /usr/bin/clickhouse-local
-		dosym /usr/bin/clickhouse /usr/bin/clickhouse-obfuscator
-		dosym /opt/${MY_PN}/etc/clickhouse-client /etc/clickhouse-client
+		dosym usr/bin/clickhouse /usr/bin/clickhouse-benchmark
+		dosym usr/bin/clickhouse /usr/bin/clickhouse-client
+		dosym usr/bin/clickhouse /usr/bin/clickhouse-compressor
+		dosym usr/bin/clickhouse /usr/bin/clickhouse-format
+		dosym usr/bin/clickhouse /usr/bin/clickhouse-local
+		dosym usr/bin/clickhouse /usr/bin/clickhouse-obfuscator
+		dosym opt/${MY_PN}/etc/clickhouse-client /etc/clickhouse-client
 	fi
 
 	if use server; then
-		dosym /usr/bin/clickhouse /usr/bin/clickhouse-copier
-		dosym /usr/bin/clickhouse /usr/bin/clickhouse-report
-		dosym /usr/bin/clickhouse /usr/bin/clickhouse-server
-		dosym /opt/${MY_PN}/etc/clickhouse-server /etc/clickhouse-server
+		dosym usr/bin/clickhouse /usr/bin/clickhouse-copier
+		dosym usr/bin/clickhouse /usr/bin/clickhouse-report
+		dosym usr/bin/clickhouse /usr/bin/clickhouse-server
+		dosym opt/${MY_PN}/etc/clickhouse-server /etc/clickhouse-server
 
 		newinitd "${FILESDIR}"/clickhouse-server.initd-r1 clickhouse-server
 		newconfd "${FILESDIR}"/clickhouse-server.confd clickhouse-server
@@ -102,7 +104,7 @@ src_install() {
 	fi
 
 	if use test; then
-		dosym /usr/bin/clickhouse /usr/bin/clickhouse-test
+		dosym usr/bin/clickhouse /usr/bin/clickhouse-test
 	fi
 
 	keepdir /var/log/clickhouse-server
