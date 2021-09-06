@@ -3,10 +3,10 @@
 
 EAPI=7
 
-inherit golang-base user
+inherit golang-base
 
 EGO_PN="github.com/go-graphite/carbonapi"
-SRC_URI="https://${EGO_PN}/archive/refs/tags/${PV}.zip -> ${P}.zip"
+SRC_URI="https://${EGO_PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 KEYWORDS="~amd64"
 
 DESCRIPTION="Implementation of graphite API (graphite-web) in golang"
