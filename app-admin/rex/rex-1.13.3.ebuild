@@ -54,6 +54,8 @@ RDEPEND="
 	)
 	virtual/perl-Carp
 	virtual/perl-Data-Dumper
+	dev-perl/Rex-Interface-Shell-Ilo
+	dev-perl/Rex-Interface-Shell-Idrac4
 	dev-perl/Data-Validate-IP
 	dev-perl/Devel-Caller
 	dev-perl/Digest-HMAC
