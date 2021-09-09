@@ -7,7 +7,7 @@ inherit eutils
 
 DESCRIPTION="Scalable Batch and Stream Data Processing"
 HOMEPAGE="https://flink.apache.org"
-SRC_URI="mirror://apache/flink/flink-${PV}/flink-${PV}-bin-hadoop2-scala_2.11.tgz -> ${P}.tgz"
+SRC_URI="https://archive.apache.org/dist/flink/flink-${PV}/flink-${PV}-bin-hadoop2-scala_2.11.tgz -> ${P}.tgz"
 
 LICENSE="Apache-2.0"
 SLOT="0"
