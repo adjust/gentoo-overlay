@@ -1,5 +1,5 @@
 diff --git a/defaults/linuxrc b/defaults/linuxrc
-index 6ede740..a485358 100644
+index 6ede740..1e36719 100644
 --- a/defaults/linuxrc
 +++ b/defaults/linuxrc
 @@ -179,6 +179,10 @@ do
@@ -7,25 +7,29 @@ index 6ede740..a485358 100644
  			NFSROOT=${x#*=}
  		;;
 +		fetch_sqfs=*)
-+			USE_SQFS_FETCH=1
++			USE_FETCH_SQFS=1
 +			SQFS_URI=${x#*=}
 +		;;
  		# iSCSI
  		iscsi_initiatorname=*)
  			ISCSI_INITIATORNAME=${x#*=}
-@@ -615,6 +619,19 @@ then
+@@ -615,6 +619,23 @@ then
  	start_iscsi
  fi
  
-+# optionally fetch a squashfs image from the network
-+if [ "${USE_SQFS_FETCH}" = '1' ]
++# optionally fetch a squashfs image via network
++if [ "${USE_FETCH_SQFS}" = '1' ]
 +then
 +	start_network
 +
-+	good_msg "Fetching $SQFS_URI"
-+
 +	# CWD is /newroot
-+	wget -O - $SQFS_URI > ${LOOP} && good_msg "Written to ${LOOP}"
++
++	sqfs_img=$(basename $SQFS_URI)
++	good_msg "Fetching $SQFS_URI ..."
++	wget -O - $SQFS_URI > "/newroot/$sqfs_img" && good_msg "$SQFS_URI fetch complete ..."
++
++	good_msg "Writting $sqfs_uri to ${LOOP} ..."
++	cat "/newroot/$sqfs_img" > ${LOOP} && good_msg "Write $sqfs_img to ${LOOP} complete ..."
 +
 +	unset SQFS_URI
 +fi
@@ -33,13 +37,13 @@ index 6ede740..a485358 100644
  # Loop file already exists on fs, assume no mount needed,
  # This allows for squashfs in initrd, which can be used for (i)PXE booting
  if [ -e "${LOOP}" ]
-@@ -634,7 +651,11 @@ setup_keymap
+@@ -634,7 +655,11 @@ setup_keymap
  
  if [ "${USE_SSH}" = '1' ]
  then
 -	start_network
-+	# network is already started if USE_SQFS_FETCH is true
-+	if [ "${USE_SQFS_FETCH}" != '1' ]
++	# network is already started if USE_FETCH_SQFS is true
++	if [ "${USE_FETCH_SQFS}" != '1' ]
 +	then
 +		start_network
 +	fi
