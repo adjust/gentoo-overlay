@@ -127,6 +127,7 @@ fi
 
 PATCHES=(
 	"${FILESDIR}/genkernel-4.2.1-include-udev-rules.patch"
+	"${FILESDIR}/genkernel-4.2.3-fetch_sqfs.patch"
 )
 
 src_unpack() {
