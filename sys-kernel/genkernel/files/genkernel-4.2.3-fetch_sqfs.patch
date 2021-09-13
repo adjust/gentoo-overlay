@@ -1,0 +1,63 @@
+diff --git a/defaults/linuxrc b/defaults/linuxrc
+index 6ede740..a485358 100644
+--- a/defaults/linuxrc
++++ b/defaults/linuxrc
+@@ -179,6 +179,10 @@ do
+ 		nfsroot=*)
+ 			NFSROOT=${x#*=}
+ 		;;
++		fetch_sqfs=*)
++			USE_SQFS_FETCH=1
++			SQFS_URI=${x#*=}
++		;;
+ 		# iSCSI
+ 		iscsi_initiatorname=*)
+ 			ISCSI_INITIATORNAME=${x#*=}
+@@ -615,6 +619,19 @@ then
+ 	start_iscsi
+ fi
+ 
++# optionally fetch a squashfs image from the network
++if [ "${USE_SQFS_FETCH}" = '1' ]
++then
++	start_network
++
++	good_msg "Fetching $SQFS_URI"
++
++	# CWD is /newroot
++	wget -O - $SQFS_URI > ${LOOP} && good_msg "Written to ${LOOP}"
++
++	unset SQFS_URI
++fi
++
+ # Loop file already exists on fs, assume no mount needed,
+ # This allows for squashfs in initrd, which can be used for (i)PXE booting
+ if [ -e "${LOOP}" ]
+@@ -634,7 +651,11 @@ setup_keymap
+ 
+ if [ "${USE_SSH}" = '1' ]
+ then
+-	start_network
++	# network is already started if USE_SQFS_FETCH is true
++	if [ "${USE_SQFS_FETCH}" != '1' ]
++	then
++		start_network
++	fi
+ 	start_sshd
+ fi
+ 
+diff --git a/doc/genkernel.8.txt b/doc/genkernel.8.txt
+index 273f9c1..b7d3493 100644
+--- a/doc/genkernel.8.txt
++++ b/doc/genkernel.8.txt
+@@ -819,6 +819,10 @@ when not set. This will allow remote user to provide answer through
+     location. Otherwise the location will be deduced from the DCHP
+     request (option root-path).
+ 
++*fetch_sqfs*=<...>::
++    If present, the initrd will try to fetch a squashfs image
++    from the given uri, e.g. fetch_sqfs=https://foo.bar/sqfs.image
++
+ *dolvm*::
+     Activate LVM volumes on bootup.
+ 
