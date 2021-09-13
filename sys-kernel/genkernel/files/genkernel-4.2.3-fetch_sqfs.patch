@@ -1,3 +1,16 @@
+diff --git a/defaults/linuxrc b/defaults/linuxrc
+index aed7cba..38b65ca 100644
+--- a/defaults/linuxrc
++++ b/defaults/linuxrc
+@@ -628,7 +628,7 @@ then
+ 
+ 	sqfs_img=$(basename $SQFS_URI)
+ 	good_msg "Fetching $SQFS_URI ..."
+-	wget -O - $SQFS_URI > "/newroot/$sqfs_img" && good_msg "$SQFS_URI fetch complete ..."
++	wget -T 60 --show-progress -O - $SQFS_URI > "/newroot/$sqfs_img" && good_msg "$SQFS_URI fetch complete ..."
+ 
+ 	good_msg "Writting $sqfs_uri to ${LOOP} ..."
+ 	cat "/newroot/$sqfs_img" > ${LOOP} && good_msg "Write $sqfs_img to ${LOOP} complete ..."
 diff --git a/genkernel-4.2.3-fetch_sqfs.patch b/genkernel-4.2.3-fetch_sqfs.patch
 index fc098f4..e69de29 100644
 --- a/genkernel-4.2.3-fetch_sqfs.patch
