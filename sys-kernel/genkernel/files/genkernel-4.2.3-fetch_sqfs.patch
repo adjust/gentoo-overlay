@@ -26,7 +26,7 @@ index 6ede740..1e36719 100644
 +
 +	sqfs_img=$(basename $SQFS_URI)
 +	good_msg "Fetching $SQFS_URI ..."
-+	wget -O - $SQFS_URI > "/newroot/$sqfs_img" && good_msg "$SQFS_URI fetch complete ..."
++	wget -T 60 --show-progress -O - $SQFS_URI > "/newroot/$sqfs_img" && good_msg "$SQFS_URI fetch complete ..."
 +
 +	good_msg "Writting $sqfs_uri to ${LOOP} ..."
 +	cat "/newroot/$sqfs_img" > ${LOOP} && good_msg "Write $sqfs_img to ${LOOP} complete ..."
