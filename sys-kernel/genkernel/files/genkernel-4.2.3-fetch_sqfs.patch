@@ -1,5 +1,5 @@
 diff --git a/defaults/linuxrc b/defaults/linuxrc
-index 6ede740..1e36719 100644
+index 6ede740..62a2168 100644
 --- a/defaults/linuxrc
 +++ b/defaults/linuxrc
 @@ -179,6 +179,10 @@ do
@@ -13,7 +13,7 @@ index 6ede740..1e36719 100644
  		# iSCSI
  		iscsi_initiatorname=*)
  			ISCSI_INITIATORNAME=${x#*=}
-@@ -615,6 +619,23 @@ then
+@@ -615,6 +619,17 @@ then
  	start_iscsi
  fi
  
@@ -22,22 +22,16 @@ index 6ede740..1e36719 100644
 +then
 +	start_network
 +
-+	# CWD is /newroot
-+
-+	sqfs_img=$(basename $SQFS_URI)
 +	good_msg "Fetching $SQFS_URI ..."
-+	wget -T 60 --show-progress -O - $SQFS_URI > "/newroot/$sqfs_img" && good_msg "$SQFS_URI fetch complete ..."
++	wget -T 60 -O - $SQFS_URI > "$LOOP" && good_msg "$SQFS_URI fetch complete!"
 +
-+	good_msg "Writting $sqfs_uri to ${LOOP} ..."
-+	cat "/newroot/$sqfs_img" > ${LOOP} && good_msg "Write $sqfs_img to ${LOOP} complete ..."
-+
-+	unset SQFS_URI sqfs_image
++	unset SQFS_URI
 +fi
 +
  # Loop file already exists on fs, assume no mount needed,
  # This allows for squashfs in initrd, which can be used for (i)PXE booting
  if [ -e "${LOOP}" ]
-@@ -634,7 +655,11 @@ setup_keymap
+@@ -634,7 +649,11 @@ setup_keymap
  
  if [ "${USE_SSH}" = '1' ]
  then
