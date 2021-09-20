@@ -1,7 +1,7 @@
-Index: postgresql-12.6/src/include/storage/lwlock.h
+Index: postgresql-11.12/src/include/storage/lwlock.h
 ===================================================================
---- postgresql-12.6.orig/src/include/storage/lwlock.h
-+++ postgresql-12.6/src/include/storage/lwlock.h
+--- postgresql-11.12.orig/src/include/storage/lwlock.h
++++ postgresql-11.12/src/include/storage/lwlock.h
 @@ -110,10 +110,10 @@ extern PGDLLIMPORT int NamedLWLockTranch
   */
  
@@ -15,3 +15,16 @@ Index: postgresql-12.6/src/include/storage/lwlock.h
  #define NUM_LOCK_PARTITIONS  (1 << LOG2_NUM_LOCK_PARTITIONS)
  
  /* Number of partitions the shared predicate lock tables are divided into */
+Index: postgresql-11.12/src/backend/storage/lmgr/lwlock.c
+===================================================================
+--- postgresql-11.12.orig/src/backend/storage/lmgr/lwlock.c
++++ postgresql-11.12/src/backend/storage/lmgr/lwlock.c
+@@ -130,7 +130,7 @@ LWLockPadded *MainLWLockArray = NULL;
+  * occasionally the number can be much higher; for example, the pg_buffercache
+  * extension locks all buffer partitions simultaneously.
+  */
+-#define MAX_SIMUL_LWLOCKS	200
++#define MAX_SIMUL_LWLOCKS	1000
+ 
+ /* struct representing the LWLocks we're holding */
+ typedef struct LWLockHandle
