@@ -13,3 +13,5 @@ DESCRIPTION="A simple wrapper around node-http-proxy"
 
 LICENSE=""
 KEYWORDS="~amd64"
+
+SLOT="0"
