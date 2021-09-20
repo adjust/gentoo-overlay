@@ -1,7 +1,7 @@
 # Copyright 2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: node.eclass
+# @ECLASS: nodejs.eclass
 # @MAINTAINER:
 # Jannis Mast <jannis@ctrl-c.xyz>
 # @SUPPORTED_EAPIS: 7
@@ -11,12 +11,12 @@
 
 case ${EAPI:-0} in
 	0|1|2|3|4|5|6)
-		die "EAPI=${EAPI} is not supported by node.eclass (too old)"
+		die "EAPI=${EAPI} is not supported by nodejs.eclass (too old)"
 		;;
 	7|8)
 		;;
 	*)
-		die "EAPI=${EAPI} is not supported by node.eclass"
+		die "EAPI=${EAPI} is not supported by nodejs.eclass"
 		;;
 esac
 
@@ -58,7 +58,7 @@ else
 	RDEPEND=">=net-libs/nodejs-${NODEJS_MIN_VERSION}"
 fi
 
-node_src_unpack() {
+nodejs_src_unpack() {
 	unpack "${NODE_MODULE_NAME}-${PV}.tgz"
 	mv "package" "${NODE_MODULE_NAME}" || die
 	mkdir "${NODE_MODULE_NAME}/node_modules" || die
@@ -70,7 +70,7 @@ node_src_unpack() {
 	done
 }
 
-node_src_install() {
+nodejs_src_install() {
 	insinto "/usr/$(get_libdir)/node_modules/${NODE_MODULE_NAME}"
 	doins -r .
 	for i in ${NODE_BIN}; do
