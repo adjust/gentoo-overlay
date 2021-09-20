@@ -11,7 +11,7 @@ inherit nodejs
 
 DESCRIPTION="A simple wrapper around node-http-proxy"
 
-LICENSE=""
+LICENSE="BSD-3"
 KEYWORDS="~amd64"
 
 SLOT="0"
