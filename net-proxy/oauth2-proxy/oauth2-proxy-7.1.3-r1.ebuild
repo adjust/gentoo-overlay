@@ -7,7 +7,7 @@ inherit go-module
 
 DESCRIPTION="A reverse proxy that provides authentication with Google, Azure and more"
 HOMEPAGE="https://github.com/oauth2-proxy/oauth2-proxy"
-SRC_URI="https://github.com/oauth2-proxy/oauth2-proxy/archive/refs/tags/v7.1.3.tar.gz"
+SRC_URI="https://github.com/oauth2-proxy/oauth2-proxy/archive/refs/tags/v${PV}.tar.gz"
 
 LICENSE="MIT"
 KEYWORDS="~amd64"
