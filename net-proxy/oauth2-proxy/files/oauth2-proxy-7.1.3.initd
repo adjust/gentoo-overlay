@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+# Copyright 1999-2018 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+pid_file="/run/oauth2-proxy.pid"
+
+start() {
+	ebegin "Starting Oauth2 proxy"
+	start-stop-daemon --make-pidfile --background --start --pidfile ${pid_file} \
+	        --exec /opt/oauth2-proxy/oauth2-proxy -- --config=/opt/oauth2-proxy/oauth2-proxy.cfg
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping Oauth2 proxy"
+	start-stop-daemon --stop --pidfile ${pid_file}
+	rm -f ${pid_file}
+	eend $?
+}
