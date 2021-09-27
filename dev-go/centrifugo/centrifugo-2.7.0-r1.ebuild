@@ -9,7 +9,7 @@ DESCRIPTION="Centrifugo is a scalable real-time messaging server in language-agn
 HOMEPAGE="https://github.com/centrifugal/centrifugo/"
 SRC_URI="https://github.com/centrifugal/centrifugo/archive/refs/tags/v${PV}.tar.gz"
 
-LICENSE=""
+LICENSE="Apache-2.0"
 KEYWORDS="~amd64"
 
 SLOT="0"
