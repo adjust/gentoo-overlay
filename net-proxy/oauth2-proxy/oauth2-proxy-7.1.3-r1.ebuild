@@ -683,6 +683,10 @@ SRC_URI+="
 	${EGO_SUM_SRC_URI}
 "
 
+src_compile() {
+	go build || die "go build failed"
+}
+
 src_install() {
 	dobin "${WORKDIR}"/${P}/${PN}
 	newinitd "${FILESDIR}"/${PN}-${PV}.initd "${PN}"
