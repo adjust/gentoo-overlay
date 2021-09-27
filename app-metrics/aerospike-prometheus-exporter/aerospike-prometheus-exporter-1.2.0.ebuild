@@ -7,7 +7,7 @@ inherit go-module user systemd
 
 DESCRIPTION="Aerospike Prometheus Exporter"
 HOMEPAGE="https://github.com/aerospike/aerospike-prometheus-exporter/"
-SRC_URI="${HOMEPAGE}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/aerospike/aerospike-prometheus-exporter/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 
 KEYWORDS="~amd64"
 LICENSE="Apache-2.0"
@@ -505,8 +505,6 @@ src_install() {
 	insinto /etc/prometheus
 
 	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
-
-
-        insinto /etc/aerospike-prometheus-exporter/
+	insinto /etc/aerospike-prometheus-exporter/
 	newins "${FILESDIR}/ape.toml" "ape.toml"
 }

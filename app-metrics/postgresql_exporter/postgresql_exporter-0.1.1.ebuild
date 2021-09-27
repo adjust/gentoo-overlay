@@ -21,7 +21,6 @@ IUSE=""
 RDEPEND="
 	acct-group/postgresql_exporter
 	acct-user/postgresql_exporter
-
 	!net-analyzer/prometheus-postgres_exporter
 "
 

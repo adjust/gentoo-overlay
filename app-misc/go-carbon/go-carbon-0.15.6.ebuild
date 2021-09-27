@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit golang-base user
+inherit golang-base
 
 EGO_PN="github.com/go-graphite/go-carbon"
 SRC_URI="https://${EGO_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"

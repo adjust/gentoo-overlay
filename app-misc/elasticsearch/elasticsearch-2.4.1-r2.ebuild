@@ -1,9 +1,9 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
-inherit eutils systemd
+inherit systemd java-pkg-opt-2
 
 MY_PN="${PN%-bin}"
 DESCRIPTION="Open Source, Distributed, RESTful, Search Engine"
@@ -18,13 +18,17 @@ RESTRICT="strip"
 RDEPEND="
 	acct-group/elasticsearch
 	acct-user/elasticsearch
-	|| ( virtual/jre:1.8 virtual/jre:1.7 )
 	sys-process/numactl
+	>=virtual/jre-1.8
 "
 
 DEPEND="
-	${RDEPEND}
+	>=virtual/jdk-1.8
 "
+
+pkg_setup() {
+	java-pkg-opt-2_pkg_setup
+}
 
 pkg_preinst() {
 	if has_version '<app-misc/elasticsearch-2.3.2'; then
@@ -33,7 +37,7 @@ pkg_preinst() {
 }
 
 src_prepare() {
-	rm -rf bin/*.{bat,exe}
+	rm -r bin/*.{bat,exe} || die
 	rm LICENSE.txt
 }
 
@@ -43,7 +47,7 @@ src_install() {
 
 	insinto /etc/${MY_PN}
 	doins config/*
-	rm -rf config
+	rm -r config || die
 
 	insinto /usr/share/${MY_PN}
 	doins -r ./*

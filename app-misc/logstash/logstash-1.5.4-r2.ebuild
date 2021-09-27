@@ -3,6 +3,8 @@
 
 EAPI=7
 
+inherit java-pkg-opt-2
+
 DESCRIPTION="A tool for managing events and logs"
 HOMEPAGE="https://www.elastic.co/products/logstash"
 SRC_URI="https://download.elastic.co/${PN}/${PN}/${P}.tar.gz"
@@ -21,6 +23,10 @@ DEPEND="
 	acct-group/logstash
 	acct-user/logstash
 "
+
+pkg_setup() {
+	java-pkg-opt-2_pkg_setup
+}
 
 src_install() {
 	dodir "/etc/logstash/conf.d"

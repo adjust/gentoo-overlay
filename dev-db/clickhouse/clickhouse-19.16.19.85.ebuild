@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -63,6 +63,7 @@ RDEPEND="
 "
 
 DEPEND="${RDEPEND}
+	app-arch/unzip
 	doc? ( >=dev-python/mkdocs-1.0.1 )
 	static? (
 		>=app-arch/lz4-1.8.0[static-libs]
@@ -81,7 +82,7 @@ DEPEND="${RDEPEND}
 		)
 		dev-libs/icu[static-libs]
 		dev-libs/glib[static-libs]
-		>=dev-libs/boost-1.65.0[static-libs]
+		dev-libs/boost
 		dev-libs/openssl[static-libs]
 		dev-db/mysql-connector-c[static-libs]
 		kafka? ( dev-libs/librdkafka[static-libs] )
@@ -95,6 +96,8 @@ DEPEND="${RDEPEND}
 "
 
 S="${WORKDIR}/${MY_PN}-${PV}-${TYPE}"
+
+RESTRICT="!test? ( test )"
 
 _clang_fullversion() {
 	local ver="$1"; shift

@@ -1,7 +1,7 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
+EAPI="7"
 
 KEYWORDS="~amd64"
 HOMEPAGE="https://www.gentoo.org"
@@ -16,7 +16,7 @@ SRC_URI="https://files.adjust.com/${PF}-hardened
 
 DEPEND="
 	sys-firmware/intel-microcode
-	=sys-kernel/gentoo-sources-${PV}
+	=sys-kernel/gentoo-sources-${PV}-r0
 	>=sys-kernel/genkernel-3.5.0.9
 	sys-apps/fakeroot
 "
@@ -27,13 +27,13 @@ REQUIRED_USE="
 "
 
 src_unpack() {
-	mkdir -p "$S"
+	mkdir -p "$S" || die
 }
 
 src_prepare() {
-	mkdir -p "$S/tmp/kernel"
-	mkdir -p "$S/final/boot"
-	mkdir -p "$S/cache"
+	mkdir -p "$S/tmp/kernel" || die
+	mkdir -p "$S/final/boot" || die
+	mkdir -p "$S/cache" || die
 }
 
 src_compile() {
@@ -85,11 +85,15 @@ src_compile() {
 
 src_install() {
 	# don't package firmware files, provided by linux-firmware if required
-	rm -rf "$S/final/lib/firmware" || die
-	cp "$S/tmp/kernel/Module.symvers" "$S/final/Module.symvers"
+	rm -r "$S/final/lib/firmware" || die
+	cp "$S/tmp/kernel/Module.symvers" "$S/final/Module.symvers" || die
 	cd "$S/final/" && tar cJf binkernel-${PV}.tar.xz * || die
-	mkdir -p "${D}/usr/share"
+	mkdir -p "${D}/usr/share" || die
 	mv binkernel-${PV}.tar.xz "${D}/usr/share" || die
-	use protection && mv "${D}/usr/share/binkernel-${PV}.tar.xz" "${D}/usr/share/binkernel-hard-${PV}.tar.xz"
-	use docker && mv "${D}/usr/share/binkernel-${PV}.tar.xz" "${D}/usr/share/binkernel-docker-${PV}.tar.xz"
+	if use protection; then
+		mv "${D}/usr/share/binkernel-${PV}.tar.xz" "${D}/usr/share/binkernel-hard-${PV}.tar.xz" || die
+	fi
+	if use docker; then
+		mv "${D}/usr/share/binkernel-${PV}.tar.xz" "${D}/usr/share/binkernel-docker-${PV}.tar.xz" || die
+	fi
 }
