@@ -1,0 +1,71 @@
+diff -Naur ceph-13.2.10/cmake/modules/BuildBoost.cmake ceph-13.2.10-r1/cmake/modules/BuildBoost.cmake
+--- ceph-13.2.10/cmake/modules/BuildBoost.cmake	2021-09-29 13:28:16.707574195 +0000
++++ ceph-13.2.10-r1/cmake/modules/BuildBoost.cmake	2021-09-29 13:34:53.138946896 +0000
+@@ -133,14 +133,14 @@
+     check_boost_version("${PROJECT_SOURCE_DIR}/src/boost" ${version})
+     set(source_dir
+       SOURCE_DIR "${PROJECT_SOURCE_DIR}/src/boost")
+-  elseif(version VERSION_GREATER 1.67)
++  elseif(version VERSION_GREATER 1.70)
+     message(FATAL_ERROR "Unknown BOOST_REQUESTED_VERSION: ${version}")
+   else()
+     message(STATUS "boost will be downloaded...")
+     # NOTE: If you change this version number make sure the package is available
+     # at the three URLs below (may involve uploading to download.ceph.com)
+-    set(boost_version 1.67.0)
+-    set(boost_sha256 2684c972994ee57fc5632e03bf044746f6eb45d4920c343937a465fd67a5adba)
++    set(boost_version 1.70.0)
++    set(boost_sha256 430ae8354789de4fd19ee52f3b1f739e1fba576f0aded0897c3c2bc00fb38778)
+     string(REPLACE "." "_" boost_version_underscore ${boost_version} )
+     set(boost_url 
+       https://dl.bintray.com/boostorg/release/${boost_version}/source/boost_${boost_version_underscore}.tar.bz2)
+diff -Naur ceph-13.2.10/CMakeLists.txt ceph-13.2.10-r1/CMakeLists.txt
+--- ceph-13.2.10/CMakeLists.txt	2021-09-29 13:28:18.181643908 +0000
++++ ceph-13.2.10-r1/CMakeLists.txt	2021-09-29 13:34:14.643049399 +0000
+@@ -606,13 +606,13 @@
+   else()
+     set(Boost_USE_STATIC_LIBS ON)
+   endif()
+-  find_package(Boost 1.67 COMPONENTS ${BOOST_COMPONENTS} REQUIRED)
++  find_package(Boost 1.70 COMPONENTS ${BOOST_COMPONENTS} REQUIRED)
+ else()
+   set(BOOST_J 1 CACHE STRING
+     "max jobs for Boost build") # override w/-DBOOST_J=<n>
+   set(Boost_USE_STATIC_LIBS ON)
+   include(BuildBoost)
+-  build_boost(1.67
++  build_boost(1.70
+     COMPONENTS ${BOOST_COMPONENTS} ${BOOST_HEADER_COMPONENTS})
+   include_directories(BEFORE SYSTEM ${Boost_INCLUDE_DIRS})
+ endif()
+diff -Naur ceph-13.2.10/src/rgw/rgw_asio_frontend.cc ceph-13.2.10-r1/src/rgw/rgw_asio_frontend.cc
+--- ceph-13.2.10/src/rgw/rgw_asio_frontend.cc	2020-04-23 16:32:31.000000000 +0000
++++ ceph-13.2.10-r1/src/rgw/rgw_asio_frontend.cc	2021-09-29 13:37:16.850738879 +0000
+@@ -121,7 +121,8 @@
+ };
+ 
+ template <typename Stream>
+-void handle_connection(RGWProcessEnv& env, Stream& stream,
++void handle_connection(boost::asio::io_context& context,
++                       RGWProcessEnv& env, Stream& stream,
+                        parse_buffer& buffer, bool is_ssl,
+                        boost::system::error_code& ec,
+                        boost::asio::yield_context yield)
+@@ -535,7 +536,7 @@
+           return;
+         }
+         buffer->consume(bytes);
+-        handle_connection(env, stream, *buffer, true, ec, yield);
++        handle_connection(context, env, stream, *buffer, true, ec, yield);
+         if (!ec) {
+           // ssl shutdown (ignoring errors)
+           stream.async_shutdown(yield[ec]);
+@@ -550,7 +551,7 @@
+       [this, s=std::move(socket)] (boost::asio::yield_context yield) mutable {
+         auto buffer = std::make_unique<parse_buffer>();
+         boost::system::error_code ec;
+-        handle_connection(env, s, *buffer, false, ec, yield);
++        handle_connection(context, env, s, *buffer, false, ec, yield);
+         s.shutdown(tcp::socket::shutdown_both, ec);
+       });
+   }

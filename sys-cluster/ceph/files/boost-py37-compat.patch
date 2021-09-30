@@ -1,0 +1,49 @@
+Description: Early import boost to avoid conflict with ceph assert.h
+ Import boost headers early to avoid conflicts with ceph's
+ assert.h; note that upstream master branch has renamed assert.h
+ to ceph_assert.h to avoid this problem.
+Author: James Page <james.page@ubuntu.com>
+Forwarded: not-needed
+
+--- a/src/mgr/PyModule.cc
++++ b/src/mgr/PyModule.cc
+@@ -11,6 +11,10 @@
+  * Foundation.  See file COPYING.
+  */
+ 
++// Courtesy of http://stackoverflow.com/questions/1418015/how-to-get-python-exception-text
++#include <boost/python.hpp>
++#include <boost/algorithm/string/predicate.hpp>
++
+ #include "BaseMgrModule.h"
+ #include "BaseMgrStandbyModule.h"
+ #include "PyOSDMap.h"
+@@ -28,9 +32,6 @@
+ // definition for non-const static member
+ std::string PyModule::config_prefix = "mgr/";
+ 
+-// Courtesy of http://stackoverflow.com/questions/1418015/how-to-get-python-exception-text
+-#include <boost/python.hpp>
+-#include <boost/algorithm/string/predicate.hpp>
+ #include "include/assert.h"  // boost clobbers this
+ // decode a Python exception into a string
+ std::string handle_pyerror()
+--- a/src/mgr/StandbyPyModules.cc
++++ b/src/mgr/StandbyPyModules.cc
+@@ -11,6 +11,8 @@
+  * Foundation.  See file COPYING.
+  */
+ 
++#include <boost/python.hpp>
++
+ #include "StandbyPyModules.h"
+ 
+ #include "common/debug.h"
+@@ -19,7 +21,6 @@
+ #include "mgr/Gil.h"
+ 
+ 
+-#include <boost/python.hpp>
+ #include "include/assert.h"  // boost clobbers this
+ 
+ // For ::config_prefix
