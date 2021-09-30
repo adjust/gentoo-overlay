@@ -2,11 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-<<<<<<< HEAD:sys-cluster/ceph/ceph-13.2.5-r6.ebuild
 PYTHON_COMPAT=( python3_{8..9} )
-=======
-PYTHON_COMPAT=( python3_9 )
->>>>>>> d945bb7 (sys-cluster/ceph: first stab at fix-up. Now builds with USE='-mgr -radosgw'):sys-cluster/ceph/ceph-13.2.10.ebuild
 DISTUTILS_OPTIONAL=1
 
 inherit check-reqs cmake-utils distutils-r1 flag-o-matic multiprocessing \

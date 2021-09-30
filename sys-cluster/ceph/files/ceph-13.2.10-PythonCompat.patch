@@ -1,0 +1,11 @@
+--- a/src/mgr/PythonCompat.h	2021-09-22 13:59:11.040902448 +0000
++++ b/src/mgr/PythonCompat.h	2021-09-22 13:59:15.626644562 +0000
+@@ -14,7 +14,7 @@
+   return PyUnicode_FromFormat("%s", v);
+ }
+ inline char* PyString_AsString(PyObject *string) {
+-  return PyUnicode_AsUTF8(string);
++  return (char *)PyUnicode_AsUTF8(string);
+ }
+ inline long PyInt_AsLong(PyObject *io) {
+   return PyLong_AsLong(io);
