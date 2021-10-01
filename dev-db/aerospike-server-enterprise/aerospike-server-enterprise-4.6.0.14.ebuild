@@ -52,8 +52,7 @@ src_prepare() {
 	ar x "${tools_deb}" || die
 	tar xf data.tar.xz && rm data.tar.xz || die
 
-	rm *.deb asinstall control.tar.gz debian-binary LICENSE SHA256SUMS
-	rm usr/bin/{asfixownership,asmigrate2to3}
+	rm -v *.deb asinstall control.tar.gz debian-binary LICENSE SHA256SUMS || die
 }
 
 src_install() {
@@ -85,10 +84,8 @@ src_install() {
 	fowners aerospike:aerospike /usr/bin/asd
 	fowners -R aerospike:aerospike /var/log/aerospike
 
-	for i in  opt/aerospike/bin/*; do
-		echo $i
-		sed -i -e "1s: python$: python2:" $i
-		sed -i -e "1s:/usr/bin/python:/usr/bin/python2:" $i
-		head -n1 $i
+	local i
+	for i in opt/aerospike/bin/* usr/bin/*; do
+		sed -i -e '1s#python.*#python3#g;' $i || die "can't sed $i"
 	done
 }
