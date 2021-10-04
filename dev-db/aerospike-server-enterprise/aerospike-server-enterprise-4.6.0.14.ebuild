@@ -56,6 +56,17 @@ src_prepare() {
 }
 
 src_install() {
+	local i mime
+	for i in ./opt/aerospike/bin/*; do
+		mime=$(file -i $i)
+		if [[ $mime =~ python ]]; then
+			einfo "Migrating aerospike $(basename $i) script to Python 3 ..."
+			2to3 --no-diffs -w -n $i &> /dev/null || die "can't run 2to3 on $i"
+			sed -i -e '1s@.*@#!/usr/bin/env python3@g;' $i || die "can't sed $i"
+			eend $?
+		fi
+	done
+
 	insinto /opt/
 	doins -r opt/aerospike
 
@@ -83,9 +94,4 @@ src_install() {
 	fowners -R aerospike:aerospike /opt/aerospike/
 	fowners aerospike:aerospike /usr/bin/asd
 	fowners -R aerospike:aerospike /var/log/aerospike
-
-	local i
-	for i in opt/aerospike/bin/* usr/bin/*; do
-		sed -i -e '1s#python.*#python3#g;' $i || die "can't sed $i"
-	done
 }
