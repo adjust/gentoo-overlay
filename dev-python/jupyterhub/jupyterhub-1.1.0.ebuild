@@ -30,7 +30,7 @@ RDEPEND="
 	dev-python/entrypoints[${PYTHON_USEDEP}]
 	dev-python/jinja[${PYTHON_USEDEP}]
 	dev-python/jupyter-telemetry[${PYTHON_USEDEP}]
-	dev-python/oauth2[${PYTHON_USEDEP}]
+	dev-python/oauthlib[${PYTHON_USEDEP}]
 	dev-python/pamela[${PYTHON_USEDEP}]
 	>=dev-python/prometheus_client-0.0.21[${PYTHON_USEDEP}]
 	dev-python/python-dateutil[${PYTHON_USEDEP}]
