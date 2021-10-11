@@ -1,23 +1,12 @@
-commit b29c65623f508082ded87af6f8d068ce8882f936
-Author: Brad Hubbard <bhubbard@redhat.com>
-Date:   Thu Sep 13 13:19:02 2018 +1000
-
-    mgr: Change signature of PyString_AsString to match return
-    
-    PyUnicode_AsUTF8 now returns 'const char*'
-    
-    Fixes: http://tracker.ceph.com/issues/35984
-    
-    Signed-off-by: Brad Hubbard <bhubbard@redhat.com>
-
---- a/src/mgr/PythonCompat.h
-+++ b/src/mgr/PythonCompat.h
+diff -Naur ceph-13.2.10/src/mgr/PythonCompat.h ceph-13.2.10-r1/src/mgr/PythonCompat.h
+--- ceph-13.2.10/src/mgr/PythonCompat.h 2021-10-11 14:01:49.437453665 +0000
++++ ceph-13.2.10-r1/src/mgr/PythonCompat.h      2021-10-11 14:03:21.951562008 +0000
 @@ -13,7 +13,7 @@
  inline PyObject* PyString_FromString(const char *v) {
    return PyUnicode_FromFormat("%s", v);
  }
 -inline char* PyString_AsString(PyObject *string) {
 +inline const char* PyString_AsString(PyObject *string) {
-   return PyUnicode_AsUTF8(string);
+   return (char *)PyUnicode_AsUTF8(string);
  }
  inline long PyInt_AsLong(PyObject *io) {
