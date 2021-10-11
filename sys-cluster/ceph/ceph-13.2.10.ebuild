@@ -26,7 +26,7 @@ SLOT="0"
 CPU_FLAGS_X86=(sse{,2,3,4_1,4_2} ssse3)
 
 IUSE="babeltrace cephfs dpdk fuse jemalloc ldap lttng +mgr"
-IUSE+=" numa +radosgw +ssl +system-boost systemd +tcmalloc"
+IUSE+=" numa +radosgw +ssl static-libs +system-boost systemd +tcmalloc"
 IUSE+=" test xfs zfs"
 IUSE+=" $(printf "cpu_flags_x86_%s\n" ${CPU_FLAGS_X86[@]})"
 
@@ -35,38 +35,38 @@ IUSE+=" $(printf "cpu_flags_x86_%s\n" ${CPU_FLAGS_X86[@]})"
 #>=dev-libs/gf-complete-2.0.0
 COMMON_DEPEND="
 	virtual/libudev:=
-	app-arch/bzip2:=
-	app-arch/lz4:=
-	app-arch/snappy:=
-	app-arch/zstd:=
-	app-misc/jq:=
-	dev-libs/crypto++:=
-	dev-libs/leveldb:=[snappy,tcmalloc?]
-	dev-libs/libaio:=
-	dev-libs/libxml2:=
+	app-arch/bzip2:=[static-libs?]
+	app-arch/lz4:=[static-libs?]
+	app-arch/snappy:=[static-libs?]
+	app-arch/zstd:=[static-libs?]
+	app-misc/jq:=[static-libs?]
+	dev-libs/crypto++:=[static-libs?]
+	dev-libs/leveldb:=[snappy,static-libs,tcmalloc?]
+	dev-libs/libaio:=[static-libs?]
+	dev-libs/libxml2:=[static-libs?]
 	dev-libs/nss:=
 	sys-auth/oath-toolkit:=
-	sys-apps/keyutils:=
-	sys-apps/util-linux:=
-	sys-libs/zlib:=
+	sys-apps/keyutils:=[static-libs?]
+	sys-apps/util-linux:=[static-libs?]
+	sys-libs/zlib:=[static-libs?]
 	babeltrace? ( dev-util/babeltrace )
-	ldap? ( net-nds/openldap:= )
+	ldap? ( net-nds/openldap:=[static-libs?] )
 	lttng? ( dev-util/lttng-ust:= )
-	fuse? ( sys-fs/fuse:0= )
-	numa? ( sys-process/numactl:= )
-	ssl? ( dev-libs/openssl:= )
-	xfs? ( sys-fs/xfsprogs:= )
-	zfs? ( sys-fs/zfs:= )
+	fuse? ( sys-fs/fuse:0=[static-libs?] )
+	numa? ( sys-process/numactl:=[static-libs?] )
+	ssl? ( dev-libs/openssl:=[static-libs?] )
+	xfs? ( sys-fs/xfsprogs:=[static-libs?] )
+	zfs? ( sys-fs/zfs:=[static-libs?] )
 	radosgw? (
-		dev-libs/expat:=
-		dev-libs/openssl:=
-		net-misc/curl:=[curl_ssl_openssl]
+		dev-libs/expat:=[static-libs?]
+		dev-libs/openssl:=[static-libs?]
+		net-misc/curl:=[curl_ssl_openssl,static-libs?]
 	)
 	system-boost? (
-		>=dev-libs/boost-1.67:=[threads,context,python,${PYTHON_USEDEP}]
+		>=dev-libs/boost-1.67:=[threads,context,python,static-libs,${PYTHON_USEDEP}]
 	)
-	jemalloc? ( dev-libs/jemalloc:= )
-	!jemalloc? ( >=dev-util/google-perftools-2.4:= )
+	jemalloc? ( dev-libs/jemalloc:=[static-libs?] )
+	!jemalloc? ( >=dev-util/google-perftools-2.4:=[static-libs?] )
 	${PYTHON_DEPS}
 "
 
@@ -143,7 +143,7 @@ PATCHES=(
 	"${FILESDIR}/ceph-12.2.12-ncurses-tinfo.patch"
 	"${FILESDIR}/ceph-13.2.0-cflags.patch"
 	"${FILESDIR}/ceph-13.2.0-mgr-python-version.patch"
-	"${FILESDIR}/ceph-13.2.0-no-virtualenvs.patch"
+	"${FILESDIR}/ceph-13.2.6-no-virtualenvs.patch"
 	"${FILESDIR}/ceph-13.2.2-dont-install-sysvinit-script.patch"
 	"${FILESDIR}/ceph-13.2.5-no-automagic-deps.patch"
 	"${FILESDIR}/ceph-13.2.6-dpdk-alignment.patch"
@@ -204,11 +204,11 @@ ceph_src_configure() {
 		-DWITH_BABELTRACE=$(usex babeltrace)
 		-DWITH_CEPHFS=$(usex cephfs)
 		-DWITH_DPDK=$(usex dpdk)
-		-DWITH_SPDK=off
 		-DWITH_FUSE=$(usex fuse)
 		-DWITH_LTTNG=$(usex lttng)
 		-DWITH_MGR=$(usex mgr)
 		-DWITH_MGR_DASHBOARD_FRONTEND=NO
+		-DMGR_PYTHON_VERSION=$(if python_is_python3; then echo 3; else echo 2; fi)
 		-DWITH_NUMA=$(usex numa)
 		-DWITH_OPENLDAP=$(usex ldap)
 		-DWITH_RADOSGW=$(usex radosgw)
@@ -217,6 +217,7 @@ ceph_src_configure() {
 		-DWITH_TESTS=$(usex test)
 		-DWITH_XFS=$(usex xfs)
 		-DWITH_ZFS=$(usex zfs)
+		-DENABLE_SHARED=$(usex static-libs '' 'yes' 'no')
 		-DALLOCATOR=$(usex tcmalloc 'tcmalloc' "$(usex jemalloc 'jemalloc' 'libc')")
 		-DWITH_SYSTEM_BOOST=$(usex system-boost)
 		-DBOOST_J=$(makeopts_jobs)
