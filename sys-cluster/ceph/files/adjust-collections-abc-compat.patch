@@ -1,0 +1,57 @@
+Description: Compat patch for collections.abc usage
+ Try to import ABCs from collections.abc to avoid
+ deprecation warnings at Python 3.7 and breakage at
+ Python 3.8.
+ .
+ Upstream master branch carries a similar but actually
+ incorrect patch which tries to import all collections
+ objects from collections.abc.
+Author: James Page <james.page@ubuntu.com>
+Forwarded: not-needed
+
+--- a/src/pybind/rados/rados.pyx
++++ b/src/pybind/rados/rados.pyx
+@@ -23,7 +23,11 @@ import sys
+ import threading
+ import time
+ 
+-from collections import Callable
++try:
++    from collections.abc import Callable
++except ImportError:
++    from collections import Callable
++
+ from datetime import datetime
+ from functools import partial, wraps
+ from itertools import chain
+--- a/src/pybind/rbd/rbd.pyx
++++ b/src/pybind/rbd/rbd.pyx
+@@ -23,7 +23,11 @@ from libc.stdint cimport *
+ from libc.stdlib cimport realloc, free
+ from libc.string cimport strdup
+ 
+-from collections import Iterable
++try:
++    from collections.abc import Iterable
++except ImportError:
++    from collections import Iterable
++
+ from datetime import datetime
+ 
+ cimport rados
+--- a/src/pybind/ceph_daemon.py
++++ b/src/pybind/ceph_daemon.py
+@@ -15,7 +15,12 @@ import json
+ import socket
+ import struct
+ import time
+-from collections import OrderedDict
++
++try:
++    from collections.abc import OrderedDict
++except ImportError:
++    from collections import OrderedDict
++
+ from fcntl import ioctl
+ from fnmatch import fnmatch
+ from prettytable import PrettyTable, HEADER

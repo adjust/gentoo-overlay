@@ -136,23 +136,25 @@ UNBUNDLE_LIBS=(
 )
 
 PATCHES=(
-	"${FILESDIR}/ceph-12.2.0-use-provided-cpu-flag-values.patch"
 	"${FILESDIR}/ceph-12.2.0-cflags.patch"
+	"${FILESDIR}/ceph-12.2.0-use-provided-cpu-flag-values.patch"
 	"${FILESDIR}/ceph-12.2.4-boost-build-none-options.patch"
-	"${FILESDIR}/ceph-13.2.0-cflags.patch"
 	"${FILESDIR}/ceph-12.2.4-rocksdb-cflags.patch"
+	"${FILESDIR}/ceph-12.2.12-ncurses-tinfo.patch"
+	"${FILESDIR}/ceph-13.2.0-cflags.patch"
 	"${FILESDIR}/ceph-13.2.0-mgr-python-version.patch"
 	"${FILESDIR}/ceph-13.2.0-no-virtualenvs.patch"
 	"${FILESDIR}/ceph-13.2.2-dont-install-sysvinit-script.patch"
 	"${FILESDIR}/ceph-13.2.5-no-automagic-deps.patch"
 	"${FILESDIR}/ceph-14.2.0-cython-0.29.patch"
-	"${FILESDIR}/ceph-12.2.12-ncurses-tinfo.patch"
 	"${FILESDIR}/ceph-13.2.10-bit-str.patch"
 	"${FILESDIR}/ceph-13.2.10-signal-handler.patch"
 	"${FILESDIR}/ceph-13.2.10-PythonCompat.patch"
+	"${FILESDIR}/adjust-boost-py37-compat.patch"
+	"${FILESDIR}/adjust-collections-abc-compat.patch"
+	"${FILESDIR}/adjust-mgr-python3-syntax-issues.patch"
 	"${FILESDIR}/python3-aware.patch"
 	"${FILESDIR}/python3-libs.patch"
-	"${FILESDIR}/boost-py37-compat.patch"
 	"${FILESDIR}/py37-compat.patch"
 )
 
