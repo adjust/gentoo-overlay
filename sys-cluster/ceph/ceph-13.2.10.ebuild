@@ -5,22 +5,17 @@ EAPI=7
 PYTHON_COMPAT=( python3_{8..9} )
 DISTUTILS_OPTIONAL=1
 
+
 inherit check-reqs cmake-utils distutils-r1 flag-o-matic multiprocessing \
 	python-r1 udev readme.gentoo-r1 systemd bash-completion-r1
 
-if [[ ${PV} == *9999* ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/ceph/ceph.git"
-	SRC_URI=""
-else
-	SRC_URI="https://download.ceph.com/tarballs/${P}.tar.gz"
-	KEYWORDS="~amd64 ~x86"
-fi
-
 DESCRIPTION="Ceph distributed filesystem"
 HOMEPAGE="https://ceph.com/"
+SRC_URI="https://download.ceph.com/tarballs/${P}.tar.gz"
 
 LICENSE="LGPL-2.1 CC-BY-SA-3.0 GPL-2 BSD Boost-1.0 MIT"
+KEYWORDS="~amd64"
+
 SLOT="0"
 
 CPU_FLAGS_X86=(sse{,2,3,4_1,4_2} ssse3)
@@ -41,7 +36,7 @@ COMMON_DEPEND="
 	app-arch/zstd:=[static-libs?]
 	app-misc/jq:=[static-libs?]
 	dev-libs/crypto++:=[static-libs?]
-	dev-libs/leveldb:=[snappy,static-libs,tcmalloc?]
+	dev-libs/leveldb:=[snappy,static-libs?,tcmalloc?]
 	dev-libs/libaio:=[static-libs?]
 	dev-libs/libxml2:=[static-libs?]
 	dev-libs/nss:=
@@ -63,7 +58,7 @@ COMMON_DEPEND="
 		net-misc/curl:=[curl_ssl_openssl,static-libs?]
 	)
 	system-boost? (
-		>=dev-libs/boost-1.67:=[threads,context,python,static-libs,${PYTHON_USEDEP}]
+		>=dev-libs/boost-1.67:=[threads,context,python,static-libs?,${PYTHON_USEDEP}]
 	)
 	jemalloc? ( dev-libs/jemalloc:=[static-libs?] )
 	!jemalloc? ( >=dev-util/google-perftools-2.4:=[static-libs?] )
