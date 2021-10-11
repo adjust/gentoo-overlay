@@ -146,6 +146,7 @@ PATCHES=(
 	"${FILESDIR}/ceph-13.2.0-no-virtualenvs.patch"
 	"${FILESDIR}/ceph-13.2.2-dont-install-sysvinit-script.patch"
 	"${FILESDIR}/ceph-13.2.5-no-automagic-deps.patch"
+	"${FILESDIR}/ceph-13.2.6-dpdk-alignment.patch"
 	"${FILESDIR}/ceph-14.2.0-cython-0.29.patch"
 	"${FILESDIR}/ceph-13.2.10-bit-str.patch"
 	"${FILESDIR}/ceph-13.2.10-signal-handler.patch"
