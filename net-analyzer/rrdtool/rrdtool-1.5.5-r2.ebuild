@@ -6,7 +6,7 @@ EAPI=7
 DISTUTILS_OPTIONAL=true
 DISTUTILS_SINGLE_IMPL=true
 GENTOO_DEPEND_ON_PERL=no
-PYTHON_COMPAT=( python3_8 )
+PYTHON_COMPAT=( python3_{8..9} )
 
 inherit autotools eutils perl-module distutils-r1 flag-o-matic multilib
 
