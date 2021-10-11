@@ -68,8 +68,10 @@ COMMON_DEPEND="
 	jemalloc? ( dev-libs/jemalloc:= )
 	!jemalloc? ( >=dev-util/google-perftools-2.4:= )
 	${PYTHON_DEPS}
-	"
-DEPEND="${COMMON_DEPEND}
+"
+
+DEPEND="
+	${COMMON_DEPEND}
 	amd64? ( dev-lang/yasm )
 	x86? ( dev-lang/yasm )
 	app-arch/cpio
@@ -86,8 +88,11 @@ DEPEND="${COMMON_DEPEND}
 		dev-python/virtualenv[${PYTHON_USEDEP}]
 		sys-apps/grep[pcre]
 		sys-fs/btrfs-progs
-	)"
-RDEPEND="${COMMON_DEPEND}
+	)
+"
+
+RDEPEND="
+	${COMMON_DEPEND}
 	acct-group/ceph
 	acct-user/ceph
 	net-misc/socat
@@ -105,12 +110,13 @@ RDEPEND="${COMMON_DEPEND}
 	dev-python/pyopenssl[${PYTHON_USEDEP}]
 	dev-python/requests[${PYTHON_USEDEP}]
 	dev-python/werkzeug[${PYTHON_USEDEP}]
-	"
+"
+
 REQUIRED_USE="
 	${PYTHON_REQUIRED_USE}
 	|| ( $(python_gen_useflags 'python3*') )
 	?? ( jemalloc tcmalloc )
-	"
+"
 
 # the tests need root access
 RESTRICT="test? ( userpriv )"
@@ -147,7 +153,7 @@ PATCHES=(
 	"${FILESDIR}/python3-aware.patch"
 	"${FILESDIR}/python3-libs.patch"
 	"${FILESDIR}/boost-py37-compat.patch"
-###	"${FILESDIR}/py37-compat.patch"
+	"${FILESDIR}/py37-compat.patch"
 )
 
 check-reqs_export_vars() {
