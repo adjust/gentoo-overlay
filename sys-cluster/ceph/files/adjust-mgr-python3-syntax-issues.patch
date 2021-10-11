@@ -1,0 +1,26 @@
+From a3db71029cfc303a35a21b0983494f61a3f3741d Mon Sep 17 00:00:00 2001
+From: Noah Watkins <noahwatkins@gmail.com>
+Date: Sat, 13 Oct 2018 09:05:06 -0700
+Subject: [PATCH 2/2] mgr: python 3 compat fixes
+
+Signed-off-by: Noah Watkins <noahwatkins@gmail.com>
+---
+ src/pybind/mgr/crash/module.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/pybind/mgr/crash/module.py b/src/pybind/mgr/crash/module.py
+index cbc51f65c2..b4a8c7da89 100644
+--- a/src/pybind/mgr/crash/module.py
++++ b/src/pybind/mgr/crash/module.py
+@@ -79,7 +79,7 @@ class Module(MgrModule):
+ 
+     def do_ls(self, cmd, inbuf):
+         keys = []
+-        for key in self.get_store_prefix('crash/').iterkeys():
++        for key in six.iterkeys(self.get_store_prefix('crash/')):
+             keys.append(key.replace('crash/', ''))
+         return 0, '\n'.join(keys), ''
+ 
+-- 
+2.20.1
+
