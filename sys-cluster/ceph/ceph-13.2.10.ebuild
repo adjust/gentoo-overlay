@@ -202,7 +202,7 @@ ceph_src_configure() {
 		-DWITH_LTTNG=$(usex lttng)
 		-DWITH_MGR=$(usex mgr)
 		-DWITH_MGR_DASHBOARD_FRONTEND=NO
-		-DMGR_PYTHON_VERSION=$(if python_is_python3; then echo 3; else echo 2; fi)
+		-DMGR_PYTHON_VERSION=3
 		-DWITH_NUMA=$(usex numa)
 		-DWITH_OPENLDAP=$(usex ldap)
 		-DWITH_RADOSGW=$(usex radosgw)
