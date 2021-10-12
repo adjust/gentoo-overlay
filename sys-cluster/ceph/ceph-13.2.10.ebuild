@@ -145,7 +145,6 @@ PATCHES=(
 	"${FILESDIR}/ceph-14.2.0-cython-0.29.patch"
 	"${FILESDIR}/ceph-13.2.10-bit-str.patch"
 	"${FILESDIR}/ceph-13.2.10-signal-handler.patch"
-	"${FILESDIR}/ceph-13.2.10-PythonCompat.patch"
 	"${FILESDIR}/adjust-boost-py37-compat.patch"
 	"${FILESDIR}/adjust-collections-abc-compat.patch"
 	"${FILESDIR}/adjust-mgr-python3-syntax-issues.patch"
