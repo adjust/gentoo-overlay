@@ -1,0 +1,18 @@
+diff -Naur ceph-13.2.10/src/mgr/PyModuleRegistry.cc ceph-13.2.10-r1/src/mgr/PyModuleRegistry.cc
+--- ceph-13.2.10/src/mgr/PyModuleRegistry.cc    2020-04-23 16:32:31.000000000 +0000
++++ ceph-13.2.10-r1/src/mgr/PyModuleRegistry.cc 2021-10-13 13:42:23.973750001 +0000
+@@ -54,10 +54,13 @@
+ 
+   // Let CPython know that we will be calling it back from other
+   // threads in future.
++#if PY_VERSION_HEX < 0x03090000
++  // Let CPython know that we will be calling it back from other
++  // threads in future.
+   if (! PyEval_ThreadsInitialized()) {
+     PyEval_InitThreads();
+   }
+-
++#endif
+   // Drop the GIL and remember the main thread state (current
+   // thread state becomes NULL)
+   pMainThreadState = PyEval_SaveThread();

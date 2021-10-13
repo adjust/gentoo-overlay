@@ -151,6 +151,7 @@ PATCHES=(
 	"${FILESDIR}/python3-aware.patch"
 	"${FILESDIR}/python3-libs.patch"
 	"${FILESDIR}/py37-compat.patch"
+	"${FILESDIR}/py39-compat.patch"
 )
 
 check-reqs_export_vars() {
