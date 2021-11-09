@@ -35,7 +35,7 @@ fi
 if [[ ! ${_PYTHON_UTILS_R1} ]]; then
 
 [[ ${EAPI} == [67] ]] && inherit eapi8-dosym
-inherit toolchain-funcs
+inherit multiprocessing toolchain-funcs
 
 # @ECLASS-VARIABLE: _PYTHON_ALL_IMPLS
 # @INTERNAL
@@ -43,8 +43,7 @@ inherit toolchain-funcs
 # All supported Python implementations, most preferred last.
 _PYTHON_ALL_IMPLS=(
 	pypy3
-	python3_{5..10}
-	python2_7
+	python3_{8..10}
 )
 readonly _PYTHON_ALL_IMPLS
 
@@ -55,8 +54,8 @@ readonly _PYTHON_ALL_IMPLS
 _PYTHON_HISTORICAL_IMPLS=(
 	jython2_7
 	pypy pypy1_{8,9} pypy2_0
-	python2_{5..6}
-	python3_{1..4}
+	python2_{5..7}
+	python3_{1..7}
 )
 readonly _PYTHON_HISTORICAL_IMPLS
 
@@ -422,7 +421,7 @@ _python_export() {
 					pypy)
 						PYTHON_PKG_DEP='>=dev-python/pypy-7.3.0:0=';;
 					pypy3)
-						PYTHON_PKG_DEP='>=dev-python/pypy3-7.3.0:0=';;
+						PYTHON_PKG_DEP='>=dev-python/pypy3-7.3.7:0=';;
 					*)
 						die "Invalid implementation: ${impl}"
 				esac
@@ -591,6 +590,9 @@ python_optimize() {
 		debug-print "${FUNCNAME}: using sys.path: ${*/%/;}"
 	fi
 
+	local jobs=$(makeopts_jobs "${MAKEOPTS}" INF)
+	[[ ${jobs} == INF ]] && jobs=$(get_nproc)
+
 	local d
 	for d; do
 		# make sure to get a nice path without //
@@ -602,11 +604,14 @@ python_optimize() {
 				"${PYTHON}" -m compileall -q -f -d "${instpath}" "${d}"
 				"${PYTHON}" -OO -m compileall -q -f -d "${instpath}" "${d}"
 				;;
-			python*|pypy3)
+			python3.[5678]|pypy3)
 				# both levels of optimization are separate since 3.5
-				"${PYTHON}" -m compileall -q -f -d "${instpath}" "${d}"
-				"${PYTHON}" -O -m compileall -q -f -d "${instpath}" "${d}"
-				"${PYTHON}" -OO -m compileall -q -f -d "${instpath}" "${d}"
+				"${PYTHON}" -m compileall -j "${jobs}" -q -f -d "${instpath}" "${d}"
+				"${PYTHON}" -O -m compileall -j "${jobs}" -q -f -d "${instpath}" "${d}"
+				"${PYTHON}" -OO -m compileall -j "${jobs}" -q -f -d "${instpath}" "${d}"
+				;;
+			python*)
+				"${PYTHON}" -m compileall -j "${jobs}" -o 0 -o 1 -o 2 --hardlink-dupes -q -f -d "${instpath}" "${d}"
 				;;
 			*)
 				"${PYTHON}" -m compileall -q -f -d "${instpath}" "${d}"
@@ -1245,17 +1250,46 @@ build_sphinx() {
 	HTML_DOCS+=( "${dir}/_build/html/." )
 }
 
+# @FUNCTION: _python_check_EPYTHON
+# @INTERNAL
+# @DESCRIPTION:
+# Check if EPYTHON is set, die if not.
+_python_check_EPYTHON() {
+	if [[ -z ${EPYTHON} ]]; then
+		die "EPYTHON unset, invalid call context"
+	fi
+}
+
+# @VARIABLE: EPYTEST_DESELECT
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Specifies an array of tests to be deselected via pytest's --deselect
+# parameter, when calling epytest.  The list can include file paths,
+# specific test functions or parametrized test invocations.
+#
+# Note that the listed files will still be subject to collection,
+# i.e. modules imported in global scope will need to be available.
+# If this is undesirable, EPYTEST_IGNORE can be used instead.
+
+# @VARIABLE: EPYTEST_IGNORE
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Specifies an array of paths to be ignored via pytest's --ignore
+# parameter, when calling epytest.  The listed files will be entirely
+# skipped from test collection.
+
 # @FUNCTION: epytest
 # @USAGE: [<args>...]
 # @DESCRIPTION:
-# Run pytest, passing the standard set of pytest options, followed
-# by user-specified options.
+# Run pytest, passing the standard set of pytest options, then
+# --deselect and --ignore options based on EPYTEST_DESELECT
+# and EPYTEST_IGNORE, then user-specified options.
 #
 # This command dies on failure and respects nonfatal.
 epytest() {
 	debug-print-function ${FUNCNAME} "${@}"
 
-	[[ -n ${EPYTHON} ]] || die "EPYTHON unset, invalid call context"
+	_python_check_EPYTHON
 
 	local args=(
 		# verbose progress reporting and tracebacks
@@ -1269,11 +1303,23 @@ epytest() {
 		# for end users, as it tends to fail on new warnings from deps
 		-Wdefault
 	)
+	local x
+	for x in "${EPYTEST_DESELECT[@]}"; do
+		args+=( --deselect "${x}" )
+	done
+	for x in "${EPYTEST_IGNORE[@]}"; do
+		args+=( --ignore "${x}" )
+	done
 	set -- "${EPYTHON}" -m pytest "${args[@]}" "${@}"
 
 	echo "${@}" >&2
 	"${@}" || die -n "pytest failed with ${EPYTHON}"
-	return ${?}
+	local ret=${?}
+
+	# remove common temporary directories left over by pytest plugins
+	rm -rf .hypothesis .pytest_cache || die
+
+	return ${ret}
 }
 
 # @FUNCTION: eunittest
@@ -1286,7 +1332,7 @@ epytest() {
 eunittest() {
 	debug-print-function ${FUNCNAME} "${@}"
 
-	[[ -n ${EPYTHON} ]] || die "EPYTHON unset, invalid call context"
+	_python_check_EPYTHON
 
 	set -- "${EPYTHON}" -m unittest_or_fail discover -v "${@}"
 
