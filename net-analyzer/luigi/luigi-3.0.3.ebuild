@@ -5,7 +5,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{8..9} )
 
-inherit python-r1
+inherit distutils-r1
 
 DESCRIPTION="Workflow mgmgt + task scheduling + dependency resolution"
 HOMEPAGE="https://github.com/spotify/luigi"
@@ -23,10 +23,6 @@ RDEPEND="
 	www-servers/tornado
 	<dev-python/python-daemon-3.0
 	dev-python/python-dateutil
-"
-
-DEPEND="
-	${RDEPEND}
 "
 
 python_install() {
