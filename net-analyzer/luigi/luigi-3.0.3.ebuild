@@ -24,6 +24,7 @@ RDEPEND="
 	dev-python/importlib_metadata
 	<dev-python/python-daemon-3.0
 	dev-python/python-dateutil
+	dev-python/sqlalchemy
 	dev-python/typing-extension
 "
 
