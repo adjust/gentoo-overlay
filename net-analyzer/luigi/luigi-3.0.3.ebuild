@@ -23,6 +23,7 @@ RDEPEND="
 	www-servers/tornado
 	<dev-python/python-daemon-3.0
 	dev-python/python-dateutil
+	dev-python/typing-extension
 "
 
 python_install() {
