@@ -25,7 +25,7 @@ RDEPEND="
 	<dev-python/python-daemon-3.0
 	dev-python/python-dateutil
 	dev-python/sqlalchemy
-	dev-python/tenacity
+	<dev-python/tenacity-7.0.0
 	dev-python/typing-extension
 "
 
