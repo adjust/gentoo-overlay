@@ -20,7 +20,8 @@ IUSE=""
 
 RDEPEND="
 	${PYTHON_DEPS}
-	www-servers/tornado
+	>=www-servers/tornado-6
+	<=www-servers/tornado-7
 	dev-python/importlib_metadata
 	<dev-python/python-daemon-3.0
 	dev-python/python-dateutil
