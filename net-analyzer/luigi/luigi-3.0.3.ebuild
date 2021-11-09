@@ -21,6 +21,7 @@ IUSE=""
 RDEPEND="
 	${PYTHON_DEPS}
 	www-servers/tornado
+	dev-python/importlib_metadata
 	<dev-python/python-daemon-3.0
 	dev-python/python-dateutil
 	dev-python/typing-extension
