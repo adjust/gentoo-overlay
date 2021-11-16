@@ -5,7 +5,6 @@ ebuilds for the adjust infrastructure.
 
 ## Build status
 
-![pkgcheck](https://github.com/adjust/gentoo-overlay/actions/workflows/pkgcheck.yml/badge.svg)
 ![RepoMan](https://github.com/adjust/gentoo-overlay/actions/workflows/repoman.yml/badge.svg)
 
 ## Setup
