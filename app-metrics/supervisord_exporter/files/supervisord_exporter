@@ -1,0 +1,22 @@
+#!/sbin/openrc-run
+# Copyright 2021 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="${RC_SVCNAME}"
+description="Exports supervisord managed jobs cpu and memory usage metrics to prometheus exporter"
+command="/var/lib/node_exporter/${RC_SVCNAME}.py"
+command_user="node_exporter"
+pidfile="/run/${RC_SVCNAME}.pid"
+start_stop_daemon_args="-d /var/lib/node_exporter"
+command_background=true
+output_log="/var/lib/node_exporter/${RC_SVCNAME}.log"
+error_log="/var/lib/node_exporter/${RC_SVCNAME}.err"
+depend() {
+	after supervisord
+}
+start_pre() {
+    checkpath --directory --owner ${command_user}:${command_user} --mode 0775 \
+       /var/lib/node_exporter 
+    checkpath -f --owner ${command_user}:${command_user} --mode 0550 \
+       /var/lib/node_exporter/${RC_SVCNAME}.py
+}
