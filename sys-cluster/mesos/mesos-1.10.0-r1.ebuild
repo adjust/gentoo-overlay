@@ -46,7 +46,7 @@ CURRENT_GCC_V=0
 pkg_setup() {
 	python-any-r1_pkg_setup
 	java-pkg-opt-2_pkg_setup
-	CURRENT_GCC_V=$(get-current-gcc)
+	CURRENT_GCC_V=$(get-current-gcc-version)
 	switch-to-gcc-9
 }
 
