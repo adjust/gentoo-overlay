@@ -591,4 +591,8 @@ src_compile() {
 src_install() {
 	dobin ${PN}
 	dodoc README.md docs/{metrics.md,reference-config.yaml}
+
+	newinitd "${FILESDIR}"/${PN}.initd ${PN}
+	newconfd "${FILESDIR}"/${PN}.confd ${PN}
 }
+
