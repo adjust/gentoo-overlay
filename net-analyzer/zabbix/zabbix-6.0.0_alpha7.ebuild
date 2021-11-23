@@ -263,7 +263,7 @@ SRC_URI="
 LICENSE="GPL-2"
 SLOT="0/$(ver_cut 1-2)"
 WEBAPP_MANUAL_SLOT="yes"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="+agent +agent2 curl frontend gnutls ipv6 java ldap libxml2 mysql odbc openipmi +openssl oracle +postgres proxy server snmp sqlite ssh ssl static"
 REQUIRED_USE="|| ( agent agent2 frontend proxy server )
 	proxy? ( ^^ ( mysql oracle postgres sqlite ) )
