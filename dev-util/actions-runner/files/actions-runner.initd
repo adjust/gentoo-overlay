@@ -1,0 +1,31 @@
+#!/sbin/openrc-run
+# Copyright 1999-2017 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+ACTIONS_RUNNER_USER="${ACTIONS_RUNNER_USER:-github_runner}"
+ACTIONS_RUNNER_DIR="${ACTIONS_RUNNER_DIR:-/opt/actions-runner}"
+
+command="${ACTIONS_RUNNER_DIR}/run.sh"
+command_user="${ACTIONS_RUNNER_USER}"
+command_background="true"
+
+pidfile="/run/${RC_SVCNAME}.pid"
+output_log="/var/log/${RC_SVCNAME}.log"
+error_log="/var/log/${RC_SVCNAME}.log"
+
+start_pre() {
+	checkpath -f -o "${command_user}" ${output_log}
+	for f in credentials credentials_rsaparams env path runner; do
+	   if [ ! -f "${ACTIONS_RUNNER_DIR}/.${f}" ]; then
+	       eerror "Required files are missing, run 'sudo -u ${ACTIONS_RUNNER_USER} -- ${ACTIONS_RUNNER_DIR}/config.sh' first"
+	       exit 1
+	   fi
+	done
+}
+
+stop_pre() {
+	for f in $( pgrep -P $( cat ${pidfile} ) ); do
+		einfo Stopping child process ${f}...
+		kill ${f}
+	done
+}
