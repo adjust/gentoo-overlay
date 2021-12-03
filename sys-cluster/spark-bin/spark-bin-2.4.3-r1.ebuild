@@ -114,5 +114,13 @@ src_install() {
 	newinitd "${FILESDIR}/spark-history.initd" spark-history
 	newconfd "${FILESDIR}/spark-history.confd" spark-history
 
+	dosym "${ED%/}"/opt/spark-${SLOT}/bin/beeline /usr/bin/beeline
+	dosym "${ED%/}"/opt/spark-${SLOT}/bin/find-spark-home /usr/bin/find-spark-home
+	dosym "${ED%/}"/opt/spark-${SLOT}/bin/pyspark /usr/bin/pyspark
+	dosym "${ED%/}"/opt/spark-${SLOT}/bin/spark-class /usr/bin/spark-class
+	dosym "${ED%/}"/opt/spark-${SLOT}/bin/spark-shell /usr/bin/spark-shell
+	dosym "${ED%/}"/opt/spark-${SLOT}/bin/spark-sql /usr/bin/spark-sql
+	dosym "${ED%/}"/opt/spark-${SLOT}/bin/spark-submit /usr/bin/spark-submit
+
 	einstalldocs
 }
