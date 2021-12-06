@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="project">
+		<email>xor@cairnlinux.org</email>
+	</maintainer>
+	<use>
+		<flag name="build-kernel">Build a kernel and modules from the kernel sources</flag>
+		<flag name="btrfs">Enable support for btrfs in the kernel + initramfs</flag>
+		<flag name="clang">Build the kernel with the Clang compiler</flag>
+		<flag name="compress">Compress kernel, modules and initramfs</flag>
+		<flag name="dracut">Use Dracut for initramfs generation</flag>
+		<flag name="firmware">Include firmware in the initramfs</flag>
+		<flag name="hardened">Apply kernel hardening patch set and CONFIG_* tweaks</flag>
+		<flag name="kpti">Remove kernel mapping in user mode</flag>
+		<flag name="luks">Enable support for luks in the kernel + initramfs</flag>
+		<flag name="lvm">Enable support for lvm in the kernel + initramfs</flag>
+		<flag name="mcelog">Enable support for mcelog in the kernel</flag>
+		<flag name="mdadm">Enable support for mdadm in the kernel + initramfs</flag>
+		<flag name="memcg">Enable the memory controller for cgroups in the kernel</flag>
+		<flag name="microcode">Include microcode in the initramfs</flag>
+		<flag name="numa">Enable NUMA balancing in the kernel</flag>
+		<flag name="plymouth">Enable support for Plymouth bootsplash in the kernel + initramfs</flag>
+		<flag name="retpoline">Avoid speculative indirect branches in kernel</flag>
+		<flag name="sign-modules">Sign the kernel modules as part of the build-kernel process</flag>
+		<flag name="systemd">TODO</flag>
+		<flag name="udev">Include udev rules in the initramfs</flag>
+		<flag name="zfs">Enable support for zfs in the kernel + initramfs</flag>
+	</use>
+</pkgmetadata>
