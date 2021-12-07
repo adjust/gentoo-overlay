@@ -9,7 +9,6 @@
 		<flag name="btrfs">Enable support for btrfs in the kernel + initramfs</flag>
 		<flag name="clang">Build the kernel with the Clang compiler</flag>
 		<flag name="compress">Compress kernel, modules and initramfs</flag>
-		<flag name="dracut">Use Dracut for initramfs generation</flag>
 		<flag name="firmware">Include firmware in the initramfs</flag>
 		<flag name="hardened">Apply kernel hardening patch set and CONFIG_* tweaks</flag>
 		<flag name="kpti">Remove kernel mapping in user mode</flag>

@@ -15,7 +15,7 @@ SLOT="${PV}"
 RESTRICT="binchecks mirror strip"
 
 # general kernel USE flags
-IUSE="build-kernel clang compress debug +dracut symlink"
+IUSE="build-kernel clang compress debug symlink"
 # optimize
 IUSE="${IUSE} custom-cflags"
 # security
@@ -34,10 +34,7 @@ BDEPEND="
 "
 
 RDEPEND="
-	build-kernel? (
-		dracut? ( sys-kernel/dracut )
-		!dracut? ( sys-kernel/genkernel )
-	)
+	build-kernel? ( sys-kernel/genkernel )
 	btrfs? ( sys-fs/btrfs-progs )
 	compress? ( sys-apps/kmod[lzma] )
 	firmware? (
@@ -488,65 +485,31 @@ pkg_postinst() {
 	# rebuild the initramfs on post_install
 	if use build-kernel; then
 
-		if use dracut; then
+		# setup dirs for genkernel
+		mkdir -p "${WORKDIR}"/genkernel/{tmp,cache,log} || die "failed to create setup directories for genkernel"
 
-			ewarn ">>> Dracut: building initramfs"
-
-			dracut_modules_add="base"
-			dracut_modules_omit="bootchart convertfs qemu"
-
-			# call dracut and pass it arguments for the initramfs build
-			dracut \
-				--no-hostonly \
-				--force \
-				--kmoddir="${ROOT}/lib/modules/${KERNEL_FULL_VERSION}" \
-				--add="${dracut_modules_add[@]}" \
-				--omit="${dracut_modules_omit[@]}" \
-				$(usex btrfs "--add=btrfs" "--omit=btrfs" ) \
-				$(usex compress "--compress=xz" "--no-compress" ) \
-				$(usex debug "--stdlog=5" "--stdlog=1" ) \
-				$(usex firmware "--fwdir=/lib/firmware" "" ) \
-				$(usex luks "--add=crypt" "--omit=crypt" ) \
-				$(usex lvm "--add=lvm --lvmconf" "--omit=lvm --nolvmconf" ) \
-				$(usex mdadm "--add=mdraid --mdadmconf" "--omit=mdraid --nomdadmconf" ) \
-				$(usex microcode "--early-microcode" "--no-early-microcode" ) \
-				$(usex plymouth "--add=plymouth" "--omit=plymouth" ) \
-				$(usex selinux "--add=selinux" "--omit=selinux" ) \
-				$(usex systemd "--add=systemd" "--omit=systemd" ) \
-				$(usex udev "--add=udev-rules" "--omit=udev-rules" ) \
-				$(usex zfs "--add=zfs" "--omit=zfs" ) \
-				"${ROOT}"/boot/initramfs-${KERNEL_FULL_VERSION}.img ${KERNEL_FULL_VERSION} || die ">>> Dracut: building initramfs failed"
-
-			ewarn ">>> Dracut: Finished building initramfs"
-
-		elif ! use dracut; then
-
-			# setup dirs for genkernel
-			mkdir -p "${WORKDIR}"/genkernel/{tmp,cache,log} || die "failed to create setup directories for genkernel"
-
-			genkernel \
-				--color \
-				--makeopts="${MAKEOPTS}" \
-				--logfile="${WORKDIR}/genkernel/log/genkernel.log" \
-				--cachedir="${WORKDIR}/genkernel/cache" \
-				--tmpdir="${WORKDIR}/genkernel/tmp" \
-				--kernel-config="/boot/config-${KERNEL_FULL_VERSION}" \
-				--kerneldir="/usr/src/linux-${KERNEL_FULL_VERSION}" \
-				--kernel-outputdir="/usr/src/linux-${KERNEL_FULL_VERSION}" \
-				--all-ramdisk-modules \
-				--busybox \
-				$(usex btrfs "--btrfs" "--no-btrfs") \
-				$(usex debug "--loglevel=5" "--loglevel=1") \
-				$(usex firmware "--firmware" "--no-firmware") \
-				$(usex luks "--luks" "--no-luks") \
-				$(usex lvm "--lvm" "--no-lvm") \
-				$(usex mdadm "--mdadm" "--no-mdadm") \
-				$(usex mdadm "--mdadm-config=/etc/mdadm.conf" "") \
-				$(usex microcode "--microcode-initramfs" "--no-microcode-initramfs") \
-				$(usex udev "--udev-rules" "--no-udev-rules") \
-				$(usex zfs "--zfs" "--no-zfs") \
-				initramfs || die "failed to build initramfs"
-		fi
+		genkernel \
+			--color \
+			--makeopts="${MAKEOPTS}" \
+			--logfile="${WORKDIR}/genkernel/log/genkernel.log" \
+			--cachedir="${WORKDIR}/genkernel/cache" \
+			--tmpdir="${WORKDIR}/genkernel/tmp" \
+			--kernel-config="/boot/config-${KERNEL_FULL_VERSION}" \
+			--kerneldir="/usr/src/linux-${KERNEL_FULL_VERSION}" \
+			--kernel-outputdir="/usr/src/linux-${KERNEL_FULL_VERSION}" \
+			--all-ramdisk-modules \
+			--busybox \
+			$(usex btrfs "--btrfs" "--no-btrfs") \
+			$(usex debug "--loglevel=5" "--loglevel=1") \
+			$(usex firmware "--firmware" "--no-firmware") \
+			$(usex luks "--luks" "--no-luks") \
+			$(usex lvm "--lvm" "--no-lvm") \
+			$(usex mdadm "--mdadm" "--no-mdadm") \
+			$(usex mdadm "--mdadm-config=/etc/mdadm.conf" "") \
+			$(usex microcode "--microcode-initramfs" "--no-microcode-initramfs") \
+			$(usex udev "--udev-rules" "--no-udev-rules") \
+			$(usex zfs "--zfs" "--no-zfs") \
+			initramfs || die "failed to build initramfs"
 	fi
 
 	# warn about the issues with running a hardened kernel
