@@ -106,22 +106,21 @@ get_certs_dir() {
 
 pkg_pretend() {
 
-	# perform sanity checks that only apply to source builds.
-	if [[ ${MERGE_TYPE} != binary ]] && use build-kernel; then
-
-		# Ensure we have enough disk space to compile
-		CHECKREQS_DISK_BUILD="5G"
-		check-reqs_pkg_setup
-	fi
-
 	# perform sanity checks that apply to both source + binary packages.
 	if use build-kernel; then
+
+		check-reqs_pkg_setup
+
 		# check that our boot partition (if it exists) is mounted
 		mount-boot_pkg_pretend
 
-		# check that we have enough free space in the boot partition
+		# check that we have enough free disk space in the boot partition.
 		CHECKREQS_DISK_BOOT="64M"
-		check-reqs_pkg_setup
+
+		# if we're emerging a source package, make sure we have enough free disk space.
+		if [[ ${MERGE_TYPE} != binary ]]; then
+			CHECKREQS_DISK_BUILD="5G"
+		fi
 
 		# a lot of hardware requires firmware
 		if ! use firmware; then
