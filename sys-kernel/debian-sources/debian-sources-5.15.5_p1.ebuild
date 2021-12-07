@@ -506,6 +506,7 @@ pkg_postinst() {
 			--kernel-outputdir="/usr/src/linux-${KERNEL_FULL_VERSION}" \
 			--all-ramdisk-modules \
 			--busybox \
+			--compress-initramfs-type="xz" \
 			$(usex btrfs "--btrfs" "--no-btrfs") \
 			$(usex debug "--loglevel=5" "--loglevel=1") \
 			$(usex firmware "--firmware" "--no-firmware") \
