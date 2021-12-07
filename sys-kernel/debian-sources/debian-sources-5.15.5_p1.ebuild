@@ -464,6 +464,12 @@ src_install() {
 	fi
 }
 
+pkg_preinst() {
+	if use build-kernel; then
+		mount-boot_pkg_preinst
+	fi
+}
+
 pkg_postinst() {
 
 	# if USE=symlink...
@@ -483,6 +489,8 @@ pkg_postinst() {
 
 	# rebuild the initramfs on post_install
 	if use build-kernel; then
+
+		mount-boot_pkg_postinst
 
 		# setup dirs for genkernel
 		mkdir -p "${WORKDIR}"/genkernel/{tmp,cache,log} || die "failed to create setup directories for genkernel"
@@ -537,10 +545,18 @@ pkg_postinst() {
 	fi
 }
 
+pkg_prerm() {
+	if use build-kernel; then
+		mount-boot_pkg_prerm
+	fi
+}
+
 pkg_postrm() {
 
 	# these clean-ups only apply if USE=build-kernel
 	if use build-kernel; then
+
+		mount-boot_pkg_postrm
 
 		# clean-up the generated initramfs for this kernel ...
 		if [[ -f "${ROOT}"/boot/initramfs-${KERNEL_FULL_VERSION}.img ]]; then
