@@ -4,7 +4,7 @@ EAPI=7
 
 DESCRIPTION="Virtual for Linux kernel sources"
 
-KEYWORDS="~amd64"
+KEYWORDS="amd64"
 
 SLOT="0"
 
