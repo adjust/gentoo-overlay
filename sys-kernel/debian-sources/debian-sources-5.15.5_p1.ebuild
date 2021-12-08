@@ -2,7 +2,7 @@
 
 EAPI=7
 
-inherit check-reqs mount-boot toolchain-funcs
+inherit toolchain-funcs
 
 DESCRIPTION="Linux kernel sources with some additional patches."
 HOMEPAGE="https://kernel.org"
@@ -106,27 +106,10 @@ get_certs_dir() {
 
 pkg_pretend() {
 
-	# perform sanity checks that apply to both source + binary packages.
-	if use build-kernel; then
-
-		check-reqs_pkg_setup
-
-		# check that our boot partition (if it exists) is mounted
-		mount-boot_pkg_pretend
-
-		# check that we have enough free disk space in the boot partition.
-		CHECKREQS_DISK_BOOT="64M"
-
-		# if we're emerging a source package, make sure we have enough free disk space.
-		if [[ ${MERGE_TYPE} != binary ]]; then
-			CHECKREQS_DISK_BUILD="5G"
-		fi
-
-		# a lot of hardware requires firmware
-		if ! use firmware; then
-			ewarn "sys-kernel/linux-firmware not found installed on your system."
-			ewarn "This package provides firmware that may be needed for your hardware to work."
-		fi
+	# a lot of hardware requires firmware
+	if ! use firmware; then
+		ewarn "sys-kernel/linux-firmware not found installed on your system."
+		ewarn "This package provides firmware that may be needed for your hardware to work."
 	fi
 }
 
@@ -464,12 +447,6 @@ src_install() {
 	fi
 }
 
-pkg_preinst() {
-	if use build-kernel; then
-		mount-boot_pkg_preinst
-	fi
-}
-
 pkg_postinst() {
 
 	# if USE=symlink...
@@ -489,8 +466,6 @@ pkg_postinst() {
 
 	# rebuild the initramfs on post_install
 	if use build-kernel; then
-
-		mount-boot_pkg_postinst
 
 		# setup dirs for genkernel
 		mkdir -p "${WORKDIR}"/genkernel/{tmp,cache,log} || die "failed to create setup directories for genkernel"
@@ -546,18 +521,10 @@ pkg_postinst() {
 	fi
 }
 
-pkg_prerm() {
-	if use build-kernel; then
-		mount-boot_pkg_prerm
-	fi
-}
-
 pkg_postrm() {
 
 	# these clean-ups only apply if USE=build-kernel
 	if use build-kernel; then
-
-		mount-boot_pkg_postrm
 
 		# clean-up the generated initramfs for this kernel ...
 		if [[ -f "${ROOT}"/boot/initramfs-${KERNEL_FULL_VERSION}.img ]]; then
