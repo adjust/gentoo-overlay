@@ -1,0 +1,22 @@
+#!/sbin/openrc-run
+# Copyright 1999-2017 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+RS_DIR="${SRCDIR:-/opt/runners-supervisor}"
+RS_USER="${RS_USER:-github_runner}"
+MAXRUNNERS="${MAXRUNNERS:-5}"
+
+command="${RS_DIR}/runners-supervisor.sh"
+command_args="-sd ${RS_DIR} -rt ${RUNNERTAG} -gt ${GHTOKEN} -gr ${GHREPO} -n ${MAXRUNNERS}"
+command_user="${RS_USER}"
+command_background="true"
+retry=20
+
+pidfile="/run/${RC_SVCNAME}.pid"
+output_log="/var/log/${RC_SVCNAME}.log"
+error_log="/var/log/${RC_SVCNAME}.log"
+
+start_pre() {
+	checkpath -f -o "${command_user}" ${output_log}
+}
+

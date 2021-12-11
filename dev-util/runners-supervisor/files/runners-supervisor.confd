@@ -1,0 +1,5 @@
+#SRCDIR=/opt/runners-supervisor
+#RUNNERTAG=myrepo
+#GHTOKEN=user:token
+#GHREPO=user/repo
+
