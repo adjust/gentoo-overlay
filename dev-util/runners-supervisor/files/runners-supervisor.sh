@@ -57,6 +57,7 @@ while [[ $# -gt 0 ]]; do
 done
 if [ "${SRCDIR}" == "" ] || [ "${RUNNERTAG}" == "" ] || [ "${GHTOKEN}" == "" ] || [ "${GHREPO}" == "" ] ; then
     echo "Usage: $0 -sd <working dir> -rt <runner tag> -gt <github token> -gr <github repo> [ -i <interval> -n <max runners> -d ] "
+    exit 1
 fi
 
 # prefix for the runner name
