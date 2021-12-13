@@ -238,7 +238,7 @@ function main() {
 	_curl "GET" ""
 	GR_STATE=${CURL_RESULT}
 	# use only self-hosted runners
-	GR_SELF=`echo ${GR_STATE} | jq '[.runners[]|select(.labels[].name|contains("self-hosted"))]'`
+	GR_SELF=`echo ${GR_STATE} | jq '[.runners[]|select((.labels[].name|contains("self-hosted")) and (.name|contains("'${DSTPREFIX}'")))]'`
 	GR_COUNT=$(echo ${GR_SELF} | jq "length")
 	GR_COUNT="${GR_COUNT:-0}"
 	for (( i=0; i<${GR_COUNT}; i++ )) do
