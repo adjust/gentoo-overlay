@@ -5,7 +5,7 @@ BASENAME=base
 
 # default interval in seconds between status checks
 # (see -i parameter below)
-INTERVAL=20
+INTERVAL=30
 
 # parallel runners 
 # (see -n parameter below)
@@ -184,7 +184,7 @@ function update_check() {
     fi
 
     # get the json with the latest information and parse it
-    LATEST=`curl -s https://api.github.com/repos/actions/runner/releases/latest`
+    LATEST=`curl -s -u ${GHTOKEN} https://api.github.com/repos/actions/runner/releases/latest`
     URL=`echo ${LATEST} | jq -r '.assets[].browser_download_url|select(.|contains("linux-x64"))'`
     VER=`echo ${LATEST} | jq -r '.name'`
 
