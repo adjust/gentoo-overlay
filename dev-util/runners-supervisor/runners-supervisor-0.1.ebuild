@@ -14,6 +14,7 @@ IUSE=""
 RDEPEND="
 	acct-group/github_runner
 	acct-user/github_runner
+	app-misc/jq
 "
 
 S="${WORKDIR}"
