@@ -2,24 +2,37 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
-PYTHON_COMPAT=( python2_7 )
-inherit eutils python-single-r1 user
+
+inherit eutils
 
 DESCRIPTION="Flash-optimized, in-memory, nosql database"
 HOMEPAGE="http://www.aerospike.com"
-
-LICENSE="Apache-2.0"
-SLOT="0"
-KEYWORDS="~amd64"
-IUSE=""
 SRC_URI="http://www.aerospike.com/artifacts/${PN}/${PV}/${P}-debian8.tgz"
 
-RDEPEND="!dev-db/aerospike-server-community
+LICENSE="Apache-2.0"
+KEYWORDS="~amd64"
+
+SLOT="0"
+
+IUSE=""
+
+RDEPEND="
+	${PYTHON_DEPS}
+	acct-group/aerospike
+	acct-user/aerospike
+	!dev-db/aerospike-server-community
+	dev-lang/python:2.7
 	net-nds/openldap
 	sys-process/numactl
-	${PYTHON_DEPS}
-	|| ( dev-libs/openssl-compat:1.0.0 <dev-libs/openssl-1.1:* )"
-DEPEND="${RDEPEND}
+	|| (
+		dev-libs/openssl-compat:1.0.0
+		<dev-libs/openssl-1.1:*
+	)
+	>=virtual/jre-1.8
+	sys-libs/readline-compat"
+
+DEPEND="
+	>=virtual/jdk-1.8
 	app-arch/xz-utils"
 
 S="${WORKDIR}/${P}-debian8"
@@ -28,12 +41,6 @@ RESTRICT="fetch"
 
 # change me at every version bump
 TOOLS_PV="3.16.0"
-
-pkg_setup() {
-	enewgroup aerospike
-	enewuser aerospike -1 /bin/bash /opt/aerospike aerospike
-	python-single-r1_pkg_setup
-}
 
 src_prepare() {
 	local server_deb="${P}.debian8.x86_64.deb"
@@ -78,5 +85,10 @@ src_install() {
 	fowners aerospike:aerospike /usr/bin/asd
 	fowners -R aerospike:aerospike /var/log/aerospike
 
-	python_fix_shebang opt/aerospike/bin
+	for i in  opt/aerospike/bin/*; do
+		echo $i
+		sed -i -e "1s: python$: python2:" $i
+		sed -i -e "1s:/usr/bin/python:/usr/bin/python2:" $i
+		head -n1 $i
+	done
 }
