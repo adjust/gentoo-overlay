@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -20,7 +20,7 @@ LICENSE="POSTGRESQL GPL-2"
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="https://www.postgresql.org/"
 
-IUSE="bagger cassert debug doc icu kerberos kernel_linux ldap nls pam perl
+IUSE="bagger cassert debug doc icu kerberos ldap nls pam perl
 	  python +readline selinux +server systemd ssl static-libs tcl
 	  +threads uuid xml zlib"
 
@@ -31,6 +31,7 @@ CDEPEND="
 acct-group/postgres
 acct-user/postgres
 sys-apps/less
+virtual/libcrypt:=
 virtual/libintl
 icu? ( dev-libs/icu:= )
 kerberos? ( virtual/krb5 )
@@ -49,8 +50,8 @@ zlib? ( sys-libs/zlib )
 # uuid flags -- depend on sys-apps/util-linux for Linux libcs, or if no
 # supported libc in use depend on dev-libs/ossp-uuid. For BSD systems,
 # the libc includes UUID functions.
-UTIL_LINUX_LIBC=( elibc_{glibc,uclibc,musl} )
-BSD_LIBC=( elibc_{Free,Net,Open}BSD )
+UTIL_LINUX_LIBC=( elibc_{glibc,musl} )
+BSD_LIBC=( elibc_{Net,Open}BSD )
 
 nest_usedep() {
 	local front back
@@ -62,7 +63,6 @@ nest_usedep() {
 	echo "${front}${1}${back}"
 }
 
-IUSE+=" ${UTIL_LINUX_LIBC[@]} ${BSD_LIBC[@]}"
 CDEPEND+="
 uuid? (
 	${UTIL_LINUX_LIBC[@]/%/? ( sys-apps/util-linux )}
@@ -87,7 +87,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-
 	# Work around PPC{,64} compilation bug where bool is already defined
 	sed '/#ifndef __cplusplus/a #undef bool' -i src/include/c.h || die
 
@@ -115,8 +114,7 @@ src_prepare() {
 
 	# https://bugs.gentoo.org/753257
 	# https://bugs.gentoo.org/766225
-	eapply "${FILESDIR}"/postgresql-10.0-icu68.patch \
-		   "${FILESDIR}"/postgresql-10.0-icu68-2.patch
+	eapply "${FILESDIR}"/postgresql-10.0-icu68.patch
 
 	eapply_user
 }
@@ -398,7 +396,7 @@ pkg_config() {
 	einfo "Initializing the database ..."
 
 	if [[ ${EUID} == 0 ]] ; then
-		su postgres -c "${EROOT}/usr/$(get_libdir)/postgresql-${SLOT}/bin/initdb -D \"${DATA_DIR}\" ${PG_INITDB_OPTS}"
+		su - postgres -c "${EROOT}/usr/$(get_libdir)/postgresql-${SLOT}/bin/initdb -D \"${DATA_DIR}\" ${PG_INITDB_OPTS}"
 	else
 		"${EROOT}"/usr/$(get_libdir)/postgresql-${SLOT}/bin/initdb -U postgres -D "${DATA_DIR}" ${PG_INITDB_OPTS}
 	fi

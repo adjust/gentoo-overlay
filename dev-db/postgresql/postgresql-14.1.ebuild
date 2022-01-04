@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{8,9,10} )
 
 inherit flag-o-matic linux-info multilib pam prefix python-single-r1 systemd tmpfiles
 
-KEYWORDS="amd64"
+KEYWORDS="~amd64"
 
 SLOT=$(ver_cut 1)
 
@@ -20,9 +20,9 @@ LICENSE="POSTGRESQL GPL-2"
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="https://www.postgresql.org/"
 
-IUSE="bagger cassert debug doc hugelwlock icu kerberos kernel_linux ldap
-	  llvm nls pam perl python +readline selinux +server systemd ssl static-libs
-	  tcl +threads uuid xml zlib"
+IUSE="bagger cassert debug doc hugelwlock icu kerberos ldap llvm lz4 nls pam
+	  perl python +readline selinux +server systemd ssl static-libs tcl
+	  +threads uuid xml zlib"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
@@ -39,6 +39,7 @@ llvm? (
 	sys-devel/llvm:=
 	sys-devel/clang:=
 )
+lz4? ( app-arch/lz4 )
 pam? ( sys-libs/pam )
 perl? ( >=dev-lang/perl-5.8:= )
 python? ( ${PYTHON_DEPS} )
@@ -53,8 +54,8 @@ zlib? ( sys-libs/zlib )
 # uuid flags -- depend on sys-apps/util-linux for Linux libcs, or if no
 # supported libc in use depend on dev-libs/ossp-uuid. For BSD systems,
 # the libc includes UUID functions.
-UTIL_LINUX_LIBC=( elibc_{glibc,uclibc,musl} )
-BSD_LIBC=( elibc_{Free,Net,Open}BSD )
+UTIL_LINUX_LIBC=( elibc_{glibc,musl} )
+BSD_LIBC=( elibc_{Net,Open}BSD )
 
 nest_usedep() {
 	local front back
@@ -66,7 +67,6 @@ nest_usedep() {
 	echo "${front}${1}${back}"
 }
 
-IUSE+=" ${UTIL_LINUX_LIBC[@]} ${BSD_LIBC[@]}"
 CDEPEND+="
 uuid? (
 	${UTIL_LINUX_LIBC[@]/%/? ( sys-apps/util-linux )}
@@ -91,7 +91,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-
 	# Set proper run directory
 	sed "s|\(PGSOCKET_DIR\s\+\)\"/tmp\"|\1\"${EPREFIX}/run/postgresql\"|" \
 		-i src/include/pg_config_manual.h || die
@@ -101,7 +100,7 @@ src_prepare() {
 	# hardened and non-hardened environments. (Bug #528786)
 	sed 's/@install_bin@/install -c/' -i src/Makefile.global.in || die
 
-	use server || eapply "${FILESDIR}/${PN}-13_beta1-no-server.patch"
+	use server || eapply "${FILESDIR}/${PN}-14_rc1-no-server.patch"
 
 	if use pam ; then
 		sed "s/\(#define PGSQL_PAM_SERVICE \"postgresql\)/\1-${SLOT}/" \
@@ -144,14 +143,13 @@ src_configure() {
 		[[ -z $uuid_config ]] && uuid_config="--with-uuid=ossp"
 	fi
 
-	econf \
+	local myconf="\
 		--prefix="${PO}/usr/$(get_libdir)/postgresql-${SLOT}" \
 		--datadir="${PO}/usr/share/postgresql-${SLOT}" \
 		--includedir="${PO}/usr/include/postgresql-${SLOT}" \
 		--mandir="${PO}/usr/share/postgresql-${SLOT}/man" \
 		--sysconfdir="${PO}/etc/postgresql-${SLOT}" \
 		--with-system-tzdata="${PO}/usr/share/zoneinfo" \
-		$(use_enable !alpha spinlocks) \
 		$(use_enable cassert) \
 		$(use_enable debug) \
 		$(use_enable threads thread-safety) \
@@ -159,6 +157,7 @@ src_configure() {
 		$(use_with kerberos gssapi) \
 		$(use_with ldap) \
 		$(use_with llvm) \
+		$(use_with lz4) \
 		$(use_with pam) \
 		$(use_with perl) \
 		$(use_with python) \
@@ -170,7 +169,14 @@ src_configure() {
 		$(use_with xml libxml) \
 		$(use_with xml libxslt) \
 		$(use_with zlib) \
-		$(use_enable nls)
+		$(use_enable nls)"
+	if use alpha; then
+		myconf+=" --disable-spinlocks"
+	else
+		# Should be the default but just in case
+		myconf+=" --enable-spinlocks"
+	fi
+	econf ${myconf}
 }
 
 src_compile() {
@@ -399,7 +405,7 @@ pkg_config() {
 	einfo "Initializing the database ..."
 
 	if [[ ${EUID} == 0 ]] ; then
-		su postgres -c "${EROOT}/usr/$(get_libdir)/postgresql-${SLOT}/bin/initdb -D \"${DATA_DIR}\" ${PG_INITDB_OPTS}"
+		su - postgres -c "${EROOT}/usr/$(get_libdir)/postgresql-${SLOT}/bin/initdb -D \"${DATA_DIR}\" ${PG_INITDB_OPTS}"
 	else
 		"${EROOT}"/usr/$(get_libdir)/postgresql-${SLOT}/bin/initdb -U postgres -D "${DATA_DIR}" ${PG_INITDB_OPTS}
 	fi
