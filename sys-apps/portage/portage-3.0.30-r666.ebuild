@@ -1,20 +1,20 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-DISTUTILS_USE_SETUPTOOLS=bdepend
 PYTHON_COMPAT=( pypy3 python3_{8..10} )
 PYTHON_REQ_USE='bzip2(+),threads(+)'
 TMPFILES_OPTIONAL=1
 
 inherit distutils-r1 linux-info tmpfiles prefix
 
-DESCRIPTION="Portage is the package management and distribution system for Gentoo"
+DESCRIPTION="The package management and distribution system for Gentoo"
 HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Portage"
+SRC_URI="https://gitweb.gentoo.org/proj/portage.git/snapshot/${P}.tar.bz2"
 
 LICENSE="GPL-2"
-KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86"
+KEYWORDS="~amd64"
 SLOT="0"
 IUSE="apidoc build doc gentoo-dev +ipc +native-extensions +rsync-verify selinux test xattr"
 RESTRICT="!test? ( test )"
@@ -28,8 +28,8 @@ DEPEND="!build? ( $(python_gen_impl_dep 'ssl(+)') )
 	>=sys-apps/sed-4.0.5 sys-devel/patch
 	doc? ( app-text/xmlto ~app-text/docbook-xml-dtd-4.4 )
 	apidoc? (
-		dev-python/sphinx
-		dev-python/sphinx-epytext
+		dev-python/sphinx[${PYTHON_USEDEP}]
+		dev-python/sphinx-epytext[${PYTHON_USEDEP}]
 	)"
 # Require sandbox-2.2 for bug #288863.
 # For whirlpool hash, require python[ssl] (bug #425046).
@@ -44,17 +44,16 @@ RDEPEND="
 	>=sys-apps/findutils-4.4
 	!build? (
 		>=sys-apps/sed-4.0.5
-		app-shells/bash:0[readline]
+		>=app-shells/bash-5.0:0[readline]
 		>=app-admin/eselect-1.2
 		rsync-verify? (
 			>=app-portage/gemato-14.5[${PYTHON_USEDEP}]
-			>=app-crypt/openpgp-keys-gentoo-release-20180706
+			>=sec-keys/openpgp-keys-gentoo-release-20180706
 			>=app-crypt/gnupg-2.2.4-r2[ssl(-)]
 		)
 	)
 	elibc_glibc? ( >=sys-apps/sandbox-2.2 )
 	elibc_musl? ( >=sys-apps/sandbox-2.2 )
-	elibc_uclibc? ( >=sys-apps/sandbox-2.2 )
 	kernel_linux? ( sys-apps/util-linux )
 	>=app-misc/pax-utils-0.1.17
 	selinux? ( >=sys-libs/libselinux-2.0.94[python,${PYTHON_USEDEP}] )
@@ -68,21 +67,11 @@ RDEPEND="
 PDEPEND="
 	!build? (
 		>=net-misc/rsync-2.6.4
+		>=sys-apps/file-5.41
 		userland_GNU? ( >=sys-apps/coreutils-6.4 )
 	)"
 # coreutils-6.4 rdep is for date format in emerge-webrsync #164532
 # NOTE: FEATURES=installsources requires debugedit and rsync
-
-SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz
-	https://github.com/gentoo/portage/commit/a4d882964ee1931462f911d0c46a80e27e59fa48.patch -> portage-3.0.20-bug-777492-a4d8829.patch
-	https://github.com/gentoo/portage/commit/209be9a8bee13384dd04a4762436b4c2a5e35bc6.patch -> portage-3.0.20-bug-777492-209be9a.patch
-	https://github.com/gentoo/portage/compare/8e47286b7082aac21fe25402a1f9d03db968cd30...693f6bf5a54e2424e2ad49e1838b61f76bf78e40.patch -> portage-3.0.20-bug-796584-693f6bf.patch
-	https://github.com/gentoo/portage/commit/2ce11f06e48290efb2d4b6743c8edf01c176b0fc.patch -> portage-3.0.20-bug-796812-2ce11f0.patch
-	https://github.com/gentoo/portage/compare/2ce11f06e48290efb2d4b6743c8edf01c176b0fc...c3e4919fd004ce0f5c91c67ea377bbda83558ca9.patch -> portage-3.0.20-bug-796959-c8a52e1-c3e4919.patch"
-
-PATCHES=(
-	"${FILESDIR}/${PN}-3.0.13-silence-deprecated-profile-check.patch"
-)
 
 pkg_pretend() {
 	local CONFIG_CHECK="~IPC_NS ~PID_NS ~NET_NS ~UTS_NS"
@@ -91,22 +80,12 @@ pkg_pretend() {
 }
 
 python_prepare_all() {
+	local PATCHES=(
+		"${FILESDIR}/3.0.30-silence-deprecated-profile-check.patch"
+		"${FILESDIR}/3.0.30-revert-default-enable-soname-dependencies.patch"
+	)
+
 	distutils-r1_python_prepare_all
-
-	# Revert due to regressions:
-	# https://bugs.gentoo.org/777492
-	# https://github.com/gentoo/portage/pull/728
-	eapply -R "${DISTDIR}/portage-3.0.20-bug-777492-209be9a.patch"
-	eapply -R "${DISTDIR}/portage-3.0.20-bug-777492-a4d8829.patch"
-
-	# Apply regression fix for https://bugs.gentoo.org/796584.
-	eapply "${DISTDIR}/portage-3.0.20-bug-796584-693f6bf.patch"
-
-	# Apply EAPI 8 fix for https://bugs.gentoo.org/796812.
-	eapply "${DISTDIR}/portage-3.0.20-bug-796812-2ce11f0.patch"
-
-	# Apply EAPI 8 fix for https://bugs.gentoo.org/796959
-	eapply "${DISTDIR}/portage-3.0.20-bug-796959-c8a52e1-c3e4919.patch"
 
 	sed -e "s:^VERSION = \"HEAD\"$:VERSION = \"${PV}\":" -i lib/portage/__init__.py || die
 
@@ -117,12 +96,12 @@ python_prepare_all() {
 			die "failed to patch create_depgraph_params.py"
 
 		einfo "Enabling additional FEATURES for gentoo-dev..."
-		echo 'FEATURES="${FEATURES} strict-keepdir"' \
+		echo 'FEATURES="${FEATURES} ipc-sandbox network-sandbox strict-keepdir"' \
 			>> cnf/make.globals || die
 	fi
 
 	if use native-extensions; then
-		printf "[build_ext]\nportage-ext-modules=true\n" >> \
+		printf "[build_ext]\nportage_ext_modules=true\n" >> \
 			setup.cfg || die
 	fi
 
