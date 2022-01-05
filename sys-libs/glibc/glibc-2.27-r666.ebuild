@@ -17,7 +17,7 @@ if [[ ${PV} == 9999* ]]; then
 	EGIT_REPO_URI="https://sourceware.org/git/glibc.git"
 	inherit git-r3
 else
-	KEYWORDS="~amd64"
+	KEYWORDS="amd64"
 	SRC_URI="mirror://gnu/glibc/${P}.tar.xz"
 fi
 
@@ -31,7 +31,7 @@ PATCH_VER=3
 SRC_URI+=" https://dev.gentoo.org/~dilfridge/distfiles/${P}-patches-${PATCH_VER}.tar.bz2"
 SRC_URI+=" multilib? ( https://dev.gentoo.org/~dilfridge/distfiles/gcc-multilib-bootstrap-${GCC_BOOTSTRAP_VER}.tar.xz )"
 
-IUSE="audit caps compile-locales doc gd hardened headers-only +multiarch multilib nscd profile selinux suid systemtap vanilla"
+IUSE="audit caps +crypt compile-locales doc gd hardened headers-only +multiarch multilib nscd profile selinux suid systemtap vanilla"
 
 # Minimum kernel version that glibc requires
 MIN_KERN_VER="3.2.0"
@@ -905,6 +905,7 @@ glibc_do_configure() {
 		--with-bugurl=https://bugs.gentoo.org/
 		--with-pkgversion="$(glibc_banner)"
 		$(use_multiarch || echo --disable-multi-arch)
+		$(use_enable crypt)
 		$(use_enable systemtap)
 		$(use_enable nscd)
 		${EXTRA_ECONF}
