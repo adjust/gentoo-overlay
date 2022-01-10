@@ -10,7 +10,7 @@ HOMEPAGE="https://kernel.org"
 LICENSE="GPL-2"
 KEYWORDS="amd64"
 
-SLOT="${PV}"
+SLOT="${PV%%_p*}"
 
 RESTRICT="binchecks mirror strip"
 
