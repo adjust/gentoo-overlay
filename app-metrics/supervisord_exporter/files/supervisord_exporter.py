@@ -37,6 +37,8 @@ def dump_job_metrics(jobs:dict,metric):
     lines = []
     if metric in ["cpu_usage","mem_usage"]:
         for pid in jobs.keys():
+            if metric not in jobs[pid]:
+                continue
             if "group" in jobs[pid]:
                 lines.append(f'supervisord_job_{metric}{{group="{jobs[pid]["group"]}", name="{jobs[pid]["name"]}"}} {jobs[pid][metric]}\n')
             else:
