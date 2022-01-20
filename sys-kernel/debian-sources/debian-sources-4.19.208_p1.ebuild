@@ -530,10 +530,5 @@ pkg_postrm() {
 		if [[ -f "${ROOT}"/boot/initramfs-${KERNEL_FULL_VERSION}.img ]]; then
 			rm -f "${ROOT}"/boot/initramfs-${KERNEL_FULL_VERSION}.img || die "failed to remove initramfs-${KERNEL_FULL_VERSION}.img"
 		fi
-
-		# clean-up leftover kernel modules for this kernel ...
-		if [[ -d "${ROOT}"/lib/modules/${KERNEL_FULL_VERSION} ]]; then
-			rm -rf "${ROOT}"/lib/modules/${KERNEL_FULL_VERSION} || die "failed to remove /lib/modules/${KERNEL_FULL_VERSION}"
-		fi
 	fi
 }
