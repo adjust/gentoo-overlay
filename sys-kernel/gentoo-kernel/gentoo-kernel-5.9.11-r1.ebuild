@@ -46,6 +46,15 @@ REQUIRED_USE="
 
 S=${WORKDIR}
 
+MY_KV="${PV%%-r*}"
+
+src_prepare() {
+	default
+
+	mv "${WORKDIR}"/boot/initramfs-genkernel-x86_64-${MY_KV}-gentoo "${WORKDIR}"/boot/initramfs-${MY_KV}-gentoo.img
+	mv "${WORKDIR}"/boot/kernel-genkernel-x86_64-${MY_KV}-gentoo "${WORKDIR}"/boot/vmlinuz-${MY_KV}-gentoo
+}
+
 src_compile() {
 	:;
 }
