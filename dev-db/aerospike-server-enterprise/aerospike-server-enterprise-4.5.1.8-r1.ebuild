@@ -37,15 +37,15 @@ S="${WORKDIR}/${P}-debian8"
 RESTRICT="fetch"
 
 src_prepare() {
+	eapply_user
+
 	local server_deb="${P}.debian8.x86_64.deb"
 
 	ar x "${server_deb}" || die
 	tar xf data.tar.xz && rm data.tar.xz || die
 
-	eapply_user
-
-	rm *.deb asinstall control.tar.gz debian-binary LICENSE SHA256SUMS
-	rm usr/bin/{asfixownership,asmigrate2to3}
+	rm *.deb asinstall control.tar.gz debian-binary LICENSE SHA256SUMS || die
+	rm usr/bin/{asfixownership,asmigrate2to3} || die
 }
 
 src_install() {
