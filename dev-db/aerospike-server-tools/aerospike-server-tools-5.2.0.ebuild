@@ -35,7 +35,7 @@ src_prepare() {
 	ar x "${tools_deb}" || die
 	tar xf data.tar.xz && rm data.tar.xz || die
 
-	rm *.deb asinstall control.tar.gz debian-binary LICENSE SHA256SUMS || die
+	rm *.deb asinstall control.tar.xz debian-binary LICENSE SHA256SUMS || die
 }
 
 src_install() {
