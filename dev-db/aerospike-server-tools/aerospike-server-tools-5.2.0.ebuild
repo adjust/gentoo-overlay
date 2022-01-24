@@ -28,14 +28,14 @@ DEPEND="app-arch/xz-utils"
 S="${WORKDIR}/aerospike-server-enterprise-5.6.0.15-ubuntu20.04"
 
 src_prepare() {
+	eapply_user
+
 	local tools_deb="aerospike-tools-${PV}.ubuntu20.04.x86_64.deb"
 
 	ar x "${tools_deb}" || die
 	tar xf data.tar.xz && rm data.tar.xz || die
 
-	eapply_user
-
-	rm *.deb asinstall control.tar.gz debian-binary LICENSE SHA256SUMS
+	rm *.deb asinstall control.tar.gz debian-binary LICENSE SHA256SUMS || die
 }
 
 src_install() {
