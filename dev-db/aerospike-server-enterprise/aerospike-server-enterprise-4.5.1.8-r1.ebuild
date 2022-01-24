@@ -1,7 +1,7 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
 inherit eutils
 
@@ -41,6 +41,8 @@ src_prepare() {
 
 	ar x "${server_deb}" || die
 	tar xf data.tar.xz && rm data.tar.xz || die
+
+	eapply_user
 
 	rm *.deb asinstall control.tar.gz debian-binary LICENSE SHA256SUMS
 	rm usr/bin/{asfixownership,asmigrate2to3}
