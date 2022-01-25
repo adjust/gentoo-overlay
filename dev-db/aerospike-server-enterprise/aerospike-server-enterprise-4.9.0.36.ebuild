@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
 inherit eutils
 
@@ -17,61 +17,41 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
-	${PYTHON_DEPS}
 	acct-group/aerospike
 	acct-user/aerospike
 	!dev-db/aerospike-server-community
-	dev-lang/python:2.7
 	net-nds/openldap
 	sys-process/numactl
 	|| (
 		dev-libs/openssl-compat:1.0.0
 		<dev-libs/openssl-1.1:*
 	)
-	>=virtual/jre-1.8
-	sys-libs/readline-compat"
+"
 
 DEPEND="
-	>=virtual/jdk-1.8
 	app-arch/xz-utils"
 
 S="${WORKDIR}/${P}-debian8"
 
 RESTRICT="fetch"
 
-# change me at every version bump
-TOOLS_PV="6.3.0"
-
 src_prepare() {
+	eapply_user
+
 	local server_deb="${P}.debian8.x86_64.deb"
-	local tools_deb="aerospike-tools-${TOOLS_PV}.debian8.x86_64.deb"
 
 	ar x "${server_deb}" || die
 	tar xf data.tar.xz && rm data.tar.xz || die
 
-	ar x "${tools_deb}" || die
-	tar xf data.tar.xz && rm data.tar.xz || die
-
-	rm -v *.deb asinstall control.tar.gz debian-binary LICENSE SHA256SUMS || die
+	rm *.deb asinstall control.tar.gz debian-binary LICENSE SHA256SUMS || die
+	rm usr/bin/{asfixownership,asmigrate2to3} || die
 }
 
 src_install() {
-	local i mime
-	for i in ./opt/aerospike/bin/*; do
-		mime=$(file -i $i)
-		if [[ $mime =~ python ]]; then
-			einfo "Migrating aerospike $(basename $i) script to Python 3 ..."
-			2to3 --no-diffs -w -n $i &> /dev/null || die "can't run 2to3 on $i"
-			sed -i -e '1s@.*@#!/usr/bin/env python3@g;' $i || die "can't sed $i"
-			eend $?
-		fi
-	done
-
 	insinto /opt/
 	doins -r opt/aerospike
 
 	fperms +x -R /opt/aerospike/bin/
-	fperms +x -R /opt/aerospike/lib/python/
 
 	for dir in '/etc' '/var/log'; do
 		keepdir "${dir}/aerospike"
