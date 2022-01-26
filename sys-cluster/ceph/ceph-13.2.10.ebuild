@@ -9,7 +9,6 @@ EAPI=7
 PYTHON_COMPAT=( python3_8 )
 DISTUTILS_OPTIONAL=1
 
-
 inherit check-reqs cmake-utils distutils-r1 flag-o-matic multiprocessing \
 	python-r1 udev readme.gentoo-r1 systemd bash-completion-r1
 
@@ -36,7 +35,7 @@ COMMON_DEPEND="
 	virtual/libudev:=
 	app-arch/bzip2:=
 	app-arch/lz4:=
-	app-arch/snappy:=
+	<app-arch/snappy-1.1.9:=
 	app-arch/zstd:=
 	app-misc/jq:=
 	dev-libs/crypto++:=
