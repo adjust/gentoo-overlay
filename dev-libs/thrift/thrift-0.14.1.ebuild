@@ -22,7 +22,7 @@ RDEPEND="${DEPEND}"
 BDEPEND="
 	sys-devel/bison
 	sys-devel/flex
-	test? ( dev-libs/boost[static-libs] )
+	test? ( dev-libs/boost )
 "
 
 src_configure() {
