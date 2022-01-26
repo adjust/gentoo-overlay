@@ -1,0 +1,77 @@
+#!/sbin/openrc-run
+# Copyright 1999-2018 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+SUFFIX=${SVCNAME#*.}
+TOPIC=${SUFFIX##*.}
+INFIX=$(echo $SUFFIX | awk -F '.' '/^.*\..*$/ { print $ 1}')
+
+if [ -n "${SUFFIX}" ] && [ "${SVCNAME}" != "schaufel_listener" ]
+then
+	LISTENER_PID="/run/schaufel_listener/${SUFFIX}.pid"
+else
+	LISTENER_PID="/run/schaufel_listener/schaufel_listener.pid"
+
+	# For now, the default behaviour is to consume the old bagger topic
+	TOPIC="bagger3"
+	LISTENER_BROKER_GROUP="bagger2"
+	LISTENER_JOBS="8"
+fi
+
+LISTENER_DIR=${LISTENER_DIR:-/var/lib/schaufel}
+LISTENER_LOG_DIR=${LISTENER_LOG_DIR:-/var/log/schaufel}
+LISTENER_LOG_FILE="${LISTENER_LOG_DIR}/${LISTENER_LOG_FILE:-${SVCNAME}.log}"
+LISTENER_USER=${LISTENER_USER:-schaufel}
+LISTENER_GROUP=${LISTENER_GROUP:-schaufel}
+LISTENER_TIMEOUT=${LISTENER_TIMEOUT:-60}
+
+LISTENER_OPTS="-m ${LISTENER_MASTER:-master-1:5432}"
+
+if [ ! -z "${LISTENER_CONFIG}" ]
+then
+	LISTENER_OPTS+=" -c ${LISTENER_CONFIG}"
+else
+	LISTENER_OPTS+=" -t ${LISTENER_TOPIC:-${TOPIC}}"
+	[ -n "${LISTENER_BROKER_GROUP}" ] && \
+		LISTENER_OPTS+=" -g ${LISTENER_BROKER_GROUP}"
+	[ -n "${LISTENER_BROKER}" ] && \
+		LISTENER_OPTS+=" -b ${LISTENER_BROKER}"
+fi
+	[ -n "${INFIX}" ] && \
+		LISTENER_OPTS+=" -i ${INFIX}"
+[ -n "${HOSTNAME_OVERRIDE}" ] && \
+		LISTENER_OPTS+=" -h ${HOSTNAME_OVERRIDE}"
+[ -n "${LISTENER_JOBS}" ] && \
+	LISTENER_OPTS+=" -j ${LISTENER_JOBS}"
+
+command=/usr/bin/listener.pl
+command_args="${LISTENER_OPTS}"
+pidfile="${LISTENER_PID}"
+
+start_stop_daemon_args="--background \
+	--make-pidfile \
+	--verbose \
+	--chdir ${LISTENER_DIR} \
+	--user ${LISTENER_USER} \
+	--group ${LISTENER_GROUP} \
+	--stdout ${LISTENER_LOG_FILE} \
+	--stderr ${LISTENER_LOG_FILE}"
+
+depend() {
+	need localmount net
+	after postgresql
+}
+
+start_pre() {
+	checkpath -d -m 0775 -o ${LISTENER_USER}:${LISTENER_GROUP} "$(dirname ${pidfile})"
+	checkpath -f -m 0775 -o ${LISTENER_USER}:${LISTENER_GROUP} "${pidfile}"
+}
+
+stop() {
+	ebegin "Stopping ${SVCNAME}"
+	start-stop-daemon --stop \
+		--exec ${command} \
+		--retry TERM/${LISTENER_TIMEOUT}/SIGINT/5 \
+		--pidfile "${pidfile}"
+	eend $?
+}
