@@ -78,5 +78,5 @@ pkg_preinst() {
 	einfo "Applying Cluster config to Constants.pm"
 	einfo "***************************************"
 	einfo "Retention: $RETENTION"
-	sed -r "s/return 24 \* 18/return ${RETENTION}/" -i "${CONSTANTS}"
+	sed -r "s/return 24 \* 18/return ${RETENTION}/" -i "${CONSTANTS}" || die
 }
