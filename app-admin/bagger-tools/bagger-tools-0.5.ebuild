@@ -30,6 +30,10 @@ DEPEND="
 	virtual/perl-Sys-Syslog
 "
 
+BDEPEND="
+	dev-perl/Module-Build
+"
+
 RDEPEND="
 	${DEPEND}
 	schaufel? (
