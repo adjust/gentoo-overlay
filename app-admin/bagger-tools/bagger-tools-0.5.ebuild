@@ -70,9 +70,6 @@ src_install() {
 
 # keep system retention hack
 pkg_preinst() {
-	einfo "***************************************"
-	einfo "Applying Cluster config to Constants.pm"
-	einfo "***************************************"
 	RETENTION="$(perl -e 'use Bagger::Constants; print Bagger::Constants::max_offset()' 2> /dev/null)"
 	RETENTION="${RETENTION//[^[:digit]]/}"
 	CONSTANTS="$(find ${D} -name Constants.pm)"
