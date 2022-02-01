@@ -33,7 +33,6 @@ DEPEND="
 
 S="${WORKDIR}/${P}-debian8"
 
-RESTRICT="fetch"
 
 src_prepare() {
 	eapply_user
@@ -44,7 +43,6 @@ src_prepare() {
 	tar xf data.tar.xz && rm data.tar.xz || die
 
 	rm *.deb asinstall control.tar.gz debian-binary LICENSE SHA256SUMS || die
-	rm usr/bin/{asfixownership,asmigrate2to3} || die
 }
 
 src_install() {
