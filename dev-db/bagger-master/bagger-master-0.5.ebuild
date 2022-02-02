@@ -3,7 +3,7 @@
 
 EAPI=7
 
-POSTGRES_COMPAT=( 9.6 10 11 12 13 )
+POSTGRES_COMPAT=( 9.6 10 11 12 13 14 )
 BUILD_DIR="${S}/sql/bagger_master"
 
 inherit postgres-multi vcs-snapshot
