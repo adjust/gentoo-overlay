@@ -3,7 +3,7 @@
 
 EAPI=7
 
-POSTGRES_COMPAT=( "9.6" "10" "11" "12" )
+POSTGRES_COMPAT=( 9.6 10 11 12 13 14 )
 POSTGRES_USEDEP="bagger"
 BUILD_DIR="${S}/sql/bagger_data"
 
