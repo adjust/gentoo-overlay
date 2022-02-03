@@ -1,0 +1,30 @@
+#!/sbin/openrc-run
+# Copyright 2021 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+description="Prometheus exporter for PgBouncer. Exports metrics at 9127/metrics"
+pidfile=${pidfile:-"/run/${RC_SVCNAME}.pid"}
+user=${user:-pgbouncer}
+group=${group:-postgres}
+pgbouncer_port=${PGPORT:-6432}
+pgbouncer_user=${PGUSER:-postgres}
+pgbouncer_password=${PGPASSWORD:-}
+pgbouncer_netloc=${PGNETLOC:-localhost}
+pgbouncer_database=${PGDB:-pgbouncer}
+exporter_port=${LISTEN:-9127}
+exporter_endpoint=${METRICS_PATH:-"/metrics"}
+exporter_loglevel=${LOG_LEVEL:-info}
+exporter_logformat=${LOG_FORMAT:-logfmt}
+
+connectionstring="postgres://${pgbouncer_user}:${pgbouncer_password}@${pgbouncer_netloc}:${pgbouncer_port}/${pgbouncer_database}?sslmode=disable"
+command="/usr/bin/pgbouncer_exporter"
+command_args="--log.level=${exporter_loglevel} --log.format=${exporter_logformat} --pgBouncer.connectionString=\"${connectionstring}\" --web.listen-address=\":${exporter_port}\" \
+--web.telemetry-path=\"${exporter_endpoint}\""
+command_background="true"
+start_stop_daemon_args="--user ${user} --group ${group} \
+	--stdout /var/log/${RC_SVCNAME}/${RC_SVCNAME}.log \
+	--stderr /var/log/${RC_SVCNAME}/${RC_SVCNAME}.log"
+
+depend() {
+	after pgbouncer
+}
