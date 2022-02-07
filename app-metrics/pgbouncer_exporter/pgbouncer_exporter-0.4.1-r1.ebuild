@@ -507,6 +507,7 @@ IUSE=""
 
 RDEPEND="
 	acct-user/pgbouncer
+	acct-group/postgres
 	dev-db/pgbouncer
 "
 
@@ -520,5 +521,5 @@ src_install() {
 	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
 	newconfd "${FILESDIR}/${PN}.confd" "${PN}"
 	keepdir "/var/log/${PN}"
-	diropts -o pgbouncer -g postgres -m 0750
+	fowners pgbouncer:postgres "/var/log/${PN}"
 }
