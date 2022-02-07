@@ -22,8 +22,8 @@ command_args="--log.level=${exporter_loglevel} --log.format=${exporter_logformat
 --web.telemetry-path=\"${exporter_endpoint}\""
 command_background="true"
 start_stop_daemon_args="--user ${user} --group ${group} \
-	--stdout /var/log/${RC_SVCNAME}/${RC_SVCNAME}.log \
-	--stderr /var/log/${RC_SVCNAME}/${RC_SVCNAME}.log"
+	--stdout /var/log/pgbouncer_exporter/${RC_SVCNAME}.log \
+	--stderr /var/log/pgbouncer_exporter/${RC_SVCNAME}.log"
 
 depend() {
 	after pgbouncer
