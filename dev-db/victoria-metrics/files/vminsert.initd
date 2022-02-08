@@ -1,0 +1,28 @@
+#!/sbin/openrc-run
+
+export ${RC_SVCNAME}_tls="${VM_TLS-:false}"
+export ${RC_SVCNAME}_tlsCertFile="${VM_TLS_CERT_FILE}"
+export ${RC_SVCNAME}_tlsKeyFile="${VM_TLS_KEY_FILE}"
+export ${RC_SVCNAME}_storageNode="${STORAGE_NODE:-}"
+httpListenAddr=${HTTP_LISTEN_ADDR:-":8480"}
+graphiteListenAddr=${GRAPHITE_LISTEN_ADDR:-}
+
+name="VictoriaMetrics ${RC_SVCNAME}"
+
+pidfile="/run/victoria-metrics/${RC_SVCNAME}"
+
+command="/usr/bin/vminsert"
+command_args="-httpListenAddr=${httpListenAddr} -graphiteListenAddr=${graphiteListenAddr} -envflag.enable -envflag.prefix=${RC_SVCNAME}_"
+command_background=yes
+
+output_log="/var/log/victoria-metrics/${RC_SVCNAME}.log"
+error_log="/var/log/victoria-metrics/${RC_SVCNAME}-error.log"
+
+depend() {
+	need local
+	use net
+}
+
+start_pre() {
+	checkpath -d -m 0755 -o "${command_user}" $(dirname ${output_log})
+}
