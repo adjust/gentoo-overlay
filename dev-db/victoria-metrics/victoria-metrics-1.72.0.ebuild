@@ -37,7 +37,21 @@ src_install() {
 	cp bin/* "${D}/usr/bin" || die
 
 	keepdir /var/log/${PN} /etc/${PN}
-
+	use cluster && keepdir "/run/${PN}"
 	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
 	newconfd "${FILESDIR}/${PN}.confd" "${PN}"
+	
+	if use cluster; then
+		#cluster components
+		local cluster_comps=(
+			vminsert
+			vmselect
+			vmstorage
+		)
+		for comp in "${cluster_comps[@]}"
+		do
+			newinitd "${FILESDIR}/${comp}.initd" "${comp}"
+			newconfd "${FILESDIR}/${comp}.confd" "${comp}"
+		done
+	fi
 }
