@@ -1,0 +1,16 @@
+#!/sbin/openrc-run
+
+CONFIG_FILEPATH="${CONFIG_FILEPATH:-/etc/kminion.yaml}"
+
+pidfile="/run/${RC_SVCNAME}"
+output_log="/var/log/kminion/${RC_SVCNAME}.log"
+error_log="/var/log/kminion/${RC_SVCNAME}-error.log"
+
+command="/usr/bin/kminion"
+command_background="true"
+
+depend() {
+	need local
+	use net
+}
+
