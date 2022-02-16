@@ -1,30 +1,33 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-PYTHON_COMPAT=( python2_7 python3_{5,6,7} pypy )
+LUA_COMPAT=( lua5-1 )
+PYTHON_COMPAT=( python3_{7..10} )
 PYTHON_REQ_USE="threads(+)"
 
 RUBY_OPTIONAL="yes"
-USE_RUBY="ruby23 ruby24 ruby25"
+USE_RUBY="ruby25 ruby26 ruby27 ruby30"
 
 PHP_EXT_INI="no"
 PHP_EXT_NAME="dummy"
 PHP_EXT_OPTIONAL_USE="php"
-USE_PHP="php5-6 php7-1 php7-2 php7-3" # deps must be registered separately below
+USE_PHP="php7-3 php7-4" # deps must be registered separately below
 
 MY_P="${P/_/-}"
+MY_PV="${PV/_p666/}"
+MY_PD="${P/_p666/}"
 
-inherit eapi7-ver eutils flag-o-matic multilib pax-utils php-ext-source-r3 python-r1 ruby-ng
+inherit lua-single pax-utils php-ext-source-r3 python-r1 ruby-ng
 
 DESCRIPTION="uWSGI server for Python web applications"
-HOMEPAGE="http://projects.unbit.it/uwsgi/"
-SRC_URI="https://github.com/unbit/uwsgi/archive/${PV}.tar.gz -> ${P}.tar.gz"
+HOMEPAGE="https://projects.unbit.it/uwsgi/"
+SRC_URI="https://github.com/unbit/uwsgi/archive/${MY_PV}.tar.gz -> ${MY_PD}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~x86 ~amd64-linux"
+KEYWORDS="amd64 arm ~arm64 x86 ~amd64-linux"
 
 UWSGI_PLUGINS_STD=( ping cache carbon nagios rpc rrdtool
 	http ugreen signal syslog rsyslog
@@ -42,7 +45,7 @@ UWSGI_PLUGINS_OPT=( alarm_{curl,xmpp} clock_{monotonic,realtime} curl_cron
 	systemd_logger transformation_toupper tuntap webdav xattr xslt zabbix )
 
 LANG_SUPPORT_SIMPLE=( cgi mono perl ) # plugins which can be built in the main build process
-LANG_SUPPORT_EXTENDED=( go lua php pypy python python_asyncio python_gevent ruby )
+LANG_SUPPORT_EXTENDED=( go lua php python python-asyncio python-gevent ruby )
 
 # plugins to be ignored (for now):
 # cheaper_backlog2: example plugin
@@ -54,7 +57,7 @@ LANG_SUPPORT_EXTENDED=( go lua php pypy python python_asyncio python_gevent ruby
 # *java*: TODO
 # v8: TODO
 # matheval: TODO
-IUSE="apache2 +caps debug +embedded expat jemalloc json libressl +pcre +routing selinux +ssl +xml yajl yaml zeromq"
+IUSE="apache2 +caps debug +embedded expat jemalloc json +pcre +routing selinux +ssl +xml yajl yaml zeromq"
 
 for plugin in ${UWSGI_PLUGINS_STD[@]}; do IUSE="${IUSE} +uwsgi_plugins_${plugin}"; done
 for plugin in ${UWSGI_PLUGINS_OPT[@]}; do IUSE="${IUSE} uwsgi_plugins_${plugin}"; done
@@ -67,10 +70,10 @@ REQUIRED_USE="|| ( ${LANG_SUPPORT_SIMPLE[@]} ${LANG_SUPPORT_EXTENDED[@]} )
 	uwsgi_plugins_emperor_zeromq? ( zeromq )
 	uwsgi_plugins_forkptyrouter? ( uwsgi_plugins_corerouter )
 	uwsgi_plugins_router_xmldir? ( xml !expat )
-	pypy? ( python_targets_python2_7 )
+	lua? ( ${LUA_REQUIRED_USE} )
 	python? ( ${PYTHON_REQUIRED_USE} )
-	python_asyncio? ( || ( $(python_gen_useflags -3) ) )
-	python_gevent? ( python )
+	python-asyncio? ( python )
+	python-gevent? ( python )
 	expat? ( xml )"
 
 # util-linux is required for libuuid when requesting zeromq support
@@ -81,16 +84,14 @@ REQUIRED_USE="|| ( ${LANG_SUPPORT_SIMPLE[@]} ${LANG_SUPPORT_EXTENDED[@]} )
 # 4. Language/app support
 CDEPEND="
 	sys-libs/zlib
+	virtual/libcrypt:=
 	caps? ( sys-libs/libcap )
 	json? (
-		!yajl? ( dev-libs/jansson )
+		!yajl? ( dev-libs/jansson:= )
 		yajl? ( dev-libs/yajl )
 	)
 	pcre? ( dev-libs/libpcre:3 )
-	ssl? (
-		!libressl? ( dev-libs/openssl:0= )
-		libressl? ( dev-libs/libressl )
-	)
+	ssl? ( dev-libs/openssl:0= )
 	xml? (
 		!expat? ( dev-libs/libxml2 )
 		expat? ( dev-libs/expat )
@@ -112,25 +113,28 @@ CDEPEND="
 	uwsgi_plugins_webdav? ( dev-libs/libxml2 )
 	uwsgi_plugins_xslt? ( dev-libs/libxslt )
 	go? ( sys-devel/gcc:=[go] )
-	lua? ( dev-lang/lua:= )
+	lua? ( ${LUA_DEPS} )
 	mono? ( dev-lang/mono:= )
 	perl? ( dev-lang/perl:= )
 	php? (
-		php_targets_php5-6? ( dev-lang/php:5.6[embed] )
-		php_targets_php7-1? ( dev-lang/php:7.1[embed] )
-		php_targets_php7-2? ( dev-lang/php:7.2[embed] )
 		php_targets_php7-3? ( dev-lang/php:7.3[embed] )
+		php_targets_php7-4? ( dev-lang/php:7.4[embed] )
 	)
-	pypy? ( dev-python/pypy )
 	python? ( ${PYTHON_DEPS} )
-	python_asyncio? ( virtual/python-greenlet[${PYTHON_USEDEP}] )
-	python_gevent? ( >=dev-python/gevent-1.3.5[${PYTHON_USEDEP}] )
+	python-asyncio? ( virtual/python-greenlet[${PYTHON_USEDEP}] )
+	python-gevent? ( >=dev-python/gevent-1.3.5[${PYTHON_USEDEP}] )
 	ruby? ( $(ruby_implementations_depend) )"
-DEPEND="${CDEPEND}
-	virtual/pkgconfig"
+DEPEND="${CDEPEND}"
 RDEPEND="${CDEPEND}
 	selinux? ( sec-policy/selinux-uwsgi )
 	uwsgi_plugins_rrdtool? ( net-analyzer/rrdtool )"
+BDEPEND="virtual/pkgconfig"
+
+PATCHES=(
+	"${FILESDIR}/${P}-py310-fix.patch"
+	"${FILESDIR}/${P}-pynode-compile.patch"
+	"${FILESDIR}/${P}-py310-fix-2.patch"
+)
 
 S="${WORKDIR}/${MY_P}"
 
@@ -141,6 +145,7 @@ src_unpack() {
 
 pkg_setup() {
 	python_setup
+	use lua && lua-single_pkg_setup
 	use ruby && ruby-ng_pkg_setup
 }
 
@@ -245,34 +250,20 @@ python_compile_plugins() {
 	EPYV=${EPYTHON/.}
 	PYV=${EPYV/python}
 
-	if [[ ${EPYTHON} == pypy* ]]; then
-		einfo "skipping because pypy is not meant to build plugins on its own"
-		return
-	fi
-
 	${PYTHON} uwsgiconfig.py --plugin plugins/python gentoo ${EPYV} || die "building plugin for ${EPYTHON} failed"
 
-	if use python_asyncio ; then
+	if use python-asyncio ; then
 		if [[ "${PYV}" != "27" ]] ; then
 			${PYTHON} uwsgiconfig.py --plugin plugins/asyncio gentoo asyncio${PYV} || die "building plugin for asyncio-support in ${EPYTHON} failed"
 		fi
 	fi
 
-	if use python_gevent ; then
+	if use python-gevent ; then
 		${PYTHON} uwsgiconfig.py --plugin plugins/gevent gentoo gevent${PYV} || die "building plugin for gevent-support in ${EPYTHON} failed"
 	fi
 
-	if use python_gevent || use python_asyncio; then
+	if use python-gevent || use python-asyncio; then
 			${PYTHON} uwsgiconfig.py --plugin plugins/greenlet gentoo greenlet${PYV} || die "building plugin for greenlet-support in ${EPYTHON} failed"
-	fi
-
-	if use pypy ; then
-		if [[ "${PYV}" == "27" ]] ; then
-			# TODO: do some proper patching ? The wiki didn't help... I gave up for now.
-			# QA: RWX --- --- usr/lib64/uwsgi/pypy_plugin.so
-			append-ldflags -Wl,-z,noexecstack
-			${PYTHON} uwsgiconfig.py --plugin plugins/pypy gentoo pypy || die "building plugin for pypy-support in ${EPYTHON} failed"
-		fi
 	fi
 }
 
@@ -283,15 +274,15 @@ python_install_symlinks() {
 src_compile() {
 	mkdir -p "${T}/plugins" || die
 
-	python uwsgiconfig.py --build gentoo || die "building uwsgi failed"
+	CPUCOUNT=1 python uwsgiconfig.py --build gentoo || die "building uwsgi failed"
 
 	if use go ; then
 		python uwsgiconfig.py --plugin plugins/gccgo gentoo || die "building plugin for go failed"
 	fi
 
 	if use lua ; then
-		# setting the name for the pkg-config file to lua, since we don't have
-		# slotted lua
+		# setting the name for the pkg-config file to lua, since that is the name
+		# provided by the wrapper from Lua eclasses
 		UWSGICONFIG_LUAPC="lua" python uwsgiconfig.py --plugin plugins/lua gentoo || die "building plugin for lua failed"
 	fi
 
@@ -367,21 +358,16 @@ pkg_postinst() {
 		EPYV=${EPYTHON/.}
 		PYV=${EPYV/python}
 
-		if [[ ${EPYTHON} == pypy* ]] ; then
-			elog "  '--plugins pypy' for pypy"
-			return
-		fi
-
 		elog " "
 		elog "  '--plugins ${EPYV}' for ${EPYTHON}"
-		if use python_asyncio ; then
+		if use python-asyncio ; then
 			if [[ ${EPYV} == python34 ]] ; then
 				elog "  '--plugins ${EPYV},asyncio${PYV}' for asyncio support in ${EPYTHON}"
 			else
 				elog "  (asyncio is only supported in python3.4)"
 			fi
 		fi
-		if use python_gevent ; then
+		if use python-gevent ; then
 			elog "  '--plugins ${EPYV},gevent${PYV}' for gevent support in ${EPYTHON}"
 		fi
 	}
