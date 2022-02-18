@@ -60,6 +60,7 @@ RDEPEND="
 	dev-perl/Net-OpenSSH
 	dev-perl/Net-SFTP-Foreign
 	dev-perl/Parallel-ForkManager
+	dev-perl/Search-Elasticsearch
 	dev-perl/Sort-Naturally
 	dev-perl/String-Escape
 	dev-perl/Template-Toolkit
