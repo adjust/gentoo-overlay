@@ -63,6 +63,7 @@ RDEPEND="
 	dev-perl/Sort-Naturally
 	dev-perl/String-Escape
 	dev-perl/Template-Toolkit
+	dev-perl/Term-ProgressBar
 	dev-perl/TermReadKey
 	dev-perl/Test-Deep
 	dev-perl/Text-Glob
