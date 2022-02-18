@@ -61,6 +61,7 @@ RDEPEND="
 	dev-perl/Net-SFTP-Foreign
 	dev-perl/Parallel-ForkManager
 	dev-perl/Search-Elasticsearch
+	dev-perl/Search-Elasticsearch-Client-2_0
 	dev-perl/Sort-Naturally
 	dev-perl/String-Escape
 	dev-perl/Template-Toolkit
