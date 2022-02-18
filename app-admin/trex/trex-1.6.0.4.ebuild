@@ -62,6 +62,7 @@ RDEPEND="
 	dev-perl/Parallel-ForkManager
 	dev-perl/Sort-Naturally
 	dev-perl/String-Escape
+	dev-perl/Template-Toolkit
 	dev-perl/TermReadKey
 	dev-perl/Test-Deep
 	dev-perl/Text-Glob
