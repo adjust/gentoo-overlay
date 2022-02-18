@@ -45,6 +45,7 @@ RDEPEND="
 	dev-perl/Data-Validate-IP
 	dev-perl/DBI
 	dev-perl/Devel-Caller
+	dev-perl/Digest-CRC
 	dev-perl/Digest-HMAC
 	dev-perl/Digest-SHA1
 	dev-perl/Expect
