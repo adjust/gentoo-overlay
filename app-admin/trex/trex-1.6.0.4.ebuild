@@ -69,6 +69,7 @@ RDEPEND="
 	dev-perl/TermReadKey
 	dev-perl/Test-Deep
 	dev-perl/Text-Glob
+	dev-perl/Text-Table
 	dev-perl/URI
 	dev-perl/XML-LibXML
 	dev-perl/XML-Simple
