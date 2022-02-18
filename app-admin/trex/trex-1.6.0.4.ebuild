@@ -55,6 +55,7 @@ RDEPEND="
 	dev-perl/JSON-MaybeXS
 	dev-perl/JSON-XS
 	dev-perl/List-MoreUtils
+	dev-perl/Net-CIDR-Lite
 	dev-perl/Net-OpenSSH
 	dev-perl/Net-SFTP-Foreign
 	dev-perl/Parallel-ForkManager
