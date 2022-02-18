@@ -69,6 +69,7 @@ RDEPEND="
 	dev-perl/XML-Simple
 	dev-perl/libwww-perl
 	dev-perl/YAML
+	dev-perl/Zabbix-Tiny
 	virtual/perl-Carp
 	virtual/perl-Data-Dumper
 	virtual/perl-Digest-MD5
