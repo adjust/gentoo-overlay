@@ -41,6 +41,7 @@ DZIL_DEPENDS="
 RDEPEND="
 	!app-admin/rex
 	dev-perl/autovivification
+	dev-perl/Data-Printer
 	dev-perl/Data-Validate-IP
 	dev-perl/DBI
 	dev-perl/Devel-Caller
