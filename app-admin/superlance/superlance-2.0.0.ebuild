@@ -11,7 +11,7 @@ DESCRIPTION="Plugin utilities for monitoring and controlling processes run by su
 HOMEPAGE="https://pypi.org/project/superlance/"
 SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
-LICENSE="BSD-2"
+LICENSE="BSD"
 KEYWORDS="~amd64"
 
 SLOT="0"
