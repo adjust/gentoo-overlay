@@ -16,8 +16,6 @@ RESTRICT="binchecks mirror strip"
 
 # general kernel USE flags
 IUSE="build-kernel clang compress debug symlink"
-# optimize
-IUSE="${IUSE} custom-cflags"
 # security
 IUSE="${IUSE} hardened +kpti +retpoline selinux sign-modules"
 # initramfs
