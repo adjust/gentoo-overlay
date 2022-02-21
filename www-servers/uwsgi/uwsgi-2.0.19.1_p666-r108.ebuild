@@ -27,7 +27,7 @@ SRC_URI="https://github.com/unbit/uwsgi/archive/${MY_PV}.tar.gz -> ${MY_PD}.tar.
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm ~arm64 x86 ~amd64-linux"
+KEYWORDS="amd64"
 
 UWSGI_PLUGINS_STD=( ping cache carbon nagios rpc rrdtool
 	http ugreen signal syslog rsyslog
