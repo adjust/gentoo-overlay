@@ -16,18 +16,16 @@ PHP_EXT_OPTIONAL_USE="php"
 USE_PHP="php7-3 php7-4" # deps must be registered separately below
 
 MY_P="${P/_/-}"
-MY_PV="${PV/_p666/}"
-MY_PD="${P/_p666/}"
 
 inherit lua-single pax-utils php-ext-source-r3 python-r1 ruby-ng
 
 DESCRIPTION="uWSGI server for Python web applications"
 HOMEPAGE="https://projects.unbit.it/uwsgi/"
-SRC_URI="https://github.com/unbit/uwsgi/archive/${MY_PV}.tar.gz -> ${MY_PD}.tar.gz"
+SRC_URI="https://github.com/unbit/uwsgi/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64"
+KEYWORDS="amd64 arm ~arm64 x86 ~amd64-linux"
 
 UWSGI_PLUGINS_STD=( ping cache carbon nagios rpc rrdtool
 	http ugreen signal syslog rsyslog
