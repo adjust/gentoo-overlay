@@ -1,11 +1,11 @@
 #!/sbin/openrc-run
 
-export ${RC_SVCNAME}_tls="${VM_TLS-:false}"
+export ${RC_SVCNAME}_tls="${VM_TLS:-false}"
 export ${RC_SVCNAME}_tlsCertFile="${VM_TLS_CERT_FILE}"
 export ${RC_SVCNAME}_tlsKeyFile="${VM_TLS_KEY_FILE}"
 export ${RC_SVCNAME}_storageNode="${STORAGE_NODE:-}"
-httpListenAddr=${HTTP_LISTEN_ADDR:-":8480"}
-graphiteListenAddr=${GRAPHITE_LISTEN_ADDR:-}
+httpListenAddr="${HTTP_LISTEN_ADDR:-:8480}"
+graphiteListenAddr="${GRAPHITE_LISTEN_ADDR:-}"
 
 name="VictoriaMetrics ${RC_SVCNAME}"
 

@@ -1,10 +1,10 @@
 #!/sbin/openrc-run
 
-export ${RC_SVCNAME}_tls="${VM_TLS-:false}"
+export ${RC_SVCNAME}_tls="${VM_TLS:-false}"
 export ${RC_SVCNAME}_tlsCertFile="${VM_TLS_CERT_FILE}"
 export ${RC_SVCNAME}_tlsKeyFile="${VM_TLS_KEY_FILE}"
 export ${RC_SVCNAME}_storageNode="${STORAGE_NODE:-}"
-httpListenAddr=${HTTP_LISTEN_ADDR:-":8481"}
+httpListenAddr="${HTTP_LISTEN_ADDR:-:8481}"
 
 name="VictoriaMetrics ${RC_SVCNAME}"
 

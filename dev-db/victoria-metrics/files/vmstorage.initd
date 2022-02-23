@@ -1,13 +1,13 @@
 #!/sbin/openrc-run
 
-export ${RC_SVCNAME}_tls="${VM_TLS-:false}"
+export ${RC_SVCNAME}_tls="${VM_TLS:-false}"
 export ${RC_SVCNAME}_tlsCertFile="${VM_TLS_CERT_FILE}"
 export ${RC_SVCNAME}_tlsKeyFile="${VM_TLS_KEY_FILE}"
 export ${RC_SVCNAME}_retentionPeriod=${VM_RETENTION_PERIOD:-1}
-export ${RC_SVCNAME}_storageDataPath=${VM_STORAGE_DATA_PATH:"/${RC_SVCNAME}"}
-vminsertAddr=${VMINSERT_ADDR:-":8400"}
-vmselectAddr=${VMSELECT_ADDR:-":8401"}
-httpListenAddr=${HTTP_LISTEN_ADDR:-":8482"}
+export ${RC_SVCNAME}_storageDataPath="${VM_STORAGE_DATA_PATH:-/${RC_SVCNAME}}"
+vminsertAddr="${VMINSERT_ADDR:-:8400}"
+vmselectAddr="${VMSELECT_ADDR:-:8401}"
+httpListenAddr="${HTTP_LISTEN_ADDR:-:8482}"
 
 name="VictoriaMetrics ${RC_SVCNAME}"
 
