@@ -23,7 +23,7 @@ BDEPEND="dev-lang/go"
 DEPEND=""
 RDEPEND="${DEPEND}"
 
-S="${WORKDIR}/${P}/src/${PN}"
+S="${WORKDIR}/${P}/src/${PN/-/}"
 
 src_compile() {
 	# need to explicit because makefile does a docker by default
@@ -37,7 +37,6 @@ src_install() {
 	cp bin/* "${D}/usr/bin" || die
 
 	keepdir /var/log/${PN} /etc/${PN}
-	use cluster && keepdir "/run/${PN}"
 	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
 	newconfd "${FILESDIR}/${PN}.confd" "${PN}"
 	
