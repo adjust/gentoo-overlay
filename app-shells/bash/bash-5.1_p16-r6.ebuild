@@ -88,4 +88,10 @@ pkg_postinst() {
 	if [[ ! -e ${EROOT}/bin/sh ]] ; then
 		ln -sf bash "${EROOT}"/bin/sh
 	fi
+	# We are not bug compatible :kekw:
+	ewarn "You might experience your profile not getting sourced (eg no colors)"
+	ewarn "if for some reason your login shell being run without '--login'."
+	ewarn "Consider actually running your login shell with '--login' to fix this."
+	ewarn "Alternatively you can source your profile from bashrc as a workaround:"
+	ewarn "\`echo >> \"\${HOME}\"/.bashrc source /etc/profile\`"
 }
