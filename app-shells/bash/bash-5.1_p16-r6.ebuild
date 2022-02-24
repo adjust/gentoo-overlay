@@ -50,20 +50,6 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-5.0-syslog-history-extern.patch
 )
 
-pkg_setup() {
-	# bug #7332
-	if is-flag -malign-double ; then
-		eerror "Detected bad CFLAGS '-malign-double'.  Do not use this"
-		eerror "as it breaks LFS (struct stat64) on x86."
-		die "remove -malign-double from your CFLAGS mr ricer"
-	fi
-
-	if use bashlogger ; then
-		ewarn "The logging patch should ONLY be used in restricted (i.e. honeypot) envs."
-		ewarn "This will log ALL output you enter into the shell, you have been warned."
-	fi
-}
-
 src_unpack() {
 	unpack ${MY_P}.tar.gz
 }
