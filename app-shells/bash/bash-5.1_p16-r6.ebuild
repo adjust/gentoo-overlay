@@ -73,7 +73,7 @@ src_install() {
 		"${ED}"/etc/bash/bashrc || die
 
 	doman doc/*.1
-	newdoc CWRU/changelog ChangeLog
+	dodoc usr/share/doc/bash/*
 	dosym bash.info /usr/share/info/bashref.info
 }
 
