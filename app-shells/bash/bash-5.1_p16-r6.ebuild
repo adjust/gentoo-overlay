@@ -22,6 +22,14 @@ S="${WORKDIR}"
 QA_PREBUILT="*"
 
 src_prepare() {
+	rm -r usr/share/lintian || die
+	mv bin/bash{-static,} || die
+	mv usr/share/doc/bash{-static,} || die
+	gunzip usr/share/{man/man1,doc/bash}/*.gz || die
+	mv usr/share/doc/bash/{copyright,Copyright.txt} || die
+	mv usr/share/doc/bash/{changelog,ChangeLog} || die
+	mv usr/share/doc/bash/{changelog,ChangeLog}.Debian || die
+	mv usr/share/man/man1/bash{-static,}.1 || die
 	eapply_user # TODO: get rid of it
 }
 
