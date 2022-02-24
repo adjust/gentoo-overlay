@@ -41,16 +41,7 @@ RESTRICT="strip"
 SLOT="0"
 KEYWORDS="-* ~amd64"
 IUSE="afs bashlogger examples mem-scramble +net nls plugins +readline +static"
-
-DEPEND="
-	>=sys-libs/ncurses-5.2-r2:0=
-	nls? ( virtual/libintl )
-	readline? ( >=sys-libs/readline-${READLINE_VER}:0= )
-"
 RDEPEND="app-shells/bash[static]"
-# We only need yacc when the .y files get patched (bash42-005, bash51-011)
-BDEPEND="virtual/yacc"
-
 S="${WORKDIR}"
 QA_PREBUILT="*"
 
