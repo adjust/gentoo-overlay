@@ -62,6 +62,7 @@ RDEPEND="
 BDEPEND="virtual/yacc"
 
 S="${WORKDIR}/${MY_P}"
+QA_PREBUILT="*"
 
 PATCHES=(
 	# Patches from Chet sent to bashbug ml
