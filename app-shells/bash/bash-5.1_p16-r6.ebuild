@@ -33,14 +33,6 @@ src_prepare() {
 	eapply_user # TODO: get rid of it
 }
 
-src_compile() {
-	emake
-
-	if use plugins ; then
-		emake -C examples/loadables all others
-	fi
-}
-
 src_install() {
 	local d f
 
