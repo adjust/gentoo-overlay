@@ -8,9 +8,9 @@ inherit flag-o-matic toolchain-funcs prefix
 # Official patchlevel
 # See ftp://ftp.cwru.edu/pub/bash/bash-5.1-patches/
 PLEVEL="${PV##*_p}"
-MY_PV="${PV/_p*}"
-MY_PV="${MY_PV/_/-}"
-MY_P="${PN}-${MY_PV}"
+MY_PV="${PVR%_p*}-${PVR#*-r}"
+MY_PN="${PN}-static"
+MY_P="${MY_PN}_${MY_PV}"
 is_release() {
 	case ${PV} in
 	*_alpha*|*_beta*|*_rc*) return 1 ;;
