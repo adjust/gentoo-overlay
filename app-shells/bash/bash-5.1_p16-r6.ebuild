@@ -21,10 +21,6 @@ RDEPEND="app-shells/bash[static]"
 S="${WORKDIR}"
 QA_PREBUILT="*"
 
-src_unpack() {
-	unpack ${MY_P}.tar.gz
-}
-
 src_prepare() {
 	# Include official patches
 	[[ ${PLEVEL} -gt 0 ]] && eapply -p0 $(patches -s)
