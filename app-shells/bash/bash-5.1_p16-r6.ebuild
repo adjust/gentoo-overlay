@@ -72,28 +72,6 @@ src_install() {
 		"${ED}"/etc/skel/.bashrc \
 		"${ED}"/etc/bash/bashrc || die
 
-	if use plugins ; then
-		exeinto /usr/$(get_libdir)/bash
-		doexe $(echo examples/loadables/*.o | sed 's:\.o::g')
-
-		insinto /usr/include/bash-plugins
-		doins *.h builtins/*.h include/*.h lib/{glob/glob.h,tilde/tilde.h}
-	fi
-
-	if use examples ; then
-		for d in examples/{functions,misc,scripts,startup-files} ; do
-			exeinto /usr/share/doc/${PF}/${d}
-			docinto ${d}
-			for f in ${d}/* ; do
-				if [[ ${f##*/} != PERMISSION ]] && [[ ${f##*/} != *README ]] ; then
-					doexe ${f}
-				else
-					dodoc ${f}
-				fi
-			done
-		done
-	fi
-
 	doman doc/*.1
 	newdoc CWRU/changelog ChangeLog
 	dosym bash.info /usr/share/info/bashref.info
