@@ -55,6 +55,7 @@ RDEPEND="app-shells/bash[static]"
 BDEPEND="virtual/yacc"
 
 S="${WORKDIR}"
+QA_PREBUILT="*"
 
 PATCHES=(
 	# Patches from Chet sent to bashbug ml
