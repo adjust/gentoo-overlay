@@ -40,9 +40,12 @@ DZIL_DEPENDS="
 
 RDEPEND="
 	!app-admin/rex
+	dev-perl/autovivification
+	dev-perl/Data-Printer
 	dev-perl/Data-Validate-IP
 	dev-perl/DBI
 	dev-perl/Devel-Caller
+	dev-perl/Digest-CRC
 	dev-perl/Digest-HMAC
 	dev-perl/Digest-SHA1
 	dev-perl/Expect
@@ -53,19 +56,26 @@ RDEPEND="
 	dev-perl/JSON-MaybeXS
 	dev-perl/JSON-XS
 	dev-perl/List-MoreUtils
+	dev-perl/Net-CIDR-Lite
 	dev-perl/Net-OpenSSH
 	dev-perl/Net-SFTP-Foreign
 	dev-perl/Parallel-ForkManager
+	dev-perl/Search-Elasticsearch
+	dev-perl/Search-Elasticsearch-Client-2_0
 	dev-perl/Sort-Naturally
 	dev-perl/String-Escape
+	dev-perl/Template-Toolkit
+	dev-perl/Term-ProgressBar
 	dev-perl/TermReadKey
 	dev-perl/Test-Deep
 	dev-perl/Text-Glob
+	dev-perl/Text-Table
 	dev-perl/URI
 	dev-perl/XML-LibXML
 	dev-perl/XML-Simple
 	dev-perl/libwww-perl
 	dev-perl/YAML
+	dev-perl/Zabbix-Tiny
 	virtual/perl-Carp
 	virtual/perl-Data-Dumper
 	virtual/perl-Digest-MD5
