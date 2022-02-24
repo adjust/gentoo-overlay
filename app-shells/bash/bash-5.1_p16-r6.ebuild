@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit flag-o-matic toolchain-funcs prefix unpacker
+inherit prefix unpacker
 
 MY_PV="${PVR%_p*}-${PVR#*-r}"
 MY_PN="${PN}-static"
