@@ -33,9 +33,6 @@ patches() {
 	fi
 }
 
-# The version of readline this bash normally ships with.
-READLINE_VER="8.1"
-
 DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"
 SRC_URI="mirror://debian/pool/main/${P:0:1}/${PN}/${MY_P}_amd64.deb"
