@@ -43,7 +43,7 @@ LICENSE="GPL-3"
 RESTRICT="strip"
 SLOT="0"
 KEYWORDS="-* ~amd64"
-IUSE="afs bashlogger examples mem-scramble +net nls plugins +readline"
+IUSE="afs bashlogger examples mem-scramble +net nls plugins +readline +static"
 
 DEPEND="
 	>=sys-libs/ncurses-5.2-r2:0=
