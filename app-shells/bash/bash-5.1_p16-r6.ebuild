@@ -74,7 +74,6 @@ src_install() {
 
 	doman usr/share/man/man1/bash.1
 	dodoc usr/share/doc/bash/*
-	dosym bash.info /usr/share/info/bashref.info
 }
 
 pkg_preinst() {
