@@ -18,20 +18,6 @@ is_release() {
 	esac
 }
 [[ ${PV} != *_p* ]] && PLEVEL=0
-patches() {
-	local opt=${1} plevel=${2:-${PLEVEL}} pn=${3:-${PN}} pv=${4:-${MY_PV}}
-	[[ ${plevel} -eq 0 ]] && return 1
-	eval set -- {1..${plevel}}
-	set -- $(printf "${pn}${pv/\.}-%03d " "$@")
-	if [[ ${opt} == -s ]] ; then
-		echo "${@/#/${DISTDIR}/}"
-	else
-		local u
-		for u in mirror://gnu/${pn} ftp://ftp.cwru.edu/pub/bash ; do
-			printf "${u}/${pn}-${pv}-patches/%s " "$@"
-		done
-	fi
-}
 
 DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"
@@ -44,11 +30,6 @@ IUSE="afs bashlogger examples mem-scramble +net nls plugins +readline +static"
 RDEPEND="app-shells/bash[static]"
 S="${WORKDIR}"
 QA_PREBUILT="*"
-
-PATCHES=(
-	# Patches from Chet sent to bashbug ml
-	"${FILESDIR}"/${PN}-5.0-syslog-history-extern.patch
-)
 
 src_unpack() {
 	unpack ${MY_P}.tar.gz
@@ -72,8 +53,7 @@ src_prepare() {
 	sed -i -r '/^(HS|RL)USER/s:=.*:=:' doc/Makefile.in || die
 	touch -r . doc/* || die
 
-	eapply -p0 "${PATCHES[@]}"
-	eapply_user
+	eapply_user # TODO: get rid of it
 }
 
 src_configure() {
