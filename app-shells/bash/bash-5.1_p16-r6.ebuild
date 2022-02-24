@@ -22,23 +22,6 @@ S="${WORKDIR}"
 QA_PREBUILT="*"
 
 src_prepare() {
-	# Include official patches
-	[[ ${PLEVEL} -gt 0 ]] && eapply -p0 $(patches -s)
-
-	# Clean out local libs so we know we use system ones w/releases.
-	if is_release ; then
-		rm -rf lib/{readline,termcap}/* || die
-		touch lib/{readline,termcap}/Makefile.in || die # for config.status
-		sed -ri -e 's:\$[{(](RL|HIST)_LIBSRC[)}]/[[:alpha:]_-]*\.h::g' Makefile.in || die
-	fi
-
-	# Prefixify hardcoded path names. No-op for non-prefix.
-	hprefixify pathnames.h.in
-
-	# Avoid regenerating docs after patches, bug #407985
-	sed -i -r '/^(HS|RL)USER/s:=.*:=:' doc/Makefile.in || die
-	touch -r . doc/* || die
-
 	eapply_user # TODO: get rid of it
 }
 
