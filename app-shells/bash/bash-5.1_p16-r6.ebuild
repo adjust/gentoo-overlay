@@ -38,12 +38,7 @@ READLINE_VER="8.1"
 
 DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"
-if is_release ; then
-	SRC_URI="mirror://gnu/bash/${MY_P}.tar.gz $(patches)"
-else
-	SRC_URI="ftp://ftp.cwru.edu/pub/bash/${MY_P}.tar.gz"
-fi
-
+SRC_URI="mirror://debian/pool/main/${P:0:1}/${PN}/${MY_P}_amd64.deb"
 LICENSE="GPL-3"
 SLOT="0"
 [[ "${PV}" == *_rc* ]] || \
