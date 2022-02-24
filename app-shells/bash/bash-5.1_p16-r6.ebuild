@@ -39,8 +39,9 @@ src_install() {
 	default
 
 	dodir /bin
-	mv "${ED}"/usr/bin/bash "${ED}"/bin/ || die
-	dosym bash /bin/rbash
+	into /
+	dobin bin/bash || die
+	dosym bash /bin/rbash || die
 
 	insinto /etc/bash
 	doins "${FILESDIR}"/bash_logout
