@@ -72,7 +72,7 @@ src_install() {
 		"${ED}"/etc/skel/.bashrc \
 		"${ED}"/etc/bash/bashrc || die
 
-	doman doc/*.1
+	doman usr/share/man/man1/bash.1
 	dodoc usr/share/doc/bash/*
 	dosym bash.info /usr/share/info/bashref.info
 }
