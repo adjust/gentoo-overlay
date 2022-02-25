@@ -13,7 +13,7 @@ S="${WORKDIR}"
 LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="-*"
-IUSE="abi_mips_n32 audit debug hpn kerberos ldns libedit livecd pam +pie +scp sctp security-key selinux ssl static test X X509 xmss"
+IUSE="abi_mips_n32 audit debug hpn kerberos ldns libedit livecd pam +pie +scp sctp security-key selinux ssl +static test X X509 xmss"
 
 RESTRICT="!test? ( test )"
 
@@ -39,6 +39,7 @@ RDEPEND="
 	!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
 	pam? ( sys-libs/pam )
 	kerberos? ( virtual/krb5 )
+	net-misc/openssh[static]
 "
 DEPEND="${RDEPEND}
 	virtual/os-headers
