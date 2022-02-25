@@ -186,7 +186,6 @@ src_test() {
 
 	local -x SUDO= SSH_SK_PROVIDER= TEST_SSH_UNSAFE_PERMISSIONS=1
 	mkdir -p "${HOME}"/.ssh || die
-	emake -j1 "${tests[@]}" </dev/null
 }
 
 # Gentoo tweaks to default config files.
@@ -238,7 +237,6 @@ tweak_ssh_configs() {
 }
 
 src_install() {
-	emake install-nokeys DESTDIR="${D}"
 	fperms 600 /etc/ssh/sshd_config
 	dobin contrib/ssh-copy-id
 	newinitd "${FILESDIR}"/sshd-r1.initd sshd
