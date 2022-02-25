@@ -75,16 +75,6 @@ tweak_ssh_configs() {
 	SendEnv COLORTERM
 	EOF
 
-	if use pam ; then
-		# TODO: fix config file regarding to pam
-		sed -i \
-			-e "/^#UsePAM /s:.*:UsePAM yes:" \
-			-e "/^#PasswordAuthentication /s:.*:PasswordAuthentication no:" \
-			-e "/^#PrintMotd /s:.*:PrintMotd no:" \
-			-e "/^#PrintLastLog /s:.*:PrintLastLog no:" \
-			"${ED}"/etc/ssh/sshd_config || die
-	fi
-
 	if use livecd ; then
 		sed -i \
 			-e '/^#PermitRootLogin/c# Allow root login with password on livecds.\nPermitRootLogin Yes' \
