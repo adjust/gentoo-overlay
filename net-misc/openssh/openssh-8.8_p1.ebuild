@@ -8,7 +8,6 @@ inherit user-info flag-o-matic autotools pam systemd toolchain-funcs
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="https://www.openssh.com/"
 SRC_URI="mirror://openbsd/OpenSSH/portable/${PARCH}.tar.gz
-	${SCTP_PATCH:+sctp? ( https://dev.gentoo.org/~chutzpah/dist/openssh/${SCTP_PATCH} )}
 	${X509_PATCH:+X509? ( https://roumenpetrov.info/openssh/x509-${X509_VER}/${X509_PATCH} )}
 "
 S="${WORKDIR}"
@@ -40,7 +39,6 @@ LIB_DEPEND="
 		net-libs/ldns[ecdsa(+),ssl(+)]
 	)
 	libedit? ( dev-libs/libedit:=[static-libs(+)] )
-	sctp? ( net-misc/lksctp-tools[static-libs(+)] )
 	security-key? ( >=dev-libs/libfido2-1.5.0:=[static-libs(+)] )
 	selinux? ( >=sys-libs/libselinux-1.28[static-libs(+)] )
 	ssl? ( >=dev-libs/openssl-1.1.1l-r1:0=[static-libs(+)] )
@@ -74,7 +72,6 @@ pkg_pretend() {
 	# than not be able to log in to their server any more
 	local missing=()
 	check_feature() { use "${1}" && [[ -z ${!2} ]] && missing+=( "${1}" ); }
-	check_feature sctp SCTP_PATCH
 	check_feature X509 X509_PATCH
 	if [[ ${#missing[@]} -ne 0 ]] ; then
 		eerror "Sorry, but this version does not yet support features"
@@ -130,21 +127,6 @@ src_prepare() {
 			-e "/^#define SSH_PORTABLE.*/a #define SSH_X509               \"-PKIXSSH-${X509_VER}\"" \
 			"${S}"/version.h || die "Failed to sed-in X.509 patch version"
 		PATCHSET_VERSION_MACROS+=( 'SSH_X509' )
-	fi
-
-	if use sctp ; then
-		eapply "${WORKDIR}"/${SCTP_PATCH%.*}
-
-		einfo "Patching version.h to expose SCTP patch set ..."
-		sed -i \
-			-e "/^#define SSH_PORTABLE/a #define SSH_SCTP        \"-sctp-${SCTP_VER}\"" \
-			"${S}"/version.h || die "Failed to sed-in SCTP patch version"
-		PATCHSET_VERSION_MACROS+=( 'SSH_SCTP' )
-
-		einfo "Disabling known failing test (cfgparse) caused by SCTP patch ..."
-		sed -i \
-			-e "/\t\tcfgparse \\\/d" \
-			"${S}"/regress/Makefile || die "Failed to disable known failing test (cfgparse) caused by SCTP patch"
 	fi
 
 	if use X509 || use sctp || use hpn ; then
@@ -225,9 +207,6 @@ src_configure() {
 		--with-privsep-user=sshd
 		$(use_with audit audit linux)
 		$(use_with kerberos kerberos5 "${EPREFIX}"/usr)
-		# We apply the sctp patch conditionally, so can't pass --without-sctp
-		# unconditionally else we get unknown flag warnings.
-		$(use sctp && use_with sctp)
 		$(use_with ldns ldns "${EPREFIX}"/usr)
 		$(use_with libedit)
 		$(use_with pam)
