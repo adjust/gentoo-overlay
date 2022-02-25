@@ -13,6 +13,7 @@ SRC_URI="https://github.com/oasislinux/${PN}/archive/${EGIT_COMMIT}.tar.gz -> ${
 	https://github.com/oasislinux/root-x86_64/archive/${EGIT_COMMIT_ROOT}.tar.gz -> ${P}-root-${EGIT_COMMIT_ROOT}.tar.gz"
 S="${WORKDIR}/openssh-${EGIT_COMMIT}"
 MY_S="${WORKDIR}/root-x86_64-${EGIT_COMMIT_ROOT}"
+QA_PREBUILT="*"
 LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="-* ~amd64"
