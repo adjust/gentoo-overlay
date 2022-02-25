@@ -7,9 +7,7 @@ inherit user-info flag-o-matic autotools pam systemd toolchain-funcs
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="https://www.openssh.com/"
-SRC_URI="mirror://openbsd/OpenSSH/portable/${PARCH}.tar.gz
-	${X509_PATCH:+X509? ( https://roumenpetrov.info/openssh/x509-${X509_VER}/${X509_PATCH} )}
-"
+SRC_URI="mirror://openbsd/OpenSSH/portable/${PARCH}.tar.gz"
 S="${WORKDIR}"
 
 LICENSE="BSD GPL-2"
@@ -62,7 +60,6 @@ pkg_pretend() {
 	# than not be able to log in to their server any more
 	local missing=()
 	check_feature() { use "${1}" && [[ -z ${!2} ]] && missing+=( "${1}" ); }
-	check_feature X509 X509_PATCH
 	if [[ ${#missing[@]} -ne 0 ]] ; then
 		eerror "Sorry, but this version does not yet support features"
 		eerror "that you requested: ${missing[*]}"
@@ -95,45 +92,6 @@ src_prepare() {
 	[[ -d ${WORKDIR}/patches ]] && eapply "${WORKDIR}"/patches
 
 	local PATCHSET_VERSION_MACROS=()
-
-	if use X509 ; then
-		pushd "${WORKDIR}" &>/dev/null || die
-		eapply "${FILESDIR}/${P}-X509-glue-"${X509_VER}".patch"
-		popd &>/dev/null || die
-
-		eapply "${WORKDIR}"/${X509_PATCH%.*}
-
-		# We need to patch package version or any X.509 sshd will reject our ssh client
-		# with "userauth_pubkey: could not parse key: string is too large [preauth]"
-		# error
-		einfo "Patching package version for X.509 patch set ..."
-		sed -i \
-			-e "s/^AC_INIT(\[OpenSSH\], \[Portable\]/AC_INIT([OpenSSH], [${X509_VER}]/" \
-			"${S}"/configure.ac || die "Failed to patch package version for X.509 patch"
-
-		einfo "Patching version.h to expose X.509 patch set ..."
-		sed -i \
-			-e "/^#define SSH_PORTABLE.*/a #define SSH_X509               \"-PKIXSSH-${X509_VER}\"" \
-			"${S}"/version.h || die "Failed to sed-in X.509 patch version"
-		PATCHSET_VERSION_MACROS+=( 'SSH_X509' )
-	fi
-
-	if use X509 || use sctp || use hpn ; then
-		einfo "Patching sshconnect.c to use SSH_RELEASE in send_client_banner() ..."
-		sed -i \
-			-e "s/PROTOCOL_MAJOR_2, PROTOCOL_MINOR_2, SSH_VERSION/PROTOCOL_MAJOR_2, PROTOCOL_MINOR_2, SSH_RELEASE/" \
-			"${S}"/sshconnect.c || die "Failed to patch send_client_banner() to use SSH_RELEASE (sshconnect.c)"
-
-		einfo "Patching sshd.c to use SSH_RELEASE in sshd_exchange_identification() ..."
-		sed -i \
-			-e "s/PROTOCOL_MAJOR_2, PROTOCOL_MINOR_2, SSH_VERSION/PROTOCOL_MAJOR_2, PROTOCOL_MINOR_2, SSH_RELEASE/" \
-			"${S}"/sshd.c || die "Failed to patch sshd_exchange_identification() to use SSH_RELEASE (sshd.c)"
-
-		einfo "Patching version.h to add our patch sets to SSH_RELEASE ..."
-		sed -i \
-			-e "s/^#define SSH_RELEASE.*/#define SSH_RELEASE     SSH_VERSION SSH_PORTABLE ${PATCHSET_VERSION_MACROS[*]}/" \
-			"${S}"/version.h || die "Failed to patch SSH_RELEASE (version.h)"
-	fi
 
 	sed -i \
 		-e "/#UseLogin no/d" \
@@ -200,7 +158,6 @@ src_configure() {
 		$(use_with pam)
 		$(use_with pie)
 		$(use_with selinux)
-		$(usex X509 '' "$(use_with security-key security-key-builtin)")
 		$(use_with !elibc_Cygwin hardening) #659210
 	)
 
@@ -295,7 +252,6 @@ src_install() {
 
 	doman contrib/ssh-copy-id.1
 	dodoc CREDITS OVERVIEW README* TODO sshd_config
-	use X509 || dodoc ChangeLog
 
 	diropts -m 0700
 	dodir /etc/skel/.ssh
