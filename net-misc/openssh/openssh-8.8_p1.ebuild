@@ -47,43 +47,6 @@ src_prepare() {
 		-i regress/Makefile || die
 }
 
-src_configure() {
-	addwrite /dev/ptmx
-
-	use debug && append-cppflags -DSANDBOX_SECCOMP_FILTER_DEBUG
-
-	if [[ ${CHOST} == *-solaris* ]] ; then
-		# Solaris' glob.h doesn't have things like GLOB_TILDE, configure
-		# doesn't check for this, so force the replacement to be put in
-		# place
-		append-cppflags -DBROKEN_GLOB
-	fi
-
-	# use replacement, RPF_ECHO_ON doesn't exist here
-	[[ ${CHOST} == *-darwin* ]] && export ac_cv_func_readpassphrase=no
-
-	local myconf=(
-		--with-ldflags="${LDFLAGS}"
-		--disable-strip
-		--with-pid-dir="${EPREFIX}"$(usex kernel_linux '' '/var')/run
-		--sysconfdir="${EPREFIX}"/etc/ssh
-		--libexecdir="${EPREFIX}"/usr/$(get_libdir)/misc
-		--datadir="${EPREFIX}"/usr/share/openssh
-		--with-privsep-user=sshd
-		$(use_with audit audit linux)
-		$(use_with ldns ldns "${EPREFIX}"/usr)
-		$(use_with libedit)
-		$(use_with pie)
-		$(use_with selinux)
-		$(use_with !elibc_Cygwin hardening) #659210
-	)
-
-	# The seccomp sandbox is broken on x32, so use the older method for now. #553748
-	use amd64 && [[ ${ABI} == "x32" ]] && myconf+=( --with-sandbox=rlimit )
-
-	econf "${myconf[@]}"
-}
-
 src_test() {
 	local tests=( compat-tests )
 	local shell=$(egetshell "${UID}")
