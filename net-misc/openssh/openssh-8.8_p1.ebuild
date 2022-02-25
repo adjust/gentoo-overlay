@@ -22,25 +22,15 @@ KEYWORDS="-*"
 IUSE="abi_mips_n32 audit debug hpn kerberos ldns libedit livecd pam +pie +scp sctp security-key selinux ssl +static test X X509 xmss"
 RESTRICT="mirror test"
 
-LIB_DEPEND="
-	audit? ( sys-process/audit[static-libs(+)] )
-	libedit? ( dev-libs/libedit:=[static-libs(+)] )
-	security-key? ( >=dev-libs/libfido2-1.5.0:=[static-libs(+)] )
-	selinux? ( >=sys-libs/libselinux-1.28[static-libs(+)] )
-	virtual/libcrypt:=[static-libs(+)]
-	>=sys-libs/zlib-1.2.3:=[static-libs(+)]
-"
 RDEPEND="
 	acct-group/sshd
 	acct-user/sshd
-	!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
 	kerberos? ( virtual/krb5 )
 	net-misc/openssh[static]
 "
 DEPEND="${RDEPEND}
 	virtual/os-headers
 	kernel_linux? ( !prefix-guest? ( >=sys-kernel/linux-headers-5.1 ) )
-	static? ( ${LIB_DEPEND} )
 "
 RDEPEND="${RDEPEND}
 	!prefix? ( sys-apps/shadow )
@@ -125,7 +115,6 @@ src_configure() {
 	addwrite /dev/ptmx
 
 	use debug && append-cppflags -DSANDBOX_SECCOMP_FILTER_DEBUG
-	use static && append-ldflags -static
 
 	if [[ ${CHOST} == *-solaris* ]] ; then
 		# Solaris' glob.h doesn't have things like GLOB_TILDE, configure
