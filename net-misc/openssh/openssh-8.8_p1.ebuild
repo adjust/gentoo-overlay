@@ -17,11 +17,6 @@ IUSE="abi_mips_n32 audit debug hpn kerberos ldns libedit livecd pam +pie +scp sc
 
 RESTRICT="test"
 
-REQUIRED_USE="
-	pie? ( !static )
-	static? ( !kerberos !pam )
-"
-
 # tests currently fail with XMSS
 REQUIRED_USE+="test? ( !xmss )"
 
