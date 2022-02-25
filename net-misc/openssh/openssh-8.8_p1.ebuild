@@ -202,7 +202,7 @@ tweak_ssh_configs() {
 
 src_install() {
 	dobin "${MY_S}"/bin/{scp,sftp,ssh,ssh-add,ssh-agent,ssh-keygen,ssh-keyscan} || die
-	dosbin "${MY_S}"/bin/sshd
+	dosbin "${MY_S}"/bin/sshd || die
 	dodir /etc/ssh || die
 	insinto /etc/ssh
 	doins moduli ssh*_config || die
