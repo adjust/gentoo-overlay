@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit autotools eapi7-ver pam systemd toolchain-funcs
+inherit eapi7-ver pam systemd toolchain-funcs
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="https://www.openssh.com/"
