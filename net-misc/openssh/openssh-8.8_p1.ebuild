@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="-*"
 IUSE="abi_mips_n32 audit debug hpn kerberos ldns libedit livecd pam +pie +scp sctp security-key selinux ssl +static test X X509 xmss"
 
-RESTRICT="!test? ( test )"
+RESTRICT="test"
 
 REQUIRED_USE="
 	pie? ( !static )
