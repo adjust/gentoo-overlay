@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit user-info flag-o-matic autotools eapi7-ver pam systemd toolchain-funcs
+inherit flag-o-matic autotools eapi7-ver pam systemd toolchain-funcs
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="https://www.openssh.com/"
