@@ -29,7 +29,6 @@ RDEPEND="
 	acct-group/sshd
 	acct-user/sshd
 	!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
-	pam? ( sys-libs/pam )
 	kerberos? ( virtual/krb5 )
 	net-misc/openssh[static]
 "
@@ -39,7 +38,6 @@ DEPEND="${RDEPEND}
 	static? ( ${LIB_DEPEND} )
 "
 RDEPEND="${RDEPEND}
-	pam? ( >=sys-auth/pambase-20081028 )
 	!prefix? ( sys-apps/shadow )
 	X? ( x11-apps/xauth )
 "
@@ -147,7 +145,6 @@ src_configure() {
 		$(use_with kerberos kerberos5 "${EPREFIX}"/usr)
 		$(use_with ldns ldns "${EPREFIX}"/usr)
 		$(use_with libedit)
-		$(use_with pam)
 		$(use_with pie)
 		$(use_with selinux)
 		$(use_with !elibc_Cygwin hardening) #659210
@@ -213,6 +210,7 @@ tweak_ssh_configs() {
 	EOF
 
 	if use pam ; then
+		# TODO: fix config file regarding to pam
 		sed -i \
 			-e "/^#UsePAM /s:.*:UsePAM yes:" \
 			-e "/^#PasswordAuthentication /s:.*:PasswordAuthentication no:" \
