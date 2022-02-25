@@ -94,6 +94,7 @@ src_install() {
 	newconfd "${FILESDIR}"/sshd-r1.confd sshd || die
 
 	if use pam; then
+		# TODO: check if used by anything
 		newpamd "${FILESDIR}"/sshd.pam_include.2 sshd || die
 	fi
 
