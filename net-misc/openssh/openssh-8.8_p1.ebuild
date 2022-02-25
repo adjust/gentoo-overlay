@@ -81,7 +81,6 @@ src_configure() {
 		--sysconfdir="${EPREFIX}"/etc/ssh
 		--libexecdir="${EPREFIX}"/usr/$(get_libdir)/misc
 		--datadir="${EPREFIX}"/usr/share/openssh
-		--with-privsep-path="${EPREFIX}"/var/empty
 		--with-privsep-user=sshd
 		$(use_with audit audit linux)
 		$(use_with ldns ldns "${EPREFIX}"/usr)
@@ -193,8 +192,6 @@ src_install() {
 		rm -f "${ED}"/usr/{bin/scp,share/man/man1/scp.1} \
 			|| die "failed to remove scp"
 	fi
-
-	rmdir "${ED}"/var/empty || die
 
 	systemd_dounit "${FILESDIR}"/sshd.{service,socket}
 	systemd_newunit "${FILESDIR}"/sshd_at.service 'sshd@.service'
