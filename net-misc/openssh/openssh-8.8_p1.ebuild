@@ -211,7 +211,7 @@ src_install() {
 	doexe "${MY_S}"/libexec/{sftp-server,ssh-sk-helper} || die
 
 	fperms 600 /etc/ssh/sshd_config
-	dobin contrib/ssh-copy-id
+	dobin contrib/ssh-copy-id || die
 	newinitd "${FILESDIR}"/sshd-r1.initd sshd
 	newconfd "${FILESDIR}"/sshd-r1.confd sshd
 
