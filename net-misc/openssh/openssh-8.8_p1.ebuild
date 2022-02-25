@@ -13,7 +13,9 @@ EGIT_COMMIT_ETC="fbab9474562865d48d9d1f7194eb8b3f0fb9651e"
 SRC_URI="https://github.com/oasislinux/${PN}/archive/${EGIT_COMMIT}.tar.gz -> ${P}-${EGIT_COMMIT}.tar.gz
 	https://github.com/oasislinux/root-x86_64/archive/${EGIT_COMMIT_ROOT}.tar.gz -> ${P}-root-${EGIT_COMMIT_ROOT}.tar.gz
 	https://github.com/oasislinux/etc/archive/${EGIT_COMMIT_ETC}.tar.gz -> ${P}-etc-${EGIT_COMMIT_ETC}.tar.gz"
-S="${WORKDIR}"
+S="${WORKDIR}/openssh-${EGIT_COMMIT}"
+MY_S="${WORKDIR}/root-x86_64-${EGIT_COMMIT_ROOT}"
+MY_S_ETC="${WORKDIR}/etc-${EGIT_COMMIT_ETC}"
 
 LICENSE="BSD GPL-2"
 SLOT="0"
