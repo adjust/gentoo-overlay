@@ -221,7 +221,7 @@ src_install() {
 	insinto /etc/ssh
 	doins moduli ssh*_config || die
 	doman *.{1,5,8} || die
-	exeinto /usr/lib64/misc
+	exeinto /usr/$(get_libdir)/misc
 	doexe "${MY_S}"/libexec/{sftp-server,ssh-sk-helper} || die
 
 	fperms 600 /etc/ssh/sshd_config
