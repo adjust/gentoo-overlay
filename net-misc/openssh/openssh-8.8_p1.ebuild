@@ -25,7 +25,6 @@ RDEPEND="
 	net-misc/openssh[static]
 "
 RDEPEND="${RDEPEND}
-	!prefix? ( sys-apps/shadow )
 	X? ( x11-apps/xauth )
 "
 BDEPEND="
