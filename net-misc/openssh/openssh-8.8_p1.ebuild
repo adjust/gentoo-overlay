@@ -16,12 +16,10 @@ SRC_URI="https://github.com/oasislinux/${PN}/archive/${EGIT_COMMIT}.tar.gz -> ${
 S="${WORKDIR}/openssh-${EGIT_COMMIT}"
 MY_S="${WORKDIR}/root-x86_64-${EGIT_COMMIT_ROOT}"
 MY_S_ETC="${WORKDIR}/etc-${EGIT_COMMIT_ETC}"
-
 LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="-*"
 IUSE="abi_mips_n32 audit debug hpn kerberos ldns libedit livecd pam +pie +scp sctp security-key selinux ssl +static test X X509 xmss"
-
 RESTRICT="mirror test"
 
 LIB_DEPEND="
