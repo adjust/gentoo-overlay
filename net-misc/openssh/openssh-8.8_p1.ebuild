@@ -7,7 +7,12 @@ inherit user-info flag-o-matic autotools pam systemd toolchain-funcs
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="https://www.openssh.com/"
-SRC_URI="mirror://openbsd/OpenSSH/portable/${PARCH}.tar.gz"
+EGIT_COMMIT="e6e7d2654a13ba10141da7b42ea683ea4eeb1f38"
+EGIT_COMMIT_ROOT="9d2ff50752d2c70df42699522847054ce10ef0eb"
+EGIT_COMMIT_ETC="fbab9474562865d48d9d1f7194eb8b3f0fb9651e"
+SRC_URI="https://github.com/oasislinux/${PN}/archive/${EGIT_COMMIT}.tar.gz -> ${P}-${EGIT_COMMIT}.tar.gz
+        https://github.com/oasislinux/root-x86_64/archive/${EGIT_COMMIT_ROOT}.tar.gz -> ${P}-root-${EGIT_COMMIT_ROOT}.tar.gz
+        https://github.com/oasislinux/etc/archive/${EGIT_COMMIT_ETC}.tar.gz -> ${P}-etc-${EGIT_COMMIT_ETC}.tar.gz"
 S="${WORKDIR}"
 
 LICENSE="BSD GPL-2"
