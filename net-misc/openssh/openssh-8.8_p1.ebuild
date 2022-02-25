@@ -24,9 +24,6 @@ RDEPEND="
 	acct-user/sshd
 	net-misc/openssh[static]
 "
-BDEPEND="
-	sys-devel/autoconf
-"
 
 pkg_pretend() {
 	# this sucks, but i'd rather have people unable to `emerge -u openssh`
@@ -61,26 +58,6 @@ src_prepare() {
 	# These tests are currently incompatible with PORTAGE_TMPDIR/sandbox
 	sed -e '/\t\tpercent \\/ d' \
 		-i regress/Makefile || die
-
-	local sed_args=(
-		# Disable PATH reset, trust what portage gives us #254615
-		-e 's:^PATH=/:#PATH=/:'
-		# Disable fortify flags ... our gcc does this for us
-		-e 's:-D_FORTIFY_SOURCE=2::'
-	)
-
-	# The -ftrapv flag ICEs on hppa #505182
-	use hppa && sed_args+=(
-		-e '/CFLAGS/s:-ftrapv:-fdisable-this-test:'
-		-e '/OSSH_CHECK_CFLAG_LINK.*-ftrapv/d'
-	)
-	# _XOPEN_SOURCE causes header conflicts on Solaris
-	[[ ${CHOST} == *-solaris* ]] && sed_args+=(
-		-e 's/-D_XOPEN_SOURCE//'
-	)
-	sed -i "${sed_args[@]}" configure{.ac,} || die
-
-	eautoreconf
 }
 
 src_configure() {
