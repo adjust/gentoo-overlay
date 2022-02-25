@@ -159,4 +159,8 @@ pkg_postinst() {
 			ewarn "connection is generally safe."
 		fi
 	done
+	ewarn "Support for USE=pam has been dropped for net-misc/sshd[static]."
+	ewarn "Make sure to update any configs that you might have."
+	ewarn "You are encouraged to use dispatch-conf right now, otherwise you"
+	ewarn "will not be able to establish new sessions!"
 }
