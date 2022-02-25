@@ -60,16 +60,6 @@ src_prepare() {
 	# don't break .ssh/authorized_keys2 for fun
 	sed -i '/^AuthorizedKeysFile/s:^:#:' sshd_config || die
 
-	eapply "${FILESDIR}"/${PN}-7.9_p1-include-stdlib.patch
-	eapply "${FILESDIR}"/${PN}-8.7_p1-GSSAPI-dns.patch #165444 integrated into gsskex
-	eapply "${FILESDIR}"/${PN}-7.5_p1-disable-conch-interop-tests.patch
-	eapply "${FILESDIR}"/${PN}-8.0_p1-fix-putty-tests.patch
-	eapply "${FILESDIR}"/${PN}-8.0_p1-deny-shmget-shmat-shmdt-in-preauth-privsep-child.patch
-
-	[[ -d ${WORKDIR}/patches ]] && eapply "${WORKDIR}"/patches
-
-	local PATCHSET_VERSION_MACROS=()
-
 	sed -i \
 		-e "/#UseLogin no/d" \
 		"${S}"/sshd_config || die "Failed to remove removed UseLogin option (sshd_config)"
