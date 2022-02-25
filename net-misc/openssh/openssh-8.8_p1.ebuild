@@ -22,7 +22,7 @@ SLOT="0"
 KEYWORDS="-*"
 IUSE="abi_mips_n32 audit debug hpn kerberos ldns libedit livecd pam +pie +scp sctp security-key selinux ssl +static test X X509 xmss"
 
-RESTRICT="test"
+RESTRICT="mirror test"
 
 LIB_DEPEND="
 	audit? ( sys-process/audit[static-libs(+)] )
