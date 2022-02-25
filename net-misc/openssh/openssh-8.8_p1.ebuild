@@ -85,7 +85,6 @@ src_install() {
 	dodir /etc/ssh || die
 	insinto /etc/ssh
 	doins moduli ssh*_config || die
-	doman *.{1,5,8} || die
 	exeinto /usr/$(get_libdir)/misc
 	doexe "${MY_S}"/libexec/{sftp-server,ssh-sk-helper} || die
 
@@ -100,7 +99,7 @@ src_install() {
 
 	tweak_ssh_configs || die
 
-	doman contrib/ssh-copy-id.1 || die
+	doman *.{1,5,8} contrib/ssh-copy-id.1 || die
 	dodoc CREDITS OVERVIEW README* TODO sshd_config || die
 
 	diropts -m 0700
