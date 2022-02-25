@@ -17,9 +17,6 @@ IUSE="abi_mips_n32 audit debug hpn kerberos ldns libedit livecd pam +pie +scp sc
 
 RESTRICT="test"
 
-# tests currently fail with XMSS
-REQUIRED_USE+="test? ( !xmss )"
-
 LIB_DEPEND="
 	audit? ( sys-process/audit[static-libs(+)] )
 	libedit? ( dev-libs/libedit:=[static-libs(+)] )
@@ -126,7 +123,6 @@ src_configure() {
 
 	use debug && append-cppflags -DSANDBOX_SECCOMP_FILTER_DEBUG
 	use static && append-ldflags -static
-	use xmss && append-cflags -DWITH_XMSS
 
 	if [[ ${CHOST} == *-solaris* ]] ; then
 		# Solaris' glob.h doesn't have things like GLOB_TILDE, configure
