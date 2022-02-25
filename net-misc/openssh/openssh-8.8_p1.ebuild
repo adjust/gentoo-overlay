@@ -28,10 +28,6 @@ RDEPEND="
 	kerberos? ( virtual/krb5 )
 	net-misc/openssh[static]
 "
-DEPEND="${RDEPEND}
-	virtual/os-headers
-	kernel_linux? ( !prefix-guest? ( >=sys-kernel/linux-headers-5.1 ) )
-"
 RDEPEND="${RDEPEND}
 	!prefix? ( sys-apps/shadow )
 	X? ( x11-apps/xauth )
