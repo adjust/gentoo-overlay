@@ -25,18 +25,6 @@ RDEPEND="
 "
 
 pkg_pretend() {
-	# this sucks, but i'd rather have people unable to `emerge -u openssh`
-	# than not be able to log in to their server any more
-	local missing=()
-	check_feature() { use "${1}" && [[ -z ${!2} ]] && missing+=( "${1}" ); }
-	if [[ ${#missing[@]} -ne 0 ]] ; then
-		eerror "Sorry, but this version does not yet support features"
-		eerror "that you requested: ${missing[*]}"
-		eerror "Please mask ${PF} for now and check back later:"
-		eerror " # echo '=${CATEGORY}/${PF}' >> /etc/portage/package.mask"
-		die "Missing requested third party patch."
-	fi
-
 	# Make sure people who are using tcp wrappers are notified of its removal. #531156
 	if grep -qs '^ *sshd *:' "${EROOT}"/etc/hosts.{allow,deny} ; then
 		ewarn "Sorry, but openssh no longer supports tcp-wrappers, and it seems like"
