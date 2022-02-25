@@ -5,22 +5,10 @@ EAPI=6
 
 inherit user-info flag-o-matic autotools pam systemd toolchain-funcs
 
-# PV to USE for HPN patches
-#HPN_PV="${PV^^}"
-HPN_PV="8.5_P1"
-
-HPN_VER="15.2"
-HPN_PATCHES=(
-	${PN}-${HPN_PV/./_}-hpn-DynWinNoneSwitch-${HPN_VER}.diff
-	${PN}-${HPN_PV/./_}-hpn-AES-CTR-${HPN_VER}.diff
-	${PN}-${HPN_PV/./_}-hpn-PeakTput-${HPN_VER}.diff
-)
-
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="https://www.openssh.com/"
 SRC_URI="mirror://openbsd/OpenSSH/portable/${PARCH}.tar.gz
 	${SCTP_PATCH:+sctp? ( https://dev.gentoo.org/~chutzpah/dist/openssh/${SCTP_PATCH} )}
-	${HPN_VER:+hpn? ( $(printf "mirror://sourceforge/project/hpnssh/Patches/HPN-SSH%%20${HPN_VER/./v}%%20${HPN_PV/_P/p}/%s\n" "${HPN_PATCHES[@]}") )}
 	${X509_PATCH:+X509? ( https://roumenpetrov.info/openssh/x509-${X509_VER}/${X509_PATCH} )}
 "
 S="${WORKDIR}"
@@ -34,7 +22,6 @@ IUSE="abi_mips_n32 audit debug hpn kerberos ldns libedit livecd pam +pie +scp sc
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
-	hpn? ( ssl )
 	ldns? ( ssl )
 	pie? ( !static )
 	static? ( !kerberos !pam )
@@ -87,7 +74,6 @@ pkg_pretend() {
 	# than not be able to log in to their server any more
 	local missing=()
 	check_feature() { use "${1}" && [[ -z ${!2} ]] && missing+=( "${1}" ); }
-	check_feature hpn HPN_VER
 	check_feature sctp SCTP_PATCH
 	check_feature X509 X509_PATCH
 	if [[ ${#missing[@]} -ne 0 ]] ; then
@@ -159,50 +145,6 @@ src_prepare() {
 		sed -i \
 			-e "/\t\tcfgparse \\\/d" \
 			"${S}"/regress/Makefile || die "Failed to disable known failing test (cfgparse) caused by SCTP patch"
-	fi
-
-	if use hpn ; then
-		local hpn_patchdir="${T}/${P}-hpn${HPN_VER}"
-		mkdir "${hpn_patchdir}" || die
-		cp $(printf -- "${DISTDIR}/%s\n" "${HPN_PATCHES[@]}") "${hpn_patchdir}" || die
-		pushd "${hpn_patchdir}" &>/dev/null || die
-		eapply "${FILESDIR}"/${PN}-8.7_p1-hpn-${HPN_VER}-glue.patch
-		use X509 && eapply "${FILESDIR}"/${PN}-8.7_p1-hpn-${HPN_VER}-X509-glue.patch
-		use sctp && eapply "${FILESDIR}"/${PN}-8.5_p1-hpn-${HPN_VER}-sctp-glue.patch
-		popd &>/dev/null || die
-
-		eapply "${hpn_patchdir}"
-
-		use X509 || eapply "${FILESDIR}/openssh-8.6_p1-hpn-version.patch"
-
-		einfo "Patching Makefile.in for HPN patch set ..."
-		sed -i \
-			-e "/^LIBS=/ s/\$/ -lpthread/" \
-			"${S}"/Makefile.in || die "Failed to patch Makefile.in"
-
-		einfo "Patching version.h to expose HPN patch set ..."
-		sed -i \
-			-e "/^#define SSH_PORTABLE/a #define SSH_HPN         \"-hpn${HPN_VER//./v}\"" \
-			"${S}"/version.h || die "Failed to sed-in HPN patch version"
-		PATCHSET_VERSION_MACROS+=( 'SSH_HPN' )
-
-		if [[ -n "${HPN_DISABLE_MTAES}" ]] ; then
-			einfo "Disabling known non-working MT AES cipher per default ..."
-
-			cat > "${T}"/disable_mtaes.conf <<- EOF
-
-			# HPN's Multi-Threaded AES CTR cipher is currently known to be broken
-			# and therefore disabled per default.
-			DisableMTAES yes
-			EOF
-			sed -i \
-				-e "/^#HPNDisabled.*/r ${T}/disable_mtaes.conf" \
-				"${S}"/sshd_config || die "Failed to disabled MT AES ciphers in sshd_config"
-
-			sed -i \
-				-e "/AcceptEnv.*_XXX_TEST$/a \\\tDisableMTAES\t\tyes" \
-				"${S}"/regress/test-exec.sh || die "Failed to disable MT AES ciphers in test config"
-		fi
 	fi
 
 	if use X509 || use sctp || use hpn ; then
@@ -389,7 +331,6 @@ src_install() {
 
 	doman contrib/ssh-copy-id.1
 	dodoc CREDITS OVERVIEW README* TODO sshd_config
-	use hpn && dodoc HPN-README
 	use X509 || dodoc ChangeLog
 
 	diropts -m 0700
@@ -458,17 +399,5 @@ pkg_postinst() {
 		elog "Be aware that by disabling openssl support in openssh, the server and clients"
 		elog "no longer support dss/rsa/ecdsa keys.  You will need to generate ed25519 keys"
 		elog "and update all clients/servers that utilize them."
-	fi
-
-	if use hpn && [[ -n "${HPN_DISABLE_MTAES}" ]] ; then
-		elog ""
-		elog "HPN's multi-threaded AES CTR cipher is currently known to be broken"
-		elog "and therefore disabled at runtime per default."
-		elog "Make sure your sshd_config is up to date and contains"
-		elog ""
-		elog "  DisableMTAES yes"
-		elog ""
-		elog "Otherwise you maybe unable to connect to this sshd using any AES CTR cipher."
-		elog ""
 	fi
 }
