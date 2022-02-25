@@ -24,9 +24,6 @@ RDEPEND="
 	acct-user/sshd
 	net-misc/openssh[static]
 "
-RDEPEND="${RDEPEND}
-	X? ( x11-apps/xauth )
-"
 BDEPEND="
 	virtual/pkgconfig
 	sys-devel/autoconf
