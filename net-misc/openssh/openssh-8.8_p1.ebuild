@@ -40,6 +40,8 @@ src_prepare() {
 		-e "/#UseLogin no/d" \
 		"${S}"/sshd_config || die "Failed to remove removed UseLogin option (sshd_config)"
 
+	# TODO: test if any other tweaks are needed for sshd_config
+
 	eapply_user # TODO: figure out how to get rid of it
 }
 
