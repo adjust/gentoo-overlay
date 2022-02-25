@@ -115,12 +115,6 @@ src_configure() {
 		$(use_with !elibc_Cygwin hardening) #659210
 	)
 
-	if use elibc_musl; then
-		# musl defines bogus values for UTMP_FILE and WTMP_FILE
-		# https://bugs.gentoo.org/753230
-		myconf+=( --disable-utmp --disable-wtmp )
-	fi
-
 	# The seccomp sandbox is broken on x32, so use the older method for now. #553748
 	use amd64 && [[ ${ABI} == "x32" ]] && myconf+=( --with-sandbox=rlimit )
 
