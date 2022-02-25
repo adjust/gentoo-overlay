@@ -77,12 +77,6 @@ tweak_ssh_configs() {
 	# Send COLORTERM to match TERM. #658540
 	SendEnv COLORTERM
 	EOF
-
-	if use livecd ; then
-		sed -i \
-			-e '/^#PermitRootLogin/c# Allow root login with password on livecds.\nPermitRootLogin Yes' \
-			"${ED}"/etc/ssh/sshd_config || die
-	fi
 }
 
 src_install() {
