@@ -41,25 +41,6 @@ src_prepare() {
 		"${S}"/sshd_config || die "Failed to remove removed UseLogin option (sshd_config)"
 
 	eapply_user # TODO: figure out how to get rid of it
-
-	# These tests are currently incompatible with PORTAGE_TMPDIR/sandbox
-	sed -e '/\t\tpercent \\/ d' \
-		-i regress/Makefile || die
-}
-
-src_test() {
-	local tests=( compat-tests )
-	local shell=$(egetshell "${UID}")
-	if [[ ${shell} == */nologin ]] || [[ ${shell} == */false ]] ; then
-		ewarn "Running the full OpenSSH testsuite requires a usable shell for the 'portage'"
-		ewarn "user, so we will run a subset only."
-		tests+=( interop-tests )
-	else
-		tests+=( tests )
-	fi
-
-	local -x SUDO= SSH_SK_PROVIDER= TEST_SSH_UNSAFE_PERMISSIONS=1
-	mkdir -p "${HOME}"/.ssh || die
 }
 
 # Gentoo tweaks to default config files.
