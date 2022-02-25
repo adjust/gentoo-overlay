@@ -25,7 +25,6 @@ RDEPEND="
 	net-misc/openssh[static]
 "
 BDEPEND="
-	virtual/pkgconfig
 	sys-devel/autoconf
 "
 
@@ -63,7 +62,6 @@ src_prepare() {
 	sed -e '/\t\tpercent \\/ d' \
 		-i regress/Makefile || die
 
-	tc-export PKG_CONFIG
 	local sed_args=(
 		# Disable PATH reset, trust what portage gives us #254615
 		-e 's:^PATH=/:#PATH=/:'
