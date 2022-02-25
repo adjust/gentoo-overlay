@@ -69,6 +69,11 @@ start_pre() {
 	# also generate any missing host key and you can start a
 	# non-running service with "restart" argument.
 	checkconfig || return $?
+
+	# Make sure we have /var/log/lastlog available for new sessions.
+	if [ ! -e /var/log/lastlog ] ; then
+		touch /var/log/lastlog
+	fi
 }
 
 stop_pre() {
