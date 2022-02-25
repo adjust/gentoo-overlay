@@ -232,6 +232,15 @@ tweak_ssh_configs() {
 }
 
 src_install() {
+	dobin "${MY_S}"/bin/{scp,sftp,ssh,ssh-add,ssh-agent,ssh-keygen,ssh-keyscan} || die
+	dosbin "${MY_S}"/bin/sshd
+	dodir /etc/ssh || die
+	insinto /etc/ssh
+	doins moduli ssh*_config || die
+	doman *.{1,5,8} || die
+	exeinto /usr/lib64/misc
+	doexe "${MY_S}"/libexec/{sftp-server,ssh-sk-helper} || die
+
 	fperms 600 /etc/ssh/sshd_config
 	dobin contrib/ssh-copy-id
 	newinitd "${FILESDIR}"/sshd-r1.initd sshd
