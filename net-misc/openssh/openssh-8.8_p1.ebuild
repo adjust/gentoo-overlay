@@ -104,20 +104,20 @@ src_install() {
 
 	fperms 600 /etc/ssh/sshd_config
 	dobin contrib/ssh-copy-id || die
-	newinitd "${FILESDIR}"/sshd-r1.initd sshd
-	newconfd "${FILESDIR}"/sshd-r1.confd sshd
+	newinitd "${FILESDIR}"/sshd-r1.initd sshd || die
+	newconfd "${FILESDIR}"/sshd-r1.confd sshd || die
 
 	if use pam; then
-		newpamd "${FILESDIR}"/sshd.pam_include.2 sshd
+		newpamd "${FILESDIR}"/sshd.pam_include.2 sshd || die
 	fi
 
-	tweak_ssh_configs
+	tweak_ssh_configs || die
 
-	doman contrib/ssh-copy-id.1
-	dodoc CREDITS OVERVIEW README* TODO sshd_config
+	doman contrib/ssh-copy-id.1 || die
+	dodoc CREDITS OVERVIEW README* TODO sshd_config || die
 
 	diropts -m 0700
-	dodir /etc/skel/.ssh
+	dodir /etc/skel/.ssh || die
 
 	# https://bugs.gentoo.org/733802
 	if ! use scp; then
@@ -125,8 +125,8 @@ src_install() {
 			|| die "failed to remove scp"
 	fi
 
-	systemd_dounit "${FILESDIR}"/sshd.{service,socket}
-	systemd_newunit "${FILESDIR}"/sshd_at.service 'sshd@.service'
+	systemd_dounit "${FILESDIR}"/sshd.{service,socket} || die
+	systemd_newunit "${FILESDIR}"/sshd_at.service 'sshd@.service' || die
 }
 
 pkg_postinst() {
