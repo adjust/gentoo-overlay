@@ -25,7 +25,6 @@ RESTRICT="mirror test"
 RDEPEND="
 	acct-group/sshd
 	acct-user/sshd
-	kerberos? ( virtual/krb5 )
 	net-misc/openssh[static]
 "
 RDEPEND="${RDEPEND}
@@ -132,7 +131,6 @@ src_configure() {
 		--with-privsep-path="${EPREFIX}"/var/empty
 		--with-privsep-user=sshd
 		$(use_with audit audit linux)
-		$(use_with kerberos kerberos5 "${EPREFIX}"/usr)
 		$(use_with ldns ldns "${EPREFIX}"/usr)
 		$(use_with libedit)
 		$(use_with pie)
