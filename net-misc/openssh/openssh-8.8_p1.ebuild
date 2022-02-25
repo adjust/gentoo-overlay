@@ -50,10 +50,6 @@ pkg_pretend() {
 }
 
 src_prepare() {
-	sed -i \
-		-e "/_PATH_XAUTH/s:/usr/X11R6/bin/xauth:${EPREFIX}/usr/bin/xauth:" \
-		pathnames.h || die
-
 	# don't break .ssh/authorized_keys2 for fun
 	sed -i '/^AuthorizedKeysFile/s:^:#:' sshd_config || die
 
