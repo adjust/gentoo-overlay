@@ -40,7 +40,7 @@ src_prepare() {
 		-e "/#UseLogin no/d" \
 		"${S}"/sshd_config || die "Failed to remove removed UseLogin option (sshd_config)"
 
-	eapply_user #473004
+	eapply_user # TODO: figure out how to get rid of it
 
 	# These tests are currently incompatible with PORTAGE_TMPDIR/sandbox
 	sed -e '/\t\tpercent \\/ d' \
