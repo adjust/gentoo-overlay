@@ -15,18 +15,13 @@ S="${WORKDIR}"
 LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~x64-cygwin ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
-# Probably want to drop ssl defaulting to on in a future version.
-IUSE="abi_mips_n32 audit debug hpn kerberos ldns libedit livecd pam +pie +scp sctp security-key selinux +ssl static test X X509 xmss"
+IUSE="abi_mips_n32 audit debug hpn kerberos ldns libedit livecd pam +pie +scp sctp security-key selinux ssl static test X X509 xmss"
 
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
-	ldns? ( ssl )
 	pie? ( !static )
 	static? ( !kerberos !pam )
-	X509? ( !sctp ssl !xmss )
-	xmss? ( ssl  )
-	test? ( ssl )
 "
 
 # tests currently fail with XMSS
@@ -34,14 +29,9 @@ REQUIRED_USE+="test? ( !xmss )"
 
 LIB_DEPEND="
 	audit? ( sys-process/audit[static-libs(+)] )
-	ldns? (
-		net-libs/ldns[static-libs(+)]
-		net-libs/ldns[ecdsa(+),ssl(+)]
-	)
 	libedit? ( dev-libs/libedit:=[static-libs(+)] )
 	security-key? ( >=dev-libs/libfido2-1.5.0:=[static-libs(+)] )
 	selinux? ( >=sys-libs/libselinux-1.28[static-libs(+)] )
-	ssl? ( >=dev-libs/openssl-1.1.1l-r1:0=[static-libs(+)] )
 	virtual/libcrypt:=[static-libs(+)]
 	>=sys-libs/zlib-1.2.3:=[static-libs(+)]
 "
@@ -98,7 +88,6 @@ src_prepare() {
 
 	eapply "${FILESDIR}"/${PN}-7.9_p1-include-stdlib.patch
 	eapply "${FILESDIR}"/${PN}-8.7_p1-GSSAPI-dns.patch #165444 integrated into gsskex
-	eapply "${FILESDIR}"/${PN}-6.7_p1-openssl-ignore-status.patch
 	eapply "${FILESDIR}"/${PN}-7.5_p1-disable-conch-interop-tests.patch
 	eapply "${FILESDIR}"/${PN}-8.0_p1-fix-putty-tests.patch
 	eapply "${FILESDIR}"/${PN}-8.0_p1-deny-shmget-shmat-shmdt-in-preauth-privsep-child.patch
@@ -158,7 +147,6 @@ src_prepare() {
 
 	tc-export PKG_CONFIG
 	local sed_args=(
-		-e "s:-lcrypto:$(${PKG_CONFIG} --libs openssl):"
 		# Disable PATH reset, trust what portage gives us #254615
 		-e 's:^PATH=/:#PATH=/:'
 		# Disable fortify flags ... our gcc does this for us
@@ -213,9 +201,6 @@ src_configure() {
 		$(use_with pie)
 		$(use_with selinux)
 		$(usex X509 '' "$(use_with security-key security-key-builtin)")
-		$(use_with ssl openssl)
-		$(use_with ssl md5-passwords)
-		$(use_with ssl ssl-engine)
 		$(use_with !elibc_Cygwin hardening) #659210
 	)
 
@@ -327,12 +312,6 @@ src_install() {
 	systemd_newunit "${FILESDIR}"/sshd_at.service 'sshd@.service'
 }
 
-pkg_preinst() {
-	if ! use ssl && has_version "${CATEGORY}/${PN}[ssl]"; then
-		show_ssl_warning=1
-	fi
-}
-
 pkg_postinst() {
 	local old_ver
 	for old_ver in ${REPLACING_VERSIONS}; do
@@ -373,10 +352,4 @@ pkg_postinst() {
 			ewarn "connection is generally safe."
 		fi
 	done
-
-	if [[ -n ${show_ssl_warning} ]]; then
-		elog "Be aware that by disabling openssl support in openssh, the server and clients"
-		elog "no longer support dss/rsa/ecdsa keys.  You will need to generate ed25519 keys"
-		elog "and update all clients/servers that utilize them."
-	fi
 }
