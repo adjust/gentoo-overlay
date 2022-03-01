@@ -83,6 +83,7 @@ src_install() {
 	dobin contrib/ssh-copy-id "${MY_S}"/bin/{scp,sftp,ssh} \
 		"${MY_S}"/bin/ssh-{add,agent,keygen,keyscan} || die
 	dosbin "${MY_S}"/bin/sshd || die
+	dosym ../usr/bin/ssh bin/ssh || die
 	dodir /etc/ssh || die
 	insinto /etc/ssh
 	doins moduli ssh*_config || die
