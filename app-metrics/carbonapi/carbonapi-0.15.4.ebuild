@@ -13,7 +13,7 @@ DESCRIPTION="Implementation of graphite API (graphite-web) in golang"
 HOMEPAGE="https://github.com/go-graphite/carbonapi"
 LICENSE="MIT"
 SLOT="0"
-IUSE=""
+IUSE="nocairo"
 
 RDEPEND="
 	acct-group/carbon
@@ -24,7 +24,8 @@ RDEPEND="
 
 src_compile() {
 	export BUILD="${PV}"
-	emake
+	use nocairo || emake
+	use nocairo && emake nocairo
 }
 
 src_install() {
