@@ -15,6 +15,7 @@ command="${SSHD_BINARY}"
 pidfile="${SSHD_PIDFILE}"
 command_args="${SSHD_OPTS} -D -e -o PidFile=${pidfile} -f ${SSHD_CONFIG}"
 command_background="yes"
+error_logger="logger"
 
 # Wait one second (length chosen arbitrarily) to see if sshd actually
 # creates a PID file, or if it crashes for some reason like not being
