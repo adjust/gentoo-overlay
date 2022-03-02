@@ -62,6 +62,19 @@ checkconfig() {
 	${SSHD_KEYGEN_BINARY} -A || return 2
 
 	"${command}" -t ${command_args} || return 3
+
+	local x err_pam
+	for x in $(awk '/^UsePAM/{ print $2 }' "$SSHD_CONFIG" 2>/dev/null) ; do
+		case "${x}" in
+			yes) err_pam="${x}" ;;
+		esac
+	done
+	if [ -n "${err_pam}" ] ; then
+		eerror "You have UsePAM enabled in your sshd_config!"
+		eerror "pam is not supported by currently installed openssh build"
+		eerror "You must disable it by removing UsePAM=yes from ${RC_PREFIX%/}/etc/conf.d/sshd"
+		return 4
+	fi
 }
 
 start_pre() {
