@@ -13,7 +13,7 @@ extra_started_commands="reload"
 
 command="${SSHD_BINARY}"
 pidfile="${SSHD_PIDFILE}"
-command_args="${SSHD_OPTS} -o PidFile=${pidfile} -f ${SSHD_CONFIG}"
+command_args="${SSHD_OPTS} -D -o PidFile=${pidfile} -f ${SSHD_CONFIG}"
 
 # Wait one second (length chosen arbitrarily) to see if sshd actually
 # creates a PID file, or if it crashes for some reason like not being
