@@ -94,11 +94,6 @@ src_install() {
 	newinitd "${FILESDIR}"/sshd-r1.initd sshd || die
 	newconfd "${FILESDIR}"/sshd-r1.confd sshd || die
 
-	if use pam; then
-		# TODO: check if used by anything
-		newpamd "${FILESDIR}"/sshd.pam_include.2 sshd || die
-	fi
-
 	tweak_ssh_configs || die
 
 	doman *.{1,5,8} contrib/ssh-copy-id.1 || die
