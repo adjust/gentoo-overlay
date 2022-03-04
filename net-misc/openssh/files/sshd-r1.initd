@@ -72,7 +72,7 @@ checkconfig() {
 	if [ -n "${err_pam}" ] ; then
 		eerror "You have UsePAM enabled in your sshd_config!"
 		eerror "pam is not supported by currently installed openssh build"
-		eerror "You must disable it by removing UsePAM=yes from ${RC_PREFIX%/}/etc/conf.d/sshd"
+		eerror "You must disable it by removing UsePAM=yes from sshd_config!"
 		return 4
 	fi
 }
