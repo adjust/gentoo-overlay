@@ -43,8 +43,6 @@ src_prepare() {
 
 	sed -i s:libexec:$(get_libdir)/misc: sshd_config || die
 
-	# TODO: test if any other tweaks are needed for sshd_config
-
 	eapply_user #473004
 }
 
