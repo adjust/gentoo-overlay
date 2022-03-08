@@ -1,0 +1,30 @@
+--- a/catalyst/targets/stage4.py	2022-03-08 14:10:03.178264819 -0000
++++ b/catalyst/targets/stage4.py	2022-03-18 16:06:54.959722831 -0000
+@@ -14,10 +14,12 @@
+ 		self.required_values=["stage4/packages"]
+ 		self.valid_values=self.required_values[:]
+ 		self.valid_values.extend(["stage4/use", "boot/kernel",
+-			"stage4/root_overlay", "stage4/fsscript",
++			"stage4/root_overlay", "stage4/prefsscript",
+ 			"stage4/gk_mainargs", "splash_theme",
+ 			"portage_overlay", "stage4/rcadd", "stage4/rcdel",
+-			"stage4/linuxrc", "stage4/unmerge", "stage4/rm", "stage4/empty"])
++			"stage4/linuxrc", "stage4/unmerge", "stage4/rm",
++			"stage4/groups", "stage4/users", "stage4/ssh_public_keys",
++			"stage4/postfsscript", "stage4/empty"])
+ 		StageBase.__init__(self,spec,addlargs)
+ 
+ 	def set_cleanables(self):
+@@ -26,8 +28,9 @@
+ 	def set_action_sequence(self):
+ 		self.settings["action_sequence"] = ["unpack", "unpack_snapshot",
+ 			"config_profile_link", "setup_confdir", "portage_overlay",
+-			"bind", "chroot_setup", "setup_environment", "build_packages",
+-			"build_kernel", "bootloader", "root_overlay", "fsscript",
+-			"preclean", "rcupdate", "unmerge", "unbind", "remove", "empty",
++			"bind", "chroot_setup", "setup_environment", "prefsscript",
++			"build_packages", "build_kernel", "bootloader", "root_overlay",
++			"preclean", "rcupdate", "unmerge", "postfsscript", "unbind",
++			"remove", "groups", "users", "ssh_public_keys", "empty",
+ 			"clean"]
+ 		self.set_completion_action_sequences()

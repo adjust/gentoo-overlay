@@ -1,0 +1,17 @@
+--- a/targets/stage4/stage4-controller.sh	2022-03-16 19:10:17.213211010 -0000
++++ b/targets/stage4/stage4-controller.sh	2022-03-16 19:12:15.119882425 -0000
+@@ -48,8 +48,12 @@
+ 		exec_in_chroot ${clst_shdir}/support/rc-update.sh
+ 	;;
+ 
+-	fsscript)
+-		exec_in_chroot ${clst_fsscript}
++	prefsscript)
++		exec_in_chroot ${clst_prefsscript}
++	;;
++
++	postfsscript)
++		exec_in_chroot ${clst_postfsscript}
+ 	;;
+ 
+ 	livecd-update)

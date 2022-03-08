@@ -1,0 +1,163 @@
+--- a/catalyst/base/stagebase.py	2022-03-08 14:13:19.171606064 -0000
++++ b/catalyst/base/stagebase.py	2022-03-16 16:59:05.816227658 -0000
+@@ -185,7 +185,8 @@
+ 		self.set_cleanables()
+ 		self.set_iso_volume_id()
+ 		self.set_build_kernel_vars()
+-		self.set_fsscript()
++		self.set_prefsscript()
++		self.set_postfsscript()
+ 		self.set_install_mask()
+ 		self.set_rcadd()
+ 		self.set_rcdel()
+@@ -196,6 +197,9 @@
+ 		self.set_packages()
+ 		self.set_rm()
+ 		self.set_linuxrc()
++		self.set_groups()
++		self.set_users()
++		self.set_ssh_public_keys()
+ 		self.set_busybox_config()
+ 		self.set_overlay()
+ 		self.set_portage_overlay()
+@@ -377,11 +381,17 @@
+ 			self.resume.enable("setup_target_path")
+ 			ensure_dirs(self.settings["storedir"] + "/builds")
+ 
+-	def set_fsscript(self):
+-		if self.settings["spec_prefix"] + "/fsscript" in self.settings:
+-			self.settings["fsscript"] = \
+-				self.settings[self.settings["spec_prefix"] + "/fsscript"]
+-			del self.settings[self.settings["spec_prefix"] + "/fsscript"]
++	def set_prefsscript(self):
++		if self.settings["spec_prefix"] + "/prefsscript" in self.settings:
++			self.settings["prefsscript"] = \
++				self.settings[self.settings["spec_prefix"] + "/prefsscript"]
++			del self.settings[self.settings["spec_prefix"] + "/prefsscript"]
++
++	def set_postfsscript(self):
++		if self.settings["spec_prefix"] + "/postfsscript" in self.settings:
++			self.settings["postfsscript"] = \
++				self.settings[self.settings["spec_prefix"] + "/postfsscript"]
++			del self.settings[self.settings["spec_prefix"] + "/postfsscript"]
+ 
+ 	def set_rcadd(self):
+ 		if self.settings["spec_prefix"] + "/rcadd" in self.settings:
+@@ -613,6 +623,39 @@
+ 					self.settings[self.settings["spec_prefix"] + "/linuxrc"]
+ 				del self.settings[self.settings["spec_prefix"] + "/linuxrc"]
+ 
++	def set_groups(self):
++		groups = self.settings["spec_prefix"] + "/groups"
++		if groups in self.settings:
++			if isinstance(self.settings[groups], str):
++				self.settings["groups"] = self.settings[groups].split(",")
++			self.settings["groups"] = self.settings[groups]
++			del self.settings[groups]
++		else:
++			self.settings["groups"] = []
++		log.info('groups to create: %s' % self.settings["groups"])
++
++	def set_users(self):
++		users = self.settings["spec_prefix"] + "/users"
++		if users in self.settings:
++			if isinstance(self.settings[users], str):
++				self.settings["users"] = self.settings[users].split(",")
++			self.settings["users"] = self.settings[users]
++			del self.settings[users]
++		else:
++			self.settings["users"] = []
++		log.info('users to create: %s' % self.settings["users"])
++
++	def set_ssh_public_keys(self):
++		ssh_public_keys = self.settings["spec_prefix"] + "/ssh_public_keys"
++		if ssh_public_keys in self.settings:
++			if isinstance(self.settings[ssh_public_keys], str):
++				self.settings["ssh_public_keys"] = self.settings[ssh_public_keys].split(",")
++			self.settings["ssh_public_keys"] = self.settings[ssh_public_keys]
++			del self.settings[ssh_public_keys]
++		else:
++			self.settings["ssh_public_keys"] = []
++		log.info('ssh public keys to copy: %s' % self.settings["ssh_public_keys"])
++
+ 	def set_busybox_config(self):
+ 		if self.settings["spec_prefix"] + "/busybox_config" in self.settings:
+ 			if isinstance(self.settings[self.settings['spec_prefix'] + '/busybox_config'], str):
+@@ -950,6 +993,43 @@
+ 					cmd(['rsync', '-a', x + '/', self.settings['chroot_path']],
+ 						env=self.env)
+ 
++	def groups(self):
++		for x in self.settings["groups"].split():
++			log.notice("Creating group: '%s'", x)
++			cmd(["groupadd", "-R", self.settings['chroot_path'], x], env=self.env)
++
++	def users(self):
++		for x in self.settings["users"]:
++			usr, grp = '', ''
++			try:
++				usr, uid, grp = x.split("|")
++			except ValueError:
++				usr = x
++				log.debug("users: '|' separator not found on line " + x)
++			uacmd = ["useradd", "-R", self.settings['chroot_path'], "-m", x]
++			if uid != '' and grp != '':
++				uacmd = ["useradd", "-R", self.settings['chroot_path'], "-m", "-u", uid, "-G", grp, usr]
++			if uid != '' and grp == '':
++				uacmd = ["useradd", "-R", self.settings['chroot_path'], "-m", "-u", uid, usr]
++			if uid == '' and grp != '':
++				uacmd = ["useradd", "-R", self.settings['chroot_path'], "-m", "-G", grp, usr]
++			log.notice("Creating user: '%s'", usr + "|" + uid + "|" + grp)
++			cmd(uacmd, env=self.env)
++
++	def ssh_public_keys(self):
++		for x in self.settings["ssh_public_keys"]:
++			usr, pub_key_src = '', ''
++			try:
++				usr, pub_key_src = x.split("|")
++			except ValueError:
++				raise CatalystError("ssh_public_keys: '=' separator not found on line " + x)
++			log.notice("Copying SSH public key for user: '%s'", usr)
++			pub_key_dest = self.settings['chroot_path'] + f"/home/{usr}/.ssh/authorized_keys"
++			cpcmd = ["cp", "-av", pub_key_src, pub_key_dest]
++			cmd(cpcmd, env=self.env)
++			chcmd = ["chmod", "0644", pub_key_dest]
++			cmd(chcmd, env=self.env)
++
+ 	def base_dirs(self):
+ 		pass
+ 
+@@ -1197,17 +1277,27 @@
+ 				'# Please keep this setting intact when reporting bugs.\n'
+ 				'LC_MESSAGES=C\n')
+ 
++	def prefsscript(self):
++		if "autoresume" in self.settings["options"] \
++			and self.resume.is_enabled("prefsscript"):
++			log.notice('Resume point detected, skipping prefsscript operation...')
++		else:
++			if "prefsscript" in self.settings:
++				if os.path.exists(self.settings["controller_file"]):
++					cmd([self.settings['controller_file'], 'prefsscript'],
++						env=self.env)
++					self.resume.enable("prefsscript")
+ 
+-	def fsscript(self):
++	def postfsscript(self):
+ 		if "autoresume" in self.settings["options"] \
+-			and self.resume.is_enabled("fsscript"):
+-			log.notice('Resume point detected, skipping fsscript operation...')
++			and self.resume.is_enabled("postfsscript"):
++			log.notice('Resume point detected, skipping postfsscript operation...')
+ 		else:
+-			if "fsscript" in self.settings:
++			if "postfsscript" in self.settings:
+ 				if os.path.exists(self.settings["controller_file"]):
+-					cmd([self.settings['controller_file'], 'fsscript'],
++					cmd([self.settings['controller_file'], 'postfsscript'],
+ 						env=self.env)
+-					self.resume.enable("fsscript")
++					self.resume.enable("postfsscript")
+ 
+ 	def rcupdate(self):
+ 		if "autoresume" in self.settings["options"] \
