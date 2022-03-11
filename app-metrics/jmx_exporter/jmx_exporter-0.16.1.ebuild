@@ -18,6 +18,7 @@ SLOT="0"
 IUSE=""
 
 RDEPEND="
+	virtual/jdk
 "
 DEPEND="
 	${RDEPEND}
