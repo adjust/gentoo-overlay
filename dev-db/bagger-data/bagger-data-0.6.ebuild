@@ -41,6 +41,6 @@ pkg_nofetch() {
 
 src_unpack() {
 	default
-	mv "${WORKDIR}/bagger-${PV}-r1" "${WORKDIR}/${P}" \
+	mv "${WORKDIR}/bagger-${PV}" "${WORKDIR}/${P}" \
 		|| die "Renaming src dir failed"
 }
