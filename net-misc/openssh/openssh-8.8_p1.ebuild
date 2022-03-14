@@ -23,6 +23,7 @@ RDEPEND="
 	acct-group/sshd
 	acct-user/sshd
 	net-misc/openssh[static]
+	sys-apps/util-linux[logger]
 "
 
 pkg_pretend() {
