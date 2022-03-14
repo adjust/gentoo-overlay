@@ -3,12 +3,11 @@
 
 EAPI=7
 
-JAR_NAME="jmx_prometheus_javaagent"
-JAR_FILE="${JAR_NAME}-${PV}.jar"
+inherit unpacker
 
 DESCRIPTION="A process for exposing JMX Beans via HTTP for Prometheus consumption"
 HOMEPAGE="https://github.com/prometheus/jmx_exporter"
-SRC_URI="https://repo1.maven.org/maven2/io/prometheus/jmx/${JAR_NAME}/${PV}/${JAR_FILE}"
+SRC_URI="https://bitbucket.org/_x0r/xor-overlay/downloads/jmx_prometheus_httpserver_0.16.1_all.deb"
 
 LICENSE="Apache-2.0"
 KEYWORDS="~amd64"
@@ -24,19 +23,15 @@ DEPEND="
 	${RDEPEND}
 "
 
-src_unpack() {
-
-	mkdir "${WORKDIR}"/${P} || die "failed to create ${S}"
-	cp -a "${DISTDIR}"/${JAR_FILE} "${S}" || die "failed to move ${JAR_FILE} to ${S}"
-}
+S="${WORKDIR}"
 
 src_install() {
-	INSTALL_DIR="/opt/${PN}"
-	CONFIG_DIR="${INSTALL_DIR}/etc/${PN}"
 
-	insinto "${INSTALL_DIR}"
-	doins -r * || die "failed to install ${JAR_FILE} to ${INSTALL_DIR}"
+	insinto /usr
+	doins -r "${S}"/usr/*
 
-	insinto "${CONFIG_DIR}"
-	doins "${FILESDIR}"/jmx_exporter.yaml
+	insinto /etc
+	doins -r "${S}"/etc/*
+
+	fperms +x /usr/bin/${PN} || die "failed to mark /usr/bin/${PN} executable"
 }
