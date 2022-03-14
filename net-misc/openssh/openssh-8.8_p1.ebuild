@@ -17,7 +17,7 @@ QA_PREBUILT="*"
 LICENSE="BSD GPL-2"
 SLOT="0"
 KEYWORDS="-* ~amd64"
-IUSE="audit debug hpn kerberos ldns libedit livecd pam +pie +scp sctp security-key selinux ssl +static test X X509 xmss"
+IUSE="audit debug hpn kerberos ldns libedit livecd pam +pie +scp sctp security-key selinux split-usr ssl +static test X X509 xmss"
 RESTRICT="mirror strip test"
 RDEPEND="
 	acct-group/sshd
