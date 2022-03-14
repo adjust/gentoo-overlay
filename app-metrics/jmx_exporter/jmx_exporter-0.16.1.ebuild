@@ -32,7 +32,11 @@ src_unpack() {
 
 src_install() {
 	INSTALL_DIR="/opt/${PN}"
+	CONFIG_DIR="${INSTALL_DIR}/etc/${PN}"
 
 	insinto "${INSTALL_DIR}"
 	doins -r * || die "failed to install ${JAR_FILE} to ${INSTALL_DIR}"
+
+	insinto "${CONFIG_DIR}"
+	doins "${FILESDIR}"/jmx_exporter.yaml
 }
