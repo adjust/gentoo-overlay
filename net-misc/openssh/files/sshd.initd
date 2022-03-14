@@ -11,6 +11,9 @@ extra_started_commands="reload"
 : ${SSHD_BINARY:=${RC_PREFIX%/}/usr/sbin/sshd}
 : ${SSHD_KEYGEN_BINARY:=${RC_PREFIX%/}/usr/bin/ssh-keygen}
 
+SSHD_SYSLOGFACILITY=$(awk '/^SyslogFacility/{print $2}' "${SSHD_CONFIG}" | head -1)
+[ -z "${SSHD_SYSLOGFACILITY}" ] && SSHD_SYSLOGFACILITY="AUTH"
+
 command="${SSHD_BINARY}"
 pidfile="${SSHD_PIDFILE}"
 command_args="${SSHD_OPTS} -D -e -o PidFile=${pidfile} -f ${SSHD_CONFIG}"
