@@ -42,6 +42,10 @@ src_prepare() {
 		-e "/#UseLogin no/d" \
 		"${S}"/sshd_config || die "Failed to remove removed UseLogin option (sshd_config)"
 
+	sed -i \
+		'/PAM/,/^$/d' \
+		"${S}"/sshd_config || die "Failed to remove removed UsePAM option (sshd_config)"
+
 	sed -i s:libexec:$(get_libdir)/misc: sshd_config || die
 
 	eapply_user #473004
