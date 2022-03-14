@@ -7,7 +7,7 @@ inherit unpacker
 
 DESCRIPTION="A process for exposing JMX Beans via HTTP for Prometheus consumption"
 HOMEPAGE="https://github.com/prometheus/jmx_exporter"
-SRC_URI="https://bitbucket.org/_x0r/xor-overlay/downloads/jmx_prometheus_httpserver_0.16.1_all.deb"
+SRC_URI="https://bitbucket.org/_x0r/xor-overlay/downloads/jmx_prometheus_httpserver_${PV}_all.deb"
 
 LICENSE="Apache-2.0"
 KEYWORDS="~amd64"
