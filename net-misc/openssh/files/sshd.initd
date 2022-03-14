@@ -13,6 +13,8 @@ extra_started_commands="reload"
 
 SSHD_SYSLOGFACILITY=$(awk '/^SyslogFacility/{print $2}' "${SSHD_CONFIG}" | head -1)
 [ -z "${SSHD_SYSLOGFACILITY}" ] && SSHD_SYSLOGFACILITY="AUTH"
+SSHD_LOGLEVEL=$(awk '/^LogLevel/{print $2}' "${SSHD_CONFIG}" | head -1)
+[ -z "${SSHD_LOGLEVEL}" ] && SSHD_LOGLEVEL="INFO"
 
 command="${SSHD_BINARY}"
 pidfile="${SSHD_PIDFILE}"
