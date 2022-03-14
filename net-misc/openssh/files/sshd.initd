@@ -21,7 +21,7 @@ pidfile="${SSHD_PIDFILE}"
 command_args="${SSHD_OPTS} -D -e -o PidFile=${pidfile} -f ${SSHD_CONFIG}"
 command_background="yes"
 # TODO: Grab facility and level from sshd_config
-error_logger="logger -p auth.info -t ${SVCNAME}"
+error_logger="logger -p ${SSHD_SYSLOGFACILITY}.${SSHD_LOGLEVEL} -t ${SVCNAME}"
 
 # Wait one second (length chosen arbitrarily) to see if sshd actually
 # creates a PID file, or if it crashes for some reason like not being
