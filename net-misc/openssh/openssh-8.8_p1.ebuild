@@ -91,8 +91,8 @@ src_install() {
 	doexe "${MY_S}"/libexec/{sftp-server,ssh-sk-helper} || die
 
 	fperms 600 /etc/ssh/sshd_config
-	newinitd "${FILESDIR}"/sshd-r1.initd sshd || die
-	newconfd "${FILESDIR}"/sshd-r1.confd sshd || die
+	newinitd "${FILESDIR}"/sshd.initd sshd || die
+	newconfd "${FILESDIR}"/sshd.confd sshd || die
 
 	tweak_ssh_configs || die
 
