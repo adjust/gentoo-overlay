@@ -29,6 +29,7 @@ DEPEND="
 	dev-perl/Digest-SHA1
 	dev-perl/IPC-Shareable
 	dev-perl/Config-INI
+	dev-perl/Hash-Merge
 	virtual/perl-Sys-Syslog
 "
 
