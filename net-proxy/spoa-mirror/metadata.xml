@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+		<maintainer type="person">
+			<email>ops@adjust.com</email>
+		</maintainer>
+	<longdescription lang="en">
+		Replicating (mirroring) HTTP requests using the HAProxy SPOP, i.e. Stream
+Processing Offload Protocol.
+
+This is a very simple program that can be used to replicate HTTP requests
+via the SPOP protocol.  All requests are replicated to the web address (URL)
+selected when running the program.
+
+The program originated from a test program located in the contrib/spoa_example
+directory.  spoa.c is an original program that comes with HAProxy source.
+
+The program uses the libev event library, as opposed to the original program
+that uses the libevent library.
+	</longdescription>
+</pkgmetadata>
