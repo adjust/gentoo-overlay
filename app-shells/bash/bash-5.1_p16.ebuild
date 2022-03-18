@@ -220,7 +220,6 @@ src_install() {
 
 	doman doc/*.1
 	newdoc CWRU/changelog ChangeLog
-	dosym bash.info /usr/share/info/bashref.info
 }
 
 pkg_preinst() {
