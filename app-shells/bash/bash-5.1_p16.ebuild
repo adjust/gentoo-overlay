@@ -8,6 +8,7 @@ inherit flag-o-matic toolchain-funcs prefix
 # Official patchlevel
 # See ftp://ftp.cwru.edu/pub/bash/bash-5.1-patches/
 PLEVEL="${PV##*_p}"
+MY_PVN="${PV/_p/.0}"
 MY_PV="${PV/_p*}"
 MY_PV="${MY_PV/_/-}"
 MY_P="${PN}-${MY_PV}"
