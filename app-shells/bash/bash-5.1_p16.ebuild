@@ -64,8 +64,6 @@ SRC_URI+="
 "
 
 RDEPEND="app-shells/bash[static]"
-# We only need yacc when the .y files get patched (bash42-005, bash51-011)
-BDEPEND="virtual/yacc"
 
 S="${WORKDIR}/${MY_P}"
 QA_PREBUILT="*"
