@@ -77,7 +77,6 @@ src_prepare() {
 	sed -i -r '/^(HS|RL)USER/s:=.*:=:' doc/Makefile.in || die
 	touch -r . doc/* || die
 
-	eapply -p0 "${PATCHES[@]}"
 	eapply_user
 }
 
