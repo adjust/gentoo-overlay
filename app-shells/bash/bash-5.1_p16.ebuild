@@ -64,11 +64,6 @@ BDEPEND="virtual/yacc"
 S="${WORKDIR}/${MY_P}"
 QA_PREBUILT="*"
 
-PATCHES=(
-	# Patches from Chet sent to bashbug ml
-	"${FILESDIR}"/${PN}-5.0-syslog-history-extern.patch
-)
-
 pkg_setup() {
 	# bug #7332
 	if is-flag -malign-double ; then
