@@ -3,7 +3,7 @@
 
 EAPI=6
 
-inherit toolchain-funcs prefix
+inherit prefix
 
 # Official patchlevel
 # See ftp://ftp.cwru.edu/pub/bash/bash-5.1-patches/
