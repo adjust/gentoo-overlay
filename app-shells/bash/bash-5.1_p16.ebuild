@@ -78,13 +78,6 @@ src_prepare() {
 	# Include official patches
 	[[ ${PLEVEL} -gt 0 ]] && eapply -p0 $(patches -s)
 
-	# Clean out local libs so we know we use system ones w/releases.
-	if is_release ; then
-		rm -rf lib/{readline,termcap}/* || die
-		touch lib/{readline,termcap}/Makefile.in || die # for config.status
-		sed -ri -e 's:\$[{(](RL|HIST)_LIBSRC[)}]/[[:alpha:]_-]*\.h::g' Makefile.in || die
-	fi
-
 	# Prefixify hardcoded path names. No-op for non-prefix.
 	hprefixify pathnames.h.in
 
