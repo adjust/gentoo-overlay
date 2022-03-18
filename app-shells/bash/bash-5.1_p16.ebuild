@@ -95,6 +95,8 @@ src_prepare() {
 	eapply_user
 
 	rm configure || die
+
+	# TODO: shuffle files around here
 }
 
 src_compile() {
