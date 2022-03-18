@@ -78,10 +78,6 @@ src_prepare() {
 	# Include official patches
 	[[ ${PLEVEL} -gt 0 ]] && eapply -p0 $(patches -s)
 
-	# Avoid regenerating docs after patches, bug #407985
-	sed -i -r '/^(HS|RL)USER/s:=.*:=:' doc/Makefile.in || die
-	touch -r . doc/* || die
-
 	eapply_user
 
 	rm configure || die
