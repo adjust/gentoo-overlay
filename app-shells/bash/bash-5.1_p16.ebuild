@@ -93,6 +93,8 @@ src_prepare() {
 	touch -r . doc/* || die
 
 	eapply_user
+
+	rm configure || die
 }
 
 src_compile() {
