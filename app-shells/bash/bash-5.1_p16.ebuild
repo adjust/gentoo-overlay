@@ -48,6 +48,18 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~ppc64 ~s390 ~amd64-linux ~ppc64-linux ~arm64-macos"
 IUSE="afs bashlogger +elibc_musl examples mem-scramble +net nls plugins +readline +static"
 
+MY_URI="https://github.com/robxu9/${PN}-static/releases/download/${MY_PVN}-${MUSL_VER}/bash"
+# TODO: fix prefix keywords
+SRC_URI+="
+	amd64?		( ${MY_URI}-linux-x86_64	-> ${P}.amd64-linux-elf.bin )
+	arm64?		( ${MY_URI}-linux-aarch64	-> ${P}.arm64-linux-elf.bin )
+	ppc64?		( ${MY_URI}-linux-ppc64le	-> ${P}.ppc64-linux-elf.bin )
+	s390?		( ${MY_URI}-linux-s390x		-> ${P}.s390-linux-elf.bin )
+	amd64-linux?	( ${MY_URI}-linux-x86_64	-> ${P}.amd64-linux-elf.bin )
+	ppc64-linux?	( ${MY_URI}-linux-ppc64le	-> ${P}.ppc64-linux-elf.bin )
+	arm64-macos?	( ${MY_URI}-macos-aarch64	-> ${P}.arm64-macos-elf.bin )
+"
+
 RDEPEND="app-shells/bash[static]"
 # We only need yacc when the .y files get patched (bash42-005, bash51-011)
 BDEPEND="virtual/yacc"
