@@ -106,7 +106,10 @@ src_install() {
 	default
 
 	dodir /bin
-	mv "${ED}"/usr/bin/bash "${ED}"/bin/ || die
+	# TODO: install matching bin for the arch
+	cp -L "${DISTDIR}"/"${P}".amd64-linux-elf.bin "${ED}"/bin/bash || die
+	# TODO: use newbin instead
+	chmod +x "${ED}"/bin/bash || die
 	dosym bash /bin/rbash
 
 	insinto /etc/bash
