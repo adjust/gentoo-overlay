@@ -99,14 +99,6 @@ src_prepare() {
 	# TODO: shuffle files around here
 }
 
-src_compile() {
-	emake
-
-	if use plugins ; then
-		emake -C examples/loadables all others
-	fi
-}
-
 src_install() {
 	local d f
 
