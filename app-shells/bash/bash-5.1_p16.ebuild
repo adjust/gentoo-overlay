@@ -48,7 +48,7 @@ LICENSE="GPL-3 MIT"
 SLOT="0"
 [[ "${PV}" == *_rc* ]] || \
 KEYWORDS="~amd64 ~arm64 ~ppc64 ~s390 ~amd64-linux ~ppc64-linux ~arm64-macos"
-IUSE="afs bashlogger examples mem-scramble +net nls plugins +readline +static"
+IUSE="afs bashlogger +elibc_musl examples mem-scramble +net nls plugins +readline +static"
 
 RDEPEND="app-shells/bash[static]"
 # We only need yacc when the .y files get patched (bash42-005, bash51-011)
