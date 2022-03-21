@@ -20,6 +20,7 @@ KEYWORDS="~amd64"
 SLOT="0"
 
 IUSE=""
+RESTRICT="bindist fetch"
 
 DEPEND=""
 

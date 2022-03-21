@@ -15,6 +15,7 @@ KEYWORDS="~amd64"
 SLOT="0"
 
 IUSE="schaufel"
+RESTRICT="bindist fetch"
 
 DEPEND="
 	dev-perl/Moo

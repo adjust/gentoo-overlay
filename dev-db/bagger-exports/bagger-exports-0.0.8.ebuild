@@ -19,7 +19,7 @@ KEYWORDS="~amd64"
 SLOT="0"
 
 IUSE="+schaufel"
-
+RESTRICT="bindist fetch"
 LICENSE="Unlicense"
 
 DEPEND="
