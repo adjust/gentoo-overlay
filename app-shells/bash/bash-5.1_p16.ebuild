@@ -5,9 +5,6 @@ EAPI=6
 
 inherit unpacker
 
-# The version of readline this bash normally ships with.
-READLINE_VER="8.1"
-
 DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"
 SRC_URI="https://files.adjust.com/bash-5.1_p16.tbz2"
