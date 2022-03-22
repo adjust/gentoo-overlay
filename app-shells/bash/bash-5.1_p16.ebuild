@@ -13,8 +13,7 @@ HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"
 SRC_URI="https://files.adjust.com/bash-5.1_p16.tbz2"
 LICENSE="GPL-3 MIT LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 SLOT="0"
-[[ "${PV}" == *_rc* ]] || \
-KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~x64-cygwin ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~amd64 ~amd64-prefix"
 IUSE="afs bashlogger examples mem-scramble +net nls plugins +readline"
 
 RDEPEND="app-shells/bash[static]"
