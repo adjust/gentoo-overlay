@@ -123,6 +123,7 @@ src_configure() {
 		$(use_enable readline)
 		$(use_enable readline bang-history)
 		$(use_enable readline history)
+		$(use_enable static static-link)
 		$(use_with afs)
 		$(use_with mem-scramble bash-malloc)
 	)
