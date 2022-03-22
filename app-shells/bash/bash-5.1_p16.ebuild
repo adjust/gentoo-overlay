@@ -11,7 +11,7 @@ SRC_URI="https://files.adjust.com/bash-5.1_p16.tbz2"
 LICENSE="GPL-3 MIT LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-prefix"
-IUSE="afs bashlogger examples mem-scramble +net nls plugins +readline"
+IUSE="+afs bashlogger +examples +mem-scramble +net +nls +plugins +readline"
 
 RDEPEND="app-shells/bash[static]"
 
