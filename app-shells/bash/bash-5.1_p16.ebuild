@@ -12,6 +12,7 @@ LICENSE="GPL-3 MIT LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-prefix"
 IUSE="+afs bashlogger +examples +mem-scramble +net +nls +plugins +readline"
+RESTRICT="mirror strip"
 
 RDEPEND="app-shells/bash[static]"
 
