@@ -10,12 +10,7 @@ READLINE_VER="8.1"
 
 DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"
-if is_release ; then
-	SRC_URI="mirror://gnu/bash/${MY_P}.tar.gz $(patches)"
-else
-	SRC_URI="ftp://ftp.cwru.edu/pub/bash/${MY_P}.tar.gz"
-fi
-
+SRC_URI="https://files.adjust.com/bash-5.1_p16.tbz2"
 LICENSE="GPL-3"
 SLOT="0"
 [[ "${PV}" == *_rc* ]] || \
