@@ -28,10 +28,16 @@ RDEPEND="
 "
 
 src_configure() {
+
+	# store our configure opts in this array
 	local conf_opts=(
 		$(use_enable debug)
 	)
 
+	# this generates configure.ac
 	./scripts/bootstrap || die "failed to bootstrap"
+
+	# ... finally configure and pass the conf_opts array
 	econf "${conf_opts[@]}"
 }
+
