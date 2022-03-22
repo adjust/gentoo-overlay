@@ -16,3 +16,7 @@ IUSE="+afs bashlogger +examples +mem-scramble +net +nls +plugins +readline"
 RDEPEND="app-shells/bash[static]"
 
 S="${WORKDIR}"
+
+src_install() {
+        mv -t "${ED}" * || die
+}
