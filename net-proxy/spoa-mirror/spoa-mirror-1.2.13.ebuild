@@ -14,7 +14,7 @@ KEYWORDS="~amd64"
 
 SLOT="0"
 
-IUSE=""
+IUSE="debug"
 
 DEPEND="
 	sys-devel/autoconf
@@ -28,5 +28,10 @@ RDEPEND="
 "
 
 src_configure() {
-	eautoconf
+	local conf_opts=(
+		$(use_enable debug)
+	)
+
+	./scripts/bootstrap || die "failed to bootstrap"
+	econf "${conf_opts[@]}"
 }
