@@ -5,34 +5,6 @@ EAPI=6
 
 inherit unpacker
 
-# Official patchlevel
-# See ftp://ftp.cwru.edu/pub/bash/bash-5.1-patches/
-PLEVEL="${PV##*_p}"
-MY_PV="${PV/_p*}"
-MY_PV="${MY_PV/_/-}"
-MY_P="${PN}-${MY_PV}"
-is_release() {
-	case ${PV} in
-	*_alpha*|*_beta*|*_rc*) return 1 ;;
-	*) return 0 ;;
-	esac
-}
-[[ ${PV} != *_p* ]] && PLEVEL=0
-patches() {
-	local opt=${1} plevel=${2:-${PLEVEL}} pn=${3:-${PN}} pv=${4:-${MY_PV}}
-	[[ ${plevel} -eq 0 ]] && return 1
-	eval set -- {1..${plevel}}
-	set -- $(printf "${pn}${pv/\.}-%03d " "$@")
-	if [[ ${opt} == -s ]] ; then
-		echo "${@/#/${DISTDIR}/}"
-	else
-		local u
-		for u in mirror://gnu/${pn} ftp://ftp.cwru.edu/pub/bash ; do
-			printf "${u}/${pn}-${pv}-patches/%s " "$@"
-		done
-	fi
-}
-
 # The version of readline this bash normally ships with.
 READLINE_VER="8.1"
 
@@ -60,8 +32,3 @@ RDEPEND="app-shells/bash[static]"
 BDEPEND="virtual/yacc"
 
 S="${WORKDIR}/${MY_P}"
-
-PATCHES=(
-	# Patches from Chet sent to bashbug ml
-	"${FILESDIR}"/${PN}-5.0-syslog-history-extern.patch
-)
