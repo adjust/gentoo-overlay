@@ -54,6 +54,7 @@ DEPEND="
 	>=sys-libs/ncurses-5.2-r2:0=
 	nls? ( virtual/libintl )
 	readline? ( >=sys-libs/readline-${READLINE_VER}:0= )
+	static? ( sys-libs/readline[static-libs] )
 "
 RDEPEND="
 	${DEPEND}
