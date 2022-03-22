@@ -16,6 +16,7 @@ RESTRICT="mirror strip"
 
 RDEPEND="app-shells/bash[static]"
 
+QA_PREBUILT="*"
 S="${WORKDIR}"
 
 src_install() {
