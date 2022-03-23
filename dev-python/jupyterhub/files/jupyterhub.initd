@@ -1,0 +1,10 @@
+#!/sbin/openrc-run
+# Copyright 1999-2022 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+user=jupyterhub
+group=jupyterhub
+pidfile=/var/run/jupyterhub.pid
+command="/usr/bin/jupyterhub"
+command_args="-f /etc/jupyterhub/config.py"
+start_stop_daemon_args="--user ${user} --group ${group} --chdir /var/lib/jupyterhub -m --pidfile ${pidfile} -b -3 logger -4 logger"
