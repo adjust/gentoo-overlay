@@ -17,7 +17,7 @@ KEYWORDS="~amd64"
 
 IUSE="ldapauthenticator postgres sudospawner"
 
-RESTRICT=network-sandbox
+RESTRICT="mirror network-sandbox"
 
 #dev-libs/kpathsea no mpl plots
 
