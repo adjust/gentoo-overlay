@@ -15,6 +15,8 @@ LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="~amd64"
 
+RESTRICT="mirror"
+
 RDEPEND="
 	dev-python/jupyterhub[${PYTHON_USEDEP}]
 	app-admin/sudo
