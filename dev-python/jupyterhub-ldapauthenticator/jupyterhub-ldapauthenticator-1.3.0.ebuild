@@ -16,6 +16,8 @@ KEYWORDS="~amd64"
 
 SLOT="0"
 
+RESTRICT="mirror"
+
 RDEPEND="
 	dev-python/ldap3[${PYTHON_USEDEP}]
 "
