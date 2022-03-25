@@ -20,7 +20,7 @@ QA_PREBUILT="*"
 S="${WORKDIR}"
 
 src_prepare() {
-	find usr/share/{doc,info,man} -type f -name "*.bz2" -exec bunzip2 {} + || die
+	find usr/share/{doc,info,man} -type f -name "*.bz2" -exec bunzip2 {} +
 }
 
 src_install() {
