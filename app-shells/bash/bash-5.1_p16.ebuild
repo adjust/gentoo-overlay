@@ -25,5 +25,5 @@ src_prepare() {
 }
 
 src_install() {
-	doins -r * || die
+        mv -t "${ED}" * || die
 }
