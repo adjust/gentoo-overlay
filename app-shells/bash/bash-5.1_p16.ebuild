@@ -24,5 +24,5 @@ src_prepare() {
 }
 
 src_install() {
-	doins -r bin etc usr || die
+	doins -r * || die
 }
