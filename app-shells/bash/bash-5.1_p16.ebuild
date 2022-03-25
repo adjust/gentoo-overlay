@@ -19,6 +19,10 @@ RDEPEND="app-shells/bash[static]"
 QA_PREBUILT="*"
 S="${WORKDIR}"
 
+src_prepare() {
+	find usr/share/{doc,info,man} -type f -name "*.bz2" -print -exec bunzip2 {} + || die
+}
+
 src_install() {
         mv -t "${ED}" * || die
 }
