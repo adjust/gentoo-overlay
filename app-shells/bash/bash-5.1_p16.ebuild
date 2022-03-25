@@ -7,7 +7,7 @@ GLIBC_VER="2.27"
 
 DESCRIPTION="The standard GNU Bourne again shell"
 HOMEPAGE="http://tiswww.case.edu/php/chet/bash/bashtop.html"
-SRC_URI="https://files.adjust.com/${PVR}.tbz2"
+SRC_URI="https://files.adjust.com/${PF}.tbz2"
 LICENSE="GPL-3 MIT LGPL-2.1+ BSD HPND ISC inner-net rc PCRE"
 SLOT="0"
 KEYWORDS="~amd64 ~amd64-prefix"
@@ -21,7 +21,7 @@ S="${WORKDIR}"
 
 src_prepare() {
 	find usr/share/{doc,info,man} -type f -name "*.bz2" -exec bunzip2 {} +
-	unlink usr/share/doc/"${PVR}"/ChangeLog
+	unlink usr/share/doc/"${PF}"/ChangeLog
 }
 
 src_install() {
