@@ -21,6 +21,7 @@ S="${WORKDIR}"
 
 src_prepare() {
 	find usr/share/{doc,info,man} -type f -name "*.bz2" -exec bunzip2 {} +
+	unlink usr/share/doc/bash-5.1_p16/ChangeLog
 }
 
 src_install() {
