@@ -1,0 +1,15 @@
+#!/sbin/openrc-run
+
+pidfile="/run/${RC_SVCNAME}"
+output_log="/var/log/kafka_exporter/${RC_SVCNAME}.log"
+error_log="/var/log/kafka_exporter/${RC_SVCNAME}-error.log"
+
+command="/usr/bin/kafka_exporter"
+command_args="--kafka.server=${kafka_server:-localhost:9092} --web.listen-address=${web_listen_address:-:9308}"
+command_background="true"
+
+depend() {
+	need local
+	use net
+}
+
