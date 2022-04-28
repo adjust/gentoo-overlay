@@ -42,6 +42,13 @@ start_pre() {
 	set_shmmax
 	ulimit -n 100000
 	if [ -n $LD_PRELOAD ]; then export LD_PRELOAD; fi
+	#checking index-on-disk mount points
+	for m in $(awk '/mount / { print $2}; ' /etc/aerospike/aerospike.conf); do
+            if ! grep -qs $m /proc/mounts; then
+                eerror "mountpoint $m is missing"
+                return 1
+            fi
+        done
 }
 
 start_post() {
