@@ -1,0 +1,15 @@
+#!/sbin/openrc-run
+
+name="sonarqube daemon"
+description="Open source framework for continuous inspection of code"
+command="/opt/sonarqube/bin/linux-x86-64/sonar.sh"
+command_args="start"
+command_user="sonarqube:sonarqube"
+pidfile="${PIDDIR}/SonarQube.pid"
+start_stop_daemon_args="-w 10000"
+
+depend() {
+        need net
+}
+
+export PIDDIR

@@ -1,0 +1,34 @@
+--- /conf/sonar.properties
++++ /conf/sonar.properties
+@@ -368,7 +368,7 @@
+ 
+ # Path to log files. Can be absolute or relative to installation directory.
+ # Default is <installation home>/logs
+-#sonar.path.logs=logs
++sonar.path.logs=/var/log/sonarqube
+ 
+ # Rolling policy of log files
+ #    - based on time if value starts with "time:", for example by day ("time:yyyy-MM-dd")
+@@ -409,6 +409,6 @@
+ # Paths to persistent data files (embedded database and search index) and temporary files.
+ # Can be absolute or relative to installation directory.
+ # Defaults are respectively <installation home>/data and <installation home>/temp
+-#sonar.path.data=data
+-#sonar.path.temp=temp
++sonar.path.data=/var/lib/sonarqube/data
++sonar.path.temp=/var/lib/sonarqube/temp
+ 
+--- /conf/wrapper.conf
++++ /conf/wrapper.conf
+@@ -32,8 +32,7 @@
+ wrapper.logfile.format=M
+ wrapper.logfile.loglevel=INFO
+ wrapper.logfile.rollmode=DATE
+-wrapper.logfile=../../logs/sonar.YYYYMMDD.log
++wrapper.logfile=/var/log/sonarqube/wrapper.YYYYMMDD.log
+ 
+ # Maximum size that the log file will be allowed to grow to before
+ #  the log is rolled. Size is specified in bytes.  The default value
+-- 
+2.36.0
+
