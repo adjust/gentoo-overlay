@@ -1,0 +1,36 @@
+--- a/bin/linux-x86-64/sonar.sh
++++ b/bin/linux-x86-64/sonar.sh
+@@ -439,6 +439,7 @@ start() {
+         echo "Started $APP_LONG_NAME."
+     else
+         echo "Failed to start $APP_LONG_NAME."
++	exit 1
+     fi    
+ }
+ 
+@@ -513,7 +514,6 @@ forcestopit() {
+     if [ "X$pid" = "X" ]
+     then
+         echo "$APP_LONG_NAME not running"
+-        exit 1
+     fi
+ 
+     testpid
+@@ -547,7 +547,7 @@ dump() {
+     if [ "X$pid" = "X" ]
+     then
+         echo "$APP_LONG_NAME was not running."
+-
++        exit 1
+     else
+         kill -3 $pid
+ 
+@@ -604,5 +604,3 @@ case "$1" in
+         exit 1
+         ;;
+ esac
+-
+-exit 0
+-- 
+2.36.0
+
