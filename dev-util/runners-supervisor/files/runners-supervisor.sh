@@ -16,7 +16,7 @@ TMP_TOKEN_EXP=""
 TMP_TOKEN_LEFT=120
 CURL_RESULT=""
 DEBUG=false
-EXTRA_LABELS="ansible"
+EXTRA_LABELS="default"
 
 # parse command line args
 while [[ $# -gt 0 ]]; do
