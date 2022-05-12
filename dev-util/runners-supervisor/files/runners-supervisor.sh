@@ -16,6 +16,7 @@ TMP_TOKEN_EXP=""
 TMP_TOKEN_LEFT=120
 CURL_RESULT=""
 DEBUG=false
+EXTRA_LABELS="ansible"
 
 # parse command line args
 while [[ $# -gt 0 ]]; do
@@ -48,6 +49,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     -d)
       DEBUG=true
+      shift
+      ;;
+    -l)
+      EXTRA_LABELS="$2"
       shift
       ;;
     *)
@@ -120,7 +125,7 @@ function clone_runner() {
     log "Hard-linking files..." "d"
     { cd ${SRCDIR}/${BASENAME} && find . -type f ;} | xargs -i ln ${SRCDIR}/${BASENAME}/{} ${DSTDIR}/{}
     log "Creating GitHub service token..." "d"
-    { cd ${DSTDIR} && ./config.sh --unattended --ephemeral --name ${DSTPREFIX}${DSTSUFFIX} --url https://github.com/${GHREPO} --token ${TMP_TOKEN} ;}
+    { cd ${DSTDIR} && ./config.sh --unattended --ephemeral --labels ${EXTRA_LABELS} --name ${DSTPREFIX}${DSTSUFFIX} --url https://github.com/${GHREPO} --token ${TMP_TOKEN} ;}
     log "Starting runner ${DSTPREFIX}${DSTSUFFIX}"
     ${DSTDIR}/run.sh &
 }
