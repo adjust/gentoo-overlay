@@ -61,7 +61,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 if [ "${SRCDIR}" == "" ] || [ "${RUNNERTAG}" == "" ] || [ "${GHTOKEN}" == "" ] || [ "${GHREPO}" == "" ] ; then
-    echo "Usage: $0 -sd <working dir> -rt <runner tag> -gt <github token> -gr <github repo> [ -i <interval> -n <max runners> -d ] "
+    echo "Usage: $0 -sd <working dir> -rt <runner tag> -gt <github token> -gr <github repo> [ -i <interval> -n <max runners> -l <additional labels> -d ] "
     exit 1
 fi
 
