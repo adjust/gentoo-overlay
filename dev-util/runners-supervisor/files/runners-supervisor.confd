@@ -2,4 +2,4 @@
 #RUNNERTAG=myrepo
 #GHTOKEN=user:token
 #GHREPO=user/repo
-
+#EXTRA_LABELS=label1,label2
