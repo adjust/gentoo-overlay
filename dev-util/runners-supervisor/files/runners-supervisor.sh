@@ -190,7 +190,9 @@ function update_check() {
 
     # get the json with the latest information and parse it
     LATEST=`curl -s -u ${GHTOKEN} https://api.github.com/repos/actions/runner/releases/latest`
-    URL=`echo ${LATEST} | jq -r '.assets[].browser_download_url|select(.|contains("linux-x64"))'`
+#    URL=`echo ${LATEST} | jq -r '.assets[].browser_download_url|select(.|contains("linux-x64"))'`
+# object structure is changed, it's a list of URLs now and the last one is what we need
+    URL=`echo ${LATEST} | jq -r '[.assets[].browser_download_url|select(.|contains("linux-x64"))]|last'`
     VER=`echo ${LATEST} | jq -r '.name'`
 
     if [ ! "${CURRENT}" == "${VER}" ]; then
