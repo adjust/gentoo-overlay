@@ -1,0 +1,3 @@
+# YAML Config file
+# kafka_server="kafka:9092"
+# web_listen_address=":9308"
