@@ -1,0 +1,8 @@
+# Server auth is a ; separated list of the format client-cn:stanza;client-cn:stanza ....
+#SERVER_AUTH="server-cn=stanza"
+#SERVER_PORT="8432"
+#SERVER_CA="/etc/pgbackrest/ca.crt"
+#SERVER_CERT="/etc/pgbackrest/server.crt"
+#SERVER_KEY="/etc/pgbackrest/server.key"
+#LOG_LEVEL="warn"
+#LOG_FILE="/var/log/pgbackrest/all-server.log"
