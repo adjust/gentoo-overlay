@@ -43,7 +43,7 @@ inherit multiprocessing toolchain-funcs
 # All supported Python implementations, most preferred last.
 _PYTHON_ALL_IMPLS=(
 	pypy3
-	python3_{5..10}
+	python3_{5..11}
 	python2_7
 )
 readonly _PYTHON_ALL_IMPLS
@@ -84,7 +84,7 @@ _python_verify_patterns() {
 	local impl pattern
 	for pattern; do
 		case ${pattern} in
-			-[23]|3.[89]|3.10)
+			-[23]|3.[89]|3.1[01])
 				continue
 				;;
 		esac
@@ -246,7 +246,7 @@ _python_impl_matches() {
 				[[ ${impl} == python${pattern/./_} || ${impl} == pypy3 ]] &&
 					return 0
 				;;
-			3.9|3.10)
+			3.9|3.10|3.11)
 				[[ ${impl} == python${pattern/./_} ]] && return 0
 				;;
 			*)
