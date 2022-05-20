@@ -45,7 +45,8 @@ checkconfig() {
 
 start()
 {
-	checkconfig || eend 1
+	ebegin "Starting ${SVCNAME}"
+	checkconfig || return 1
 	local clients=""
 	for client in ${SERVER_AUTH/;/ }
 	do
@@ -70,6 +71,7 @@ start()
 
 stop()
 {
+	ebegin "Stopping ${SVCNAME}"
 	start-stop-daemon --stop --pidfile "/run/${SVCNAME}.pid" \
 		--user postgres:postgres
 	eend $?
