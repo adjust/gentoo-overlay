@@ -1,5 +1,6 @@
 # Server auth is a ; separated list of the format client-cn:stanza;client-cn:stanza ....
 #SERVER_AUTH="server-cn=stanza"
+#SERVER_ADDRESS="*"
 #SERVER_PORT="8432"
 #SERVER_CA="/etc/pgbackrest/ca.crt"
 #SERVER_CERT="/etc/pgbackrest/server.crt"

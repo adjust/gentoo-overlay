@@ -10,6 +10,7 @@ SERVER_CA="${SERVER_CA-/etc/pgbackrest/ca.pem}"
 SERVER_CERT="${SERVER_CERT-/etc/pgbackrest/server.crt}"
 SERVER_KEY="${SERVER_KEY-/etc/pgbackrest/server.key}"
 SERVER_PORT="${SERVER_PORT-8432}"
+SERVER_ADDRESS="${SERVER_ADDRESS-*}"
 LOG_LEVEL="${LOG_LEVEL-info}"
 
 depend() {
@@ -56,6 +57,7 @@ start()
 		--background  --make-pidfile \
 		--pidfile "/run/${SVCNAME}.pid" \
 		-- server $clients \
+		--tls-server-address="$SERVER_ADDRESS" \
 		--tls-server-port="$SERVER_PORT" \
 		--tls-server-ca-file="$SERVER_CA" \
 		--tls-server-cert-file="$SERVER_CERT" \
