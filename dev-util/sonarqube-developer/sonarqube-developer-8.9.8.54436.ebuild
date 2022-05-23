@@ -32,7 +32,7 @@ inherit epatch
 
 src_unpack() {
 	unpack ${P}.zip
-	mv sonarqube-${PV} ${P}
+        mv sonarqube-${PV} ${P} || die
 }
 
 src_install() {
