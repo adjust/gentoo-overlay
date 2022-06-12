@@ -4,7 +4,7 @@
          echo "Started $APP_LONG_NAME."
      else
          echo "Failed to start $APP_LONG_NAME."
-         exit 1
++        exit 1
      fi    
  }
  
