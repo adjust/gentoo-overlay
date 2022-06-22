@@ -1,0 +1,5 @@
+# Mask postgresql-14.1 because of a bug in REINDEX CONCURRENTLY
+# https://www.postgresql.org/docs/current/release-14-2.html
+# If applied to a TOAST table or TOAST table's index, REINDEX CONCURRENTLY
+# tended to produce a corrupted index.
+=dev-db/postgresql-14.1
