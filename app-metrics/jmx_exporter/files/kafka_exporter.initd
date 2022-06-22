@@ -1,0 +1,14 @@
+#!/sbin/openrc-run
+
+description="Prometheus Exporter for Jmx Metrics"
+pidfile=${pidfile:-"/run/${RC_SVCNAME}.pid"}
+configfile=${CONFIGFILE:-/etc/jmx_exporter/jmx_exporter.yaml}
+listen=${LISTEN:-localhost:9585}
+
+command="/usr/bin/jmx_exporter"
+command_args="${listen} ${configfile}"
+command_background="true"
+
+depend() {
+	after net
+}
