@@ -47,11 +47,8 @@ start()
 {
 	ebegin "Starting ${SVCNAME}"
 	checkconfig || return 1
-	local clients=""
-	for client in ${SERVER_AUTH/;/ }
-	do
-		clients="$clients --tls-server-auth=$client"
-	done
+	local clients="$(echo --tls-server-auth=$SERVER_AUTH |\
+		sed 's/;/ --tls-server-auth=/g')"
 
 	start-stop-daemon --start --exec /usr/bin/pgbackrest \
 		--user postgres --group postgres \
