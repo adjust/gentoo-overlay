@@ -33,5 +33,6 @@ src_install() {
 	insinto /etc
 	doins -r "${S}"/etc/*
 
+	newinitd "${FILESDIR}"/${PN}.initd ${PN}
 	fperms +x /usr/bin/${PN} || die "failed to mark /usr/bin/${PN} executable"
 }
