@@ -1,0 +1,14 @@
+#!/sbin/openrc-run
+
+description="Prometheus Exporter for Jmx Metrics"
+pidfile=${pidfile:-"/run/${RC_SVCNAME}.pid"}
+mode=${MODE:-master}
+listen=${LISTEN:-0.0.0.0:9105}
+
+command="/usr/bin/mesos_exporter"
+command_args="${mode} ${listen}"
+command_background="true"
+
+depend() {
+	after net
+}
