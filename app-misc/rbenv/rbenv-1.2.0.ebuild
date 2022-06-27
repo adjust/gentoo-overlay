@@ -1,8 +1,8 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-GIT_REVISION=a3fa9b7
+GIT_REVISION=38e1fbb
 
 inherit multilib bash-completion-r1
 
