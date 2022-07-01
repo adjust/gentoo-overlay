@@ -262,6 +262,9 @@ ceph_src_configure() {
 		done
 	fi
 
+	# needed for >=glibc-2.32
+	has_version '>=sys-libs/glibc-2.32' && mycmakeargs+=(-DWITH_REENTRANT_STRSIGNAL:BOOL=ON)
+
 	rm -f "${BUILD_DIR:-${S}}/CMakeCache.txt" \
 		|| die "failed to remove cmake cache"
 
