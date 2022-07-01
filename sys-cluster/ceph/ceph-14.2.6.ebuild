@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-PYTHON_COMPAT=( python3_{6,7} )
+PYTHON_COMPAT=( python3_{7,8} )
 CMAKE_MAKEFILE_GENERATOR=emake
 
 DISTUTILS_OPTIONAL=1
@@ -170,6 +170,9 @@ PATCHES=(
 	"${FILESDIR}/ceph-14.2.3-dpdk-compile-fix-1.patch"
 	"${FILESDIR}/ceph-14.2.4-python-executable.patch"
 	"${FILESDIR}/ceph-14.2.4-undefined-behaviour.patch"
+	"${FILESDIR}/python3-aware.patch"
+	"${FILESDIR}/python3-libs.patch"
+	"${FILESDIR}/py39-compat.patch"
 )
 
 check-reqs_export_vars() {
