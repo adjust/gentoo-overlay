@@ -1,0 +1,26 @@
+From 5e9fa1d990a0eed1e68686cf8ff9a8215562186d Mon Sep 17 00:00:00 2001
+From: kalebskeithley <kaleb@redhat.com>
+Date: Mon, 13 Jan 2020 07:51:59 -0500
+Subject: [PATCH] librbd: added missing <string> include to PoolMetadata header
+
+Signed-off-by: Kaleb S. KEITHLEY <kkeithle@redhat.com>
+(cherry picked from commit 84f629e1b1c8b336b9ce6bcc2466010045e68e7e)
+---
+ src/librbd/api/PoolMetadata.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/librbd/api/PoolMetadata.h b/src/librbd/api/PoolMetadata.h
+index 977ce3638d1..c0a8173596e 100644
+--- a/src/librbd/api/PoolMetadata.h
++++ b/src/librbd/api/PoolMetadata.h
+@@ -8,6 +8,7 @@
+ #include "include/rados/librados_fwd.hpp"
+ 
+ #include <map>
++#include <string>
+ 
+ namespace librbd {
+ 
+-- 
+2.28.0
+

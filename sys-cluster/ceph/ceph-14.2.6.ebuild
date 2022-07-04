@@ -170,6 +170,8 @@ PATCHES=(
 	"${FILESDIR}/ceph-14.2.3-dpdk-compile-fix-1.patch"
 	"${FILESDIR}/ceph-14.2.4-python-executable.patch"
 	"${FILESDIR}/ceph-14.2.4-undefined-behaviour.patch"
+	"${FILESDIR}/ceph-14.2.6-missing-include.patch"
+	"${FILESDIR}/ceph-14.2.6-librdb-missing-include.patch"
 	"${FILESDIR}/python3-aware.patch"
 	"${FILESDIR}/python3-libs.patch"
 	"${FILESDIR}/py39-compat.patch"
