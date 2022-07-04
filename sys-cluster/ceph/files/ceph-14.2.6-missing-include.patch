@@ -1,0 +1,42 @@
+From 7b47cfef7b1f8695cf6597fde00445cd3cf3bd66 Mon Sep 17 00:00:00 2001
+From: Kefu Chai <kchai@redhat.com>
+Date: Sun, 5 Jan 2020 22:25:40 +0800
+Subject: [PATCH] common: add missing #include
+
+clang++-9.0.1 and libc++ require them to build
+
+Signed-off-by: Kefu Chai <kchai@redhat.com>
+(cherry picked from commit 598c37296c944a056e4cd90e9f73c9e2fa6552fc)
+---
+ src/common/PluginRegistry.h | 1 +
+ src/common/bit_str.h        | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/src/common/PluginRegistry.h b/src/common/PluginRegistry.h
+index 5a092def7c5..62020a963a8 100644
+--- a/src/common/PluginRegistry.h
++++ b/src/common/PluginRegistry.h
+@@ -19,6 +19,7 @@
+ #define CEPH_COMMON_PLUGINREGISTRY_H
+ 
+ #include <map>
++#include <string>
+ #include "common/ceph_mutex.h"
+ 
+ class CephContext;
+diff --git a/src/common/bit_str.h b/src/common/bit_str.h
+index c4c24f6a75f..5271c8ffe15 100644
+--- a/src/common/bit_str.h
++++ b/src/common/bit_str.h
+@@ -14,6 +14,8 @@
+ #ifndef CEPH_COMMON_BIT_STR_H
+ #define CEPH_COMMON_BIT_STR_H
+ 
++#include <cstdint>
++#include <iosfwd>
+ #include <functional>
+ 
+ namespace ceph {
+-- 
+2.28.0
+
