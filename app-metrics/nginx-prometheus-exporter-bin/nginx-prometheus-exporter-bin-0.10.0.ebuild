@@ -30,6 +30,6 @@ src_install() {
 	doexe "${S}"/nginx-prometheus-exporter
 	dosym /opt/${MY_PN}/nginx-prometheus-exporter /usr/bin/nginx-prometheus-exporter
 	newinitd "${FILESDIR}"/nginx-prometheus-exporter.init nginx-prometheus-exporter
-
+	newconfd "${FILESDIR}/${PN}.confd" ${PN}
 }
 
