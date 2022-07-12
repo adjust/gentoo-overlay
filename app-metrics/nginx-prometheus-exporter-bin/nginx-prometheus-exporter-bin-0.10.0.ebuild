@@ -26,10 +26,10 @@ QA_PREBUILT="
 
 src_install() {
 
-	exeinto /opt/${MY_PN}
-	doexe "${S}"/nginx-prometheus-exporter
-	dosym /opt/${MY_PN}/nginx-prometheus-exporter /usr/bin/nginx-prometheus-exporter
-	newinitd "${FILESDIR}"/nginx-prometheus-exporter.init nginx-prometheus-exporter
-	newconfd "${FILESDIR}/${PN}.confd" ${PN}
+	exeinto "/opt/${MY_PN}"
+	doexe "${S}/${MY_PN}"
+	dosym "/opt/${MY_PN}/${MY_PN}" "/usr/bin/${MY_PN}"
+	newinitd "${FILESDIR}/${MY_PN}.init" ${MY_PN}
+	newconfd "${FILESDIR}/${MY_PN}.confd" ${MY_PN}
 }
 
