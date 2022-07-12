@@ -1,0 +1,13 @@
+#!/sbin/openrc-run
+# Copyright 1999-2022 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+command="nginx-prometheus-exporter"
+command_args=$SCRAPE_URI
+command_background="true"
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+	provide nginx-prometheus-exporter
+	use nginx
+}
