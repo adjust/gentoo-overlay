@@ -1,0 +1,26 @@
+From ecc4ba98d7972ee5bc764fbf7d02c426081350a0 Mon Sep 17 00:00:00 2001
+From: Ali Polatel <alip@adjust.com>
+Date: Tue, 19 Jul 2022 09:19:23 +0200
+Subject: [PATCH 2/3] create_user: pass user group for ssh authorized keys
+
+This prevents a newly created authorized keys file having the group of
+the deploy user rather than the created user.
+---
+ lib/Rex/Commands/User.pm | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/Rex/Commands/User.pm b/lib/Rex/Commands/User.pm
+index ee3d6f34..be15d4ac 100644
+--- a/lib/Rex/Commands/User.pm
++++ b/lib/Rex/Commands/User.pm
+@@ -181,6 +181,7 @@ sub create_user {
+       file $data->{"home"} . "/.ssh/authorized_keys",
+         content => $data->{"ssh_key"},
+         owner   => $user,
++        group   => $user,
+         mode    => 600;
+ 
+     }
+-- 
+2.28.0
+

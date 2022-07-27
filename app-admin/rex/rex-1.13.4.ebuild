@@ -114,6 +114,7 @@ PATCHES=(
 	"${FILESDIR}"/adjust_patches/0004-Shell.pm-add-iLO-support.patch
 	"${FILESDIR}"/adjust_patches/0005-Allow-uploading-files-even-when-permissions-cannot-b.patch
 	"${FILESDIR}"/adjust_patches/0006-Only-apply-best-effort-option-if-sudo-is-not-availab.patch
+	"${FILESDIR}"/adjust_patches/0007-create_user-pass-user-group-for-ssh-authorized-keys.patch
 )
 
 [[ ${PV} == 9999 ]] && BDEPEND+=" ${DZIL_DEPENDS}"
