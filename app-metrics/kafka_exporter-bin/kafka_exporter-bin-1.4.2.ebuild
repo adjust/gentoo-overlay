@@ -26,7 +26,7 @@ src_install() {
 	exeinto /opt/kafka_exporter/${MY_PN}-${PV}.linux-amd64
 	doexe "${S}"/${MY_PN}-${PV}.linux-amd64/kafka_exporter
 	dosym /opt/kafka_exporter/${MY_PN}-${PV}.linux-amd64/kafka_exporter /usr/bin/kafka_exporter
-	keepdir /var/log}/${MY_PN}
+	keepdir /var/log/${MY_PN}
 
 	newinitd "${FILESDIR}"/${MY_PN}.initd ${MY_PN}
 	newconfd "${FILESDIR}"/${MY_PN}.confd ${MY_PN}
