@@ -4,10 +4,10 @@
 
 description="Prometheus exporter for PgBouncer. Exports metrics at 9127/metrics"
 pidfile=${pidfile:-"/run/${RC_SVCNAME}.pid"}
-user=${user:-pgbouncer}
+user=${user:-root}
 group=${group:-postgres}
-pgbouncer_port=${PGPORT:-6432}
-pgbouncer_user=${PGUSER:-postgres}
+pgbouncer_port=${PGPORT:-7432}
+pgbouncer_user=${PGUSER:-root}
 pgbouncer_password=${PGPASSWORD:-}
 pgbouncer_netloc=${PGNETLOC:-localhost}
 pgbouncer_database=${PGDB:-pgbouncer}
@@ -16,7 +16,7 @@ exporter_endpoint=${METRICS_PATH:-"/metrics"}
 exporter_loglevel=${LOG_LEVEL:-info}
 exporter_logformat=${LOG_FORMAT:-logfmt}
 
-connectionstring="postgres://${pgbouncer_user}:${pgbouncer_password}@${pgbouncer_netloc}:${pgbouncer_port}/${pgbouncer_database}?sslmode=disable"
+connectionstring="postgres://${pgbouncer_user}:${pgbouncer_password}@:${pgbouncer_port}/${pgbouncer_database}?sslmode=disable&host=${pgbouncer_netloc}"
 command="/usr/bin/pgbouncer_exporter"
 command_args="--log.level=${exporter_loglevel} --log.format=${exporter_logformat} --pgBouncer.connectionString=\"${connectionstring}\" --web.listen-address=\":${exporter_port}\" \
 --web.telemetry-path=\"${exporter_endpoint}\""
