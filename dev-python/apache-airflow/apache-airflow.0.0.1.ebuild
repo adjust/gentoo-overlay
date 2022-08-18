@@ -30,4 +30,4 @@ RDEPEND=">=dev-python/click-8.1.3
 	>=dev-python/packaging-21.3-r3
 	>=dev-python/rich-12.5.1
 	>=dev-python/semver-2.13.0
-	>=dev-python/0.8.10"
+	>=dev-python/tabulate-0.8.10"
