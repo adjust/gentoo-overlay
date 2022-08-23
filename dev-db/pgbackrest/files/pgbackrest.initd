@@ -1,0 +1,75 @@
+#!/sbin/openrc-run
+# Copyright 2022 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="pgbackrest daemon"
+description="Daemon for providing replica based backups"
+extra_commands="checkconfig"
+
+SERVER_CA="${SERVER_CA-/etc/pgbackrest/ca.pem}"
+SERVER_CERT="${SERVER_CERT-/etc/pgbackrest/server.crt}"
+SERVER_KEY="${SERVER_KEY-/etc/pgbackrest/server.key}"
+SERVER_PORT="${SERVER_PORT-8432}"
+SERVER_ADDRESS="${SERVER_ADDRESS-*}"
+LOG_LEVEL="${LOG_LEVEL-info}"
+
+depend() {
+	need net
+}
+
+checkconfig() {
+	if [ -z "$SERVER_AUTH" ]
+	then
+		eerror "${SVCNAME} requires SERVER_AUTH to be set!"
+	fi
+
+	if [ ! -f "$SERVER_CA" ] || [ ! -f "$SERVER_CERT" ] || [ ! -f "$SERVER_KEY" ]
+	then
+		eerror "${SVCNAME} has missing certificates!"
+	fi
+	checkpath -f -o postgres:postgres -m 0640 "$SERVER_CA"
+	checkpath -f -o postgres:postgres -m 0640 "$SERVER_CERT"
+	checkpath -f -o postgres:postgres -m 0600 "$SERVER_KEY"
+	checkpath -d -o postgres:postgres -m 0640 "/var/log/pgbackrest"
+	checkpath -f -o postgres:postgres -m 0640 "/var/log/pgbackrest/all-server.log"
+
+	pgbackrest info 1>/dev/null 2>&1
+	local ret=$?
+	if [ $ret -ne 0 ]
+	then
+		eerror "${SVCNAME} has detected a syntax error in your configuration file: "
+		pgbackrest info
+	fi
+	return $ret
+}
+
+start()
+{
+	ebegin "Starting ${SVCNAME}"
+	checkconfig || return 1
+	local clients="$(echo --tls-server-auth=$SERVER_AUTH |\
+		sed 's/;/ --tls-server-auth=/g')"
+
+	start-stop-daemon --start --exec /usr/bin/pgbackrest \
+		--user postgres --group postgres \
+		--background  --make-pidfile \
+		--pidfile "/run/${SVCNAME}.pid" \
+		-- server $clients \
+		--tls-server-address="$SERVER_ADDRESS" \
+		--tls-server-port="$SERVER_PORT" \
+		--tls-server-ca-file="$SERVER_CA" \
+		--tls-server-cert-file="$SERVER_CERT" \
+		--tls-server-key-file="$SERVER_KEY" \
+		--log-level-file="$LOG_LEVEL" \
+		--log-level-console=off \
+		--log-level-stderr=off
+	eend $?
+}
+
+stop()
+{
+	ebegin "Stopping ${SVCNAME}"
+	start-stop-daemon --stop --pidfile "/run/${SVCNAME}.pid" \
+		--user postgres:postgres
+	eend $?
+}

@@ -37,15 +37,20 @@ src_install() {
 	# install base configuration
 	dodir /etc/"${PN}"
 	insinto /etc/"${PN}"
+	insopts -o postgres -g postgres
 	doins "${FILESDIR}"/pgbackrest.conf
 	# user postgres should exist implicitly by dev-db/postgresql
 	diropts -m 0775 -g postgres
 	keepdir /var/log/"${PN}"
 	# async wal archiving requires a spooler directory
-	keepdir /var/spool/"{PN}"
+	keepdir /var/spool/"${PN}"
 
+	insopts -o root -g root
 	insinto /etc/logrotate.d
 	newins "${FILESDIR}/${PN}.logrotate" ${PN}
+
+	newinitd "${FILESDIR}/${PN}.initd" ${PN}
+	newconfd "${FILESDIR}/${PN}.confd" ${PN}
 
 	default
 }
