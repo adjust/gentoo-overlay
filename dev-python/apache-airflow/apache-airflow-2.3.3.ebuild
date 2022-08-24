@@ -20,6 +20,9 @@ SLOT="0"
 
 RESTRICT="test"
 
+BDEPEND="
+	dev-python/GitPython
+"
 RDEPEND=">=dev-python/click-8.0
 	>=dev-python/jinja-2.1.0
 	dev-python/keyring
