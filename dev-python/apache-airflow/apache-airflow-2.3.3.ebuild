@@ -21,17 +21,17 @@ SLOT="0"
 RESTRICT="test"
 
 BDEPEND="
-	dev-python/GitPython
+	dev-python/GitPython[${PYTHON_USEDEP}]
 "
-RDEPEND=">=dev-python/click-8.0
-	>=dev-python/jinja-2.1.0
-	dev-python/keyring
-	dev-python/PyGithub
-	dev-python/jsonschema
-	dev-python/pendulum
-	dev-python/pyyaml
-	dev-python/packaging
-	dev-python/rich
-	dev-python/semver
-	dev-python/tabulate
+RDEPEND=">=dev-python/click-8.0[${PYTHON_USEDEP}]
+	>=dev-python/jinja-2.1.0[${PYTHON_USEDEP}]
+	dev-python/keyring[${PYTHON_USEDEP}]
+	dev-python/PyGithub[${PYTHON_USEDEP}]
+	dev-python/jsonschema[${PYTHON_USEDEP}]
+	dev-python/pendulum[${PYTHON_USEDEP}]
+	dev-python/pyyaml[${PYTHON_USEDEP}]
+	dev-python/packaging[${PYTHON_USEDEP}]
+	dev-python/rich[${PYTHON_USEDEP}]
+	dev-python/semver[${PYTHON_USEDEP}]
+	dev-python/tabulate[${PYTHON_USEDEP}]
 "
