@@ -20,6 +20,7 @@ RESTRICT="bindist fetch"
 DEPEND="
 	dev-perl/Moo
 	dev-perl/DBD-Pg
+	dev-perl/Config-INI
 	dev-perl/DateTime
 	dev-perl/DateTime-Format-Strptime
 	dev-perl/DateTimeX-Easy
