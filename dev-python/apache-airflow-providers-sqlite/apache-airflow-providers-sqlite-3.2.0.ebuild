@@ -21,5 +21,5 @@ SLOT="0"
 RESTRICT="test"
 
 BDEPEND="dev-python/GitPython[${PYTHON_USEDEP}]"
-RDEPEND=">=dev-python/sqlparse[${PYTHON_USEDEP}]"
+RDEPEND="dev-python/apache-airflow-providers-common-sql[${PYTHON_USEDEP}]"
 
