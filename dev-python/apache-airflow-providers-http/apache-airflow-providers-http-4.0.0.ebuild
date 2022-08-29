@@ -21,5 +21,8 @@ SLOT="0"
 RESTRICT="test"
 
 BDEPEND="dev-python/GitPython[${PYTHON_USEDEP}]"
-RDEPEND=">=dev-python/sqlparse[${PYTHON_USEDEP}]"
+RDEPEND="
+	>=dev-python/requests-2.26.0[${PYTHON_USEDEP}]
+	dev-python/requests-toolbelt[${PYTHON_USEDEP}]
+"
 
