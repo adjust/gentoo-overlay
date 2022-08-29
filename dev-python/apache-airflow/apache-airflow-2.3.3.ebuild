@@ -15,6 +15,7 @@ SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 KEYWORDS="~amd64"
+IUSE="+ftp +http +imap sqlite"
 
 SLOT="0"
 
@@ -34,4 +35,10 @@ RDEPEND=">=dev-python/click-8.0[${PYTHON_USEDEP}]
 	dev-python/rich[${PYTHON_USEDEP}]
 	dev-python/semver[${PYTHON_USEDEP}]
 	dev-python/tabulate[${PYTHON_USEDEP}]
+"
+PDEPEND="
+	ftp? ( dev-python/apache-airflow-providers-ftp[${PYTHON_USEDEP}] )
+	http? ( dev-python/apache-airflow-providers-http[${PYTHON_USEDEP}] )
+	imap? ( dev-python/apache-airflow-providers-imap[${PYTHON_USEDEP}] )
+	sqlite? ( dev-python/apache-airflow-providers-sqlite[${PYTHON_USEDEP}] )
 "
