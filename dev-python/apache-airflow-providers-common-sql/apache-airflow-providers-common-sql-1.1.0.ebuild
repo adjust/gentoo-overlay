@@ -21,4 +21,4 @@ SLOT="0"
 RESTRICT="test"
 
 BDEPEND="dev-python/GitPython[${PYTHON_USEDEP}]"
-RDEPEND=">=dev-python/sqlparse[${PYTHON_USEDEP}]"
+RDEPEND=">=dev-python/sqlparse-0.4.2[${PYTHON_USEDEP}]"
