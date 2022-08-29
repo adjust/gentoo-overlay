@@ -25,8 +25,11 @@ BDEPEND="
 	dev-python/GitPython[${PYTHON_USEDEP}]
 "
 RDEPEND=">=dev-python/click-8.0[${PYTHON_USEDEP}]
+	dev-python/colorlog[${PYTHON_USEDEP}]
 	>=dev-python/jinja-2.1.0[${PYTHON_USEDEP}]
+	dev-python/httpx[${PYTHON_USEDEP}]
 	dev-python/keyring[${PYTHON_USEDEP}]
+	dev-python/lazy-object-proxy[${PYTHON_USEDEP}]
 	dev-python/PyGithub[${PYTHON_USEDEP}]
 	dev-python/jsonschema[${PYTHON_USEDEP}]
 	dev-python/pendulum[${PYTHON_USEDEP}]
@@ -35,6 +38,8 @@ RDEPEND=">=dev-python/click-8.0[${PYTHON_USEDEP}]
 	dev-python/rich[${PYTHON_USEDEP}]
 	dev-python/semver[${PYTHON_USEDEP}]
 	dev-python/tabulate[${PYTHON_USEDEP}]
+	dev-python/tenacity[${PYTHON_USEDEP}]
+	dev-python/unicodecsv[${PYTHON_USEDEP}]
 "
 PDEPEND="
 	ftp? ( dev-python/apache-airflow-providers-ftp[${PYTHON_USEDEP}] )
