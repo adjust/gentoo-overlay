@@ -7,15 +7,11 @@ DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{8..9} )
 inherit distutils-r1
 
-DESCRIPTION="Links recognition library with FULL unicode support"
-HOMEPAGE="https://pypi.org/project/linkify-it-py"
+DESCRIPTION="Micro subset of unicode data files for linkify-it-py projects"
+HOMEPAGE="https://pypi.org/project/uc-micro-py"
 SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
-
-RDEPEND="
-	dev-python/uc-micro-py[${PYTHON_USEDEP}]
-"
