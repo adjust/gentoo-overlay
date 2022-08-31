@@ -21,7 +21,7 @@ KEYWORDS="~amd64"
 
 RDEPEND="
 	dev-python/Authlib[${PYTHON_USEDEP}]
-	dev-python/apispec[${PYTHON_USEDEP}]
+	<dev-python/apispec-4[${PYTHON_USEDEP}]
 	dev-python/colorama[${PYTHON_USEDEP}]
 	dev-python/flask[${PYTHON_USEDEP}]
 	dev-python/flask-babel[${PYTHON_USEDEP}]
