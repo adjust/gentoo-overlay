@@ -29,7 +29,7 @@ RDEPEND="
 	dev-python/argcomplete[${PYTHON_USEDEP}]
 	dev-python/attrs[${PYTHON_USEDEP}]
 	dev-python/blinker[${PYTHON_USEDEP}]
-	=dev-python/cattrs-1.10.0[${PYTHON_USEDEP}]
+	dev-python/cattrs[${PYTHON_USEDEP}]
 	>=dev-python/click-8.0[${PYTHON_USEDEP}]
 	<dev-python/colorlog-5[${PYTHON_USEDEP}]
 	dev-python/connexion[${PYTHON_USEDEP}]
