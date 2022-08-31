@@ -40,5 +40,6 @@ RDEPEND="
 	dev-python/python-dateutil[${PYTHON_USEDEP}]
 	dev-python/pyjwt[${PYTHON_USEDEP}]
 	dev-python/sqlalchemy[${PYTHON_USEDEP}]
+	dev-python/sqlalchemy-utils[${PYTHON_USEDEP}]
 	<dev-python/wtforms-3[${PYTHON_USEDEP}]
 "
