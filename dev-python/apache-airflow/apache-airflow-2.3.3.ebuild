@@ -31,7 +31,7 @@ RDEPEND="
 	dev-python/blinker[${PYTHON_USEDEP}]
 	dev-python/cattrs[${PYTHON_USEDEP}]
 	>=dev-python/click-8.0[${PYTHON_USEDEP}]
-	dev-python/colorlog[${PYTHON_USEDEP}]
+	<dev-python/colorlog-5[${PYTHON_USEDEP}]
 	dev-python/connexion[${PYTHON_USEDEP}]
 	dev-python/croniter[${PYTHON_USEDEP}]
 	dev-python/cron-descriptor[${PYTHON_USEDEP}]
