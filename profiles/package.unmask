@@ -10,3 +10,6 @@ sys-cluster/zookeeper-bin
 
 # eh
 dev-python/ipaddress
+
+# required for apache-airflow
+dev-python/flask-wtf
