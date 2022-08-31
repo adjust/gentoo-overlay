@@ -29,7 +29,7 @@ RDEPEND="
 	dev-python/flask-login[${PYTHON_USEDEP}]
 	dev-python/flask-openid[${PYTHON_USEDEP}]
 	dev-python/flask-sqlalchemy[${PYTHON_USEDEP}]
-	dev-python/flask-wtf[${PYTHON_USEDEP}]
+	<dev-python/flask-wtf-1[${PYTHON_USEDEP}]
 	dev-python/jsonschema[${PYTHON_USEDEP}]
 	dev-python/jmespath[${PYTHON_USEDEP}]
 	dev-python/marshmallow[${PYTHON_USEDEP}]
