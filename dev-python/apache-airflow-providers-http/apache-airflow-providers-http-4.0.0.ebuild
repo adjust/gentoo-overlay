@@ -25,4 +25,3 @@ RDEPEND="
 	>=dev-python/requests-2.26.0[${PYTHON_USEDEP}]
 	dev-python/requests-toolbelt[${PYTHON_USEDEP}]
 "
-

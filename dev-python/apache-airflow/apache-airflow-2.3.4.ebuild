@@ -39,7 +39,7 @@ RDEPEND="
 	dev-python/deprecated[${PYTHON_USEDEP}]
 	dev-python/dill[${PYTHON_USEDEP}]
 	dev-python/flask[${PYTHON_USEDEP}]
-	=dev-python/flask-appbuilder-4.1.3[${PYTHON_USEDEP}]
+	~dev-python/flask-appbuilder-4.1.3[${PYTHON_USEDEP}]
 	dev-python/flask-caching[${PYTHON_USEDEP}]
 	dev-python/flask-login[${PYTHON_USEDEP}]
 	dev-python/flask-session[${PYTHON_USEDEP}]
