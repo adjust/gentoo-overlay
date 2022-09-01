@@ -9,6 +9,7 @@
     <flag name="ftp">Install the FTP provider</flag>
     <flag name="http">Install the HTTP provider</flag>
     <flag name="imap">Install the IMAP provider</flag>
+    <flag name="postgres">Install the PostgreSQL provider</flag>
     <flag name="sqlite">Install the SQLite provider</flag>
   </use>
 </pkgmetadata>
