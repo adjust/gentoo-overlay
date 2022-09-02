@@ -24,7 +24,12 @@ RESTRICT="test"
 BDEPEND="
 	dev-python/GitPython[${PYTHON_USEDEP}]
 "
+DEPEND="
+	acct-user/airflow
+	acct-group/airflow
+"
 RDEPEND="
+	${DEPEND}
 	dev-python/alembic[${PYTHON_USEDEP}]
 	dev-python/argcomplete[${PYTHON_USEDEP}]
 	dev-python/attrs[${PYTHON_USEDEP}]
