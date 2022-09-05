@@ -1,0 +1,15 @@
+#!/sbin/openrc-run
+# Copyright 2021 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="schaufel_exporter daemon"
+description="Exports schaufel log telemtry to victoriametrics"
+
+SCHAUFEL_USER=${SCHAUFEL_USER:-schaufel}
+SCHAUFEL_GROUP=${SCHAUFEL_GROUP:-schaufel}
+
+pidfile=/run/${SVCNAME}.pid
+start_stop_daemon_args="--background --make-pidfile --pidfile ${pidfile}
+	--user ${SCHAUFEL_USER} --group ${SCHAUFEL_GROUP}"
+command=/usr/local/sbin/schaufel_exporter.pl
+command_args="${EXPORTER_ARGS}"
