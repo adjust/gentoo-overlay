@@ -27,7 +27,7 @@ RDEPEND="
 	dev-libs/hiredis
 	dev-db/postgresql
 	dev-libs/json-c
-	dev-libs/libconfig
+	>=dev-libs/libconfig-1.7
 	doc? (
 		sys-apps/groff
 		app-text/ghostscript-gpl
