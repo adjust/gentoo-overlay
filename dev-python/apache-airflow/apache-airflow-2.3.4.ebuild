@@ -108,7 +108,7 @@ src_install() {
 	keepdir /var/log/airflow
 	fowners airflow:airflow /var/log/airflow
 
-	for service in scheduler webserver; do
+	for service in flower kerberos scheduler webserver worker; do
 		newconfd "${FILESDIR}/airflow-${service}.confd" airflow-${service}
 		newinitd "${FILESDIR}/airflow-${service}.initd" airflow-${service}
 	done

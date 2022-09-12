@@ -1,0 +1,11 @@
+# Settings for the Airflow Celery Flower
+#AIRFLOW_CONFIG=
+#AIRFLOW_HOME=
+
+# Extra command line arguments for the Airflow Celery Flower
+# See, airflow flower --help
+AIRFLOW_ARGS="
+	--stderr /var/log/airflow/flower_stderr.log
+	--stdout /var/log/airflow/flower_stdout.log
+	--log-file /var/log/airflow/flower.log
+"

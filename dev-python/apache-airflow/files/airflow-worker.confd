@@ -1,0 +1,11 @@
+# Settings for the Airflow Celery Worker
+#AIRFLOW_CONFIG=
+#AIRFLOW_HOME=
+
+# Extra command line arguments for the Airflow Celery Worker
+# See, airflow worker --help
+AIRFLOW_ARGS="
+	--stderr /var/log/airflow/worker_stderr.log
+	--stdout /var/log/airflow/worker_stdout.log
+	--log-file /var/log/airflow/worker.log
+"

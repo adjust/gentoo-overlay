@@ -1,0 +1,11 @@
+# Settings for the Airflow Kerberos Ticket Renewer
+#AIRFLOW_CONFIG=
+#AIRFLOW_HOME=
+
+# Extra command line arguments for the Airflow Kerberos Ticket Renewer
+# See, airflow kerberos --help
+AIRFLOW_ARGS="
+	--stderr /var/log/airflow/kerberos_stderr.log
+	--stdout /var/log/airflow/kerberos_stdout.log
+	--log-file /var/log/airflow/kerberos.log
+"
