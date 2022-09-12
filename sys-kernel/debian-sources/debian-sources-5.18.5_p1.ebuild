@@ -202,8 +202,10 @@ src_prepare() {
 	# only enable debugging symbols etc if USE=debug...
 	if use debug; then
 		tweak_config "CONFIG_DEBUG_INFO=y"
+		tweak_config "CONFIG_DEBUG_INFO_BTF=y"
 	else
 		tweak_config "CONFIG_DEBUG_INFO=n"
+		tweak_config "CONFIG_DEBUG_INFO_BTF=n"
 	fi
 
 	if use hardened; then
