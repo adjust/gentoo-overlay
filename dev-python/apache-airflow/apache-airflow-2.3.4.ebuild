@@ -108,6 +108,8 @@ src_install() {
 	keepdir /var/log/airflow
 	fowners airflow:airflow /var/log/airflow
 
-	newconfd "${FILESDIR}/airflow-webserver.confd" airflow-webserver
-	newinitd "${FILESDIR}/airflow-webserver.initd" airflow-webserver
+	for service in scheduler webserver; do
+		newconfd "${FILESDIR}/airflow-${service}.confd" airflow-${service}
+		newinitd "${FILESDIR}/airflow-${service}.initd" airflow-${service}
+	done
 }
