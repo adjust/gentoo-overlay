@@ -1,0 +1,11 @@
+# Settings for the Airflow Scheduler
+#AIRFLOW_CONFIG=
+#AIRFLOW_HOME=
+
+# Extra command line arguments for the Airflow Scheduler
+# See, airflow scheduler --help
+AIRFLOW_ARGS="
+	--stderr /var/log/airflow/scheduler_stderr.log
+	--stdout /var/log/airflow/scheduler_stdout.log
+	--log-file /var/log/airflow/scheduler.log
+"

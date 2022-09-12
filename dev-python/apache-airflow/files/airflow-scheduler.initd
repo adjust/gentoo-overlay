@@ -1,0 +1,18 @@
+#!/sbin/openrc-run
+# Copyright 1999-2022 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+pidfile="/run/airflow/scheduler.pid"
+command="/usr/bin/airflow"
+command_args="scheduler ${AIRFLOW_ARGS}"
+command_args_background="--daemon --pid ${pidfile}"
+command_user="airflow:airflow"
+
+depend() {
+	use logger
+	need net
+}
+
+start_pre() {
+	checkpath -q -d -o ${command_user} -m 0755 "$(dirname "${pidfile}")" || return 1
+}
