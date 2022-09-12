@@ -101,3 +101,13 @@ PDEPEND="
 	postgres? ( dev-python/apache-airflow-providers-postgres[${PYTHON_USEDEP}] )
 	sqlite? ( dev-python/apache-airflow-providers-sqlite[${PYTHON_USEDEP}] )
 "
+
+src_install() {
+	distutils-r1_src_install
+
+	keepdir /var/log/airflow
+	fowners airflow:airflow /var/log/airflow
+
+	newconfd "${FILESDIR}/airflow-webserver.confd" airflow-webserver
+	newinitd "${FILESDIR}/airflow-webserver.initd" airflow-webserver
+}
