@@ -6,6 +6,7 @@
     <name>Adjust Ops Team</name>
   </maintainer>
   <use>
+    <flag name="celery">Enable the CeleryExecutor</flag>
     <flag name="ftp">Install the FTP provider</flag>
     <flag name="http">Install the HTTP provider</flag>
     <flag name="imap">Install the IMAP provider</flag>
