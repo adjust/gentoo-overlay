@@ -15,7 +15,7 @@ SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 KEYWORDS="~amd64"
-IUSE="+ftp +http +imap +sqlite postgres"
+IUSE="+ftp +http +imap +sqlite celery postgres"
 
 SLOT="0"
 
@@ -89,6 +89,10 @@ RDEPEND="
 	dev-python/unicodecsv[${PYTHON_USEDEP}]
 	dev-python/werkzeug[${PYTHON_USEDEP}]
 	www-servers/gunicorn[${PYTHON_USEDEP}]
+	celery? (
+		dev-python/celery[${PYTHON_USEDEP}]
+		dev-python/flower[${PYTHON_USEDEP}]
+	)
 "
 PDEPEND="
 	ftp? ( dev-python/apache-airflow-providers-ftp[${PYTHON_USEDEP}] )
