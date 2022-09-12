@@ -1,0 +1,11 @@
+# Settings for the Airflow Webserver
+#AIRFLOW_CONFIG=
+#AIRFLOW_HOME=
+
+# Extra command line arguments for the Airflow Webserver
+# See, airflow webserver --help
+AIRFLOW_ARGS="
+	--stderr /var/log/airflow/webserver_stderr.log
+	--stdout /var/log/airflow/webserver_stdout.log
+	--log-file /var/log/airflow/webserver.log
+"
