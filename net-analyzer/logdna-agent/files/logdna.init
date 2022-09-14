@@ -19,7 +19,7 @@ start() {
         check_config || return 1
         chmod 0644 /etc/logrotate.d/"${name}" > /dev/null 2>&1
         start-stop-daemon --background --start --exec "${command}" \
-        --make-pidfile --pidfile "${pid_file}" >> "${log_file}" 2>&1
+        --make-pidfile --pidfile "${pid_file}" --stdout "${log_file}" --stderr "${log_file}"
         eend $?
 }
 
