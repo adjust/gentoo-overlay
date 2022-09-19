@@ -496,15 +496,15 @@ src_install() {
 
 	# the below has not been modified and probably needs tidied up somewhat
 
-	newbin "${MY_PN}" "${PN}"
+	newbin "${PN}" "${PN}"
 	dodoc README.md
 
 	keepdir /var/lib/prometheus/"${MY_PN}" /var/log/prometheus
-	fowners "${EXPORTER_USER}" /var/lib/prometheus/"${MY_PN}" /var/log/prometheus
+	fowners prometheus-exporter:prometheus-exporter /var/lib/prometheus/"${MY_PN}" /var/log/prometheus
 
 	insinto /etc/prometheus
-
 	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
 	insinto /etc/aerospike-prometheus-exporter/
+	fowners prometheus-exporter:prometheus-exporter /etc/aerospike-prometheus-exporter
 	newins "${FILESDIR}/ape.toml" "ape.toml"
 }
