@@ -1,0 +1,46 @@
+#!/sbin/openrc-run
+
+export ${RC_SVCNAME}_tls="${VM_TLS}"
+export ${RC_SVCNAME}_tlsCertFile="${VM_TLS_CERT_FILE}"
+export ${RC_SVCNAME}_tlsKeyFile="${VM_TLS_KEY_FILE}"
+export ${RC_SVCNAME}_loggerLevel="${LOGGER_LEVEL}"
+export ${RC_SVCNAME}_loggerOutput="${LOGGER_OUTPUT}"
+export ${RC_SVCNAME}_maxConcurrentInserts="${MAX_CONCURRENT_INSERTS}"
+export ${RC_SVCNAME}_maxInsertRequestSize="${MAX_INSERT_REQUESTS_SIZE}"
+export ${RC_SVCNAME}_memory_allowedBytes="${MEMORY_ALLOWEDBYTES}"
+export ${RC_SVCNAME}_memory_allowedPercent="${MEMORY_ALLOWEDPERCENT}"
+export ${RC_SVCNAME}_promscrape_cluster_memberNum="${MEMBER_NUM}"
+export ${RC_SVCNAME}_promscrape_cluster_membersCount="${MEMBER_COUNT}"
+export ${RC_SVCNAME}_promscrape_cluster_name="${CLUSTER_NAME}"
+export ${RC_SVCNAME}_promscrape_config="${PROMSCRAPE_CONFIG}"
+export ${RC_SVCNAME}_promscrape_config_strictParse="${STRICT_PARSE}"
+export ${RC_SVCNAME}_remoteWrite_url="${REMOTE_WRITE_URL}"
+export ${RC_SVCNAME}_remoteWrite_tmpDataPath="${TMP_DATA_PATH}"
+export ${RC_SVCNAME}_remoteWrite_maxDiskUsagePerURL="${MAX_DISK_USAGE}"
+
+httpListenAddr="${HTTP_LISTEN_ADDR}"
+
+
+name="VictoriaMetrics ${RC_SVCNAME}"
+
+pidfile="/run/victoria-metrics/${RC_SVCNAME}"
+
+command="/usr/bin/vmagent"
+command_args="-httpListenAddr=${httpListenAddr} -envflag.enable -envflag.prefix=${RC_SVCNAME}_"
+command_background=yes
+
+output_log="/var/log/victoria-metrics/${RC_SVCNAME}.log"
+error_log="/var/log/victoria-metrics/${RC_SVCNAME}-error.log"
+
+depend() {
+	need local
+	use net
+}
+
+start_pre() {
+	remote_write_tmpdir=${RC_SVCNAME}_remoteWrite_tmpDataPath
+	config_file=${RC_SVCNAME}_promscrape_config
+	checkpath -d -m 0755 -o "${command_user}" $(dirname ${output_log})
+    checkpath -d -m 0660 -o "${command_user}" ${!remote_write_tmpdir}
+    checkpath -f -m 0440 -o "${command_user}" ${!config_file}
+}
