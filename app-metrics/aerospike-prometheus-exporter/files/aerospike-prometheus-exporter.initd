@@ -8,13 +8,12 @@ pidfile="/run/${SVCNAME}/${SVCNAME}.pid"
 user="prometheus-exporter"
 
 command="/usr/bin/${SVCNAME}"
-command_args="${command_args}"
+command_args="${command_args} --config /etc/aerospike-prometheus-exporter/ape.toml"
 command_background="true"
 command_user="${user}"
 output_log="/var/log/prometheus/${SVCNAME}.log"
 error_log="/var/log/prometheus/${SVCNAME}.log"
-start_stop_daemon_args="--wait 1000 \
-    --config /etc/aerospike-prometheus-exporter/ape.toml"
+start_stop_daemon_args="--wait 1000"
 
 depend() {
 	need net
@@ -22,9 +21,5 @@ depend() {
 }
 
 start_pre() {
-	if [[ -z ${DATA_SOURCE_NAME} ]]; then
-		ewarn "DATA_SOURCE_NAME not set"
-		exit 1
-	fi
 	checkpath -d -m 0755 -o "${user}" "${pidfile%/*}"
 }
