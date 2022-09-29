@@ -40,7 +40,6 @@ src_install() {
 	doins -r "${S}"
 
 	newinitd "${FILESDIR}/init" sonarqube
-	newconfd "${FILESDIR}/conf" sonarqube
 
 	keepdir /var/lib/sonarqube/data /var/lib/sonarqube/temp /var/lib/sonarqube/downloads/
 	keepdir /var/log/sonarqube
