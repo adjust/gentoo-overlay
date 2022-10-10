@@ -411,4 +411,7 @@ src_compile() {
 src_install() {
 	dobin target/release/${PN}
 	dodoc docs/*
+
+	newconfd "${FILESDIR}"/logdna.conf logdna-agent
+	newinitd "${FILESDIR}"/logdna.init logdna-agent
 }
