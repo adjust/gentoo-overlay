@@ -376,6 +376,15 @@ KEYWORDS="~amd64"
 
 S="${WORKDIR}/${PN}-v2-${PV}"
 
+BDEPEND="
+	sys-devel/clang:=
+	>=virtual/rust-1.57.0
+"
+
+RDEPEND="
+	dev-libs/libpcre2:=
+"
+
 src_prepare() {
 	default
 
