@@ -54,7 +54,7 @@ checkconfig() {
     for file in postgresql pg_hba pg_ident ; do
         file="${PGDATA%/}/${file}.conf"
         if [ -f "${file}" ] ; then
-            checkpath -f -m 0600 -o postgres:postgres "${file}"
+            checkpath -f -m 0644 -o postgres:postgres "${file}"
         else
             eerror "${file} not found"
             eerror "HINT: mv ${DATA_DIR%/}/*.conf ${PGDATA}"
