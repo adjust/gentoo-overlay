@@ -378,7 +378,7 @@ S="${WORKDIR}/${PN}-v2-${PV}"
 
 BDEPEND="
 	sys-devel/clang:=
-	>=virtual/rust-1.57.0
+	>=virtual/rust-1.64.0
 "
 
 RDEPEND="
