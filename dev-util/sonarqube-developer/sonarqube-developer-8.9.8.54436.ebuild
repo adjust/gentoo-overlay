@@ -1,15 +1,15 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 DESCRIPTION="A supervisor that manages ephemeral github runners"
 HOMEPAGE="https://www.sonarqube.org/"
 SRC_URI="https://binaries.sonarsource.com/CommercialDistribution/${PN}/${P}.zip"
 
-LICENSE="LGPL"
+LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64"
 IUSE=""
 
 BDEPEND="
@@ -19,7 +19,7 @@ BDEPEND="
 RDEPEND="
 	acct-group/sonarqube
 	acct-user/sonarqube
-	dev-java/openjdk-bin:11
+	dev-java/openjdk-bin
 "
 
 PATCHES=(
@@ -28,11 +28,9 @@ PATCHES=(
 	"${FILESDIR}/configuration.patch"
 )
 
-inherit epatch
-
 src_unpack() {
 	unpack ${P}.zip
-        mv sonarqube-${PV} ${P} || die
+	mv sonarqube-${PV} ${P} || die
 }
 
 src_install() {
