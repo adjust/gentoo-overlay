@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -22,8 +22,7 @@ IUSE="x-pack"
 RDEPEND="
 	acct-group/kibana
 	acct-user/kibana
-	>=net-libs/nodejs-10.15.2
-	<net-libs/nodejs-14
+	net-libs/nodejs
 	x-pack? (
 		dev-libs/expat
 		dev-libs/nss
