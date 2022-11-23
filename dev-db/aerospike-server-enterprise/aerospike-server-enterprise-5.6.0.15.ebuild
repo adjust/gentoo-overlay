@@ -33,7 +33,6 @@ DEPEND="
 
 S="${WORKDIR}/${P}-debian8"
 
-
 src_prepare() {
 	eapply_user
 

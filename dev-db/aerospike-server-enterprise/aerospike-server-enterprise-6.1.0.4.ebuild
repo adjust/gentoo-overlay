@@ -7,7 +7,7 @@ inherit eutils
 
 DESCRIPTION="Flash-optimized, in-memory, nosql database"
 HOMEPAGE="http://www.aerospike.com"
-SRC_URI="https://files.adjust.com/${P}.tar.xz"
+SRC_URI="http://www.aerospike.com/artifacts/${PN}/${PV}/${P}-debian9.tgz"
 
 LICENSE="Apache-2.0"
 KEYWORDS="~amd64"
@@ -31,7 +31,18 @@ RDEPEND="
 DEPEND="
 	app-arch/xz-utils"
 
-S="${WORKDIR}"
+S="${WORKDIR}/${P}-debian9"
+
+src_prepare() {
+	eapply_user
+
+	local server_deb="${P}.debian9.x86_64.deb"
+
+	ar x "${server_deb}" || die
+	tar xf data.tar.xz && rm data.tar.xz || die
+
+	rm *.deb asinstall control.tar.gz debian-binary LICENSE SHA256SUMS || die
+}
 
 src_install() {
 	insinto /opt/
