@@ -33,10 +33,13 @@ src_prepare() {
 
 src_install() {
 	dodoc Readme.md
-	insinto usr/share/zabbix/externalscripts
-	doins -r *.py ssl "${FILESDIR}"/aerospike_*.sh
-	fperms 750 /usr/share/zabbix/externalscripts/aerospike_discovery.py
-	fowners zabbix:zabbix /usr/share/zabbix/externalscripts/aerospike_discovery.py
-	fperms 750 /usr/share/zabbix/externalscripts/aerospike_*.sh
-	fowners zabbix:zabbix /usr/share/zabbix/externalscripts/aerospike_*.sh
+	dodir /usr/share/zabbix/externalscripts
+	insinto /usr/share/zabbix/externalscripts
+	doins -r "${WORKDIR}"/"${MY_P}"/*.py
+	doins -r "${WORKDIR}"/"${MY_P}"/ssl
+	for script in `ls "${FILESDIR}"/aerospike_*.sh`; do
+		doins $script
+	done
+	fperms -R 750 /usr/share/zabbix/externalscripts
+	fowners -R zabbix:zabbix /usr/share/zabbix/externalscripts
 }
