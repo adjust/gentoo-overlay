@@ -25,7 +25,7 @@ RDEPEND="
 	app-arch/gzip
 	net-misc/wget
 	sys-apps/util-linux
-	sys-fs/udev
+	virtual/udev
 "
 
 src_install() {
