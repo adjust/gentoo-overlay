@@ -49,4 +49,26 @@ src_install() {
 	doins usr/bin/*
 
 	fowners -R aerospike:aerospike /opt/aerospike/
+
+	# fix dependencies for aql
+	if test -f "/lib64/libreadline.so.7"; then
+		# required version exists, create the symlink `aql` looks for
+		dosym /lib64/`readlink /lib64/libreadline.so.7` /usr/lib64/libreadline.so.7
+	elif test -f "/lib64/libreadline.so.6"; then
+		# fallback to version 6 with the required name that `aql` looks for
+		dosym /lib64/`readlink /lib64/libreadline.so.6` /usr/lib64/libreadline.so.7
+	else
+		# create a link to version 8 with the required name
+		dosym /lib64/`readlink /lib64/libreadline.so.8` /usr/lib64/libreadline.so.7
+	fi
+	if test -f "/lib64/libhistory.so.7"; then
+		# required version exists, create the symlink `aql` looks for
+		dosym /lib64/`readlink /lib64/libhistory.so.7` /usr/lib64/libhistory.so.7
+	elif test -f "/lib64/libhistory.so.6"; then
+		# fallback to version 6 with the required name that aql looks for
+		dosym /lib64/`readlink /lib64/libhistory.so.6` /usr/lib64/libhistory.so.7
+	else
+		# create a link to version 8 with the required name
+		dosym /lib64/`readlink /lib64/libhistory.so.8` /usr/lib64/libhistory.so.7
+	fi
 }
