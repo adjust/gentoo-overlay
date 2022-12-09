@@ -163,7 +163,7 @@ _LINUX_MOD_ECLASS=1
 
 # TODO: When adding support for future EAPIs, please audit this list
 # for unused inherits and conditionalise them.
-inherit linux-info multilib toolchain-funcs
+inherit linux-info multilib multiprocessing toolchain-funcs
 
 case ${MODULES_OPTIONAL_USE_IUSE_DEFAULT:-n} in
   [nNfF]*|[oO][fF]*|0|-) _modules_optional_use_iuse_default='' ;;
