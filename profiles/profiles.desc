@@ -13,8 +13,6 @@
 # @MAINTAINER: amd64@gentoo.org
 amd64		default/linux/amd64/17.0				dev
 amd64		default/linux/amd64/17.0/no-multilib			exp
-amd64		default/linux/amd64/17.0/no-multilib/hardened		exp
-amd64		default/linux/amd64/17.0/no-multilib/hardened/selinux	exp
 
 # vim: set ts=8 noet ft=conf:
 
