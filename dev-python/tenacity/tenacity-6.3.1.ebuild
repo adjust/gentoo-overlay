@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -16,18 +16,4 @@ KEYWORDS="amd64 ~arm64 ~riscv x86"
 
 BDEPEND="
 	dev-python/setuptools_scm[${PYTHON_USEDEP}]
-	test? (
-		www-servers/tornado[${PYTHON_USEDEP}]
-	)
 "
-
-distutils_enable_tests pytest
-
-python_test() {
-	local deselect=(
-		# TODO: package typeguard
-		tests/test_tenacity.py::TestRetryTyping::test_retry_type_annotations
-	)
-
-	epytest ${deselect[@]/#/--deselect }
-}

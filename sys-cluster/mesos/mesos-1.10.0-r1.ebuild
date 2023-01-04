@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -22,13 +22,13 @@ KEYWORDS="amd64"
 RDEPEND="
 	acct-group/warden
 	acct-user/warden
-	>=virtual/jdk-1.8"
+	>=virtual/jre-1.8"
 
 DEPEND="
 	${PYTHON_DEPS}
 	>=virtual/jdk-1.8
 	dev-java/maven-bin:3.8
-	sys-devel/gcc:9.4.0
+	sys-devel/gcc
 	dev-libs/cyrus-sasl
 	dev-vcs/subversion
 	dev-python/six

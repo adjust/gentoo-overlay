@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -36,7 +36,6 @@ COMMON_DEPEND="
 	mysql? ( dev-db/mysql-connector-c )
 	odbc? ( dev-db/unixODBC )
 	openipmi? ( sys-libs/openipmi )
-	oracle? ( dev-db/oracle-instantclient-basic )
 	postgres? ( dev-db/postgresql:* )
 	proxy?  ( sys-libs/zlib )
 	server? (
@@ -46,7 +45,7 @@ COMMON_DEPEND="
 	snmp? ( net-analyzer/net-snmp )
 	sqlite? ( dev-db/sqlite )
 	ssh? ( net-libs/libssh2 )
-	ssl? ( dev-libs/openssl:=[-bindist] )
+	ssl? ( >=dev-libs/openssl-1.1.1:0=[-bindist(-)] )
 "
 
 RDEPEND="${COMMON_DEPEND}
