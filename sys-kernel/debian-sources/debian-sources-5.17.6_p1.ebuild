@@ -28,7 +28,7 @@ BDEPEND="
 	debug? ( dev-util/pahole )
 	sys-devel/flex
 	virtual/libelf
-	virtual/yacc
+	app-alternatives/yacc
 "
 
 RDEPEND="
