@@ -9,7 +9,7 @@ DESCRIPTION="Aerospike Prometheus Exporter"
 HOMEPAGE="https://github.com/aerospike/aerospike-prometheus-exporter/"
 SRC_URI="https://github.com/aerospike/aerospike-prometheus-exporter/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 
-KEYWORDS="~amd64"
+KEYWORDS="amd64"
 LICENSE="Apache-2.0"
 
 SLOT="0"
