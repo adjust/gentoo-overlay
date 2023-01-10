@@ -1,11 +1,11 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 POSTGRES_COMPAT=( 9.6 10 11 )
 
-inherit postgres-multi cmake-utils
+inherit postgres-multi
 
 DESCRIPTION="Open-source time-series SQL database"
 HOMEPAGE="https://www.timescale.com/"
