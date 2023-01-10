@@ -1,11 +1,11 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 CMAKE_MAKEFILE_GENERATOR="ninja"
 
-inherit cmake-utils systemd toolchain-funcs
+inherit cmake systemd toolchain-funcs
 
 DESCRIPTION="An OSS column-oriented database management system for real-time data analysis"
 HOMEPAGE="https://clickhouse.yandex"
@@ -163,7 +163,7 @@ src_prepare() {
 
 	eapply_user
 
-	cmake-utils_src_prepare
+	cmake_src_prepare
 }
 
 src_configure() {
@@ -191,11 +191,11 @@ src_configure() {
 		-DUNBUNDLED=ON
 	)
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 
 	# wtf ur doin
 	rm  "${D}/usr/cmake/global.cmake"
