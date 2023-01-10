@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -7,7 +7,7 @@ CMAKE_MAKEFILE_GENERATOR=emake
 
 DISTUTILS_OPTIONAL=1
 
-inherit check-reqs bash-completion-r1 cmake-utils distutils-r1 flag-o-matic \
+inherit check-reqs bash-completion-r1 cmake distutils-r1 flag-o-matic \
 		multiprocessing python-r1 udev readme.gentoo-r1 toolchain-funcs \
 		systemd
 
@@ -202,7 +202,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	cmake-utils_src_prepare
+	cmake_src_prepare
 
 	if use system-boost; then
 		eapply "${FILESDIR}/ceph-14.2.5-boost-sonames.patch"
@@ -271,7 +271,7 @@ ceph_src_configure() {
 	rm -f "${BUILD_DIR:-${S}}/CMakeCache.txt" \
 		|| die "failed to remove cmake cache"
 
-	cmake-utils_src_configure
+	cmake_src_configure
 
 	# bug #630232
 	sed -i "s:\"${T//:\\:}/${EPYTHON}/bin/python\":\"${PYTHON}\":" \
@@ -298,7 +298,7 @@ python_compile() {
 }
 
 src_compile() {
-	cmake-utils_src_make VERBOSE=1 all
+	cmake_build VERBOSE=1 all
 
 	# we have to do this here to prevent from building everything multiple times
 	python_copy_sources
@@ -319,7 +319,7 @@ python_install() {
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 	python_foreach_impl python_install
 
 	find "${ED}" -name '*.la' -type f -delete || die

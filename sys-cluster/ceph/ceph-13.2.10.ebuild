@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,7 +9,7 @@ EAPI=7
 PYTHON_COMPAT=( python3_8 )
 DISTUTILS_OPTIONAL=1
 
-inherit check-reqs cmake-utils distutils-r1 flag-o-matic multiprocessing \
+inherit check-reqs cmake distutils-r1 flag-o-matic multiprocessing \
 	python-r1 udev readme.gentoo-r1 systemd bash-completion-r1
 
 DESCRIPTION="Ceph distributed filesystem"
@@ -181,7 +181,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	cmake-utils_src_prepare
+	cmake_src_prepare
 
 	if use system-boost; then
 		eapply "${FILESDIR}/ceph-13.2.0-boost-sonames.patch"
@@ -234,7 +234,7 @@ ceph_src_configure() {
 	fi
 
 	rm -f "${BUILD_DIR:-${S}}/CMakeCache.txt"
-	cmake-utils_src_configure
+	cmake_src_configure
 
 	# bug #630232
 	sed -i "s:\"${T//:\\:}/${EPYTHON}/bin/python\":\"${PYTHON}\":" \
@@ -263,7 +263,7 @@ python_compile() {
 }
 
 src_compile() {
-	cmake-utils_src_make VERBOSE=1 all
+	cmake_build VERBOSE=1 all
 
 	# we have to do this here to prevent from building everything multiple times
 	BUILD_DIR="${CMAKE_BUILD_DIR}" python_copy_sources
@@ -282,7 +282,7 @@ python_install() {
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 	python_foreach_impl python_install
 
 	find "${D}" -name '*.la' -delete || die
