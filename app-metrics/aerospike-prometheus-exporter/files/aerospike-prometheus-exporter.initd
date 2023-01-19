@@ -5,7 +5,7 @@
 description="Aerospike's monitoring agent for Prometheus"
 name="Aerospike Prometheus Exporter"
 pidfile="/run/${SVCNAME}/${SVCNAME}.pid"
-user="prometheus-exporter"
+user="aerospike-prometheus-exporter"
 
 command="/usr/bin/${SVCNAME}"
 command_args="${command_args} --config /etc/aerospike-prometheus-exporter/ape.toml"
