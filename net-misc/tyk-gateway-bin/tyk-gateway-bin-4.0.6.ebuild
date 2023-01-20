@@ -30,6 +30,11 @@ src_prepare() {
 	rm -r lib etc opt/share opt/tyk-gateway/install opt/tyk || die
 }
 
+pkg_preinst() {
+  /usr/sbin/useradd -r tyk -d /opt/tyk-gateway -s /sbin/nologin
+}
+
+
 src_install() {
 	newinitd "${FILESDIR}/tyk-gateway.initd" "tyk-gateway"
 	insinto /etc
