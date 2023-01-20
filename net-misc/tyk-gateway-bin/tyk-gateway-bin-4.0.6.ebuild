@@ -31,8 +31,7 @@ src_prepare() {
 }
 
 pkg_preinst() {
-	enewgroup tyk
-	enewuser tyk -1 /bin/false /dev/null tyk
+  /usr/sbin/useradd -r tyk -d /opt/tyk-gateway -s /sbin/nologin
 }
 
 
