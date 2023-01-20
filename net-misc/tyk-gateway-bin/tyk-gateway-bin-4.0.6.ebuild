@@ -30,6 +30,12 @@ src_prepare() {
 	rm -r lib etc opt/share opt/tyk-gateway/install opt/tyk || die
 }
 
+pkg_preinst() {
+	enewgroup tyk
+	enewuser tyk -1 /bin/false /dev/null tyk
+}
+
+
 src_install() {
 	newinitd "${FILESDIR}/tyk-gateway.initd" "tyk-gateway"
 	insinto /etc
