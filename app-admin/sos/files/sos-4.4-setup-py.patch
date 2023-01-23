@@ -1,0 +1,11 @@
+--- a/setup.py	2023-01-23 13:41:44.731270118 -0000
++++ b/setup.py	2023-01-23 13:41:49.351270033 -0000
+@@ -93,8 +93,6 @@
+                             'man/en/sos-mask.1', 'man/en/sos-help.1']),
+         ('share/man/man5', ['man/en/sos.conf.5']),
+         ('share/licenses/sos', ['LICENSE']),
+-        ('share/doc/sos', ['AUTHORS', 'README.md']),
+-        ('config', ['sos.conf'])
+     ],
+     packages=[
+         'sos', 'sos.presets', 'sos.presets.redhat', 'sos.policies',
