@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>ops@adjust.com</email>
-		<name>Adjust Ops</name>
-	</maintainer>
+	<upstream>
+		<maintainer status="active">
+			<email>ops@adjust.com</email>
+			<name>Adjust Ops</name>
+		</maintainer>
+		<remote-id type="github">prometheus/jmx_exporter</remote-id>
+	</upstream>
 </pkgmetadata>
