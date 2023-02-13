@@ -1,5 +1,5 @@
---- a/catalyst/base/stagebase.py	2022-03-08 14:13:19.171606064 -0000
-+++ b/catalyst/base/stagebase.py	2022-03-16 16:59:05.816227658 -0000
+--- a/catalyst/base/stagebase.py	2022-10-01 18:26:27.000000000 +0200
++++ b/catalyst/base/stagebase.py	2023-02-13 15:11:31.408304261 +0100
 @@ -185,7 +185,8 @@
  		self.set_cleanables()
  		self.set_iso_volume_id()
@@ -83,12 +83,16 @@
  	def set_busybox_config(self):
  		if self.settings["spec_prefix"] + "/busybox_config" in self.settings:
  			if isinstance(self.settings[self.settings['spec_prefix'] + '/busybox_config'], str):
-@@ -950,6 +993,43 @@
+@@ -950,6 +993,47 @@
  					cmd(['rsync', '-a', x + '/', self.settings['chroot_path']],
  						env=self.env)
  
 +	def groups(self):
-+		for x in self.settings["groups"].split():
++		grps = self.settings["groups"]
++		if isinstance(grps, str):
++			tmp = [grps]
++			grps = tmp
++		for x in grps:
 +			log.notice("Creating group: '%s'", x)
 +			cmd(["groupadd", "-R", self.settings['chroot_path'], x], env=self.env)
 +
@@ -102,11 +106,11 @@
 +				log.debug("users: '|' separator not found on line " + x)
 +			uacmd = ["useradd", "-R", self.settings['chroot_path'], "-m", x]
 +			if uid != '' and grp != '':
-+				uacmd = ["useradd", "-R", self.settings['chroot_path'], "-m", "-u", uid, "-G", grp, usr]
++				uacmd = ["useradd", "-R", self.settings['chroot_path'], "-m", "-u", uid, "-g", grp, usr]
 +			if uid != '' and grp == '':
 +				uacmd = ["useradd", "-R", self.settings['chroot_path'], "-m", "-u", uid, usr]
 +			if uid == '' and grp != '':
-+				uacmd = ["useradd", "-R", self.settings['chroot_path'], "-m", "-G", grp, usr]
++				uacmd = ["useradd", "-R", self.settings['chroot_path'], "-m", "-g", grp, usr]
 +			log.notice("Creating user: '%s'", usr + "|" + uid + "|" + grp)
 +			cmd(uacmd, env=self.env)
 +
@@ -127,7 +131,7 @@
  	def base_dirs(self):
  		pass
  
-@@ -1197,17 +1277,27 @@
+@@ -1197,17 +1281,27 @@
  				'# Please keep this setting intact when reporting bugs.\n'
  				'LC_MESSAGES=C\n')
  
