@@ -14,7 +14,6 @@ RDEPEND="
 	firmware? ( sys-kernel/linux-firmware )
 	|| (
 		sys-kernel/debian-sources
-		sys-kernel/gentoo-sources
 		sys-kernel/vanilla-sources
 		sys-kernel/git-sources
 		sys-kernel/mips-sources
@@ -22,8 +21,6 @@ RDEPEND="
 		sys-kernel/rt-sources
 		sys-kernel/zen-sources
 		sys-kernel/raspberrypi-sources
-		sys-kernel/gentoo-kernel
-		sys-kernel/gentoo-kernel-bin
 		sys-kernel/vanilla-kernel
 	)
 "
