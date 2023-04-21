@@ -1,0 +1,20 @@
+#!/sbin/openrc-run
+# Copyright 2023 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="${RC_SVCNAME}"
+description="Hashicorp Vault proxy for remotely stored zfs encryption keys"
+command="/usr/bin/zkg_run"
+command_user="root"
+pidfile="/run/${RC_SVCNAME}.pid"
+command_background=true
+output_log="/var/log/${RC_SVCNAME}/${RC_SVCNAME}.stdout.log"
+error_log="/var/log/${RC_SVCNAME}/${RC_SVCNAME}.stderr.log"
+
+start_stop_daemon_args="--wait 5000 \
+  ${ENV_CONFIG}"
+retry="SIGTERM/15/KILL/3"
+
+depend() {
+    need net
+}
