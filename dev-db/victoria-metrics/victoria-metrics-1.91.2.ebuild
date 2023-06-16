@@ -46,6 +46,7 @@ src_install() {
 			vminsert
 			vmselect
 			vmstorage
+			vmagent
 		)
 
 		for comp in "${cluster_comps[@]}"
