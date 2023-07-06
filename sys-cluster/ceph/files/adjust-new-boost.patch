@@ -1,0 +1,60 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e87f6bc..6eb89b5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -649,7 +649,7 @@ set(BOOST_HEADER_COMPONENTS container)
+ 
+ if(WITH_MGR)
+   list(APPEND BOOST_COMPONENTS
+-    python${MGR_PYTHON_VERSION_MAJOR}${MGR_PYTHON_VERSION_MINOR})
++    python${MGR_PYTHON_VERSION_MAJOR}.${MGR_PYTHON_VERSION_MINOR})
+ endif()
+ if(WITH_BOOST_CONTEXT)
+   list(APPEND BOOST_COMPONENTS context coroutine)
+@@ -669,13 +669,13 @@ if(WITH_SYSTEM_BOOST)
+   if(BOOST_ROOT AND CMAKE_LIBRARY_ARCHITECTURE)
+     set(BOOST_LIBRARYDIR "${BOOST_ROOT}/lib/${CMAKE_LIBRARY_ARCHITECTURE}")
+   endif()
+-  find_package(Boost 1.67 COMPONENTS ${BOOST_COMPONENTS} REQUIRED)
++  find_package(Boost 1.79 COMPONENTS ${BOOST_COMPONENTS} REQUIRED)
+ else()
+   set(BOOST_J 1 CACHE STRING
+     "max jobs for Boost build") # override w/-DBOOST_J=<n>
+   set(Boost_USE_STATIC_LIBS ON)
+   include(BuildBoost)
+-  build_boost(1.67
++  build_boost(1.79
+     COMPONENTS ${BOOST_COMPONENTS} ${BOOST_HEADER_COMPONENTS})
+ endif()
+ include_directories(BEFORE SYSTEM ${Boost_INCLUDE_DIRS})
+diff --git a/cmake/modules/BuildBoost.cmake b/cmake/modules/BuildBoost.cmake
+index f46cc0d..bb092d9 100644
+--- a/cmake/modules/BuildBoost.cmake
++++ b/cmake/modules/BuildBoost.cmake
+@@ -70,7 +70,7 @@ function(do_build_boost version)
+     if(c MATCHES "^python([0-9])\$")
+        set(with_python_version "${CMAKE_MATCH_1}")
+	list(APPEND boost_with_libs "python")
+-    elseif(c MATCHES "^python([0-9])\\.?([0-9])\$")
++    elseif(c MATCHES "^python([0-9])\.?([0-9]+)\$")
+	set(with_python_version "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}")
+	list(APPEND boost_with_libs "python")
+     else()
+@@ -137,14 +137,14 @@ function(do_build_boost version)
+     check_boost_version("${PROJECT_SOURCE_DIR}/src/boost" ${version})
+     set(source_dir
+       SOURCE_DIR "${PROJECT_SOURCE_DIR}/src/boost")
+-  elseif(version VERSION_GREATER 1.67)
++  elseif(version VERSION_GREATER 1.79)
+     message(FATAL_ERROR "Unknown BOOST_REQUESTED_VERSION: ${version}")
+   else()
+     message(STATUS "boost will be downloaded...")
+     # NOTE: If you change this version number make sure the package is available
+     # at the three URLs below (may involve uploading to download.ceph.com)
+-    set(boost_version 1.67.0)
+-    set(boost_sha256 2684c972994ee57fc5632e03bf044746f6eb45d4920c343937a465fd67a5adba)
++    set(boost_version 1.79.0)
++    set(boost_sha256 475d589d51a7f8b3ba2ba4eda022b170e562ca3b760ee922c146b6c65856ef39)
+     string(REPLACE "." "_" boost_version_underscore ${boost_version} )
+     set(boost_url 
+       https://dl.bintray.com/boostorg/release/${boost_version}/source/boost_${boost_version_underscore}.tar.bz2)
