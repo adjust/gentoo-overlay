@@ -3,11 +3,15 @@
 
 EAPI=7
 inherit go-module
-inherit git-r3
 
 DESCRIPTION="Prometheus exporter that scrapes metrics from a nutcracker"
 HOMEPAGE="https://github.com/stuartnelson3/twemproxy_exporter"
-EGIT_REPO_URI="https://github.com/stuartnelson3/twemproxy_exporter.git"
+if [[ ${PV} == *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/stuartnelson3/twemproxy_exporter.git"
+else
+	SRC_URI="https://github.com/adjust/gentoo-overlay/releases/download/twemproxy/twemproxy_exporter.tar.gz"
+fi
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
