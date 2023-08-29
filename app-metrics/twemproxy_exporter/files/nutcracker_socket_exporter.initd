@@ -1,0 +1,16 @@
+#!/sbin/openrc-run
+# Copyright 2016-2017 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+description="Nutcracker metrics exporter"
+pidfile=${pidfile:-"/run/${RC_SVCNAME}.pid"}
+user=${user:-nobody}
+group=${group:-nobody}
+
+command="/usr/bin/nutcracker_exporter"
+command_background="true"
+start_stop_daemon_args="--user ${user} --group ${group}"
+
+depend() {
+	after net
+}
