@@ -13,3 +13,8 @@ dev-python/ipaddress
 
 # required for apache-airflow
 dev-python/flask-wtf
+
+# they've been masked and are about to be retired
+# https://github.com/gentoo/gentoo/blob/79d83cec69d93b015fb7c725cc74b4cf63bbab6e/profiles/package.mask#L211
+acct-group/quagga
+acct-user/quagga
