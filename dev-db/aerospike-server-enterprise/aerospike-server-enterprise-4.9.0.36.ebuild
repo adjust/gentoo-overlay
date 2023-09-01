@@ -1,9 +1,7 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-
-inherit eutils
+EAPI=8
 
 DESCRIPTION="Flash-optimized, in-memory, nosql database"
 HOMEPAGE="http://www.aerospike.com"
@@ -19,7 +17,6 @@ IUSE=""
 RDEPEND="
 	acct-group/aerospike
 	acct-user/aerospike
-	!dev-db/aerospike-server-community
 	net-nds/openldap
 	sys-process/numactl
 	|| (
