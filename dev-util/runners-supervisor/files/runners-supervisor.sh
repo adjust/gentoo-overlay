@@ -7,9 +7,13 @@ BASENAME=base
 # (see -i parameter below)
 INTERVAL=30
 
-# parallel runners 
+# parallel runners
 # (see -n parameter below)
 MAXRUNNERS=5
+
+# Add user local pip binary path to PATH
+# This is required for ansible purposes
+export PATH=${HOME}/.local/bin:${PATH}
 
 TMP_TOKEN=""
 TMP_TOKEN_EXP=""
@@ -115,7 +119,7 @@ function tmptoken() {
 
 # clone the runner from the base image
 # it uses the random name and creates all the files required
-# to save disk space files are not copied, they are 
+# to save disk space files are not copied, they are
 # hardlinked instead
 function clone_runner() {
     DSTSUFFIX=$(echo $RANDOM | md5sum | head -c 6) # 6 random HEX digits
