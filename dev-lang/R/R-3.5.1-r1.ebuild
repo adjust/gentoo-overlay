@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit bash-completion-r1 autotools eutils flag-o-matic fortran-2 multilib toolchain-funcs
+inherit bash-completion-r1 autotools flag-o-matic fortran-2 multilib toolchain-funcs
 
 # latest git commit for R bash completion: https://github.com/deepayan/rcompletion
 BCPV=78d6830e28ea90a046da79a9b4f70c39594bb6d6
