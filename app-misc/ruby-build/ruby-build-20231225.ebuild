@@ -17,6 +17,10 @@ IUSE="rbenv"
 DEPEND="rbenv? ( app-misc/rbenv )"
 RDEPEND="${DEPEND}"
 
+src_compile() {
+    :
+}
+
 src_install() {
 	dobin bin/${PN}
 
