@@ -16,7 +16,7 @@ use LWP::UserAgent;
 
 use Data::Dumper;
 
-my ($help, $verbose, $time, $parser, $json, $prometheus);
+my ($help, $verbose, $time, $parser, $json, $prometheus, $name);
 my $base_uri = "/insert/prometheus/api/v1/import/prometheus";
 
 GetOptions(
@@ -24,7 +24,8 @@ GetOptions(
     "t|time=i" => \$time,
     "v|verbose" => \$verbose,
     "p|parser=s" => \&_parse_handler,
-    "j|json" => \$json
+    "j|json" => \$json,
+    "n|name=s" => \$name
 ) or _help(2);
 _parse_handler('parser','stats') unless $parser;
 
@@ -333,16 +334,17 @@ sub _send_victoriametrics
 sub _parse_prometheus
 {
     my $file = shift;
+    my $id = $name ? $name : hostname();
     # turns out tail is much better than anything
     # I can whip up in perl on short notice
     open(my $fh, '-|', "tail -n0 -f $file 2>/dev/null")
         or die ("Can't tail $file: $!");
 
-    my ($topic) = $file =~ m/(?:schaufel_?)?(?:exports_?)?([^\/]+?)\.log/;
-	my $grafana_delivered = "schaufel_delivered{ topic=\"$topic\" , host=\"".hostname()."\" }" ;
-    my $grafana_kafkaerr = "schaufel_kafkaerr{ topic=\"$topic\" , host=\"".hostname()."\" }" ;
-    my $grafana_autocommit = "schaufel_autocommit{ topic=\"$topic\" , host=\"".hostname()."\" }" ;
-    my $grafana_rebalance = "schaufel_rebalanced{ topic=\"$topic\" , host=\"".hostname()."\" }" ;
+    my ($topic) = $file =~ m/(?:schaufel_?)?(?:exports_?)?(?:[a-z0-9]+\.)?([^\/]+?)\.log/;
+	my $grafana_delivered = "schaufel_delivered{ topic=\"$topic\" , host=\"".$id."\" }" ;
+    my $grafana_kafkaerr = "schaufel_kafkaerr{ topic=\"$topic\" , host=\"".$id."\" }" ;
+    my $grafana_autocommit = "schaufel_autocommit{ topic=\"$topic\" , host=\"".$id."\" }" ;
+    my $grafana_rebalance = "schaufel_rebalanced{ topic=\"$topic\" , host=\"".$id."\" }" ;
 
     # using http connections to prometheus
 	my $data = "";
