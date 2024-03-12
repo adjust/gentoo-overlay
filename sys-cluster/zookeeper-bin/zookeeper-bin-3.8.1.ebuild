@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -10,8 +10,8 @@ MY_P="${MY_PN}-${PV}"
 
 DESCRIPTION="A high-performance coordination service for distributed applications"
 HOMEPAGE="https://zookeeper.apache.org/"
-SRC_URI="https://archive.apache.org/dist/${MY_PN}/${MY_P}/${MY_P}.tar.gz"
-S="${WORKDIR}/${MY_P}"
+SRC_URI="https://archive.apache.org/dist/${MY_PN}/${MY_P}/apache-${MY_P}-bin.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/apache-${MY_P}-bin"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -24,7 +24,7 @@ BDEPEND="
 "
 RDEPEND="
 	${BDEPEND}
-	>=virtual/jre-1.7
+	>=virtual/jre-1.8
 "
 
 INSTALL_DIR=/opt/"${PN}"
@@ -32,8 +32,7 @@ export CONFIG_PROTECT="${CONFIG_PROTECT} ${INSTALL_DIR}/conf"
 
 src_prepare() {
 	default
-	rm "${S}"/docs/images/instruction_arrow.png || die
-	rm "${S}"/docs/skin/images/instruction_arrow.png || die
+	rm "${S}"/docs/skin/instruction_arrow.png || die
 }
 
 src_install() {
