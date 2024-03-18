@@ -194,6 +194,7 @@ function update_check() {
 
     # get the json with the latest information and parse it
     LATEST=`curl -s -u ${GHTOKEN} https://api.github.com/repos/actions/runner/releases/latest`
+    [ $? -ne 0 ] && log "Failed to get the latest version" && return
 #    URL=`echo ${LATEST} | jq -r '.assets[].browser_download_url|select(.|contains("linux-x64"))'`
 # object structure is changed, it's a list of URLs now and the last one is what we need
     URL=`echo ${LATEST} | jq -r '[.assets[].browser_download_url|select(.|contains("linux-x64"))]|last'`
@@ -205,6 +206,7 @@ function update_check() {
 	rm -rf ${DIR}.tmp # to be sure
 	mkdir ${DIR}.tmp
 	wget -qO- ${URL} | tar xfz - -C ${DIR}.tmp
+    [ $? -ne 0 ] && log "Failed to download the new version" && return
 	mv ${DIR} ${DIR}.bak
 	mv ${DIR}.tmp ${DIR}
 	rm -rf ${DIR}.bak
