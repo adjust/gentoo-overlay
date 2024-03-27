@@ -111,14 +111,10 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 DEPEND=""
 RDEPEND="${PYTHON_DEPS}
 	app-arch/cpio
-	>=app-misc/pax-utils-1.2.2
+	app-misc/pax-utils
 	app-portage/elt-patches
 	dev-util/gperf
 	sys-apps/sandbox
-	sys-devel/autoconf
-	sys-devel/autoconf-archive
-	sys-devel/automake
-	sys-devel/libtool
 	virtual/pkgconfig
 	elibc_glibc? ( sys-libs/glibc[static-libs(+)] )
 	firmware? ( sys-kernel/linux-firmware )"
