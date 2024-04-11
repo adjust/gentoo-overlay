@@ -4,21 +4,12 @@
 
 name="sql_exporter daemon"
 description="SQL Exporter allows to run custom queries against a database"
+command="/usr/bin/sql_exporter"
+command_args="-config.file /etc/sql_exporter/sql_exporter.yml"
+start_stop_daemon_args="--user sql_exporter"
+output_log="/var/log/sql_exporter/sql_exporter.log"
+error_log="/var/log/sql_exporter/sql_exporter.log"
 
 depend() {
     need net
-}
-
-start() {
-    ebegin "Starting sql_exporter"
-    start-stop-daemon --start --chuid sql_exporter --exec /usr/bin/sql_exporter -- \
-        -config.file /etc/sql_exporter/sql_exporter.yml \
-        >> /var/log/sql_exporter/sql_exporter.log 2>&1 &
-    eend $?
-}
-
-stop() {
-    ebegin "Stopping sql_exporter"
-    start-stop-daemon --stop --quiet --exec /usr/bin/sql_exporter
-    eend $?
 }
