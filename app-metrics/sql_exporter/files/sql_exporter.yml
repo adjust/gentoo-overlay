@@ -2,16 +2,16 @@
 # jobs is a map of jobs, define any number but please keep the connection usage on the DBs in mind
 jobs:
   # each job needs a unique name, it's used for logging and as an default label
-- name: "example"
+- name: "postgres"
   # interval defined the pause between the runs of this job
-  interval: '5m'
+  interval: '1m'
   # cron_schedule when to execute the job in the standard CRON syntax
   # if specified, the interval is ignored
-  cron_schedule: "0 0 * * *"
+  #cron_schedule: "0 0 * * *"
   # connections is an array of connection URLs
   # each query will be executed on each connection
   connections:
-  - 'postgres://postgres@localhost/postgres?sslmode=disable'
+  - 'postgres://sql_exporter@/?host=/run/postgresql&dbname=postgres&sslmode=disable'
   # startup_sql is an array of SQL statements
   # each statements is executed once after connecting
   startup_sql:

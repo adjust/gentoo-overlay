@@ -26,31 +26,34 @@ EGO_PN="github.com/justwatchcom/sql_exporter"
 
 src_prepare() {
 	default
-	cd "${S}" || die
+	cd "${S}"
 	export GO111MODULE=auto
 }
 
 src_compile() {
 	export GOPATH="${S}"
-	cd "${S}/src/${EGO_PN}" || die
-	echo "compiling from $(pwd)" || die
-	go build -o "${S}/bin/sql_exporter" || die "Failed to build sql_exporter"
+	cd "${S}/src/${EGO_PN}"
+	echo "compiling from $(pwd)"
+	go build -o "${S}/bin/sql_exporter"
 }
 
 src_test() {
-	cd "${S}/src/${EGO_PN}" || die
-	go test -v ./... || die "Tests failed"
+	cd "${S}/src/${EGO_PN}"
+	go test -v ./... 
 }
 
 src_install() {
-	dobin "${S}/bin/sql_exporter"
-	newinitd "${FILESDIR}/sql_exporter.init.d" sql_exporter
-	dosym /etc/init.d/sql_exporter /etc/runlevels/default/sql_exporter || die
+    dobin "${S}/bin/sql_exporter"
+    newinitd "${FILESDIR}/sql_exporter.init.d" sql_exporter
+    dosym /etc/init.d/sql_exporter /etc/runlevels/default/sql_exporter
 
-	insinto /etc/sql_exporter
-	doins "${FILESDIR}/sql_exporter.yml"
+    insinto /etc/sql_exporter
+    doins "${FILESDIR}/sql_exporter.yml"
 
-	# Create log directory and file
-	dodir /var/log/sql_exporter
-	touch "${ED}"/var/log/sql_exporter/sql_exporter.log || die "failed to create log file"
+    # Create log directory and file
+    dodir /var/log/sql_exporter
+    touch "${ED}"/var/log/sql_exporter/sql_exporter.log
+
+    # Change ownership of the log file to sql_exporter
+    chown sql_exporter:sql_exporter "${ED}"/var/log/sql_exporter/sql_exporter.log
 }
