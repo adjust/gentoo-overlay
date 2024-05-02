@@ -1,0 +1,122 @@
+diff -urN jemalloc-5.1.0/VERSION redis-6.2.14/VERSION
+--- jemalloc-5.1.0/VERSION	2018-05-08 19:15:29.000000000 -0000
++++ redis-6.2.14/VERSION	2023-10-18 07:43:10.000000000 -0000
+@@ -1 +1 @@
+-5.1.0-0-g61efbda7098de6fe64c362d309824864308c36d4
++5.1.0-0-g0
+diff -urN jemalloc-5.1.0/configure.ac redis-6.2.14/configure.ac
+--- jemalloc-5.1.0/configure.ac	2018-05-08 19:15:01.000000000 -0000
++++ redis-6.2.14/configure.ac	2023-10-18 07:43:10.000000000 -0000
+@@ -512,7 +512,7 @@
+ LDTARGET='-o $@'
+ TEST_LD_MODE=
+ EXTRA_LDFLAGS=
+-ARFLAGS='crus'
++ARFLAGS='crs'
+ AROUT=' $@'
+ CC_MM=1
+ 
+diff -urN jemalloc-5.1.0/include/jemalloc/internal/jemalloc_internal_inlines_c.h redis-6.2.14/include/jemalloc/internal/jemalloc_internal_inlines_c.h
+--- jemalloc-5.1.0/include/jemalloc/internal/jemalloc_internal_inlines_c.h	2018-05-08 19:15:01.000000000 -0000
++++ redis-6.2.14/include/jemalloc/internal/jemalloc_internal_inlines_c.h	2023-10-18 07:43:10.000000000 -0000
+@@ -215,4 +215,43 @@
+ 	return arena_ralloc_no_move(tsdn, ptr, oldsize, size, extra, zero);
+ }
+ 
++JEMALLOC_ALWAYS_INLINE int
++iget_defrag_hint(tsdn_t *tsdn, void* ptr) {
++	int defrag = 0;
++	rtree_ctx_t rtree_ctx_fallback;
++	rtree_ctx_t *rtree_ctx = tsdn_rtree_ctx(tsdn, &rtree_ctx_fallback);
++	szind_t szind;
++	bool is_slab;
++	rtree_szind_slab_read(tsdn, &extents_rtree, rtree_ctx, (uintptr_t)ptr, true, &szind, &is_slab);
++	if (likely(is_slab)) {
++		/* Small allocation. */
++		extent_t *slab = iealloc(tsdn, ptr);
++		arena_t *arena = extent_arena_get(slab);
++		szind_t binind = extent_szind_get(slab);
++		bin_t *bin = &arena->bins[binind];
++		malloc_mutex_lock(tsdn, &bin->lock);
++		/* don't bother moving allocations from the slab currently used for new allocations */
++		if (slab != bin->slabcur) {
++			int free_in_slab = extent_nfree_get(slab);
++			if (free_in_slab) {
++				const bin_info_t *bin_info = &bin_infos[binind];
++				unsigned long curslabs = bin->stats.curslabs;
++				size_t curregs = bin->stats.curregs;
++				if (bin->slabcur) {
++					/* remove slabcur from the overall utilization */
++					curregs -= bin_info->nregs - extent_nfree_get(bin->slabcur);
++					curslabs -= 1;
++				}
++				/* Compare the utilization ratio of the slab in question to the total average,
++				 * to avoid precision lost and division, we do that by extrapolating the usage
++				 * of the slab as if all slabs have the same usage. If this slab is less used 
++				 * than the average, we'll prefer to evict the data to hopefully more used ones */
++				defrag = (bin_info->nregs - free_in_slab) * curslabs <= curregs;
++			}
++		}
++		malloc_mutex_unlock(tsdn, &bin->lock);
++	}
++	return defrag;
++}
++
+ #endif /* JEMALLOC_INTERNAL_INLINES_C_H */
+diff -urN jemalloc-5.1.0/include/jemalloc/jemalloc_macros.h.in redis-6.2.14/include/jemalloc/jemalloc_macros.h.in
+--- jemalloc-5.1.0/include/jemalloc/jemalloc_macros.h.in	2018-05-08 19:15:01.000000000 -0000
++++ redis-6.2.14/include/jemalloc/jemalloc_macros.h.in	2023-10-18 07:43:10.000000000 -0000
+@@ -120,3 +120,7 @@
+ #  define JEMALLOC_RESTRICT_RETURN
+ #  define JEMALLOC_ALLOCATOR
+ #endif
++
++/* This version of Jemalloc, modified for Redis, has the je_get_defrag_hint()
++ * function. */
++#define JEMALLOC_FRAG_HINT
+diff -urN jemalloc-5.1.0/src/background_thread.c redis-6.2.14/src/background_thread.c
+--- jemalloc-5.1.0/src/background_thread.c	2018-05-08 19:15:01.000000000 -0000
++++ redis-6.2.14/src/background_thread.c	2023-10-18 07:43:10.000000000 -0000
+@@ -787,7 +787,13 @@
+ 	nstime_init(&stats->run_interval, 0);
+ 	for (unsigned i = 0; i < max_background_threads; i++) {
+ 		background_thread_info_t *info = &background_thread_info[i];
+-		malloc_mutex_lock(tsdn, &info->mtx);
++		if (malloc_mutex_trylock(tsdn, &info->mtx)) {
++			/*
++			 * Each background thread run may take a long time;
++			 * avoid waiting on the stats if the thread is active.
++			 */
++			continue;
++		}
+ 		if (info->state != background_thread_stopped) {
+ 			num_runs += info->tot_n_runs;
+ 			nstime_add(&stats->run_interval, &info->tot_sleep_time);
+diff -urN jemalloc-5.1.0/src/jemalloc.c redis-6.2.14/src/jemalloc.c
+--- jemalloc-5.1.0/src/jemalloc.c	2018-05-08 19:15:01.000000000 -0000
++++ redis-6.2.14/src/jemalloc.c	2023-10-18 07:43:10.000000000 -0000
+@@ -3324,3 +3324,12 @@
+ }
+ 
+ /******************************************************************************/
++
++/* Helps the application decide if a pointer is worth re-allocating in order to reduce fragmentation.
++ * returns 1 if the allocation should be moved, and 0 if the allocation be kept.
++ * If the application decides to re-allocate it should use MALLOCX_TCACHE_NONE when doing so. */
++JEMALLOC_EXPORT int JEMALLOC_NOTHROW
++get_defrag_hint(void* ptr) {
++	assert(ptr != NULL);
++	return iget_defrag_hint(TSDN_NULL, ptr);
++}
+diff -urN jemalloc-5.1.0/src/malloc_io.c redis-6.2.14/src/malloc_io.c
+--- jemalloc-5.1.0/src/malloc_io.c	2018-05-08 19:15:01.000000000 -0000
++++ redis-6.2.14/src/malloc_io.c	2023-10-18 07:43:10.000000000 -0000
+@@ -362,7 +362,7 @@
+ 	}								\
+ } while (0)
+ #define GET_ARG_NUMERIC(val, len) do {					\
+-	switch (len) {							\
++	switch ((unsigned char)len) {					\
+ 	case '?':							\
+ 		val = va_arg(ap, int);					\
+ 		break;							\
