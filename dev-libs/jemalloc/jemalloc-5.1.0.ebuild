@@ -25,8 +25,7 @@ MULTILIB_WRAPPED_HEADERS=( /usr/include/jemalloc/jemalloc.h )
 QA_CONFIGURE_OPTIONS="--enable-static --disable-static --enable-shared --disable-shared"
 
 # TODO: ease the restriction
-RDEPEND="!<dev-db/redis-6.2.14
-	!>dev-db/redis-6.2.14-r9999"
+RDEPEND="!<dev-db/redis-6.2.14"
 
 src_prepare() {
 	default
