@@ -5,7 +5,7 @@ After=network-online.target
 
 [Service]
 EnvironmentFile=/etc/default/%p
-User=prometheus-exporter
+User=prometheus
 Restart=on-failure
 ExecStart=/usr/bin/%p $ARGS
 ExecReload=/bin/kill -HUP $MAINPID
