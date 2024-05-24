@@ -1,5 +1,5 @@
 #!/sbin/openrc-run
-# Copyright 2017 Gentoo Foundation
+# Copyright 2024 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 description="Prometheus unbound exporter"
@@ -11,7 +11,7 @@ command_args="${command_args}"
 command_background="true"
 start_stop_daemon_args="--user ${user} \
 	--stdout /var/log/prometheus/${SVCNAME}.log \
-	--stderr /var/log/prometheus/${SVCNAME}.log"
+	--stderr /var/log/prometheus/${SVCNAME}.err"
 
 depend() {
 	need net
