@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <maintainer type="person">
-    <email>mva@gentoo.org</email>
-    <name>Vadim Misbakh-Soloviov</name>
+  <maintainer>
+    <email>ops@adjustcom</email>
+    <name>Adjust Ops Team</name>
   </maintainer>
   <upstream>
     <remote-id type="github">letsencrypt/unbound_exporter</remote-id>
