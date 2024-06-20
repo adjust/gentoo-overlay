@@ -1,0 +1,16 @@
+#!/sbin/openrc-run
+# Copyright 2024 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="Loki Promtail"
+description="Promtail is a logs agent"
+command="/opt/bin/promtail"
+command_args="-config.file /etc/promtail.yml"
+command_background="true"
+pidfile="/var/run/${RC_SVCNAME}.pid"
+output_logger="logger -p daemon.info -t ${SVCNAME}"
+error_logger="logger -p daemon.error -t ${SVCNAME}"
+
+depend() {
+    after net
+}
