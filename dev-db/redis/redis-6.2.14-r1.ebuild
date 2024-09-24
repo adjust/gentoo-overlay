@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 # Redis does NOT build with Lua 5.2 or newer at this time:
 #  - 5.3 and 5.4 give:
@@ -11,16 +11,19 @@ EAPI=7
 #    because lua_open became lua_newstate in 5.2
 LUA_COMPAT=( lua5-1 luajit )
 
-inherit autotools flag-o-matic lua-single systemd toolchain-funcs tmpfiles
+# Upstream have deviated too far from vanilla Lua, adding their own APIs
+# like lua_enablereadonlytable, but we still need the eclass and such
+# for bug #841422.
+inherit autotools edo flag-o-matic lua-single multiprocessing systemd tmpfiles toolchain-funcs
 
-DESCRIPTION="A persistent caching system, key-value and data structures database"
+DESCRIPTION="A persistent caching system, key-value, and data structures database"
 HOMEPAGE="https://redis.io"
 SRC_URI="https://github.com/redis/redis/archive/refs/tags/${P}.tar.gz"
 
 LICENSE="BSD"
-SLOT="0"
-KEYWORDS="amd64 arm arm64 ~hppa ppc ppc64 ~riscv sparc x86 ~amd64-linux ~x86-linux ~x86-solaris"
-IUSE="+jemalloc ssl systemd tcmalloc test"
+SLOT="0/$(ver_cut 1-2)"
+KEYWORDS="amd64 ~arm arm64 ~hppa ~ppc ppc64 ~riscv ~s390 ~sparc x86 ~amd64-linux ~x86-linux"
+IUSE="+jemalloc selinux ssl systemd tcmalloc test"
 RESTRICT="!test? ( test )"
 
 COMMON_DEPEND="
@@ -34,6 +37,7 @@ RDEPEND="
 	${COMMON_DEPEND}
 	acct-group/redis
 	acct-user/redis
+	selinux? ( sec-policy/selinux-redis )
 "
 
 BDEPEND="
@@ -54,7 +58,6 @@ REQUIRED_USE="?? ( jemalloc tcmalloc )
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-6.2.1-config.patch
-	"${FILESDIR}"/${PN}-6.2.1-sharedlua.patch
 	"${FILESDIR}"/${PN}-sentinel-5.0-config.patch
 )
 
@@ -88,18 +91,24 @@ src_compile() {
 }
 
 src_test() {
-	# Known to fail with FEATURES=usersandbox
-	if has usersandbox ${FEATURES}; then
-		ewarn "You are emerging ${P} with 'usersandbox' enabled." \
-			"Expect some test failures or emerge with 'FEATURES=-usersandbox'!"
+	local runtestargs=(
+		--clients "$(makeopts_jobs)" # see bug #649868
+	)
+
+	if has usersandbox ${FEATURES} || ! has userpriv ${FEATURES}; then
+		ewarn "unit/oom-score-adj test will be skipped." \
+			"It is known to fail with FEATURES usersandbox or -userpriv. See bug #756382."
+
+		# unit/oom-score-adj was introduced in version 6.2.0
+		runtestargs+=( --skipunit unit/oom-score-adj ) # see bug #756382
 	fi
 
 	if use ssl; then
-		./utils/gen-test-certs.sh
-		./runtest --tls
-	else
-		./runtest
+		edo ./utils/gen-test-certs.sh
+		runtestargs+=( --tls )
 	fi
+
+	edo ./runtest "${runtestargs[@]}"
 }
 
 src_install() {

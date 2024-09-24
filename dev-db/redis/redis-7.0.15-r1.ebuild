@@ -1,30 +1,24 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-# Redis does NOT build with Lua 5.2 or newer at this time:
-#  - 5.3 and 5.4 give:
-# lua_bit.c:83:2: error: #error "Unknown number type, check LUA_NUMBER_* in luaconf.h"
-#  - 5.2 fails with:
-# scripting.c:(.text+0x1f9b): undefined reference to `lua_open'
-#    because lua_open became lua_newstate in 5.2
-LUA_COMPAT=( lua5-1 luajit )
+# N.B.: It is no clue in porting to Lua eclasses, as upstream have deviated
+# too far from vanilla Lua, adding their own APIs like lua_enablereadonlytable
 
-inherit autotools flag-o-matic lua-single systemd toolchain-funcs tmpfiles
+inherit autotools edo flag-o-matic multiprocessing systemd tmpfiles toolchain-funcs
 
-DESCRIPTION="A persistent caching system, key-value and data structures database"
+DESCRIPTION="A persistent caching system, key-value, and data structures database"
 HOMEPAGE="https://redis.io"
 SRC_URI="https://github.com/redis/redis/archive/refs/tags/${P}.tar.gz"
 
 LICENSE="BSD"
-SLOT="0"
-KEYWORDS="amd64 arm arm64 ~hppa ppc ppc64 ~riscv sparc x86 ~amd64-linux ~x86-linux ~x86-solaris"
-IUSE="+jemalloc ssl systemd tcmalloc test"
+SLOT="0/$(ver_cut 1-2)"
+KEYWORDS="amd64 ~arm arm64 ~hppa ~loong ~ppc ppc64 ~riscv ~s390 ~sparc x86 ~amd64-linux ~x86-linux"
+IUSE="+jemalloc selinux ssl systemd tcmalloc test"
 RESTRICT="!test? ( test )"
 
 COMMON_DEPEND="
-	${LUA_DEPS}
 	ssl? ( dev-libs/openssl:0= )
 	systemd? ( sys-apps/systemd:= )
 	tcmalloc? ( dev-util/google-perftools )
@@ -34,6 +28,7 @@ RDEPEND="
 	${COMMON_DEPEND}
 	acct-group/redis
 	acct-user/redis
+	selinux? ( sec-policy/selinux-redis )
 "
 
 BDEPEND="
@@ -49,13 +44,12 @@ DEPEND="
 		ssl? ( dev-tcltk/tls )
 	)"
 
-REQUIRED_USE="?? ( jemalloc tcmalloc )
-	${LUA_REQUIRED_USE}"
+REQUIRED_USE="?? ( jemalloc tcmalloc )"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-6.2.1-config.patch
-	"${FILESDIR}"/${PN}-6.2.1-sharedlua.patch
 	"${FILESDIR}"/${PN}-sentinel-5.0-config.patch
+	"${FILESDIR}"/${PN}-7.0.4-no-which.patch
 )
 
 src_prepare() {
@@ -88,18 +82,32 @@ src_compile() {
 }
 
 src_test() {
-	# Known to fail with FEATURES=usersandbox
-	if has usersandbox ${FEATURES}; then
-		ewarn "You are emerging ${P} with 'usersandbox' enabled." \
-			"Expect some test failures or emerge with 'FEATURES=-usersandbox'!"
+	local runtestargs=(
+		--clients "$(makeopts_jobs)" # see bug #649868
+
+		--skiptest "Active defrag eval scripts" # see bug #851654
+	)
+
+	if has usersandbox ${FEATURES} || ! has userpriv ${FEATURES}; then
+		ewarn "oom-score-adj related tests will be skipped." \
+			"They are known to fail with FEATURES usersandbox or -userpriv. See bug #756382."
+
+		runtestargs+=(
+			# unit/oom-score-adj was introduced in version 6.2.0
+			--skipunit unit/oom-score-adj # see bug #756382
+
+			# Following test was added in version 7.0.0 to unit/introspection.
+			# It also tries to adjust OOM score.
+			--skiptest "CONFIG SET rollback on apply error"
+		)
 	fi
 
 	if use ssl; then
-		./utils/gen-test-certs.sh
-		./runtest --tls
-	else
-		./runtest
+		edo ./utils/gen-test-certs.sh
+		runtestargs+=( --tls )
 	fi
+
+	edo ./runtest "${runtestargs[@]}"
 }
 
 src_install() {
@@ -121,7 +129,7 @@ src_install() {
 	insinto /etc/logrotate.d/
 	newins "${FILESDIR}/${PN}.logrotate" ${PN}
 
-	dodoc 00-RELEASENOTES BUGS CONTRIBUTING MANIFESTO README.md
+	dodoc 00-RELEASENOTES BUGS CONTRIBUTING.md MANIFESTO README.md
 
 	dobin src/redis-cli
 	dosbin src/redis-benchmark src/redis-server src/redis-check-aof src/redis-check-rdb

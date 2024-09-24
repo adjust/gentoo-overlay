@@ -49,7 +49,7 @@
  $since = {}
  git_dir = File.dirname(__FILE__) ++ "/../.git"
 -if File.directory?(git_dir) && `which git` != ""
-+if File.directory?(git_dir) && `comamnd -v git` != ""
++if File.directory?(git_dir) && `command -v git` != ""
      `git --git-dir="#{git_dir}" tag --sort=v:refname`.each_line do |version|
          next if version !~ /^(\d+)\.\d+\.\d+?$/ || $1.to_i < 4
          version.chomp!
