@@ -28,11 +28,8 @@ case "${EAPI:-0}" in
 	*)     die "Unsupported EAPI=${EAPI} (unknown) for ${ECLASS}" ;;
 esac
 
-if [[ ${_PYTHON_ECLASS_INHERITED} ]]; then
-	die 'python-r1 suite eclasses can not be used with python.eclass.'
-fi
-
-if [[ ! ${_PYTHON_UTILS_R1} ]]; then
+if [[ -z ${_PYTHON_UTILS_R1_ECLASS} ]]; then
+_PYTHON_UTILS_R1_ECLASS=1
 
 [[ ${EAPI} == [67] ]] && inherit eapi8-dosym
 inherit multiprocessing toolchain-funcs
@@ -44,6 +41,7 @@ inherit multiprocessing toolchain-funcs
 _PYTHON_ALL_IMPLS=(
 	pypy3
 	python3_{5..13}
+	python3_13t
 )
 readonly _PYTHON_ALL_IMPLS
 
@@ -132,7 +130,7 @@ _python_set_impls() {
 			# please keep them in sync with _PYTHON_ALL_IMPLS
 			# and _PYTHON_HISTORICAL_IMPLS
 			case ${i} in
-				pypy3|python2_7|python3_[89]|python3_1[0-3])
+				pypy3|python2_7|python3_[89]|python3_1[0-3]|python3_13t)
 					;;
 				jython2_7|pypy|pypy1_[89]|pypy2_0|python2_[5-6]|python3_[1-7])
 					obsolete+=( "${i}" )
@@ -1446,5 +1444,38 @@ python_has_version() {
 	return 0
 }
 
-_PYTHON_UTILS_R1=1
+# @FUNCTION: _python_sanity_checks
+# @INTERNAL
+# @DESCRIPTION:
+# Perform additional environment sanity checks.
+_python_sanity_checks() {
+	debug-print-function ${FUNCNAME} "$@"
+
+	[[ ${_PYTHON_SANITY_CHECKED} ]] && return
+
+	if [[ -v PYTHONPATH ]]; then
+		local x paths=()
+		mapfile -d ':' -t paths <<<${PYTHONPATH}
+
+		for x in "${paths[@]}"; do
+			if [[ ${x} != /* ]]; then
+				eerror "Relative path found in PYTHONPATH:"
+				eerror
+				eerror "  PYTHONPATH=${PYTHONPATH@Q}"
+				eerror
+				eerror "This is guaranteed to cause random breakage.  Please make sure that"
+				eerror "your PYTHONPATH contains absolute paths only (and only if necessary)."
+				eerror "Note that empty values (including ':' at either end and an empty"
+				eerror "PYTHONPATH) count as the current directory.  If no PYTHONPATH"
+				eerror "is intended, it needs to be unset instead."
+				die "Relative paths in PYTHONPATH are forbidden: ${x@Q}"
+			fi
+		done
+
+		elog "PYTHONPATH=${PYTHONPATH@Q}"
+	fi
+
+	_PYTHON_SANITY_CHECKED=1
+}
+
 fi
