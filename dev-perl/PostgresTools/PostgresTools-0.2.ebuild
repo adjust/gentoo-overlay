@@ -27,14 +27,18 @@ BDEPEND="
 "
 
 DEPEND="
-	dev-perl/Moo
-	dev-perl/DBD-Pg
-	virtual/perl-File-Path
-	dev-perl/DateTime
-	dev-perl/DateTime-Format-Strptime
-	dev-perl/Module-Build
-	dev-perl/Parallel-ForkManager
-	dev-perl/Term-ProgressBar
+        dev-perl/Moo
+        dev-perl/DBD-Pg
+        virtual/perl-File-Path
+        dev-perl/DateTime
+        dev-perl/DateTime-Format-Strptime
+        dev-perl/Module-Build
+        dev-perl/Parallel-ForkManager
+        dev-perl/Term-ProgressBar
+        dev-perl/Sub-Identify
+        dev-perl/Params-Util
+        dev-perl/Sub-Name
+        dev-perl/Class-MethodMaker
 "
 
 RDEPEND="
