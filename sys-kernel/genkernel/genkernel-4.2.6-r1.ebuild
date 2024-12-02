@@ -32,7 +32,7 @@ VERSION_KMOD="29"
 VERSION_LIBAIO="0.3.112"
 VERSION_LIBGCRYPT="1.9.4"
 VERSION_LIBGPGERROR="1.43"
-VERSION_LIBXCRYPT="4.4.26"
+VERSION_LIBXCRYPT="4.4.36"
 VERSION_LVM="2.02.188"
 VERSION_LZO="2.10"
 VERSION_MDADM="4.1"
@@ -40,7 +40,7 @@ VERSION_POPT="1.18"
 VERSION_STRACE="5.14"
 VERSION_THIN_PROVISIONING_TOOLS="0.9.0"
 VERSION_UNIONFS_FUSE="2.0"
-VERSION_UTIL_LINUX="2.37.2"
+VERSION_UTIL_LINUX="2.39.4"
 VERSION_XFSPROGS="5.13.0"
 VERSION_XZ="5.2.5"
 VERSION_ZLIB="1.2.11"
@@ -78,7 +78,7 @@ COMMON_URI="
 	https://www.kernel.org/pub/linux/utils/util-linux/v${VERSION_UTIL_LINUX:0:4}/util-linux-${VERSION_UTIL_LINUX}.tar.xz
 	https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-${VERSION_XFSPROGS}.tar.xz
 	https://tukaani.org/xz/xz-${VERSION_XZ}.tar.gz
-	https://zlib.net/zlib-${VERSION_ZLIB}.tar.gz
+	https://zlib.net/fossils/zlib-${VERSION_ZLIB}.tar.gz
 	https://github.com/facebook/zstd/archive/v${VERSION_ZSTD}.tar.gz -> zstd-${VERSION_ZSTD}.tar.gz
 "
 
