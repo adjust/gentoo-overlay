@@ -15,7 +15,7 @@ inherit autotools flag-o-matic lua-single systemd toolchain-funcs tmpfiles
 
 DESCRIPTION="A persistent caching system, key-value and data structures database"
 HOMEPAGE="https://redis.io"
-SRC_URI="https://github.com/redis/redis/archive/refs/tags/${P}.tar.gz"
+SRC_URI="https://github.com/redis/redis/archive/refs/tags/${PV}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
@@ -90,7 +90,7 @@ src_compile() {
 src_test() {
 	# Known to fail with FEATURES=usersandbox
 	if has usersandbox ${FEATURES}; then
-		ewarn "You are emerging ${P} with 'usersandbox' enabled." \
+		ewarn "You are emerging ${PV} with 'usersandbox' enabled." \
 			"Expect some test failures or emerge with 'FEATURES=-usersandbox'!"
 	fi
 

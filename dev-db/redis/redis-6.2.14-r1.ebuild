@@ -18,7 +18,7 @@ inherit autotools edo flag-o-matic lua-single multiprocessing systemd tmpfiles t
 
 DESCRIPTION="A persistent caching system, key-value, and data structures database"
 HOMEPAGE="https://redis.io"
-SRC_URI="https://github.com/redis/redis/archive/refs/tags/${P}.tar.gz"
+SRC_URI="https://github.com/redis/redis/archive/refs/tags/${PV}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0/$(ver_cut 1-2)"
