@@ -13,7 +13,7 @@ HOMEPAGE="
 	https://redis.io
 	https://github.com/redis/redis
 "
-SRC_URI="https://github.com/redis/redis/archive/refs/tags/${P}.tar.gz"
+SRC_URI="https://github.com/redis/redis/archive/refs/tags/${PV}.tar.gz"
 
 LICENSE="Boost-1.0 SSPL-1"
 SLOT="0/$(ver_cut 1-2)"
