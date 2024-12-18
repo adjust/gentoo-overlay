@@ -6,8 +6,8 @@ EAPI=7
 inherit golang-build golang-vcs-snapshot
 
 DESCRIPTION="Prometheus exporter for SQL database metrics."
-HOMEPAGE="https://github.com/justwatchcom/sql_exporter"
-SRC_URI="https://github.com/justwatchcom/sql_exporter/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+HOMEPAGE="https://github.com/burningalchemist/sql_exporter"
+SRC_URI="${HOMEPAGE}/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
@@ -22,7 +22,7 @@ DEPEND="
 RDEPEND="
 	${DEPEND}"
 
-EGO_PN="github.com/justwatchcom/sql_exporter"
+EGO_PN="github.com/burningalchemist/sql_exporter"
 
 src_prepare() {
 	default
