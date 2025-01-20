@@ -34,7 +34,7 @@ src_compile() {
 	export GOPATH="${S}"
 	cd "${S}/src/${EGO_PN}"
 	echo "compiling from $(pwd)"
-	go build -o "${S}/bin/sql_exporter"
+	default
 }
 
 src_test() {
@@ -43,7 +43,7 @@ src_test() {
 }
 
 src_install() {
-    dobin "${S}/bin/sql_exporter"
+    dobin "${S}/src/${EGO_PN}/sql_exporter"
     newinitd "${FILESDIR}/sql_exporter.init.d" sql_exporter
     dosym /etc/init.d/sql_exporter /etc/runlevels/default/sql_exporter
 
