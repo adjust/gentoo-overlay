@@ -34,7 +34,7 @@ COMMON_DEPEND="
 	!elibc_glibc? ( dev-libs/libpcre )"
 DEPEND="${COMMON_DEPEND}
 	sys-apps/gawk
-	sys-devel/libtool:2
+	dev-build/libtool:2
 	test? ( dev-util/dejagnu )"
 RDEPEND="${COMMON_DEPEND}
 	sys-apps/iproute2"
