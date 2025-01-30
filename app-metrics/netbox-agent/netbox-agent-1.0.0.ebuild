@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -19,14 +19,14 @@ KEYWORDS="~amd64 ~arm64 ~ppc64 ~x86"
 REQUIRED_USE=${PYTHON_REQUIRED_USE}
 RDEPEND="
 	${PYTHON_DEPS}
-	dev-python/netaddr
-	dev-python/netifaces
-	dev-python/pyyaml
-	dev-python/python-slugify
-	dev-python/packaging
-	dev-python/distro
+	dev-python/netaddr[${PYTHON_USEDEP}]
+	dev-python/netifaces[${PYTHON_USEDEP}]
+	dev-python/pyyaml[${PYTHON_USEDEP}]
+	dev-python/python-slugify[${PYTHON_USEDEP}]
+	dev-python/packaging[${PYTHON_USEDEP}]
+	dev-python/distro[${PYTHON_USEDEP}]
 
-	dev-python/jsonargparse
-	dev-python/pynetbox
+	dev-python/jsonargparse[${PYTHON_USEDEP}]
+	dev-python/pynetbox[${PYTHON_USEDEP}]
 "
 BDEPEND=${RDEPEND}
