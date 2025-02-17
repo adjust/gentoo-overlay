@@ -44,7 +44,7 @@ src_install() {
 	newinitd "${FILESDIR}"/"${PN}".initd keepalived_exporter
 	newconfd "${FILESDIR}"/"${PN}".confd keepalived_exporter
 	keepdir /var/log/${PN}
-#	fowners ${PN}:${PN} /var/log/${PN}
+	fowners ${PN}:${PN} /var/log/${PN}
 }
 
 src_test() {
