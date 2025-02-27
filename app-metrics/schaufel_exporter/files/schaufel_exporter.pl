@@ -196,6 +196,7 @@ sub _extract_delivered
     my $result;
 
     ($result) = $line =~ m|delivered / s: (\d+)$|;
+    return "0.0" if !$result;
     return $result;
 }
 
