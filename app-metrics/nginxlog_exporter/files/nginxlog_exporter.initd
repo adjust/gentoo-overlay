@@ -1,0 +1,15 @@
+#!/sbin/openrc-run
+# Copyright 2024 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="nginxlog_exporter daemon"
+description="Prometheus exporter for NGINX Log metrics."
+command="/usr/bin/nginxlog_exporter"
+output_log="/var/log/nginxlog_exporter/nginxlog_exporter.log"
+error_log="/var/log/nginxlog_exporter/nginxlog_exporter.err.log"
+start_stop_daemon_args="--background"
+command_user="${NGINXLOG_EXPORTER_USER:-nginx}:${NGINXLOG_EXPORTER_USER:-nginx}"
+
+depend() {
+    need net
+}
