@@ -1,0 +1,3 @@
+# arguments for prometheus nginxlog exporter
+command_args='-listen-port=4040 -config-file /etc/nginx_exporter/config.hcl"'
+NGINXLOG_EXPORTER_USER="nginxlog_exporter"
