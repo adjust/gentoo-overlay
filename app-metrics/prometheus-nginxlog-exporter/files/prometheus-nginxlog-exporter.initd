@@ -1,0 +1,23 @@
+#!/sbin/openrc-run
+# Copyright 2025 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="prometheus-nginxlog-exporter daemon"
+description="Prometheus exporter for NGINX Log metrics."
+command="/usr/bin/prometheus-nginxlog-exporter"
+pidfile="/run/${RC_SVCNAME}.pid"
+output_log="/var/log/prometheus-nginxlog-exporter/prometheus-nginxlog-exporter.log"
+error_log="/var/log/prometheus-nginxlog-exporter/prometheus-nginxlog-exporter.log"
+command_background="yes"
+command_args="-config-file /etc/prometheus-nginxlog-exporter/config.hcl"
+command_user="${PROMETHEUS_NGINXLOG_EXPORTER_USER:-nginx}:${PROMETHEUS_NGINXLOG_EXPORTER_USER:-nginx}"
+
+depend() {
+    need net
+}
+
+start_pre() {
+    checkpath -d -m 0755 -o ${PROMETHEUS_NGINXLOG_EXPORTER_USER:-nginx}:${PROMETHEUS_NGINXLOG_EXPORTER_USER:-nginx} /var/log/prometheus-nginxlog-exporter
+    checkpath -f -m 0644 -o ${PROMETHEUS_NGINXLOG_EXPORTER_USER:-nginx}:${PROMETHEUS_NGINXLOG_EXPORTER_USER:-nginx} "$output_log"
+    checkpath -f -m 0644 -o ${PROMETHEUS_NGINXLOG_EXPORTER_USER:-nginx}:${PROMETHEUS_NGINXLOG_EXPORTER_USER:-nginx} "$error_log"
+}
