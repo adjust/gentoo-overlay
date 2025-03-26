@@ -16,8 +16,8 @@ SLOT="0"
 # Go module dependencies
 COMMON_DEPEND="
 	>=dev-lang/go-1.22
-	acct-group/keepalived_exporter
-	acct-user/keepalived_exporter
+	acct-group/keepalived-exporter
+	acct-user/keepalived-exporter
 "
 RDEPEND="${COMMON_DEPEND}"
 SRC_DIR="${WORKDIR}/${P}"
@@ -39,8 +39,8 @@ src_compile() {
 
 src_install() {
 	dobin "${PN}"
-	newinitd "${FILESDIR}"/"${PN}".initd keepalived_exporter
-	newconfd "${FILESDIR}"/"${PN}".confd keepalived_exporter
+	newinitd "${FILESDIR}"/"${PN}".initd keepalived-exporter
+	newconfd "${FILESDIR}"/"${PN}".confd keepalived-exporter
 	keepdir /var/log/${PN}
 	fowners ${PN}:${PN} /var/log/${PN}
 }
