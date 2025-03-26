@@ -4,10 +4,11 @@
 
 name="keepalive_exporter daemon"
 description="Prometheus exporter for Keepalived metrics."
+pidfile="/run/keepalived_exporter.pid"
 command="/usr/bin/keepalived_exporter"
 output_log="/var/log/keepalived_exporter/keepalived_exporter.log"
 error_log="/var/log/keepalived_exporter/keepalived_exporter.err.log"
-start_stop_daemon_args="--background --user keepalived_exporter"
+start_stop_daemon_args="--background --user keepalived_exporter --make-pidfile --pidfile ${pidfile}"
 
 depend() {
     need net
