@@ -3,62 +3,53 @@
 
 EAPI=8
 
-# Redis does NOT build with Lua 5.2 or newer at this time:
-#  - 5.3 and 5.4 give:
-# lua_bit.c:83:2: error: #error "Unknown number type, check LUA_NUMBER_* in luaconf.h"
-#  - 5.2 fails with:
-# scripting.c:(.text+0x1f9b): undefined reference to `lua_open'
-#    because lua_open became lua_newstate in 5.2
-LUA_COMPAT=( lua5-1 luajit )
+# N.B.: It is no clue in porting to Lua eclasses, as upstream have deviated
+# too far from vanilla Lua, adding their own APIs like lua_enablereadonlytable
 
-# Upstream have deviated too far from vanilla Lua, adding their own APIs
-# like lua_enablereadonlytable, but we still need the eclass and such
-# for bug #841422.
-inherit autotools edo flag-o-matic lua-single multiprocessing systemd tmpfiles toolchain-funcs
+inherit autotools edo multiprocessing systemd tmpfiles toolchain-funcs
 
 DESCRIPTION="A persistent caching system, key-value, and data structures database"
-HOMEPAGE="https://redis.io"
+HOMEPAGE="
+	https://redis.io
+	https://github.com/redis/redis
+"
 SRC_URI="https://github.com/redis/redis/archive/refs/tags/${PV}.tar.gz"
 
-LICENSE="BSD"
+LICENSE="BSD Boost-1.0"
 SLOT="0/$(ver_cut 1-2)"
-KEYWORDS="amd64 ~arm arm64 ~hppa ~ppc ppc64 ~riscv ~s390 ~sparc x86 ~amd64-linux ~x86-linux"
+KEYWORDS="amd64 ~arm arm64 ~hppa ~loong ppc ppc64 ~riscv ~s390 ~sparc x86 ~amd64-linux ~x86-linux"
 IUSE="+jemalloc selinux ssl systemd tcmalloc test"
 RESTRICT="!test? ( test )"
 
-COMMON_DEPEND="
-	${LUA_DEPS}
+DEPEND="
 	ssl? ( dev-libs/openssl:0= )
 	systemd? ( sys-apps/systemd:= )
 	tcmalloc? ( dev-util/google-perftools )
 "
 
 RDEPEND="
-	${COMMON_DEPEND}
+	${DEPEND}
 	acct-group/redis
 	acct-user/redis
 	selinux? ( sec-policy/selinux-redis )
 "
 
 BDEPEND="
-	${COMMON_DEPEND}
+	acct-group/redis
+	acct-user/redis
 	virtual/pkgconfig
-"
-
-# Tcl is only needed in the CHOST test env
-DEPEND="
-	${COMMON_DEPEND}
 	test? (
 		dev-lang/tcl:0=
 		ssl? ( dev-tcltk/tls )
-	)"
+	)
+"
 
-REQUIRED_USE="?? ( jemalloc tcmalloc )
-	${LUA_REQUIRED_USE}"
+REQUIRED_USE="?? ( jemalloc tcmalloc )"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-6.2.1-config.patch
-	"${FILESDIR}"/${PN}-sentinel-5.0-config.patch
+	"${FILESDIR}"/${PN}-sentinel-7.2.0-config.patch
+	"${FILESDIR}"/${PN}-7.0.4-no-which.patch
 )
 
 src_prepare() {
@@ -70,37 +61,55 @@ src_configure() {
 }
 
 src_compile() {
-	local myconf=""
+	tc-export AR CC RANLIB
+
+	local myconf=(
+		AR="${AR}"
+		CC="${CC}"
+		RANLIB="${RANLIB}"
+
+		V=1 # verbose
+
+		# OPTIMIZATION defaults to -O3. Let's respect user CFLAGS by setting it
+		# to empty value.
+		OPTIMIZATION=''
+		# Disable debug flags in bundled hiredis
+		DEBUG_FLAGS=''
+
+		BUILD_TLS=$(usex ssl)
+		USE_SYSTEMD=$(usex systemd)
+	)
 
 	if use jemalloc; then
-		myconf+="MALLOC=jemalloc"
+		myconf+=( MALLOC=jemalloc )
 	elif use tcmalloc; then
-		myconf+="MALLOC=tcmalloc"
+		myconf+=( MALLOC=tcmalloc )
 	else
-		myconf+="MALLOC=libc"
+		myconf+=( MALLOC=libc )
 	fi
 
-	if use ssl; then
-		myconf+=" BUILD_TLS=yes"
-	fi
-
-	export USE_SYSTEMD=$(usex systemd)
-
-	tc-export AR CC RANLIB
-	emake V=1 ${myconf} AR="${AR}" CC="${CC}" RANLIB="${RANLIB}"
+	emake "${myconf[@]}"
 }
 
 src_test() {
 	local runtestargs=(
 		--clients "$(makeopts_jobs)" # see bug #649868
+
+		--skiptest "Active defrag eval scripts" # see bug #851654
 	)
 
 	if has usersandbox ${FEATURES} || ! has userpriv ${FEATURES}; then
-		ewarn "unit/oom-score-adj test will be skipped." \
-			"It is known to fail with FEATURES usersandbox or -userpriv. See bug #756382."
+		ewarn "oom-score-adj related tests will be skipped." \
+			"They are known to fail with FEATURES usersandbox or -userpriv. See bug #756382."
 
-		# unit/oom-score-adj was introduced in version 6.2.0
-		runtestargs+=( --skipunit unit/oom-score-adj ) # see bug #756382
+		runtestargs+=(
+			# unit/oom-score-adj was introduced in version 6.2.0
+			--skipunit unit/oom-score-adj # see bug #756382
+
+			# Following test was added in version 7.0.0 to unit/introspection.
+			# It also tries to adjust OOM score.
+			--skiptest "CONFIG SET rollback on apply error"
+		)
 	fi
 
 	if use ssl; then
@@ -130,7 +139,7 @@ src_install() {
 	insinto /etc/logrotate.d/
 	newins "${FILESDIR}/${PN}.logrotate" ${PN}
 
-	dodoc 00-RELEASENOTES BUGS CONTRIBUTING MANIFESTO README.md
+	dodoc 00-RELEASENOTES BUGS CONTRIBUTING.md MANIFESTO README.md
 
 	dobin src/redis-cli
 	dosbin src/redis-benchmark src/redis-server src/redis-check-aof src/redis-check-rdb
