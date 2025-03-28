@@ -33,7 +33,6 @@ src_prepare() {
 src_compile() {
 	export GOPATH="${SRC_DIR}"
 	cd "${SRC_DIR}"
-	make dep
 	make build
 }
 
