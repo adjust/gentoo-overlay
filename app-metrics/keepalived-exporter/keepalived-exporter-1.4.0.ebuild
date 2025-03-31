@@ -21,6 +21,7 @@ COMMON_DEPEND="
 "
 RDEPEND="${COMMON_DEPEND}"
 SRC_DIR="${WORKDIR}/${P}"
+RESTRICT="network-sandbox"
 
 src_unpack() {
 	default
