@@ -1,2 +1,2 @@
 # arguments for prometheus keepalived exporter
-command_args='-web.listen-address=":9165" -web.telemetry-path="/metrics"'
+command_args='-web.listen-address=":9650" -web.telemetry-path="/metrics" -ka.json'

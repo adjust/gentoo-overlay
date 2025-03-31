@@ -27,6 +27,7 @@ src_unpack() {
 }
 
 src_prepare() {
+	eapply "${FILESDIR}"/non-root.patch
 	default
 }
 
