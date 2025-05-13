@@ -40,8 +40,8 @@ inherit multiprocessing toolchain-funcs
 # All supported Python implementations, most preferred last.
 _PYTHON_ALL_IMPLS=(
 	pypy3
-	python3_{5..13}
-	python3_13t
+	python3_{13..14}t
+	python3_{5..14}
 )
 readonly _PYTHON_ALL_IMPLS
 
@@ -81,7 +81,7 @@ _python_verify_patterns() {
 	local impl pattern
 	for pattern; do
 		case ${pattern} in
-			-[23]|3.[89]|3.1[0123])
+			-[23]|3.[89]|3.1[01234])
 				continue
 				;;
 		esac
@@ -130,9 +130,9 @@ _python_set_impls() {
 			# please keep them in sync with _PYTHON_ALL_IMPLS
 			# and _PYTHON_HISTORICAL_IMPLS
 			case ${i} in
-				pypy3|python2_7|python3_[89]|python3_1[0-3]|python3_13t)
+				pypy3_11|python3_9|python3_1[1-4]|python3_1[3-4]t)
 					;;
-				jython2_7|pypy|pypy1_[89]|pypy2_0|python2_[5-6]|python3_[1-7])
+				jython2_7|pypy|pypy1_[89]|pypy2_0|python2_[5-6]|python3_[1-8])
 					obsolete+=( "${i}" )
 					;;
 				*)
@@ -243,7 +243,7 @@ _python_impl_matches() {
 				[[ ${impl} == python${pattern/./_} || ${impl} == pypy3 ]] &&
 					return 0
 				;;
-			3.8|3.1[0-3])
+			3.[89]|3.1[0-4])
 				[[ ${impl} == python${pattern/./_} ]] && return 0
 				;;
 			*)
@@ -315,12 +315,8 @@ _python_export() {
 	local impl var
 
 	case "${1}" in
-		python*|jython*)
+		python*|jython*|pypy|pypy3*)
 			impl=${1/_/.}
-			shift
-			;;
-		pypy|pypy3)
-			impl=${1}
 			shift
 			;;
 		*)
@@ -466,6 +462,8 @@ _python_export() {
 					pypy)
 						PYTHON_PKG_DEP='>=dev-python/pypy-7.3.9:0=';;
 					pypy3)
+						PYTHON_PKG_DEP='>=dev-python/pypy3-7.3.9_p1:0=';;
+					pypy3.*)
 						PYTHON_PKG_DEP='>=dev-python/pypy3-7.3.9_p1:0=';;
 					*)
 						die "Invalid implementation: ${impl}"
