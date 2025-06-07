@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+# Copyright 2025 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="tcp_exporter daemon"
+description=""
+pidfile=${pidfile:-"/run/${RC_SVCNAME}.pid"}
+user=${user:-"root"}
+group=${group:-"root"}
+command=/usr/sbin/tcp_exporter
+#command_args="${tcp_exporter_args}"
+command_background=true
+start_stop_daemon_args="--user ${user} --group ${group} \
+        --stdout /var/log/tcp_exporter/${RC_SVCNAME}.log \
+        --stderr /var/log/tcp_exporter/${RC_SVCNAME}.log"
+
+depend() {
+        after net
+}
