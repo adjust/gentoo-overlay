@@ -7,7 +7,7 @@ DESCRIPTION="Lightweight connection pooler for PostgreSQL"
 HOMEPAGE="https://www.pgbouncer.org/"
 SRC_URI="https://www.pgbouncer.org/downloads/files/${PV}/pgbouncer-${PV}.tar.gz"
 LICENSE="BSD"
-SLOT="0"
+SLOT="1.20.0"
 KEYWORDS="~amd64 ~x86"
 IUSE="+c-ares debug doc pam ssl systemd udns"
 
@@ -16,7 +16,6 @@ REQUIRED_USE="?? ( c-ares udns )"
 
 RDEPEND="
 	>=dev-libs/libevent-2.0:=
-	>=sys-libs/glibc-2.10
 	acct-user/pgbouncer
 	c-ares? ( >=net-dns/c-ares-1.10 )
 	ssl? ( >=dev-libs/openssl-1.0.1:=[-bindist(-)] )
@@ -31,7 +30,6 @@ DEPEND="${RDEPEND}"
 RESTRICT="test"
 
 src_prepare() {
-	eapply "${FILESDIR}"/pgbouncer-1.12-dirs.patch
 
 	default
 }
