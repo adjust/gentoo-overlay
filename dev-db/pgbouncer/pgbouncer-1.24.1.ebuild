@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -7,12 +7,9 @@ DESCRIPTION="Lightweight connection pooler for PostgreSQL"
 HOMEPAGE="https://www.pgbouncer.org/"
 SRC_URI="https://www.pgbouncer.org/downloads/files/${PV}/pgbouncer-${PV}.tar.gz"
 LICENSE="BSD"
-SLOT="1.20.1"
+SLOT="1.24.1"
 KEYWORDS="~amd64 ~x86"
-IUSE="+c-ares debug doc pam ssl systemd udns"
-
-# At-most-one-of, one can be enabled but not both
-REQUIRED_USE="?? ( c-ares udns )"
+IUSE="+c-ares debug doc pam ssl systemd"
 
 RDEPEND="
 	>=dev-libs/libevent-2.0:=
@@ -20,7 +17,6 @@ RDEPEND="
 	c-ares? ( >=net-dns/c-ares-1.10 )
 	ssl? ( >=dev-libs/openssl-1.0.1:=[-bindist(-)] )
 	systemd? ( sys-apps/systemd )
-	udns? ( >=net-libs/udns-0.1 )
 "
 
 DEPEND="${RDEPEND}"
@@ -43,8 +39,7 @@ src_configure() {
 		$(use_enable debug cassert) \
 		$(use_with pam) \
 		$(use_with ssl openssl) \
-		$(use_with systemd) \
-		$(use_with udns)
+		$(use_with systemd)
 }
 
 src_install() {
