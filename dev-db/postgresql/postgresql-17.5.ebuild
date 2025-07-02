@@ -1,13 +1,15 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{8,9,10,11} )
+PYTHON_COMPAT=( python3_{11..13} )
+LLVM_COMPAT=( {15..20} )
+LLVM_OPTIONAL=1
 
-inherit flag-o-matic linux-info multilib pam prefix python-single-r1 systemd tmpfiles
+inherit dot-a flag-o-matic linux-info llvm-r1 pam python-single-r1 systemd tmpfiles
 
-KEYWORDS="~amd64"
+KEYWORDS="~alpha amd64 arm arm64 ~hppa ~loong ~mips ppc ppc64 ~riscv ~s390 ~sparc x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x64-solaris"
 
 SLOT=$(ver_cut 1)
 
@@ -20,9 +22,9 @@ LICENSE="POSTGRESQL GPL-2"
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="https://www.postgresql.org/"
 
-IUSE="bagger cassert debug doc hugelwlock icu kerberos ldap llvm lz4 nls pam
-	  perl python +readline selinux +server systemd ssl static-libs tcl
-	  +threads uuid xml zlib"
+IUSE="debug doc +icu kerberos ldap llvm +lz4 nls pam perl python
+	  +readline selinux +server systemd ssl static-libs tcl uuid xml
+	  zlib +zstd"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
@@ -33,12 +35,12 @@ acct-user/postgres
 sys-apps/less
 virtual/libintl
 icu? ( dev-libs/icu:= )
-kerberos? ( virtual/krb5 )
+kerberos? ( app-crypt/mit-krb5 )
 ldap? ( net-nds/openldap:= )
-llvm? (
-	sys-devel/llvm:=
-	sys-devel/clang:=
-)
+llvm? ( $(llvm_gen_dep '
+	llvm-core/clang:${LLVM_SLOT}
+	llvm-core/llvm:${LLVM_SLOT}
+	') )
 lz4? ( app-arch/lz4 )
 pam? ( sys-libs/pam )
 perl? ( >=dev-lang/perl-5.8:= )
@@ -49,6 +51,7 @@ ssl? ( >=dev-libs/openssl-0.9.6-r1:0= )
 tcl? ( >=dev-lang/tcl-8:0= )
 xml? ( dev-libs/libxml2 dev-libs/libxslt )
 zlib? ( sys-libs/zlib )
+zstd? ( app-arch/zstd )
 "
 
 # uuid flags -- depend on sys-apps/util-linux for Linux libcs, or if no
@@ -74,7 +77,7 @@ uuid? (
 
 DEPEND="${CDEPEND}
 sys-devel/bison
-sys-devel/flex
+app-alternatives/lex
 nls? ( sys-devel/gettext )
 xml? ( virtual/pkgconfig )
 "
@@ -83,7 +86,21 @@ RDEPEND="${CDEPEND}
 selinux? ( sec-policy/selinux-postgresql )
 "
 
+# Openjade, docbook, XML, and XSLT are needed to generate manpages and
+# any documentation that may be elected.
+BDEPEND="
+app-text/openjade
+app-text/docbook-dsssl-stylesheets
+app-text/docbook-sgml-dtd:4.5
+app-text/docbook-xml-dtd:4.5
+app-text/docbook-xsl-stylesheets
+dev-libs/libxml2
+dev-libs/libxslt
+"
+
 pkg_setup() {
+	use llvm && llvm-r1_pkg_setup
+
 	use server && CONFIG_CHECK="~SYSVIPC" linux-info_pkg_setup
 
 	use python && python-single-r1_pkg_setup
@@ -99,7 +116,7 @@ src_prepare() {
 	# hardened and non-hardened environments. (Bug #528786)
 	sed 's/@install_bin@/install -c/' -i src/Makefile.global.in || die
 
-	use server || eapply "${FILESDIR}/${PN}-14_rc1-no-server.patch"
+	use server || eapply "${FILESDIR}/${PN}-17.0-no-server.patch"
 
 	if use pam ; then
 		sed "s/\(#define PGSQL_PAM_SERVICE \"postgresql\)/\1-${SLOT}/" \
@@ -107,19 +124,16 @@ src_prepare() {
 			die 'PGSQL_PAM_SERVICE rename failed.'
 	fi
 
-	# bagger
-	if use bagger ; then
-		eapply "${FILESDIR}"/${PN}-10.0-index.patch
-	fi
-
-	if use hugelwlock ; then
-		eapply "${FILESDIR}"/lock_partitions.patch
-	fi
-
 	eapply_user
 }
 
 src_configure() {
+	lto-guarantee-fat
+
+	# Fails to build with C23, fallback to the old default in < GCC 15
+	# for now: https://marc.info/?l=pgsql-bugs&m=173185132906874&w=2
+	append-cflags -std=gnu17
+
 	case ${CHOST} in
 		*-darwin*|*-solaris*)
 			use nls && append-libs intl
@@ -146,9 +160,7 @@ src_configure() {
 		--mandir="${PO}/usr/share/postgresql-${SLOT}/man" \
 		--sysconfdir="${PO}/etc/postgresql-${SLOT}" \
 		--with-system-tzdata="${PO}/usr/share/zoneinfo" \
-		$(use_enable cassert) \
 		$(use_enable debug) \
-		$(use_enable threads thread-safety) \
 		$(use_with icu) \
 		$(use_with kerberos gssapi) \
 		$(use_with ldap) \
@@ -165,6 +177,7 @@ src_configure() {
 		$(use_with xml libxml) \
 		$(use_with xml libxslt) \
 		$(use_with zlib) \
+		$(use_with zstd) \
 		$(use_enable nls)"
 	if use alpha; then
 		myconf+=" --disable-spinlocks"
@@ -178,13 +191,14 @@ src_configure() {
 src_compile() {
 	emake
 	emake -C contrib
+	emake -C doc
 }
 
 src_install() {
 	emake DESTDIR="${D}" install
 	emake DESTDIR="${D}" install -C contrib
 
-	dodoc README HISTORY
+	dodoc HISTORY
 
 	# man pages are already built, but if we have the target make them,
 	# they'll be generated from source before being installed so we
@@ -238,6 +252,7 @@ src_install() {
 	use static-libs || \
 		find "${ED}" -name '*.a' ! -name libpgport.a ! -name libpgcommon.a \
 			 -delete
+	strip-lto-bytecode "${ED}"
 
 	# Make slot specific links to programs
 	local f bn
@@ -414,13 +429,6 @@ pkg_config() {
 	# unix_socket_directory has no effect in postgresql.conf as it's
 	# overridden in the initscript
 	sed '/^#unix_socket_directories/,+1d' -i "${PGDATA%/}"/postgresql.conf
-
-	cat <<- EOF >> "${PGDATA%/}"/postgresql.conf
-		# This is here because of https://bugs.gentoo.org/show_bug.cgi?id=518522
-		# On the off-chance that you might need to work with UTF-8 encoded
-		# characters in PL/Perl
-		plperl.on_init = 'use utf8; use re; package utf8; require "utf8_heavy.pl";'
-	EOF
 
 	einfo "The autovacuum function, which was in contrib, has been moved to the main"
 	einfo "PostgreSQL functions starting with 8.1, and starting with 8.4 is now enabled"
