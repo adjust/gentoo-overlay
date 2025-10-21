@@ -130,7 +130,7 @@ _python_set_impls() {
 			# please keep them in sync with _PYTHON_ALL_IMPLS
 			# and _PYTHON_HISTORICAL_IMPLS
 			case ${i} in
-				pypy3_11|python3_9|python3_1[1-4]|python3_1[3-4]t)
+				pypy3_11|python3_9|python3_1[0-4]|python3_1[3-4]t)
 					;;
 				jython2_7|pypy|pypy1_[89]|pypy2_0|python2_[5-6]|python3_[1-8])
 					obsolete+=( "${i}" )
