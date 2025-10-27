@@ -10,8 +10,8 @@ command="/usr/bin/${SVCNAME}"
 command_args="${command_args}"
 command_background="true"
 start_stop_daemon_args="--user ${user} \
-	--stdout /var/log/prometheus/${SVCNAME}.log \
-	--stderr /var/log/prometheus/${SVCNAME}.err"
+	--stdout /var/log/unbound_exporter/${SVCNAME}.log \
+	--stderr /var/log/unbound_exporter/${SVCNAME}.err"
 
 depend() {
 	need net
