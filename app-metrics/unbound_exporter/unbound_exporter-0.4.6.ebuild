@@ -38,6 +38,9 @@ src_compile() {
 src_install() {
 	dobin "${PN}"
 
+  keepdir "/var/log/${PN}"
+  fowners unbound:unbound "/var/log/${PN}"
+
 	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
 	newconfd "${FILESDIR}/${PN}.confd" "${PN}"
 
