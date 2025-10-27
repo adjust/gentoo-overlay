@@ -4,7 +4,7 @@
 
 description="Prometheus unbound exporter"
 pidfile=${pidfile:-"/run/${SVCNAME}/${SVCNAME}.pid"}
-user=${user:-prometheus}
+user=${user:-unbound}
 
 command="/usr/bin/${SVCNAME}"
 command_args="${command_args}"

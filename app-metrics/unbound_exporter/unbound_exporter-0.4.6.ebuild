@@ -3,24 +3,32 @@
 
 EAPI=8
 
-inherit go-module systemd git-r3
+inherit go-module
 
-DESCRIPTION="Prometheus exporter for PostgreSQL metrics"
+DESCRIPTION="Prometheus exporter for Unbound TLS metrics"
 HOMEPAGE="https://github.com/letsencrypt/unbound_exporter"
-EGIT_REPO_URI="https://github.com/letsencrypt/unbound_exporter"
+SRC_URI="
+	${HOMEPAGE}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
+	https://files.adjust.com/${P}.tar.xz -> ${P}-deps.tar.xz
+"
+
 LICENSE="Apache-2.0"
 SLOT="0"
+KEYWORDS="~amd64"
 
 RDEPEND="
-	acct-user/prometheus
-	acct-group/prometheus
+	acct-user/unbound
+	acct-group/unbound
 "
+
 DOCS=(README.md)
 
 src_unpack() {
 	default
-	git-r3_src_unpack
-	go-module_live_vendor
+}
+
+src_prepare() {
+	default
 }
 
 src_compile() {
@@ -32,8 +40,6 @@ src_install() {
 
 	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
 	newconfd "${FILESDIR}/${PN}.confd" "${PN}"
-	systemd_dounit "${FILESDIR}/${PN}.service"
-	systemd_install_serviced "${FILESDIR}/${PN}.service.conf"
 
 	einstalldocs
 }

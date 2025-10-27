@@ -1,4 +1,4 @@
-command_args=""
+command_args='-unbound.ca "" -unbound.cert "" -unbound.host "unix:///run/unbound.ctl"'
 
 # Prometheus-unbound-exporter supports the following options:
 
