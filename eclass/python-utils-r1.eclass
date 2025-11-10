@@ -1276,6 +1276,131 @@ _python_check_EPYTHON() {
 # parameter, when calling epytest.  The listed files will be entirely
 # skipped from test collection.
 
+# @ECLASS_VARIABLE: EPYTEST_PLUGINS
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# An array of pytest plugin package names (without categories) to use
+# for the package.  It has a twofold purpose:
+#
+# 1. When set prior to calling distutils_enable_tests, it causes
+#    dependencies on the specified pytest plugins to be added.
+#
+# 2. When plugin autoloading is disabled, it causes "-p" arguments
+#    loading specified plugins to be added.
+#
+# Defaults to an empty list.
+#
+# The eclasses explicitly handle a number of pytest plugins, and assume
+# the default of "dev-python/${package}" and obtain "-p" via entry
+# points.  If this is incorrect for some plugin package, please report
+# a bug.
+#
+# This is not a perfect solution, and may not be sufficient for some
+# packages.  In these cases, either plugin autoloading should be used
+# or PYTEST_PLUGINS environment variable may be used directly (see
+# pytest documentation).
+#
+# For pytest-timeout and pytest-xdist plugins, it is generally
+# preferable to use EPYTEST_TIMEOUT and EPYTEST_XDIST options
+# that handle passing all needed options.
+
+# @ECLASS_VARIABLE: EPYTEST_PLUGIN_AUTOLOAD
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# If set to a non-empty value, permits pytest plugin autoloading.
+# Otherwise, PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 is set to disable it.
+#
+# If EPYTEST_PLUGINS is set explicitly or EAPI is 9 or later,
+# defaults to disabled.  Otherwise, defaults to enabled.
+# The recommended way to disable it in EAPI 8 or earlier is to set
+# EPYTEST_PLUGINS (possibly to an empty array).
+
+# @ECLASS_VARIABLE: EPYTEST_PLUGIN_LOAD_VIA_ENV
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# If set to a non-empty value, plugins will be loaded via PYTEST_PLUGINS
+# environment variable rather than explicit "-p" options.  This ensures
+# that plugins are passed down to subprocess, which may be necessary
+# when testing pytest plugins.  However, this is also more likely
+# to cause duplicate plugin errors.
+
+# @FUNCTION: _set_epytest_plugins
+# @INTERNAL
+# @DESCRIPTION:
+# Check if EPYTEST_PLUGINS is set correctly, and set the default
+# if it is not.
+_set_epytest_plugins() {
+	debug-print-function ${FUNCNAME} "$@"
+
+	# TODO: drop BASH_VERSINFO check when we require EAPI 8
+	if [[ ${BASH_VERSINFO[0]} -ge 5 ]]; then
+		[[ ${EPYTEST_PLUGINS@a} == *a* ]]
+	else
+		[[ $(declare -p EPYTEST_PLUGINS) == "declare -a"* ]]
+	fi
+	if [[ ${?} -eq 0 ]]; then
+		# EPYTEST_PLUGINS set explicitly -- disable autoloading
+		: "${EPYTEST_PLUGIN_AUTOLOAD:=}"
+	else
+		if ! declare -p EPYTEST_PLUGINS &>/dev/null; then
+			# EPYTEST_PLUGINS unset -- default to empty.
+			# EPYTEST_PLUGIN_AUTOLOAD default depends on EAPI.
+			EPYTEST_PLUGINS=()
+			if [[ ${EAPI} != [78] ]]; then
+				: "${EPYTEST_PLUGIN_AUTOLOAD:=}"
+			else
+				: "${EPYTEST_PLUGIN_AUTOLOAD:=1}"
+			fi
+		else
+			die 'EPYTEST_PLUGINS must be an array.'
+		fi
+	fi
+}
+
+# @ECLASS_VARIABLE: EPYTEST_RERUNS
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# If set to a non-empty value, enables pytest-rerunfailures plugin
+# and sets rerun count to the specified value.  This variable can be
+# either set in ebuilds with flaky tests, or by user to try if it helps.
+# If this variable is set prior to calling distutils_enable_tests
+# in distutils-r1, a test dependency on dev-python/pytest-rerunfailures
+# is added automatically.
+
+# @ECLASS_VARIABLE: EPYTEST_TIMEOUT
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# If set to a non-empty value, enables pytest-timeout plugin and sets
+# test timeout to the specified value.  This variable can be either set
+# in ebuilds that are known to hang, or by user to prevent hangs
+# in automated test environments.  If this variable is set prior
+# to calling distutils_enable_tests in distutils-r1, a test dependency
+# on dev-python/pytest-timeout is added automatically.
+
+# @ECLASS_VARIABLE: EPYTEST_XDIST
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# If set to a non-empty value, enables running tests in parallel
+# via pytest-xdist plugin.  If this variable is set prior to calling
+# distutils_enable_tests in distutils-r1, a test dependency
+# on dev-python/pytest-xdist is added automatically.
+
+# @ECLASS_VARIABLE: EPYTEST_JOBS
+# @USER_VARIABLE
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Specifies the number of jobs for parallel (pytest-xdist) test runs.
+# When unset, defaults to -j from MAKEOPTS, or the current nproc.
+
+# @ECLASS_VARIABLE: EPYTEST_FLAGS
+# @USER_VARIABLE
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Additional flags to pass to pytest.  This is intended to be set
+# in the environment when debugging packages (options such as -x or -s
+# are useful here), rather than globally.  It must not be set
+# in ebuilds.
+
 # @FUNCTION: epytest
 # @USAGE: [<args>...]
 # @DESCRIPTION:
