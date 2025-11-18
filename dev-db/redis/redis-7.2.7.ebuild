@@ -48,7 +48,6 @@ REQUIRED_USE="?? ( jemalloc tcmalloc )"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-6.2.1-config.patch
-	"${FILESDIR}"/${PN}-7.2.0-system-jemalloc.patch
 	"${FILESDIR}"/${PN}-6.2.3-ppc-atomic.patch
 	"${FILESDIR}"/${PN}-sentinel-7.2.0-config.patch
 	"${FILESDIR}"/${PN}-7.0.4-no-which.patch
