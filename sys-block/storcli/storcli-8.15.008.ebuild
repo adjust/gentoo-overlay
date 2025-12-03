@@ -11,26 +11,27 @@ MY_P="storcli2-${MY_PV}"
 MY_PN="StorCLI_Avenger_8.15-008"
 DESCRIPTION="MegaRAID StorCLI (successor of the MegaCLI)"
 HOMEPAGE="https://www.broadcom.com/support/download-search?dk=storcli"
-SRC_URI="https://docs.broadcom.com/api/document/download/${MY_PN}.0015.0000.0010.zip -> ${P}.zip"
+SRC_URI="
+  https://files.adjust.com/StorCLI_Avenger_8.15-008.0015.0000.0010.tar.gz -> ${P}.tar.gz
+"
 
 LICENSE="Avago LSI BSD"
 SLOT="0"
 KEYWORDS="-* ~amd64"
 BDEPEND="app-arch/unzip"
 
-S="${WORKDIR}"
+S="${WORKDIR}/StorCLI_Avenger_8.15-008.0015.0000.0010"
 
 QA_PREBUILT="/opt/MegaRAID/storcli/storcli64"
 
 src_unpack() {
 	default
-	rpm_unpack ./Avenger_StorCLI/Linux/${MY_P}-1.x86_64.rpm
+	rpm_unpack "${S}/Avenger_StorCLI/Linux/${MY_P}-1.x86_64.rpm"
 }
 
 src_install() {
 	exeinto /opt/MegaRAID/storcli
-	doexe opt/MegaRAID/storcli/storcli64
+	doexe "${WORKDIR}/opt/MegaRAID/storcli2/storcli2"
 
-	dosym ../../opt/MegaRAID/storcli/storcli64 /usr/sbin/storcli
-	dosym ../../opt/MegaRAID/storcli/storcli64 /usr/sbin/storcli64
+	dosym /opt/MegaRAID/storcli/storcli2 /usr/sbin/storcli
 }
