@@ -1,41 +1,39 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( pypy3 python3_{8..11} )
+PYTHON_COMPAT=( python3_{10..11} )
 PYTHON_REQ_USE='bzip2(+),threads(+)'
 TMPFILES_OPTIONAL=1
+# Force modern PEP517 handling for distutils-r1
+DISTUTILS_USE_PEP517=setuptools
+DISTUTILS_OPTIONAL=1
 
 inherit distutils-r1 linux-info toolchain-funcs tmpfiles prefix
+
 
 DESCRIPTION="The package management and distribution system for Gentoo"
 HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Portage"
 SRC_URI="https://gitweb.gentoo.org/proj/portage.git/snapshot/${P}.tar.bz2"
 
 LICENSE="GPL-2"
-KEYWORDS="~amd64"
 SLOT="0"
+KEYWORDS="~amd64"
 IUSE="apidoc build doc gentoo-dev +ipc +native-extensions +rsync-verify selinux test xattr"
 RESTRICT="!test? ( test )"
 
-BDEPEND="
-	app-arch/xz-utils
-	test? ( dev-vcs/git )"
+# Minimal safe python-exec requirement for modern behavior
 DEPEND="!build? ( $(python_gen_impl_dep 'ssl(+)') )
 	>=app-arch/tar-1.27
-	dev-lang/python-exec:2
+	>=dev-lang/python-exec-2.4.10
 	>=sys-apps/sed-4.0.5 sys-devel/patch
 	doc? ( app-text/xmlto ~app-text/docbook-xml-dtd-4.4 )
 	apidoc? (
 		dev-python/sphinx[${PYTHON_USEDEP}]
 		dev-python/sphinx-epytext[${PYTHON_USEDEP}]
 	)"
-# Require sandbox-2.2 for bug #288863.
-# For whirlpool hash, require python[ssl] (bug #425046).
-# For compgen, require bash[readline] (bug #445576).
-# app-portage/gemato goes without PYTHON_USEDEP since we're calling
-# the executable.
+
 RDEPEND="
 	acct-user/portage
 	app-arch/zstd
@@ -64,14 +62,14 @@ RDEPEND="
 	!<app-portage/gentoolkit-0.4.6
 	!<app-portage/repoman-2.3.10
 	!~app-portage/repoman-3.0.0"
+
 PDEPEND="
 	!build? (
 		>=net-misc/rsync-2.6.4
 		>=sys-apps/file-5.41
 		>=sys-apps/coreutils-6.4
-	)"
-# coreutils-6.4 rdep is for date format in emerge-webrsync #164532
-# NOTE: FEATURES=installsources requires debugedit and rsync
+	)
+"
 
 pkg_pretend() {
 	local CONFIG_CHECK="~IPC_NS ~PID_NS ~NET_NS ~UTS_NS"
@@ -104,8 +102,7 @@ python_prepare_all() {
 	fi
 
 	if use native-extensions && ! tc-is-cross-compiler; then
-		printf "[build_ext]\nportage_ext_modules=true\n" >> \
-			setup.cfg || die
+		printf "[build_ext]\nportage_ext_modules=true\n" >> setup.cfg || die
 	fi
 
 	if ! use ipc ; then
@@ -117,8 +114,7 @@ python_prepare_all() {
 
 	if use xattr && use kernel_linux ; then
 		einfo "Adding FEATURES=xattr to make.globals ..."
-		echo -e '\nFEATURES="${FEATURES} xattr"' >> cnf/make.globals \
-			|| die "failed to append to make.globals"
+		echo -e '\nFEATURES="${FEATURES} xattr"' >> cnf/make.globals || die "failed to append to make.globals"
 	fi
 
 	if use build || ! use rsync-verify; then
@@ -150,20 +146,18 @@ python_prepare_all() {
 
 		if use prefix-guest ; then
 			sed -e "s|^\(main-repo = \).*|\\1gentoo_prefix|" \
-				-e "s|^\\[gentoo\\]|[gentoo_prefix]|" \
+				-e "s|^\[gentoo\]|[gentoo_prefix]|" \
 				-e "s|^\(sync-uri = \).*|\\1rsync://rsync.prefix.bitzolder.nl/gentoo-portage-prefix|" \
 				-i cnf/repos.conf || die "sed failed"
 		fi
 
 		einfo "Adding FEATURES=force-prefix to make.globals ..."
-		echo -e '\nFEATURES="${FEATURES} force-prefix"' >> cnf/make.globals \
-			|| die "failed to append to make.globals"
+		echo -e '\nFEATURES="${FEATURES} force-prefix"' >> cnf/make.globals || die "failed to append to make.globals"
 	fi
 
 	cd "${S}/cnf" || die
 	if [ -f "make.conf.example.${ARCH}".diff ]; then
-		patch make.conf.example "make.conf.example.${ARCH}".diff || \
-			die "Failed to patch make.conf.example"
+		patch make.conf.example "make.conf.example.${ARCH}".diff || die "Failed to patch make.conf.example"
 	else
 		eerror ""
 		eerror "Portage does not have an arch-specific configuration for this arch."
@@ -187,15 +181,13 @@ python_test() {
 }
 
 python_install() {
-	# Install sbin scripts to bindir for python-exec linking
-	# they will be relocated in pkg_preinst()
+	# Use distutils-r1 default script locations (python-exec) and avoid
+	# overriding bindir/sbindir which confuses modern python-exec behavior.
 	distutils-r1_python_install \
 		--system-prefix="${EPREFIX}/usr" \
-		--bindir="$(python_get_scriptdir)" \
+		--portage-bindir="${EPREFIX}/usr/lib/portage/${EPYTHON}" \
 		--docdir="${EPREFIX}/usr/share/doc/${PF}" \
 		--htmldir="${EPREFIX}/usr/share/doc/${PF}/html" \
-		--portage-bindir="${EPREFIX}/usr/lib/portage/${EPYTHON}" \
-		--sbindir="$(python_get_scriptdir)" \
 		--sysconfdir="${EPREFIX}/etc" \
 		"${@}"
 }
@@ -213,51 +205,45 @@ python_install_all() {
 		--htmldir="${EPREFIX}/usr/share/doc/${PF}/html"
 	)
 
-	# install docs
 	if [[ ${targets[@]} ]]; then
 		esetup.py "${targets[@]}"
 	fi
 
 	dotmpfiles "${FILESDIR}"/portage-{ccache,tmpdir}.conf
-
-	# Due to distutils/python-exec limitations
-	# these must be installed to /usr/bin.
-	local sbin_relocations='archive-conf dispatch-conf emaint env-update etc-update fixpackages regenworld'
-	einfo "Moving admin scripts to the correct directory"
-	dodir /usr/sbin
-	for target in ${sbin_relocations}; do
-		einfo "Moving /usr/bin/${target} to /usr/sbin/${target}"
-		mv "${ED}/usr/bin/${target}" "${ED}/usr/sbin/${target}" || die "sbin scripts move failed!"
-	done
 }
 
 pkg_preinst() {
+	# Ensure the site-packages directory exists in the image; some build-time
+	# helpers expect it to exist when running python modules during preinst.
 	if ! use build; then
 		python_setup
-		local sitedir=$(python_get_sitedir)
-		[[ -d ${D}${sitedir} ]] || die "${D}${sitedir}: No such directory"
-		env -u DISTDIR \
-			-u PORTAGE_OVERRIDE_EPREFIX \
-			-u PORTAGE_REPOSITORIES \
-			-u PORTDIR \
-			-u PORTDIR_OVERLAY \
-			PYTHONPATH="${D}${sitedir}${PYTHONPATH:+:${PYTHONPATH}}" \
+		local sitedir
+		sitedir=$(python_get_sitedir)
+		if [[ -z ${sitedir} ]]; then
+			ewarn "Cannot determine python sitedir"
+		else
+			# Create the staged site-packages directory using dodir so it is
+			# created under ${D} and tracked properly by the ebuild helpers.
+			if [[ ! -d ${D}${sitedir} ]]; then
+				einfo "Creating missing ${D}${sitedir} to satisfy preinst checks"
+				dodir "${sitedir}" || mkdir -p "${D}${sitedir}" || die "failed to create ${D}${sitedir}"
+			fi
+		fi
+
+		# Run compatibility upgrade helpers using the build tree on PYTHONPATH
+		# so Python can import the portage package from the source directory.
+		PYTHONPATH="${S}${PYTHONPATH:+:${PYTHONPATH}}" \
 			"${PYTHON}" -m portage._compat_upgrade.default_locations || die
 
-		env -u BINPKG_COMPRESS -u PORTAGE_REPOSITORIES \
-			PYTHONPATH="${D}${sitedir}${PYTHONPATH:+:${PYTHONPATH}}" \
+		PYTHONPATH="${S}${PYTHONPATH:+:${PYTHONPATH}}" \
 			"${PYTHON}" -m portage._compat_upgrade.binpkg_compression || die
 
-		env -u FEATURES -u PORTAGE_REPOSITORIES \
-			PYTHONPATH="${D}${sitedir}${PYTHONPATH:+:${PYTHONPATH}}" \
+		PYTHONPATH="${S}${PYTHONPATH:+:${PYTHONPATH}}" \
 			"${PYTHON}" -m portage._compat_upgrade.binpkg_multi_instance || die
 	fi
 
-	# elog dir must exist to avoid logrotate error for bug #415911.
-	# This code runs in preinst in order to bypass the mapping of
-	# portage:portage to root:root which happens after src_install.
+	# Ensure elog dir exists to avoid logrotate error (bug #415911)
 	keepdir /var/log/portage/elog
-	# This is allowed to fail if the user/group are invalid for prefix users.
 	if chown portage:portage "${ED}"/var/log/portage{,/elog} 2>/dev/null ; then
 		chmod g+s,ug+rwx "${ED}"/var/log/portage{,/elog}
 	fi

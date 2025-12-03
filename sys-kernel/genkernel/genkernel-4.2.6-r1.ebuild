@@ -4,9 +4,9 @@
 # genkernel-9999        -> latest Git branch "master"
 # genkernel-VERSION     -> normal genkernel release
 
-EAPI="7"
+EAPI="8"
 
-PYTHON_COMPAT=( python3_11 )
+PYTHON_COMPAT=( python3_12 )
 
 inherit bash-completion-r1 python-single-r1
 
