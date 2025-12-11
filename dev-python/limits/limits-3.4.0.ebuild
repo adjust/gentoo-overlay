@@ -3,14 +3,13 @@
 
 EAPI=8
 
-DISTUTILS_USE_GPEP517=setuptools
-PYTHON_COMPAT=( python3_{7..11} )
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{7..12} )
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="Python module for enforcing limits on system resources"
 HOMEPAGE="https://github.com/benosman/limits"
-SRC_URI="https://files.pythonhosted.org/packages/source/l/limits/limits-${PV}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
