@@ -3,6 +3,8 @@
 
 EAPI=8
 
+inherit meson
+
 DESCRIPTION="Simple, reliable, scalable backup solution to postgres"
 HOMEPAGE="https://pgbackrest.org/"
 SRC_URI="https://github.com/${PN}/${PN}/archive/release/${PV}.tar.gz -> ${P}.tar.gz"
@@ -24,16 +26,21 @@ DEPEND="
 	app-arch/bzip2
 	dev-libs/openssl
 	dev-libs/libxml2
+	net-libs/libssh2
 	>=app-arch/zstd-1.0
 "
 
 RDEPEND="${DEPEND}"
 
-BDEPEND="dev-libs/libyaml"
+BDEPEND="
+  dev-libs/libyaml
+  >=dev-build/meson-0.47
+"
 
-S="${WORKDIR}/${PN}-release-${PV}/src"
+S="${WORKDIR}/${PN}-release-${PV}"
 
 src_install() {
+	meson_src_install
 	# install base configuration
 	dodir /etc/"${PN}"
 	insinto /etc/"${PN}"
@@ -51,6 +58,4 @@ src_install() {
 
 	newinitd "${FILESDIR}/${PN}.initd" ${PN}
 	newconfd "${FILESDIR}/${PN}.confd" ${PN}
-
-	default
 }
