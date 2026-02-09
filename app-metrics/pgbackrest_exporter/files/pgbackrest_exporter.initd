@@ -1,0 +1,21 @@
+#!/sbin/openrc-run
+# Copyright 2024 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EXPORTER_USER="${PGBACKREST_USER}"
+EXPORTER_GROUP="${PGBACKREST_GROUP}"
+
+name="PGBackrest Exporter daemon"
+description="The metrics are collected based on result of pgbackrest info --output json command"
+
+command="/usr/bin/pgbackrest_exporter"
+command_args="${EXPORTER_ARGS}"
+pidfile="/run/${SVCNAME}.pid"
+output_log="/var/log/${SVCNAME}/${SVCNAME}.log"
+error_log="/var/log/${SVCNAME}/${SVCNAME}.log"
+start_stop_daemon_args="--background --make-pidfile --pidfile ${pidfile}
+	--user ${EXPORTER_USER} --group ${EXPORTER_GROUP}"
+
+depend() {
+    need net
+}
