@@ -1,0 +1,4 @@
+# PGBackrest exporter default args
+PGBACKREST_USER=postgres
+PGBACKREST_GROUP=postgres
+EXPORTER_ARGS="--web.telemetry-path=/metrics --web.listen-address=:9854 --collect.interval=600"
