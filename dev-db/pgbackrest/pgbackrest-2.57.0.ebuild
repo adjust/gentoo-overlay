@@ -52,7 +52,7 @@ src_install() {
 	# async wal archiving requires a spooler directory
 	keepdir /var/spool/"${PN}"
 
-	insopts -o root -g root
+	insopts -m 0644 -o root -g root
 	insinto /etc/logrotate.d
 	newins "${FILESDIR}/${PN}.logrotate" ${PN}
 
