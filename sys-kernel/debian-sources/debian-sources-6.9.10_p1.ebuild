@@ -170,7 +170,7 @@ src_prepare() {
 	fi
 
 	# Copy 'config-extract' tool to the work directory
-	cp "${FILESDIR}"/config-extract-6.1 config-extrac || die "failed to install config-extract to sources directory"
+	cp "${FILESDIR}"/config-extract-6.6 config-extract || die "failed to install config-extract to sources directory"
 
 	# ... and make it executable
 	chmod +x config-extract || die "failed to set +x on config-extract"
