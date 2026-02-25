@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+		<maintainer type="person">
+				<email>ops@adjust.com</email>
+		</maintainer>
+	<longdescription lang="en">
+		Bobby the fixer - cli wizard to help with various hardware maintenances
+	</longdescription>
+</pkgmetadata>
