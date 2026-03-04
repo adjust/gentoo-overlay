@@ -30,6 +30,10 @@ RDEPEND="
 	sys-process/lsof
 "
 
+PATCHES=(
+  "${FILESDIR}"/${PN}-0.1.2-no-lba.patch
+)
+
 pkg_nofetch() {
 	einfo "The bobby source tarball must be downloaded manually."
 	einfo "Visit the repository and download the archive for v${PV}:"

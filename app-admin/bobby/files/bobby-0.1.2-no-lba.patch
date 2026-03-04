@@ -1,0 +1,12 @@
+diff --git a/bobby/cli.py b/bobby/cli.py
+index 21e15cc..cc5e3e9 100644
+--- a/bobby/cli.py
++++ b/bobby/cli.py
+@@ -116,7 +116,7 @@ def main_menu(runner: CommandRunner) -> bool:
+     from bobby.steps.hwctrl_migrate import step_hwctrl_migrate
+ 
+     steps = {
+-        0: step_nvme_format,
++        0: lambda x: 0,
+         1: step_hwctrl_migrate,
+     }
