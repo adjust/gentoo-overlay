@@ -14,8 +14,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="rbenv"
 
-DEPEND="rbenv? ( app-misc/rbenv )"
-RDEPEND="${DEPEND}"
+RDEPEND="rbenv? ( app-misc/rbenv )"
+DEPEND="${RDEPEND}"
 
 src_compile() {
     :

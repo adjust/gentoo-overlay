@@ -14,14 +14,12 @@ IUSE="test"
 
 RESTRICT="!test? ( test )"
 
-DEPEND="
+RDEPEND="
 	>=dev-lang/erlang-22:0=[ssl]
-"
-# 'mix' tool collides with sci-biology/phylip, bug #537514
-RDEPEND="${DEPEND}
 	!!sci-biology/phylip
 "
-DEPEND+="
+# 'mix' tool collides with sci-biology/phylip, bug #537514
+DEPEND="${RDEPEND}
 	test? ( dev-vcs/git )
 "
 

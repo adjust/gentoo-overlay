@@ -1,7 +1,7 @@
 # Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="7"
+EAPI=7
 
 LUA_COMPAT=( lua5-4 lua5-3 )
 
@@ -39,7 +39,7 @@ REQUIRED_USE="pcre-jit? ( pcre )
 RESTRICT="!test? ( test )"
 
 BDEPEND="virtual/pkgconfig"
-DEPEND="
+COMMON_DEPEND="
 	crypt? ( virtual/libcrypt:= )
 	pcre? (
 		dev-libs/libpcre2:=
@@ -55,7 +55,9 @@ DEPEND="
 		dev-libs/libpcre2
 		sys-libs/zlib
 	)"
-RDEPEND="${DEPEND}
+
+DEPEND="${COMMON_DEPEND}"
+RDEPEND="${COMMON_DEPEND}
 	acct-group/haproxy
 	acct-user/haproxy"
 

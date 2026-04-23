@@ -17,13 +17,13 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="doc"
 
-DEPEND="
+RDEPEND="
   >=dev-lang/go-1.24.0
   acct-group/postgres
   acct-user/postgres
 "
 
-RDEPEND="${DEPEND}"
+DEPEND="${RDEPEND}"
 BDEPEND="
   dev-build/make
 "
