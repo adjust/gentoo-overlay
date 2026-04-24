@@ -15,7 +15,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="+ns1"
 
-DEPEND="
+RDEPEND="
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	dev-python/dnspython[${PYTHON_USEDEP}]
@@ -27,4 +27,4 @@ DEPEND="
 	dev-python/requests[${PYTHON_USEDEP}]
 	ns1? ( dev-python/ns1-python[${PYTHON_USEDEP}] )
 "
-RDEPEND="${DEPEND}"
+DEPEND="${RDEPEND}"

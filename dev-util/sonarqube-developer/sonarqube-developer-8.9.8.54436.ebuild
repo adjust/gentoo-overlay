@@ -1,7 +1,7 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 DESCRIPTION="A supervisor that manages ephemeral github runners"
 HOMEPAGE="https://www.sonarqube.org/"
@@ -27,8 +27,6 @@ PATCHES=(
 	"${FILESDIR}/exit-codes.patch"
 	"${FILESDIR}/configuration.patch"
 )
-
-inherit epatch
 
 src_unpack() {
 	unpack ${P}.zip

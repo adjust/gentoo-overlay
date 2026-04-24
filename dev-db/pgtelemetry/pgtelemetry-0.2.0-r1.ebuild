@@ -18,8 +18,8 @@ SLOT=0
 
 RESTRICT="test" # connects to local DB instance, which is bad
 
-DEPEND="${POSTGRES_DEP}"
-RDEPEND="${DEPEND}"
+RDEPEND="${POSTGRES_DEP}"
+DEPEND="${RDEPEND}"
 
 src_prepare() {
 	cp "${FILESDIR}/Makefile" .

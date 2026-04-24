@@ -14,7 +14,7 @@ LICENSE="Apache-2.0"
 KEYWORDS="~amd64 ~x86"
 SLOT="0"
 
-DEPEND="dev-libs/boost
+RDEPEND="dev-libs/boost
 	dev-libs/thrift
 	|| (
 		dev-libs/rapidjson
@@ -30,7 +30,7 @@ DEPEND="dev-libs/boost
 	app-arch/brotli
 "
 
-RDEPEND="${DEPEND}"
+DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/arrow-apache-arrow-${PV}"
 

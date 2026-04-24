@@ -17,12 +17,12 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="doc"
 
-DEPEND="
+RDEPEND="
 	dev-lang/go
 	acct-group/sql_exporter
 	acct-user/sql_exporter"
 
-RDEPEND="${DEPEND}"
+DEPEND="${RDEPEND}"
 BDEPEND=">=dev-util/promu-0.15.0"
 SRC_DIR="${WORKDIR}/${P}"
 

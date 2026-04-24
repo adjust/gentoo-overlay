@@ -12,8 +12,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 
-DEPEND="dev-lang/go"
-RDEPEND="${DEPEND}"
+RDEPEND="dev-lang/go"
+DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/tcp_exporter"
 

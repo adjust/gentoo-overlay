@@ -32,7 +32,7 @@ REQUIRED_USE="pcre-jit? ( pcre )
 	?? ( slz zlib )"
 
 BDEPEND="virtual/pkgconfig"
-DEPEND="
+COMMON_DEPEND="
 	crypt? ( virtual/libcrypt:= )
 	pcre? (
 		dev-libs/libpcre2:=
@@ -45,7 +45,9 @@ DEPEND="
 	systemd? ( sys-apps/systemd )
 	zlib? ( sys-libs/zlib )
 	lua? ( ${LUA_DEPS} )"
-RDEPEND="${DEPEND}
+
+DEPEND="${COMMON_DEPEND}"
+RDEPEND="${COMMON_DEPEND}
 	acct-group/haproxy
 	acct-user/haproxy"
 
