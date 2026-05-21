@@ -141,7 +141,8 @@ src_prepare() {
 	for deb_patch in $( get_patch_list "${WORKDIR}/debian/patches/series" ); do
 		eapply "${WORKDIR}"/debian/patches/${deb_patch}
 	done
-
+  einfo "Applying extra security patches..."
+  eapply "${FILESDIR}"/patches/*.patch
 	# apply any user patches
 	eapply_user
 
@@ -170,7 +171,7 @@ src_prepare() {
 	fi
 
 	# Copy 'config-extract' tool to the work directory
-	cp "${FILESDIR}"/config-extract-6.1 config-extrac || die "failed to install config-extract to sources directory"
+	cp "${FILESDIR}"/config-extract-6.1 config-extract || die "failed to install config-extract to sources directory"
 
 	# ... and make it executable
 	chmod +x config-extract || die "failed to set +x on config-extract"
