@@ -479,7 +479,6 @@ pkg_postinst() {
 			--kernel-config="/boot/config-${KERNEL_FULL_VERSION}" \
 			--kerneldir="/usr/src/linux-${KERNEL_FULL_VERSION}" \
 			--kernel-outputdir="/usr/src/linux-${KERNEL_FULL_VERSION}" \
-			--all-ramdisk-modules \
 			--busybox \
 			--compress-initramfs \
 			--compress-initramfs-type="xz" \
