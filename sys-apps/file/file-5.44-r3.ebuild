@@ -31,7 +31,7 @@ SLOT="0"
 IUSE="bzip2 lzip lzma python seccomp static-libs zlib zstd"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-DEPEND="
+COMMON_DEPEND="
 	bzip2? ( app-arch/bzip2[${MULTILIB_USEDEP}] )
 	lzip? ( app-arch/lzlib )
 	lzma? ( app-arch/xz-utils[${MULTILIB_USEDEP}] )
@@ -43,8 +43,8 @@ DEPEND="
 	zlib? ( >=sys-libs/zlib-1.2.8-r1[${MULTILIB_USEDEP}] )
 	zstd? ( app-arch/zstd:=[${MULTILIB_USEDEP}] )
 "
-RDEPEND="
-	${DEPEND}
+DEPEND="${COMMON_DEPEND}"
+RDEPEND="${COMMON_DEPEND}
 	python? ( !dev-python/python-magic )
 	seccomp? ( >=sys-libs/libseccomp-2.5.4[${MULTILIB_USEDEP}] )
 "

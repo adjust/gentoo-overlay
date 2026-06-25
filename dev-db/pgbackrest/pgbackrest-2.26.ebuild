@@ -15,7 +15,7 @@ SLOT="0"
 # Docs depend on XML::Checker::Parser. Skip for now
 #IUSE="doc"
 
-DEPEND="
+RDEPEND="
 	>=dev-db/postgresql-8.3:=
 	sys-libs/zlib
 	app-arch/lz4
@@ -23,7 +23,7 @@ DEPEND="
 	dev-libs/libxml2
 "
 
-RDEPEND="${DEPEND}"
+DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${PN}-release-${PV}/src"
 

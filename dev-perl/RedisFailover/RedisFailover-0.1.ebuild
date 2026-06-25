@@ -25,7 +25,7 @@ BDEPEND="
 	dev-perl/Module-Build
 "
 
-DEPEND="
+RDEPEND="
 	dev-perl/Moo
 	dev-perl/Redis
 	dev-perl/YAML
@@ -33,7 +33,7 @@ DEPEND="
 	dev-perl/Module-Build
 "
 
-RDEPEND="${DEPEND}"
+DEPEND="${RDEPEND}"
 
 src_unpack() {
 	unpack ${P}.tar.gz

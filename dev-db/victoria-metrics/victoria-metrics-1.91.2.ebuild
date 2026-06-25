@@ -20,8 +20,8 @@ LICENSE="Apache-2.0"
 SLOT="0"
 
 BDEPEND="dev-lang/go"
-DEPEND=""
-RDEPEND="${DEPEND}"
+RDEPEND=""
+DEPEND="${RDEPEND}"
 
 S="${WORKDIR}/${P}/src/${PN/-/}"
 

@@ -11,14 +11,14 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE='test +zlib static-libs glib'
 
-DEPEND="
+RDEPEND="
 	dev-libs/boost:=
 	dev-libs/openssl:=
 	zlib? ( sys-libs/zlib:= )
 	glib? ( dev-libs/glib:2 )
 "
 
-RDEPEND="${DEPEND}"
+DEPEND="${RDEPEND}"
 BDEPEND="
 	sys-devel/bison
 	sys-devel/flex

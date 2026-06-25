@@ -18,8 +18,8 @@ SLOT=0
 
 RESTRICT="test"
 
-DEPEND="${POSTGRES_DEP}"
-RDEPEND="${DEPEND}"
+RDEPEND="${POSTGRES_DEP}"
+DEPEND="${RDEPEND}"
 
 src_prepare() {
 	postgres-multi_src_prepare

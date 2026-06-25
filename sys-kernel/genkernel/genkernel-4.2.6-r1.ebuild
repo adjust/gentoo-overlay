@@ -4,7 +4,7 @@
 # genkernel-9999        -> latest Git branch "master"
 # genkernel-VERSION     -> normal genkernel release
 
-EAPI="8"
+EAPI=8
 
 PYTHON_COMPAT=( python3_12 )
 

@@ -17,7 +17,7 @@ SLOT="0"
 # Docs depend on XML::Checker::Parser. Skip for now
 #IUSE="doc"
 
-DEPEND="
+RDEPEND="
 	acct-group/postgres
 	acct-user/postgres
 	>=dev-db/postgresql-9.0:=
@@ -30,7 +30,7 @@ DEPEND="
 	>=app-arch/zstd-1.0
 "
 
-RDEPEND="${DEPEND}"
+DEPEND="${RDEPEND}"
 
 BDEPEND="
   dev-libs/libyaml

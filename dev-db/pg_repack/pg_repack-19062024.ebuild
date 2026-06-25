@@ -18,8 +18,8 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-DEPEND="${POSTGRES_DEP}"
-RDEPEND="${DEPEND}"
+RDEPEND="${POSTGRES_DEP}"
+DEPEND="${RDEPEND}"
 
 # Needs a running PostgreSQL server
 RESTRICT="test"

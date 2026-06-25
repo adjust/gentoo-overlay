@@ -24,9 +24,11 @@ LICENSE="GPL-2"
 SLOT="0"
 
 # Need newer Portage for XML fix, bug #857537
-DEPEND="
+COMMON_DEPEND="
 	>=sys-apps/portage-3.0.32[${PYTHON_USEDEP}]"
-RDEPEND="${DEPEND}
+
+DEPEND="${COMMON_DEPEND}"
+RDEPEND="${COMMON_DEPEND}
 	app-alternatives/awk
 	sys-apps/gentoo-functions"
 

@@ -1,7 +1,7 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
 GLIBC_VER="2.27"
 
@@ -22,6 +22,7 @@ S="${WORKDIR}"
 src_prepare() {
 	find usr/share/{doc,info,man} -type f -name "*.bz2" -exec bunzip2 {} +
 	unlink usr/share/doc/"${PF}"/ChangeLog
+	eapply_user
 }
 
 src_install() {

@@ -18,13 +18,13 @@ KEYWORDS="~amd64"
 SLOT="0"
 IUSE="doc"
 
-DEPEND="
+RDEPEND="
 	acct-group/nginx
 	acct-user/nginx
 	>=dev-lang/go-1.20
 "
 
-RDEPEND="${DEPEND}"
+DEPEND="${RDEPEND}"
 SRC_DIR="${WORKDIR}/${P}"
 
 RESTRICT="network-sandbox"

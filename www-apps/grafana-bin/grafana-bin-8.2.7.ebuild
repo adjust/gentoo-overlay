@@ -17,9 +17,11 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
 
-DEPEND="acct-group/grafana
+COMMON_DEPEND="acct-group/grafana
 	acct-user/grafana"
-RDEPEND="${DEPEND}
+
+DEPEND="${COMMON_DEPEND}"
+RDEPEND="${COMMON_DEPEND}
 	media-libs/fontconfig"
 
 QA_PREBUILT="usr/bin/grafana-*"
