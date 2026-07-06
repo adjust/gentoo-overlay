@@ -6,12 +6,13 @@ EAPI=8
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{11..13} )
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="Python client for Consul"
-HOMEPAGE="https://github.com/cablehead/python-consul/"
-SRC_URI="https://github.com/cablehead/python-consul/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-
+HOMEPAGE="
+	https://pypi.org/project/python-consul/
+	https://github.com/python-consul/python-consul/
+"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
