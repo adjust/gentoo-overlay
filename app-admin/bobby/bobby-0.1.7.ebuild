@@ -45,4 +45,9 @@ pkg_nofetch() {
 	einfo "  ${DISTDIR}/${P}.tar.gz"
 }
 
+pkg_postinst() {
+	diropts -m 0755 -o root -g root
+  keepdir /var/log/bobby /etc/bobby
+}
+
 #distutils_enable_tests pytest
