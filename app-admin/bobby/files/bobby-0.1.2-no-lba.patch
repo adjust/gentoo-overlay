@@ -1,13 +1,13 @@
 diff --git a/bobby/cli.py b/bobby/cli.py
-index 94fff49..dcde87e 100644
+index fbc4c53..75ace09 100644
 --- a/bobby/cli.py
 +++ b/bobby/cli.py
-@@ -132,7 +132,7 @@ def main_menu(runner: CommandRunner) -> bool:
-     from bobby.steps.zfs_replace import step_zfs_disk_replace
+@@ -148,7 +148,7 @@ def main_menu(runner: CommandRunner) -> bool:
+     from bobby.steps.zfs_replace import step_zfs_disk_replace, step_zfs_post_replace
 
      steps = {
 -        0: step_nvme_format,
 +        0: lambda x: 0,
          1: step_hwctrl_migrate,
          2: step_zfs_disk_replace,
-     }
+         3: step_zfs_post_replace,
