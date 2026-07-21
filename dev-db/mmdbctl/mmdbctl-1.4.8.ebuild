@@ -16,7 +16,19 @@ S="${WORKDIR}/mmdbctl-${P}"
 DEPEND="dev-lang/go"
 BDEPEND="${DEPEND}"
 
+src_unpack() {
+	default
+}
+
+src_prepare() {
+	default
+	mv "${WORKDIR}"/go-mod "${S}"/
+}
+
 src_compile() {
+	export GOPATH="${S}"
+	export GOMODCACHE="${S}/go-mod"
+	cd "${S}"
 	ego build -o mmdbctl
 }
 
