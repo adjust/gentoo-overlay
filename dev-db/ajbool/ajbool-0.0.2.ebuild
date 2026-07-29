@@ -20,7 +20,11 @@ RESTRICT="test" # connects to local DB instance, which is bad
 
 DEPEND="${POSTGRES_DEP}"
 RDEPEND="${DEPEND}"
-
+src_prepare() {
+	eapply "${FILESDIR}/ajbool-pg13-datummacros.patch"
+	eapply_user
+	postgres-multi_src_prepare
+}
 src_compile() {
 	postgres-multi_foreach emake USE_PGXS=1
 }

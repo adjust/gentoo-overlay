@@ -1,0 +1,7 @@
+--- a/src/ajbool.h
++++ b/src/ajbool.h
+@@ -3,8 +3,8 @@
+-#define DatumGetAjBool(X) ((ajbool) GET_1_BYTE(X))
+-#define AjBoolGetDatum(X) ((Datum) SET_1_BYTE(X))
++#define DatumGetAjBool(X) ((ajbool) DatumGetBool(X))
++#define AjBoolGetDatum(X) ((Datum) BoolGetDatum(X))
