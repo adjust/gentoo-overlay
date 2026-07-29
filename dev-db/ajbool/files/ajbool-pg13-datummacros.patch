@@ -2,10 +2,12 @@
 +++ b/src/ajbool.h
 @@ -3,8 +3,8 @@
  #include "fmgr.h"
+
  typedef int8 ajbool;
 -#define DatumGetAjBool(X) ((ajbool) GET_1_BYTE(X))
 -#define AjBoolGetDatum(X) ((Datum) SET_1_BYTE(X))
 +#define DatumGetAjBool(X) ((ajbool) DatumGetBool(X))
 +#define AjBoolGetDatum(X) ((Datum) BoolGetDatum(X))
+
  #define PG_GETARG_AJBOOL(n)    DatumGetAjBool(PG_GETARG_DATUM(n))
  #define PG_RETURN_AJBOOL(x)    return AjBoolGetDatum(x)
