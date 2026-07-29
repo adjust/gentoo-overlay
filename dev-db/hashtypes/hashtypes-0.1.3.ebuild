@@ -3,7 +3,7 @@
 
 EAPI=7
 
-POSTGRES_COMPAT=( 9.6 10 11 12 15 )
+POSTGRES_COMPAT=( 9.6 10 11 12 15 17)
 
 inherit postgres-multi
 
@@ -20,6 +20,11 @@ RESTRICT="test" # connects to local DB instance, which is bad
 
 DEPEND="${POSTGRES_DEP}"
 RDEPEND="${DEPEND}"
+src_prepare() {
+	eapply "${FILESDIR}/hashtypes-pg17-varatt-crc32.patch"
+	eapply_user
+	postgres-multi_src_prepare
+}
 
 src_compile() {
 	postgres-multi_foreach emake USE_PGXS=1
