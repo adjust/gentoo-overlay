@@ -1,0 +1,115 @@
+--- a/sql/hashtypes--0.1.1.sql
++++ b/sql/hashtypes--0.1.1.sql
+@@ -98,7 +98,7 @@
+
+ CREATE FUNCTION sha224(bytea) RETURNS sha224 LANGUAGE C STRICT AS 'hashtypes', 'byteasha224';
+ CREATE FUNCTION bytea(sha224) RETURNS bytea LANGUAGE C STRICT AS 'hashtypes', 'shabytea224';
+-CREATE CAST (bytea AS sha224) WITH FUNCTION sha224(bytea) AS ASSIGNMENT;
++CREATE CAST (bytea AS sha224) WITH FUNCTION @extschema@.sha224(bytea) AS ASSIGNMENT;
+ CREATE CAST (sha224 AS bytea) WITH FUNCTION bytea(sha224) AS ASSIGNMENT;
+ -- Adjust this setting to control where the objects get created.
+ SET search_path = @extschema@;
+@@ -149,7 +149,7 @@
+
+ CREATE FUNCTION sha256(bytea) RETURNS sha256 LANGUAGE C STRICT AS 'hashtypes', 'byteasha256';
+ CREATE FUNCTION bytea(sha256) RETURNS bytea LANGUAGE C STRICT AS 'hashtypes', 'shabytea256';
+-CREATE CAST (bytea AS sha256) WITH FUNCTION sha256(bytea) AS ASSIGNMENT;
++CREATE CAST (bytea AS sha256) WITH FUNCTION @extschema@.sha256(bytea) AS ASSIGNMENT;
+ CREATE CAST (sha256 AS bytea) WITH FUNCTION bytea(sha256) AS ASSIGNMENT;
+ -- Adjust this setting to control where the objects get created.
+ SET search_path = @extschema@;
+@@ -200,7 +200,7 @@
+
+ CREATE FUNCTION sha384(bytea) RETURNS sha384 LANGUAGE C STRICT AS 'hashtypes', 'byteasha384';
+ CREATE FUNCTION bytea(sha384) RETURNS bytea LANGUAGE C STRICT AS 'hashtypes', 'shabytea384';
+-CREATE CAST (bytea AS sha384) WITH FUNCTION sha384(bytea) AS ASSIGNMENT;
++CREATE CAST (bytea AS sha384) WITH FUNCTION @extschema@.sha384(bytea) AS ASSIGNMENT;
+ CREATE CAST (sha384 AS bytea) WITH FUNCTION bytea(sha384) AS ASSIGNMENT;
+ -- Adjust this setting to control where the objects get created.
+ SET search_path = @extschema@;
+@@ -251,7 +251,7 @@
+
+ CREATE FUNCTION sha512(bytea) RETURNS sha512 LANGUAGE C STRICT AS 'hashtypes', 'byteasha512';
+ CREATE FUNCTION bytea(sha512) RETURNS bytea LANGUAGE C STRICT AS 'hashtypes', 'shabytea512';
+-CREATE CAST (bytea AS sha512) WITH FUNCTION sha512(bytea) AS ASSIGNMENT;
++CREATE CAST (bytea AS sha512) WITH FUNCTION @extschema@.sha512(bytea) AS ASSIGNMENT;
+ CREATE CAST (sha512 AS bytea) WITH FUNCTION bytea(sha512) AS ASSIGNMENT;
+ -- Adjust this setting to control where the objects get created.
+ SET search_path = @extschema@;
+--- a/sql/hashtypes--0.1.2.sql
++++ b/sql/hashtypes--0.1.2.sql
+@@ -98,7 +98,7 @@
+
+ CREATE FUNCTION sha224(bytea) RETURNS sha224 LANGUAGE C STRICT AS 'hashtypes', 'byteasha224';
+ CREATE FUNCTION bytea(sha224) RETURNS bytea LANGUAGE C STRICT AS 'hashtypes', 'shabytea224';
+-CREATE CAST (bytea AS sha224) WITH FUNCTION sha224(bytea) AS ASSIGNMENT;
++CREATE CAST (bytea AS sha224) WITH FUNCTION @extschema@.sha224(bytea) AS ASSIGNMENT;
+ CREATE CAST (sha224 AS bytea) WITH FUNCTION bytea(sha224) AS ASSIGNMENT;
+ -- Adjust this setting to control where the objects get created.
+ SET search_path = @extschema@;
+@@ -149,7 +149,7 @@
+
+ CREATE FUNCTION sha256(bytea) RETURNS sha256 LANGUAGE C STRICT AS 'hashtypes', 'byteasha256';
+ CREATE FUNCTION bytea(sha256) RETURNS bytea LANGUAGE C STRICT AS 'hashtypes', 'shabytea256';
+-CREATE CAST (bytea AS sha256) WITH FUNCTION sha256(bytea) AS ASSIGNMENT;
++CREATE CAST (bytea AS sha256) WITH FUNCTION @extschema@.sha256(bytea) AS ASSIGNMENT;
+ CREATE CAST (sha256 AS bytea) WITH FUNCTION bytea(sha256) AS ASSIGNMENT;
+ -- Adjust this setting to control where the objects get created.
+ SET search_path = @extschema@;
+@@ -200,7 +200,7 @@
+
+ CREATE FUNCTION sha384(bytea) RETURNS sha384 LANGUAGE C STRICT AS 'hashtypes', 'byteasha384';
+ CREATE FUNCTION bytea(sha384) RETURNS bytea LANGUAGE C STRICT AS 'hashtypes', 'shabytea384';
+-CREATE CAST (bytea AS sha384) WITH FUNCTION sha384(bytea) AS ASSIGNMENT;
++CREATE CAST (bytea AS sha384) WITH FUNCTION @extschema@.sha384(bytea) AS ASSIGNMENT;
+ CREATE CAST (sha384 AS bytea) WITH FUNCTION bytea(sha384) AS ASSIGNMENT;
+ -- Adjust this setting to control where the objects get created.
+ SET search_path = @extschema@;
+@@ -251,7 +251,7 @@
+
+ CREATE FUNCTION sha512(bytea) RETURNS sha512 LANGUAGE C STRICT AS 'hashtypes', 'byteasha512';
+ CREATE FUNCTION bytea(sha512) RETURNS bytea LANGUAGE C STRICT AS 'hashtypes', 'shabytea512';
+-CREATE CAST (bytea AS sha512) WITH FUNCTION sha512(bytea) AS ASSIGNMENT;
++CREATE CAST (bytea AS sha512) WITH FUNCTION @extschema@.sha512(bytea) AS ASSIGNMENT;
+ CREATE CAST (sha512 AS bytea) WITH FUNCTION bytea(sha512) AS ASSIGNMENT;
+ -- Adjust this setting to control where the objects get created.
+ SET search_path = @extschema@;
+--- a/sql/hashtypes--0.1.3.sql
++++ b/sql/hashtypes--0.1.3.sql
+@@ -98,7 +98,7 @@
+
+ CREATE FUNCTION sha224(bytea) RETURNS sha224 LANGUAGE C STRICT AS 'hashtypes', 'byteasha224';
+ CREATE FUNCTION bytea(sha224) RETURNS bytea LANGUAGE C STRICT AS 'hashtypes', 'shabytea224';
+-CREATE CAST (bytea AS sha224) WITH FUNCTION sha224(bytea) AS ASSIGNMENT;
++CREATE CAST (bytea AS sha224) WITH FUNCTION @extschema@.sha224(bytea) AS ASSIGNMENT;
+ CREATE CAST (sha224 AS bytea) WITH FUNCTION bytea(sha224) AS ASSIGNMENT;
+ -- Adjust this setting to control where the objects get created.
+ SET search_path = @extschema@;
+@@ -149,7 +149,7 @@
+
+ CREATE FUNCTION sha256(bytea) RETURNS sha256 LANGUAGE C STRICT AS 'hashtypes', 'byteasha256';
+ CREATE FUNCTION bytea(sha256) RETURNS bytea LANGUAGE C STRICT AS 'hashtypes', 'shabytea256';
+-CREATE CAST (bytea AS sha256) WITH FUNCTION sha256(bytea) AS ASSIGNMENT;
++CREATE CAST (bytea AS sha256) WITH FUNCTION @extschema@.sha256(bytea) AS ASSIGNMENT;
+ CREATE CAST (sha256 AS bytea) WITH FUNCTION bytea(sha256) AS ASSIGNMENT;
+ -- Adjust this setting to control where the objects get created.
+ SET search_path = @extschema@;
+@@ -200,7 +200,7 @@
+
+ CREATE FUNCTION sha384(bytea) RETURNS sha384 LANGUAGE C STRICT AS 'hashtypes', 'byteasha384';
+ CREATE FUNCTION bytea(sha384) RETURNS bytea LANGUAGE C STRICT AS 'hashtypes', 'shabytea384';
+-CREATE CAST (bytea AS sha384) WITH FUNCTION sha384(bytea) AS ASSIGNMENT;
++CREATE CAST (bytea AS sha384) WITH FUNCTION @extschema@.sha384(bytea) AS ASSIGNMENT;
+ CREATE CAST (sha384 AS bytea) WITH FUNCTION bytea(sha384) AS ASSIGNMENT;
+ -- Adjust this setting to control where the objects get created.
+ SET search_path = @extschema@;
+@@ -251,7 +251,7 @@
+
+ CREATE FUNCTION sha512(bytea) RETURNS sha512 LANGUAGE C STRICT AS 'hashtypes', 'byteasha512';
+ CREATE FUNCTION bytea(sha512) RETURNS bytea LANGUAGE C STRICT AS 'hashtypes', 'shabytea512';
+-CREATE CAST (bytea AS sha512) WITH FUNCTION sha512(bytea) AS ASSIGNMENT;
++CREATE CAST (bytea AS sha512) WITH FUNCTION @extschema@.sha512(bytea) AS ASSIGNMENT;
+ CREATE CAST (sha512 AS bytea) WITH FUNCTION bytea(sha512) AS ASSIGNMENT;
+ -- Adjust this setting to control where the objects get created.
+ SET search_path = @extschema@;
+

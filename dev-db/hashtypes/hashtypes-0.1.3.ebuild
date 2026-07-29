@@ -22,6 +22,7 @@ DEPEND="${POSTGRES_DEP}"
 RDEPEND="${DEPEND}"
 src_prepare() {
 	eapply "${FILESDIR}/hashtypes-pg17-varatt-crc32.patch"
+	eapply "${FILESDIR}/hashtypes-pg14-sha-schema.patch"
 	eapply_user
 	postgres-multi_src_prepare
 }
