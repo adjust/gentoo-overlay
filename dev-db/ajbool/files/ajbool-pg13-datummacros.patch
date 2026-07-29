@@ -9,3 +9,4 @@
 +#define AjBoolGetDatum(X) ((Datum) BoolGetDatum(X))
  #define PG_GETARG_AJBOOL(n)    DatumGetAjBool(PG_GETARG_DATUM(n))
  #define PG_RETURN_AJBOOL(x)    return AjBoolGetDatum(x)
+ 
