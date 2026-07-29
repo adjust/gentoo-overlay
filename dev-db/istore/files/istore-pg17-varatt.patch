@@ -1,0 +1,12 @@
+--- a/src/avl.h
++++ b/src/avl.h
+@@ -2,6 +2,9 @@
+ #define ISTORE_AVL_H
+
+ #include "postgres.h"
++#if PG_VERSION_NUM >= 160000
++#include "varatt.h"
++#endif
+
+
+ typedef struct AvlNode AvlNode;
