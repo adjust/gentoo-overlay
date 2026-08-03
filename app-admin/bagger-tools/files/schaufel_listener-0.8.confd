@@ -5,6 +5,7 @@
 #LISTENER_LOG_DIR="/var/log/schaufel"
 #LISTENER_LOG_FILE="schaufel_listener.log"
 #LISTENER_USER=schaufel
+#LISTENER_PGUSER=postgres
 #LISTENER_GROUP=schaufel
 #LISTENER_TIMEOUT=60
 #HOSTNAME_OVERRIDE=

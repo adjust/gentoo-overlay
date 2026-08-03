@@ -45,6 +45,8 @@ fi
 	LISTENER_OPTS+=" -j ${LISTENER_JOBS}"
 [ -n "${LISTENER_REPLICATION}" ] && \
 	LISTENER_OPTS+=" -r ${LISTENER_REPLICATION}"
+[ -n "${LISTENER_PGUSER}" ] && \
+	LISTENER_OPTS+=" -u ${LISTENER_PGUSER}"
 
 
 command=/usr/bin/listener.pl

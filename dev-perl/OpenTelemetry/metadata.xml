@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>belhassen.dahmen@adjust.com</email>
+	</maintainer>
+	<longdescription>
+		OpenTelemetry is a vendor-neutral framework for distributed tracing,
+		metrics, and logging. This distribution provides the Perl API and includes
+		OpenTelemetry::Trace, OpenTelemetry::Context, OpenTelemetry::Constants,
+		OpenTelemetry::Integration::DBI, and OpenTelemetry::Propagator::TraceContext.
+	</longdescription>
+</pkgmetadata>
