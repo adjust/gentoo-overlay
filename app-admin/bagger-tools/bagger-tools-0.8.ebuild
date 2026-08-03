@@ -31,6 +31,8 @@ DEPEND="
 	dev-perl/Term-ProgressBar
 	dev-perl/Digest-SHA1
 	virtual/perl-Sys-Syslog
+	dev-perl/OpenTelemetry
+	dev-perl/OpenTelemetry-SDK
 "
 
 BDEPEND="
