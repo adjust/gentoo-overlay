@@ -4,6 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{8..9} )
+DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1
 
 MY_PN="newrelic"

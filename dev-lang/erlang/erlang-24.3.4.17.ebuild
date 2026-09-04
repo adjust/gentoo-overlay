@@ -1,8 +1,8 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-WX_GTK_VER="3.0-gtk3"
+EAPI=8
+WX_GTK_VER="3.2-gtk3"
 
 inherit elisp-common flag-o-matic java-pkg-opt-2 systemd toolchain-funcs wxwidgets
 

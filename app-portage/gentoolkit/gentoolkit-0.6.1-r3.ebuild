@@ -3,7 +3,7 @@
 
 EAPI=8
 
-DISTUTILS_USE_SETUPTOOLS=no
+DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{9..11} pypy3 )
 PYTHON_REQ_USE="xml(+),threads(+)"
 
@@ -34,8 +34,6 @@ PATCHES=(
 	"${FILESDIR}/gentoolkit-0.6.1-data_files.patch"
 	"${FILESDIR}/gentoolkit-0.6.1-pkgindex.patch"
 )
-
-distutils_enable_tests setup.py
 
 python_prepare_all() {
 	python_setup
