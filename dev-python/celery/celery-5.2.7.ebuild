@@ -5,11 +5,10 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{8..9} )
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="Distributed Task Queue"
 HOMEPAGE="https://pypi.org/project/celery"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="BSD-4"
 SLOT="0"

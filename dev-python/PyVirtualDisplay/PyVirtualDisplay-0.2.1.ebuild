@@ -5,12 +5,12 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{8..9} )
 DISTUTILS_USE_PEP517=setuptools
+PYPI_NO_NORMALIZE=1
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="python wrapper for Xvfb, Xephyr and Xvnc"
 HOMEPAGE="https://pypi.org/project/pyvirtualdisplay/"
-SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="BSD"
 KEYWORDS="~amd64 ~x86"

@@ -4,12 +4,12 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
+PYPI_NO_NORMALIZE=1
 PYTHON_COMPAT=( python3_{8..10} )
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="OpenID support for modern servers and consumers"
 HOMEPAGE="https://pypi.org/project/python3-openid"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="Apache-2.0"
 SLOT="0"

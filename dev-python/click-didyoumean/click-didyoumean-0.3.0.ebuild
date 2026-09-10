@@ -4,12 +4,12 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=poetry
+PYPI_NO_NORMALIZE=1
 PYTHON_COMPAT=( python3_{8..9} )
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="Enables git-like *did-you-mean* feature in click"
 HOMEPAGE="https://pypi.org/project/click-didyoumean"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"

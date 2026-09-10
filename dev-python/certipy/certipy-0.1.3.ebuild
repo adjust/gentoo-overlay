@@ -6,11 +6,10 @@ EAPI=8
 PYTHON_COMPAT=( python3_{8..9} )
 DISTUTILS_USE_PEP517=setuptools
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="Tool for creating certificate authorities and certificates on the fly."
 HOMEPAGE="https://github.com/LLNL/certipy"
-SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="BSD-2"
 KEYWORDS="~amd64"

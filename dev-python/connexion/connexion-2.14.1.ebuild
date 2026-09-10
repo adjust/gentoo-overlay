@@ -5,11 +5,10 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{8..10} )
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="API first applications with OpenAPI/Swagger and Flask"
 HOMEPAGE="https://pypi.org/project/connexion"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="Apache-2.0"
 SLOT="0"

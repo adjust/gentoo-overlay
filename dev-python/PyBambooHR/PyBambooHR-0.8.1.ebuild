@@ -5,12 +5,12 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{8..9} )
 DISTUTILS_USE_PEP517=setuptools
+PYPI_NO_NORMALIZE=1
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="This is an unofficial Python API for Bamboo HR."
 HOMEPAGE="https://pypi.org/project/PyBambooHR/"
-SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 KEYWORDS="~amd64 ~x86"

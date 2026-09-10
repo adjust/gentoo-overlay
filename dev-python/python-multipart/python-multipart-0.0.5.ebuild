@@ -5,12 +5,12 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{8..9} )
 DISTUTILS_USE_PEP517=setuptools
+PYPI_NO_NORMALIZE=1
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="A streaming multipart parser for Python"
 HOMEPAGE="https://andrew-d.github.io/python-multipart"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="Apache-2.0"
 KEYWORDS="~amd64"

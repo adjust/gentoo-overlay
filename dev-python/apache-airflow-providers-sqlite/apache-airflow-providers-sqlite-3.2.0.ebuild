@@ -5,14 +5,12 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{8..9} )
 DISTUTILS_USE_PEP517=setuptools
+PYPI_NO_NORMALIZE=1
 
-DISTUTILS_USE_SETUPTOOLS=no
-
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="Apache Airflow providers sqlite package."
 HOMEPAGE="https://pypi.org/project/apache-airflow-providers-sqlite"
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 KEYWORDS="~amd64"

@@ -6,11 +6,10 @@ EAPI=8
 PYTHON_COMPAT=( python3_{8..9} )
 DISTUTILS_USE_PEP517=setuptools
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 DESCRIPTION="Utilities for managing graphite clusters"
 HOMEPAGE="https://github.com/jssjr/carbonate"
-SRC_URI="mirror://pypi/c/${PN}/${P}.tar.gz"
 
 KEYWORDS="~amd64 ~x86"
 LICENSE="MIT"
