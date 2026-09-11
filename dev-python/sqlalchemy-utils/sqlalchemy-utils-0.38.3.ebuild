@@ -4,16 +4,13 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
+PYPI_NO_NORMALIZE=1
+PYPI_PN=SQLAlchemy-Utils
 PYTHON_COMPAT=( python3_{8..9} )
-inherit distutils-r1
-
-MY_PN="SQLAlchemy-Utils"
-MY_P="${MY_PN}-${PV}"
+inherit distutils-r1 pypi
 
 DESCRIPTION="Various utility functions for SQLAlchemy"
 HOMEPAGE="https://pypi.org/project/SQLAlchemy-JSONField"
-SRC_URI="mirror://pypi/${MY_P:0:1}/${MY_PN}/${MY_P}.tar.gz"
-S="${WORKDIR}/${MY_P}"
 
 LICENSE="BSD"
 SLOT="0"

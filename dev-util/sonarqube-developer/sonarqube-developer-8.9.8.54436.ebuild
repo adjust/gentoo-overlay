@@ -28,7 +28,6 @@ PATCHES=(
 	"${FILESDIR}/configuration.patch"
 )
 
-inherit epatch
 
 src_unpack() {
 	unpack ${P}.zip

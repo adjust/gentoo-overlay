@@ -1,12 +1,13 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 # hard depend on python3_8
 # python3_9 compat has been mostly done, down to one final error
 # TODO: complete the above
 PYTHON_COMPAT=( python3_8 )
+DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_OPTIONAL=1
 
 inherit check-reqs cmake distutils-r1 flag-o-matic multiprocessing \
