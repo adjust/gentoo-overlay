@@ -1,0 +1,20 @@
+#!/bin/bash
+# webapp hook script for nmis
+
+die() {
+    echo "###"
+    echo $1
+    echo "###"
+    exit 1
+}
+
+if [[ $1 = "install" ]]; then
+    chown -R "nmis:${VHOST_SERVER_GID}" "${VHOST_ROOT}" || die 'chown failed'
+    sed -i \
+        -e "s|/usr/local/nmis4|${VHOST_ROOT}|g" \
+        "${VHOST_ROOT}"/conf/{crontab.root,logrotate.conf} || die 'sed failed'
+elif [[ $1 = "clean" ]]; then
+    echo $1
+fi
+
+exit 0

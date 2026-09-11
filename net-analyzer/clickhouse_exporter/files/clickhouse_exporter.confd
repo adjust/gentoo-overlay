@@ -1,0 +1,16 @@
+# Accepts debug, info, warn, error, fatal, panic.
+#CE_LOG_LEVEL="error"
+
+# Ignore server certificate when using https
+#CE_INSECURE="true"
+
+# Clickhouse endpoint
+#CE_SCRAPE_URI="http://localhost:8123/"
+
+# Port and endpoint for telemetry
+#CE_TELEMETRY_ADDRESS=":9116"
+#CE_TELEMETRY_ENDPOINT="/metrics"
+
+# Credentials for Clickhouse
+#CLICKHOUSE_USER=
+#CLICKHOUSE_PASSWORD=
