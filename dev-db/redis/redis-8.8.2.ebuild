@@ -18,9 +18,9 @@ SRC_URI="
 		-> ${P}.tar.gz
 "
 
-LICENSE="BSD Boost-1.0"
+LICENSE="|| ( AGPL-3 RSAL-2 SSPL-1 ) Boost-1.0 MIT"
 SLOT="0/$(ver_cut 1-2)"
-KEYWORDS="~amd64 ~arm ~arm64 ~hppa ~loong ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux"
+KEYWORDS="amd64 ~arm arm64 ~hppa ~loong ppc ppc64 ~riscv ~s390 ~sparc x86 ~amd64-linux ~x86-linux"
 IUSE="+jemalloc selinux ssl systemd tcmalloc test"
 RESTRICT="!test? ( test )"
 
@@ -92,7 +92,7 @@ src_configure() {
 
 	# Linenoise can't be built with -std=c99, see https://bugs.gentoo.org/451164
 	# also, don't define ANSI/c99 for lua twice
-	sed -i -e "s:-std=c99::g" deps/linenoise/Makefile deps/Makefile || die
+	sed -i -e "s:-std=c99::g" deps{,/linenoise}/Makefile || die
 }
 
 src_compile() {
@@ -130,7 +130,15 @@ src_test() {
 	local runtestargs=(
 		--clients "$(makeopts_jobs)" # see bug #649868
 
-		--skiptest "Active defrag eval scripts" # see bug #851654
+		# The Active defrag for argv test fails with edge values, it does not seem to be
+		# critical issue, see https://github.com/redis/redis/issues/14006
+		--skiptest "/Active defrag for argv retained by the main thread from IO thread.*"
+
+		# The following test fails with system jemalloc, as it expects
+		# different values, because the bundled jemalloc is compiled with
+		# --with-lg-quantum=3 parameter in order to provide additional size
+		# classes which are not 16 byte alligned.
+		--skiptest "Check MEMORY USAGE for embedded key strings with jemalloc"
 	)
 
 	if has usersandbox ${FEATURES} || ! has userpriv ${FEATURES}; then
@@ -191,8 +199,4 @@ src_install() {
 
 pkg_postinst() {
 	tmpfiles_process redis.conf
-
-	ewarn "The default redis configuration file location changed to:"
-	ewarn "  /etc/redis/{redis,sentinel}.conf"
-	ewarn "Please apply your changes to the new configuration files."
 }
