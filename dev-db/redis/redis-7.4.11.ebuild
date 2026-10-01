@@ -18,9 +18,9 @@ SRC_URI="
 		-> ${P}.tar.gz
 "
 
-LICENSE="BSD Boost-1.0"
+LICENSE="|| ( RSAL-2 SSPL-1 ) Boost-1.0"
 SLOT="0/$(ver_cut 1-2)"
-KEYWORDS="~amd64 ~arm ~arm64 ~hppa ~loong ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux"
+KEYWORDS="~amd64"
 IUSE="+jemalloc selinux ssl systemd tcmalloc test"
 RESTRICT="!test? ( test )"
 
@@ -191,8 +191,4 @@ src_install() {
 
 pkg_postinst() {
 	tmpfiles_process redis.conf
-
-	ewarn "The default redis configuration file location changed to:"
-	ewarn "  /etc/redis/{redis,sentinel}.conf"
-	ewarn "Please apply your changes to the new configuration files."
 }
