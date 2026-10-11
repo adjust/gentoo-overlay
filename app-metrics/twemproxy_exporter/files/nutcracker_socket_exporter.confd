@@ -1,2 +1,0 @@
-# arguments for ceph exporter
-command_args="-web.listen-address 0.0.0.0:9146 -twemproxy.stats-address localhost:146"
