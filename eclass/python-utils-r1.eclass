@@ -41,6 +41,7 @@ inherit multiprocessing toolchain-funcs
 _PYTHON_ALL_IMPLS=(
 	pypy3
 	pypy3_11
+	pypy3_12
 	python3_{13..15}t
 	python3_{5..15}
 )
@@ -131,7 +132,7 @@ _python_set_impls() {
 			# please keep them in sync with _PYTHON_ALL_IMPLS
 			# and _PYTHON_HISTORICAL_IMPLS
 			case ${i} in
-				pypy3|pypy3_11|python3_9|python3_1[0-5]|python3_1[3-5]t)
+				pypy3|pypy3_1[12]|python3_9|python3_1[0-5]|python3_1[3-5]t)
 					;;
 				jython2_7|pypy|pypy1_[89]|pypy2_0|python2_[5-7]|python3_[1-8])
 					obsolete+=( "${i}" )
