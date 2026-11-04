@@ -1,9 +1,0 @@
-/var/log/kolide-k2.log {
-        daily
-        rotate 7
-        copytruncate
-        compress
-        delaycompress
-        missingok
-        notifempty
-}

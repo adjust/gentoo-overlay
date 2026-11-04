@@ -1,9 +1,0 @@
-#!/sbin/openrc-run
-
-name="logdna-agent"
-command="/usr/bin/${name}"
-command_background='true'
-pidfile="/var/run/${name}.pid"
-logfile="/var/log/${name}.log"
-output_log="${logfile}"
-error_log="${logfile}"
