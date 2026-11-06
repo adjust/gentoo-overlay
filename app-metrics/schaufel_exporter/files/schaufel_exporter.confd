@@ -1,1 +1,1 @@
-EXPORTER_ARGS="-p prometheus /var/log/schaufel/ams02.log"
+EXPORTER_ARGS="-p prometheus /var/log/schaufel/ams02.log -c /etc/schaufel_exporter/config.yaml"

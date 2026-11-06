@@ -13,10 +13,13 @@ use JSON;
 use Sys::Hostname;
 use HTTP::Request;
 use LWP::UserAgent;
+use YAML::XS qw(LoadFile);
 
 use Data::Dumper;
 
 my ($help, $verbose, $time, $parser, $json, $prometheus, $name);
+my $config_file = "/etc/schaufel_exporter/config.yaml";
+my ($config, $ua);
 my $base_uri = "/insert/prometheus/api/v1/import/prometheus";
 
 GetOptions(
@@ -25,7 +28,8 @@ GetOptions(
     "v|verbose" => \$verbose,
     "p|parser=s" => \&_parse_handler,
     "j|json" => \$json,
-    "n|name=s" => \$name
+    "n|name=s" => \$name,
+    "c|config=s" => \$config_file
 ) or _help(2);
 _parse_handler('parser','stats') unless $parser;
 
@@ -318,19 +322,50 @@ sub _find_offset
     vprint("$file: desired offset for $past does not exist");
     return 0;
 }
+sub _load_config
+{
+    my $file = shift;
+    my $cfg = try { LoadFile($file) }
+        catch { die "Can't read config $file: $_" };
+
+    die "$file: 'clusters' must be a non-empty list\n"
+        unless ref $$cfg{clusters} eq 'ARRAY' && @{$$cfg{clusters}};
+
+    $$cfg{base_uri} //= $base_uri;
+    $$cfg{timeout}  //= 5;
+
+    my $i = 0;
+    foreach my $cluster (@{$$cfg{clusters}}) {
+        $i++;
+        die "$file: cluster #$i must be a mapping\n"
+            unless ref $cluster eq 'HASH';
+        $$cluster{name} //= "cluster$i";
+        die "$file: cluster '$$cluster{name}': 'endpoints' must be a non-empty list\n"
+            unless ref $$cluster{endpoints} eq 'ARRAY' && @{$$cluster{endpoints}};
+        $$cluster{base_uri} //= $$cfg{base_uri};
+    }
+    return $cfg;
+}
+
 sub _send_victoriametrics
 {
-	my $data = shift;
-	my $req_prometheus = HTTP::Request->new('POST');
-	my $ua = LWP::UserAgent->new;
-	my $req_res, my $url = "";
-	$req_prometheus->content($data);
-	for (my $i = 1; $i <= 4; $i++) {
-		$url = "http://ams-metrics-$i.adjust.com$base_uri";
-		$req_prometheus->uri($url);
-		$req_res = $ua->request($req_prometheus);
-		last if $req_res->is_success;
-	}
+    my $data = shift;
+    my $ok = 1;
+    # created lazily so each forked worker gets its own connection
+    $ua //= LWP::UserAgent->new(timeout => $$config{timeout});
+
+    # every cluster gets the sample; failover only happens within a cluster
+    CLUSTER: foreach my $cluster (@{$$config{clusters}}) {
+        foreach my $endpoint (@{$$cluster{endpoints}}) {
+            (my $url = $endpoint) =~ s{/+$}{};
+            my $res = $ua->post($url . $$cluster{base_uri}, Content => $data);
+            next CLUSTER if $res->is_success;
+            vprint("$$cluster{name}: $url: " . $res->status_line);
+        }
+        say STDERR "$$cluster{name}: Failed to send metrics to any endpoint";
+        $ok = 0;
+    }
+    return $ok;
 }
 sub _parse_prometheus
 {
@@ -391,6 +426,7 @@ sub _parse_prometheus
 sub main
 {
     my @children;
+    $config = _load_config($config_file) if $prometheus;
     foreach my $file (@ARGV) {
         if ($prometheus) {
             my $pid = fork();
@@ -439,10 +475,12 @@ Reliably parse Schaufel logfiles
 
 =head1 SYNOPSIS
 
-parseSchaufelLog.pl [-h] [-t seconds] [-v] [-J] [-p parser] [-s host:port] file ...
+parseSchaufelLog.pl [-h] [-t seconds] [-v] [-J] [-p parser] [-c config] file ...
 
 Options:
 
+    -c|--config     YAML config with metrics endpoints
+                    (default /etc/schaufel_exporter/config.yaml)
     -j|--json       output json
     -h|--help       this help screen
     -t|--time       seconds to seek backwards into schaufel (default 600)
