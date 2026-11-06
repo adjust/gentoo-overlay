@@ -1,0 +1,19 @@
+# Every sample is sent to each cluster. Within a cluster, endpoints are
+# tried in order and the first one that succeeds wins.
+clusters:
+  - name: ams
+    endpoints:
+      - http://ams-metrics-1.adjust.com
+      - http://ams-metrics-2.adjust.com
+      - http://ams-metrics-3.adjust.com
+      - http://ams-metrics-4.adjust.com
+  - name: esh
+    endpoints:
+      - http://esh-metrics-1.adjust.com
+      - http://esh-metrics-2.adjust.com
+      - http://esh-metrics-3.adjust.com
+      - http://esh-metrics-4.adjust.com
+
+# optional, can also be set per cluster
+base_uri: /insert/prometheus/api/v1/import/prometheus
+timeout: 5
