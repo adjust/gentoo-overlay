@@ -5,7 +5,7 @@ EAPI=7
 
 POSTGRES_COMPAT=( 9.6 10 11 )
 
-inherit postgres-multi
+inherit postgres-multi cmake
 
 DESCRIPTION="Open-source time-series SQL database"
 HOMEPAGE="https://www.timescale.com/"
@@ -18,9 +18,14 @@ SLOT=0
 
 RESTRICT="test"
 
+CMAKE_IN_SOURCE_BUILD=yes
+CMAKE_BUILD_TYPE="RelWithDebInfo"
+BUILD_DIR=${WORKDIR}/${P}
+
 DEPEND="${POSTGRES_DEP}"
 RDEPEND="${DEPEND}"
 
 src_prepare() {
 	postgres-multi_src_prepare
+	postgres-multi_foreach cmake_src_prepare
 }
